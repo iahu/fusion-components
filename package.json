@@ -1,7 +1,7 @@
 {
   "name": "fusion-ui",
   "version": "1.0.0",
-  "description": "",
+  "description": "一套面向类桌面应用的沉浸式风格 Web Components UI 库",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
