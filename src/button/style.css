@@ -1,0 +1,44 @@
+:host {
+  display: inline-block;
+}
+
+button {
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--foreground);
+  cursor: pointer;
+  display: inline-block;
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height);
+  border-radius: var(--border-radius);
+  user-select: none;
+}
+
+button[data-sharp] {
+  border-radius: 0;
+}
+
+button[data-actived] {
+  background: var(--background-actived);
+}
+
+button[data-outline] {
+  border-color: var(--border-color);
+}
+
+button:not(:disabled):hover {
+  background: var(--background-hover);
+}
+
+button:not(:disabled):active {
+  background: var(--background-active);
+}
+
+button:disabled {
+  cursor: default;
+  color: var(--foreground-disabled);
+}
+
+button[data-actived]:disabled {
+  background: var(--background-disabled);
+}

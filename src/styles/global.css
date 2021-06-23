@@ -1,0 +1,69 @@
+:host {
+  /*rset*/
+  all: initial;
+  line-height: var(--host-line-height);
+  font-size: var(--font-size-s);
+  user-select: var(--user-select);
+
+  --user-select: none;
+
+  /*size*/
+  --host-line-height: 1;
+  --line-height: 1.4;
+  --font-size-s: 12px;
+  --font-size-m: 14px;
+  --font-size-l: 16px;
+  --font-size-xl: 18px;
+  --font-size-xxl: 20px;
+  --font-size-xxxl: 24px;
+  --border-radius: 2px;
+
+  /*color variables*/
+  --black: hsl(0, 0%, 0%);
+  --blue: hsl(210, 50%, 60%);
+  --bluevibrant: hsl(210, 70%, 70%);
+  --blue2: hsla(210, 13%, 40%, 0.7);
+  --blue3: hsl(210, 15%, 22%);
+  --blue4: hsl(210, 13%, 45%);
+  --blue5: hsl(180, 36%, 54%);
+  --blue6: hsl(221, 12%, 69%);
+  --green: hsl(114, 31%, 68%);
+  --darker-grey: hsl(0, 0%, 30%);
+  --dark-grey: hsl(0, 0%, 40%);
+  --grey: hsl(0, 0%, 50%);
+  --light-grey: hsl(0, 0%, 60%);
+  --lighter-grey: hsl(0, 0%, 70%);
+  --orange: hsl(32, 93%, 66%);
+  --orange2: hsl(32, 85%, 55%);
+  --orange3: hsl(40, 94%, 68%);
+  --pink: hsl(300, 30%, 68%);
+  --red: hsl(357, 79%, 65%);
+  --red2: hsl(13, 93%, 66%);
+  --white: hsl(0, 0%, 100%);
+  --white2: hsl(0, 0%, 97%);
+  --white3: hsl(219, 28%, 88%);
+
+  /* globals colors*/
+  --foreground: var(--white3);
+  --foreground-disabled: var(--grey);
+  --background: var(--blue3);
+  --background-hover: var(--blue2);
+  --background-active: var(--blue4);
+
+  --background-actived: var(--blue4);
+  --background-disabled: var(--blue2);
+  --border-color: var(--blue2);
+  --accent: var(--blue-vibrant);
+  --caret: var(--orange);
+  --line-highlight: var(--blue2);
+  --selection: var(--blue2);
+  --selection-border: var(--blue4);
+  --inactive-selection: var(--blue2);
+  --misspelling: var(--red);
+  --shadow: rgba(0, 0, 0, 0.25);
+  --active-guide: var(--blue5);
+  --stack-guide: rgba(95, 180, 180, 0.5);
+  --highlight: var(--blue5);
+  --find-highlight-foreground: var(--grey);
+  --find-highlight: var(--orange3);
+}
