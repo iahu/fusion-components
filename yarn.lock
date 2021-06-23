@@ -4098,6 +4098,19 @@ copy-to-clipboard@^3.3.1:
   dependencies:
     toggle-selection "^1.0.6"
 
+copyfiles@^2.4.1:
+  version "2.4.1"
+  resolved "https://registry.nlark.com/copyfiles/download/copyfiles-2.4.1.tgz#d2dcff60aaad1015f09d0b66e7f0f1c5cd3c5da5"
+  integrity sha1-0tz/YKqtEBXwnQtm5/Dxxc08XaU=
+  dependencies:
+    glob "^7.0.5"
+    minimatch "^3.0.3"
+    mkdirp "^1.0.4"
+    noms "0.0.0"
+    through2 "^2.0.1"
+    untildify "^4.0.0"
+    yargs "^16.1.0"
+
 core-js-compat@^3.14.0, core-js-compat@^3.15.0, core-js-compat@^3.8.1:
   version "3.15.0"
   resolved "https://registry.nlark.com/core-js-compat/download/core-js-compat-3.15.0.tgz?cache=0&sync_timestamp=1624210501764&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fcore-js-compat%2Fdownload%2Fcore-js-compat-3.15.0.tgz#e14a371123db9d1c5b41206d3f420643d238b8fa"
@@ -4272,22 +4285,6 @@ css-loader@^3.6.0:
     postcss-value-parser "^4.1.0"
     schema-utils "^2.7.0"
     semver "^6.3.0"
-
-css-loader@^5.2.6:
-  version "5.2.6"
-  resolved "https://registry.nlark.com/css-loader/download/css-loader-5.2.6.tgz#c3c82ab77fea1f360e587d871a6811f4450cc8d1"
-  integrity sha1-w8gqt3/qHzYOWH2HGmgR9EUMyNE=
-  dependencies:
-    icss-utils "^5.1.0"
-    loader-utils "^2.0.0"
-    postcss "^8.2.15"
-    postcss-modules-extract-imports "^3.0.0"
-    postcss-modules-local-by-default "^4.0.0"
-    postcss-modules-scope "^3.0.0"
-    postcss-modules-values "^4.0.0"
-    postcss-value-parser "^4.1.0"
-    schema-utils "^3.0.0"
-    semver "^7.3.5"
 
 css-select@^4.1.3:
   version "4.1.3"
@@ -5635,7 +5632,7 @@ glob-to-regexp@^0.4.1:
   resolved "https://registry.nlark.com/glob-to-regexp/download/glob-to-regexp-0.4.1.tgz#c75297087c851b9a578bd217dd59a92f59fe546e"
   integrity sha1-x1KXCHyFG5pXi9IX3VmpL1n+VG4=
 
-glob@^7.0.0, glob@^7.1.3, glob@^7.1.4, glob@^7.1.6:
+glob@^7.0.0, glob@^7.0.5, glob@^7.1.3, glob@^7.1.4, glob@^7.1.6:
   version "7.1.7"
   resolved "https://registry.nlark.com/glob/download/glob-7.1.7.tgz#3b193e9233f01d42d0b3f78294bbeeb418f94a90"
   integrity sha1-Oxk+kjPwHULQs/eClLvutBj5SpA=
@@ -6111,11 +6108,6 @@ icss-utils@^4.0.0, icss-utils@^4.1.1:
   integrity sha1-IRcLU3ie4nRHwvR91oMIFAP5pGc=
   dependencies:
     postcss "^7.0.14"
-
-icss-utils@^5.0.0, icss-utils@^5.1.0:
-  version "5.1.0"
-  resolved "https://registry.nlark.com/icss-utils/download/icss-utils-5.1.0.tgz#c6be6858abd013d768e98366ae47e25d5887b1ae"
-  integrity sha1-xr5oWKvQE9do6YNmrkfiXViHsa4=
 
 ieee754@^1.1.4:
   version "1.2.1"
@@ -6662,6 +6654,11 @@ is-yarn-global@^0.3.0:
   version "0.3.0"
   resolved "https://registry.nlark.com/is-yarn-global/download/is-yarn-global-0.3.0.tgz#d502d3382590ea3004893746754c89139973e232"
   integrity sha1-1QLTOCWQ6jAEiTdGdUyJE5lz4jI=
+
+isarray@0.0.1:
+  version "0.0.1"
+  resolved "https://registry.nlark.com/isarray/download/isarray-0.0.1.tgz#8a18acfca9a8f4177e09abfc6038939b05d1eedf"
+  integrity sha1-ihis/Kmo9Bd+Cav8YDiTmwXR7t8=
 
 isarray@1.0.0, isarray@^1.0.0, isarray@~1.0.0:
   version "1.0.0"
@@ -7431,7 +7428,7 @@ minimalistic-crypto-utils@^1.0.1:
   resolved "https://registry.nlark.com/minimalistic-crypto-utils/download/minimalistic-crypto-utils-1.0.1.tgz#f6c00c1c0b082246e5c4d99dfb8c7c083b2b582a"
   integrity sha1-9sAMHAsIIkblxNmd+4x8CDsrWCo=
 
-minimatch@3.0.4, minimatch@^3.0.2, minimatch@^3.0.4:
+minimatch@3.0.4, minimatch@^3.0.2, minimatch@^3.0.3, minimatch@^3.0.4:
   version "3.0.4"
   resolved "https://registry.nlark.com/minimatch/download/minimatch-3.0.4.tgz#5166e286457f03306064be5497e8dbb0c3d32083"
   integrity sha1-UWbihkV/AzBgZL5Ul+jbsMPTIIM=
@@ -7551,11 +7548,6 @@ nan@^2.12.1:
   version "2.14.2"
   resolved "https://registry.nlark.com/nan/download/nan-2.14.2.tgz#f5376400695168f4cc694ac9393d0c9585eeea19"
   integrity sha1-9TdkAGlRaPTMaUrJOT0MlYXu6hk=
-
-nanoid@^3.1.23:
-  version "3.1.23"
-  resolved "https://registry.nlark.com/nanoid/download/nanoid-3.1.23.tgz#f744086ce7c2bc47ee0a8472574d5c78e4183a81"
-  integrity sha1-90QIbOfCvEfuCoRyV01ceOQYOoE=
 
 nanomatch@^1.2.9:
   version "1.2.13"
@@ -7683,6 +7675,14 @@ nodemon@^2.0.7:
     touch "^3.1.0"
     undefsafe "^2.0.3"
     update-notifier "^4.1.0"
+
+noms@0.0.0:
+  version "0.0.0"
+  resolved "https://registry.npm.taobao.org/noms/download/noms-0.0.0.tgz#da8ebd9f3af9d6760919b27d9cdc8092a7332859"
+  integrity sha1-2o69nzr51nYJGbJ9nNyAkqczKFk=
+  dependencies:
+    inherits "^2.0.1"
+    readable-stream "~1.0.31"
 
 nopt@~1.0.10:
   version "1.0.10"
@@ -8271,11 +8271,6 @@ postcss-modules-extract-imports@^2.0.0:
   dependencies:
     postcss "^7.0.5"
 
-postcss-modules-extract-imports@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.nlark.com/postcss-modules-extract-imports/download/postcss-modules-extract-imports-3.0.0.tgz#cda1f047c0ae80c97dbe28c3e76a43b88025741d"
-  integrity sha1-zaHwR8CugMl9vijD52pDuIAldB0=
-
 postcss-modules-local-by-default@^3.0.2:
   version "3.0.3"
   resolved "https://registry.nlark.com/postcss-modules-local-by-default/download/postcss-modules-local-by-default-3.0.3.tgz#bb14e0cc78279d504dbdcbfd7e0ca28993ffbbb0"
@@ -8283,15 +8278,6 @@ postcss-modules-local-by-default@^3.0.2:
   dependencies:
     icss-utils "^4.1.1"
     postcss "^7.0.32"
-    postcss-selector-parser "^6.0.2"
-    postcss-value-parser "^4.1.0"
-
-postcss-modules-local-by-default@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.nlark.com/postcss-modules-local-by-default/download/postcss-modules-local-by-default-4.0.0.tgz#ebbb54fae1598eecfdf691a02b3ff3b390a5a51c"
-  integrity sha1-67tU+uFZjuz99pGgKz/zs5ClpRw=
-  dependencies:
-    icss-utils "^5.0.0"
     postcss-selector-parser "^6.0.2"
     postcss-value-parser "^4.1.0"
 
@@ -8303,13 +8289,6 @@ postcss-modules-scope@^2.2.0:
     postcss "^7.0.6"
     postcss-selector-parser "^6.0.0"
 
-postcss-modules-scope@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.nlark.com/postcss-modules-scope/download/postcss-modules-scope-3.0.0.tgz#9ef3151456d3bbfa120ca44898dfca6f2fa01f06"
-  integrity sha1-nvMVFFbTu/oSDKRImN/Kby+gHwY=
-  dependencies:
-    postcss-selector-parser "^6.0.4"
-
 postcss-modules-values@^3.0.0:
   version "3.0.0"
   resolved "https://registry.nlark.com/postcss-modules-values/download/postcss-modules-values-3.0.0.tgz#5b5000d6ebae29b4255301b4a3a54574423e7f10"
@@ -8318,14 +8297,7 @@ postcss-modules-values@^3.0.0:
     icss-utils "^4.0.0"
     postcss "^7.0.6"
 
-postcss-modules-values@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.nlark.com/postcss-modules-values/download/postcss-modules-values-4.0.0.tgz#d7c5e7e68c3bb3c9b27cbf48ca0bb3ffb4602c9c"
-  integrity sha1-18Xn5ow7s8myfL9Iyguz/7RgLJw=
-  dependencies:
-    icss-utils "^5.0.0"
-
-postcss-selector-parser@^6.0.0, postcss-selector-parser@^6.0.2, postcss-selector-parser@^6.0.4:
+postcss-selector-parser@^6.0.0, postcss-selector-parser@^6.0.2:
   version "6.0.6"
   resolved "https://registry.nlark.com/postcss-selector-parser/download/postcss-selector-parser-6.0.6.tgz#2c5bba8174ac2f6981ab631a42ab0ee54af332ea"
   integrity sha1-LFu6gXSsL2mBq2MaQqsO5UrzMuo=
@@ -8346,15 +8318,6 @@ postcss@^7.0.14, postcss@^7.0.26, postcss@^7.0.32, postcss@^7.0.35, postcss@^7.0
     chalk "^2.4.2"
     source-map "^0.6.1"
     supports-color "^6.1.0"
-
-postcss@^8.2.15:
-  version "8.3.5"
-  resolved "https://registry.nlark.com/postcss/download/postcss-8.3.5.tgz#982216b113412bc20a86289e91eb994952a5b709"
-  integrity sha1-mCIWsRNBK8IKhiiekeuZSVKltwk=
-  dependencies:
-    colorette "^1.2.2"
-    nanoid "^3.1.23"
-    source-map-js "^0.6.2"
 
 prelude-ls@^1.2.1:
   version "1.2.1"
@@ -8864,6 +8827,16 @@ readable-stream@^3.6.0:
     inherits "^2.0.3"
     string_decoder "^1.1.1"
     util-deprecate "^1.0.1"
+
+readable-stream@~1.0.31:
+  version "1.0.34"
+  resolved "https://registry.nlark.com/readable-stream/download/readable-stream-1.0.34.tgz#125820e34bc842d2f2aaafafe4c2916ee32c157c"
+  integrity sha1-Elgg40vIQtLyqq+v5MKRbuMsFXw=
+  dependencies:
+    core-util-is "~1.0.0"
+    inherits "~2.0.1"
+    isarray "0.0.1"
+    string_decoder "~0.10.x"
 
 readdirp@^2.2.1:
   version "2.2.1"
@@ -9565,11 +9538,6 @@ source-list-map@^2.0.0, source-list-map@^2.0.1:
   resolved "https://registry.nlark.com/source-list-map/download/source-list-map-2.0.1.tgz#3993bd873bfc48479cca9ea3a547835c7c154b34"
   integrity sha1-OZO9hzv8SEecyp6jpUeDXHwVSzQ=
 
-source-map-js@^0.6.2:
-  version "0.6.2"
-  resolved "https://registry.nlark.com/source-map-js/download/source-map-js-0.6.2.tgz#0bb5de631b41cfbda6cfba8bd05a80efdfd2385e"
-  integrity sha1-C7XeYxtBz72mz7qL0FqA79/SOF4=
-
 source-map-resolve@^0.5.0:
   version "0.5.3"
   resolved "https://registry.nlark.com/source-map-resolve/download/source-map-resolve-0.5.3.tgz#190866bece7553e1f8f267a2ee82c606b5509a1a"
@@ -9815,6 +9783,11 @@ string_decoder@^1.0.0, string_decoder@^1.1.1:
   integrity sha1-QvEUWUpGzxqOMLCoT1bHjD7awh4=
   dependencies:
     safe-buffer "~5.2.0"
+
+string_decoder@~0.10.x:
+  version "0.10.31"
+  resolved "https://registry.nlark.com/string_decoder/download/string_decoder-0.10.31.tgz#62e203bc41766c6c28c9fc84301dab1c5310fa94"
+  integrity sha1-YuIDvEF2bGwoyfyEMB2rHFMQ+pQ=
 
 string_decoder@~1.1.1:
   version "1.1.1"
@@ -10071,7 +10044,7 @@ throttle-debounce@^3.0.1:
   resolved "https://registry.nlark.com/throttle-debounce/download/throttle-debounce-3.0.1.tgz#32f94d84dfa894f786c9a1f290e7a645b6a19abb"
   integrity sha1-MvlNhN+olPeGyaHykOemRbahmrs=
 
-through2@^2.0.0:
+through2@^2.0.0, through2@^2.0.1:
   version "2.0.5"
   resolved "https://registry.nlark.com/through2/download/through2-2.0.5.tgz#01c1e39eb31d07cb7d03a96a70823260b23132cd"
   integrity sha1-AcHjnrMdB8t9A6lqcIIyYLIxMs0=
@@ -10469,6 +10442,11 @@ unset-value@^1.0.0:
   dependencies:
     has-value "^0.3.1"
     isobject "^3.0.0"
+
+untildify@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.npm.taobao.org/untildify/download/untildify-4.0.0.tgz#2bc947b953652487e4600949fb091e3ae8cd919b"
+  integrity sha1-K8lHuVNlJIfkYAlJ+wkeOujNkZs=
 
 upath@^1.1.1:
   version "1.2.0"
@@ -10996,6 +10974,19 @@ yargs-parser@^20.2.2:
   version "20.2.9"
   resolved "https://registry.nlark.com/yargs-parser/download/yargs-parser-20.2.9.tgz#2eb7dc3b0289718fc295f362753845c41a0c94ee"
   integrity sha1-LrfcOwKJcY/ClfNidThFxBoMlO4=
+
+yargs@^16.1.0:
+  version "16.2.0"
+  resolved "https://registry.nlark.com/yargs/download/yargs-16.2.0.tgz#1c82bf0f6b6a66eafce7ef30e376f49a12477f66"
+  integrity sha1-HIK/D2tqZur85+8w43b0mhJHf2Y=
+  dependencies:
+    cliui "^7.0.2"
+    escalade "^3.1.1"
+    get-caller-file "^2.0.5"
+    require-directory "^2.1.1"
+    string-width "^4.2.0"
+    y18n "^5.0.5"
+    yargs-parser "^20.2.2"
 
 yargs@^17.0.1:
   version "17.0.1"
