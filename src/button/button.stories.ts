@@ -4,4 +4,4 @@ import './index'
 
 export default { title: 'Button', id: 'button' }
 
-export const Primary = () => book
+export const Button = () => book

@@ -18,8 +18,8 @@ button[data-sharp] {
   border-radius: 0;
 }
 
-button[data-actived] {
-  background: var(--background-actived);
+button[data-selected] {
+  background: var(--background-selected);
 }
 
 button[data-outline] {
@@ -35,10 +35,11 @@ button:not(:disabled):active {
 }
 
 button:disabled {
-  cursor: default;
+  cursor: auto;
   color: var(--foreground-disabled);
+  border-color: var(--border-color-disabled);
 }
 
-button[data-actived]:disabled {
+button[data-selected]:disabled {
   background: var(--background-disabled);
 }

@@ -10,7 +10,7 @@
     "types"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "yarn storybook",
     "clean:dist": "node ./build/clean.js dist",
     "copy-files": "copyfiles -u 1 src/**/*.css dist/esm/",
     "prebuild": "yarn clean:dist",
@@ -20,7 +20,12 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
-  "keywords": [],
+  "keywords": [
+    "web components",
+    "ui",
+    "desktop",
+    "application"
+  ],
   "author": "",
   "license": "ISC",
   "devDependencies": {

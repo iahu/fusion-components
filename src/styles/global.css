@@ -23,7 +23,7 @@
   --blue: hsl(210, 50%, 60%);
   --bluevibrant: hsl(210, 70%, 70%);
   --blue2: hsla(210, 13%, 40%, 0.7);
-  --blue3: hsl(210, 15%, 22%);
+  --blue3: hsl(210, 7%, 40%, 0.5);
   --blue4: hsl(210, 13%, 45%);
   --blue5: hsl(180, 36%, 54%);
   --blue6: hsl(221, 12%, 69%);
@@ -50,9 +50,12 @@
   --background-hover: var(--blue2);
   --background-active: var(--blue4);
 
-  --background-actived: var(--blue4);
-  --background-disabled: var(--blue2);
+  --background-selected: var(--blue2);
+  --background-disabled: var(--blue3);
+
   --border-color: var(--blue2);
+  --border-color-disabled: var(--blue3);
+
   --accent: var(--blue-vibrant);
   --caret: var(--orange);
   --line-highlight: var(--blue2);
@@ -60,9 +63,9 @@
   --selection-border: var(--blue4);
   --inactive-selection: var(--blue2);
   --misspelling: var(--red);
-  --shadow: rgba(0, 0, 0, 0.25);
+  --shadow: hsla(0, 0%, 0%, 0.25);
   --active-guide: var(--blue5);
-  --stack-guide: rgba(95, 180, 180, 0.5);
+  --stack-guide: hsla(180, 36.17%, 53.92%, 0.5);
   --highlight: var(--blue5);
   --find-highlight-foreground: var(--grey);
   --find-highlight: var(--orange3);

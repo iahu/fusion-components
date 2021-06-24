@@ -5,7 +5,7 @@ import style from './style.css'
 
 export interface Button {
   outline?: boolean
-  actived?: boolean
+  selected?: boolean
   disabled?: boolean
   sharp?: boolean
   size?: '' | 'xs' | 's' | 'm' | 'l' | 'xl' | 'xxl' | 'xxxl'
@@ -13,7 +13,7 @@ export interface Button {
 
 export const Button: Hybrids<Button> = {
   outline: property(false),
-  actived: property(false),
+  selected: property(false),
   disabled: {
     set: (host, value) => {
       if (value) {
@@ -31,13 +31,13 @@ export const Button: Hybrids<Button> = {
   size: property(''),
   sharp: property(false),
 
-  render: ({ disabled, outline, actived, size, sharp }) =>
+  render: ({ disabled, outline, selected, size, sharp }) =>
     html`
       <button
         part="fui-button"
         disabled="${disabled}"
         data-outline="${outline}"
-        data-actived="${actived}"
+        data-selected="${selected}"
         data-size="${size}"
         data-sharp="${sharp}"
       >
