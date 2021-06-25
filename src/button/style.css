@@ -1,29 +1,50 @@
 :host {
-  display: inline-block;
+  display: inline-flex;
+  vertical-align: bottom;
+  cursor: pointer;
+  color: var(--foreground);
+  border-radius: var(--border-radius);
 }
 
 button {
+  outline: none;
   border: 1px solid transparent;
-  background: transparent;
-  color: var(--foreground);
-  cursor: pointer;
-  display: inline-block;
-  font-size: var(--font-size-xs);
+  display: inline-flex;
+  justify-self: space-between;
+  word-break: keep-all;
+  white-space: nowrap;
+  --padding-l: clamp(2px, calc(var(--font-size) - 7px), 5px);
+  --padding-r: var(--padding-l);
+  --padding-t: clamp(2px, calc(var(--font-size) - 10px), 5px);
+  --padding-b: var(--padding-t);
   line-height: var(--line-height);
-  border-radius: var(--border-radius);
   user-select: none;
+  padding: var(--padding-t, 0) var(--padding-r, 0) var(--padding-b, 0) var(--padding-l, 0);
 }
 
-button[data-sharp] {
+button .before,
+button .aftter {
+  flex-grow: 0;
+}
+button .content {
+  flex: 1;
+}
+
+:host([sharp]) {
   border-radius: 0;
 }
 
-button[data-selected] {
+:host([selected]) {
   background: var(--background-selected);
 }
 
-button[data-outline] {
+:host([outline]) button {
   border-color: var(--border-color);
+}
+
+button:not(:disabled):focus-visible {
+  background: var(--background-hover);
+  border-color: var(--border-active);
 }
 
 button:not(:disabled):hover {
@@ -40,6 +61,6 @@ button:disabled {
   border-color: var(--border-color-disabled);
 }
 
-button[data-selected]:disabled {
+:host([selected]) button:disabled {
   background: var(--background-disabled);
 }

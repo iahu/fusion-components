@@ -1,5 +1,5 @@
 {
-  "name": "fusion-ui",
+  "name": "fusion-components",
   "version": "1.0.0",
   "description": "一套面向类桌面应用的沉浸式风格 Web Components UI 库",
   "main": "dist/bundle.js",
@@ -14,6 +14,7 @@
     "clean:dist": "node ./build/clean.js dist",
     "copy-files": "copyfiles -u 1 src/**/*.css dist/esm/",
     "prebuild": "yarn clean:dist",
+    "rollup": "rollup --config rollup.config.js",
     "build": "yarn build:tsc && yarn build:bundle && yarn copy-files",
     "build:tsc": "tsc -p tsconfig.json",
     "build:bundle": "webpack",
@@ -23,6 +24,7 @@
   "keywords": [
     "web components",
     "ui",
+    "components",
     "desktop",
     "application"
   ],
@@ -44,21 +46,25 @@
     "eslint": "^7.29.0",
     "eslint-config-prettier": "^8.3.0",
     "less-loader": "6.1.2",
-    "lit-html": "^1.4.1",
     "nodemon": "^2.0.7",
     "prettier": "^2.3.1",
     "raw-loader": "^4.0.2",
-    "sb": "^6.2.9",
+    "rollup": "^2.52.2",
+    "rollup-plugin-import-css": "^2.0.1",
+    "rollup-plugin-terser": "^7.0.2",
+    "sb": "^6.3.0",
     "style-loader": "^2.0.0",
     "ts-loader": "7.0.2",
     "ts-node": "^10.0.0",
     "typescript": "^4.3.4",
-    "webpack": "^5.40.0",
-    "webpack-cli": "^4.7.2",
     "yargs": "^17.0.1"
   },
   "dependencies": {
-    "@storybook/addon-postcss": "^2.0.0",
-    "hybrids": "^5.3.3"
+    "@rollup/plugin-node-resolve": "^13.0.0",
+    "lit": "^2.0.0-rc.2",
+    "lit-html": "^1.4.1",
+    "rollup-plugin-typescript": "^1.0.1",
+    "rollup-plugin-typescript2": "^0.30.0",
+    "tslib": "^2.3.0"
   }
 }

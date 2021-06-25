@@ -1,49 +1,59 @@
-import { html, define, property, Hybrids } from 'hybrids'
+import { html, TemplateResult } from 'lit'
+import { customElement, property } from 'lit/decorators.js'
+import { styleMap } from 'lit/directives/style-map.js'
+import FusionElement from '../fusion-element'
+import mergeStyles from '../merge-styles'
 
-import global from '../styles/global.css'
 import style from './style.css'
 
-export interface Button {
-  outline?: boolean
-  selected?: boolean
-  disabled?: boolean
-  sharp?: boolean
-  size?: '' | 'xs' | 's' | 'm' | 'l' | 'xl' | 'xxl' | 'xxxl'
+@customElement('fu-button')
+export class Button extends FusionElement {
+  static styles = mergeStyles(style)
+
+  @property()
+  classes = {}
+
+  @property()
+  styles = {}
+
+  @property({ type: Boolean })
+  autofocus = false
+
+  @property({ type: Boolean })
+  disabled = false
+
+  @property()
+  type: '' | 'button' | 'submit' | 'reset' | 'menu' = ''
+
+  @property()
+  name = ''
+
+  @property()
+  value = ''
+
+  @property({ type: Boolean })
+  selected = false
+
+  @property({ type: Boolean })
+  outline = false
+
+  @property({ type: Boolean })
+  sharp = false
+
+  render(): TemplateResult<1> {
+    const { autofocus, disabled, name, value, type, size, styles } = this
+
+    return html`<button
+      part="fui-button"
+      .disabled="${disabled}"
+      .autofocus="${autofocus}"
+      name="${name}"
+      value="${value}"
+      type="${type}"
+    >
+      <span part="before" class="before"><slot name="before"></slot></span>
+      <span part="content" class="content"><slot></slot></span>
+      <span part="after" class="after"><slot name="after"></slot></span>
+    </button>`
+  }
 }
-
-export const Button: Hybrids<Button> = {
-  outline: property(false),
-  selected: property(false),
-  disabled: {
-    set: (host, value) => {
-      if (value) {
-        host.setAttribute('disabled', '')
-      } else {
-        host.removeAttribute('disabled')
-      }
-      return value
-    },
-    get: (host) => host.hasAttribute('disabled'),
-    observe: (host) => {
-      host.disabled = host.hasAttribute('disabled')
-    },
-  },
-  size: property(''),
-  sharp: property(false),
-
-  render: ({ disabled, outline, selected, size, sharp }) =>
-    html`
-      <button
-        part="fui-button"
-        disabled="${disabled}"
-        data-outline="${outline}"
-        data-selected="${selected}"
-        data-size="${size}"
-        data-sharp="${sharp}"
-      >
-        <slot></slot>
-      </button>
-    `.style(global, style),
-}
-
-define('fui-button', Button)

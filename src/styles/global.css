@@ -2,21 +2,29 @@
   /*rset*/
   all: initial;
   line-height: var(--host-line-height);
-  font-size: var(--font-size-s);
+  --font-size: var(--font-size-xs);
+  font-size: var(--font-size);
   user-select: var(--user-select);
+  fill: currentColor;
 
   --user-select: none;
 
   /*size*/
   --host-line-height: 1;
   --line-height: 1.4;
-  --font-size-s: 12px;
+  --font-size-xs: 12px;
+  --font-size-s: 13px;
   --font-size-m: 14px;
-  --font-size-l: 16px;
-  --font-size-xl: 18px;
-  --font-size-xxl: 20px;
-  --font-size-xxxl: 24px;
+  --font-size-l: 15px;
+  --font-size-xl: 16px;
+  --font-size-xxl: 17px;
+  --font-size-xxxl: 18px;
   --border-radius: 2px;
+
+  --padding-t: 0;
+  --padding-r: 4px;
+  --padding-b: 0;
+  --padding-l: 4px;
 
   /*color variables*/
   --black: hsl(0, 0%, 0%);
@@ -54,6 +62,7 @@
   --background-disabled: var(--blue3);
 
   --border-color: var(--blue2);
+  --border-active: var(--blue);
   --border-color-disabled: var(--blue3);
 
   --accent: var(--blue-vibrant);
@@ -69,4 +78,41 @@
   --highlight: var(--blue5);
   --find-highlight-foreground: var(--grey);
   --find-highlight: var(--orange3);
+}
+
+:host([size='xs']) {
+  --font-size: var(--font-size-xs);
+}
+:host([size='s']) {
+  --font-size: var(--font-size-s);
+}
+:host([size='m']) {
+  --font-size: var(--font-size-m);
+}
+:host([size='l']) {
+  --font-size: var(--font-size-l);
+}
+:host([size='xl']) {
+  --font-size: var(--font-size-xl);
+}
+:host([size='xxl']) {
+  --font-size: var(--font-size-xxl);
+}
+:host([size='xxxl']) {
+  --font-size: var(--font-size-xxxl);
+}
+
+:host *:not(:focus-visible) {
+  outline: none;
+}
+
+:host > * {
+  font: inherit;
+  color: inherit;
+  background: inherit;
+  cursor: inherit;
+  fill: inherit;
+  border-radius: inherit;
+  height: inherit;
+  width: inherit;
 }
