@@ -1,0 +1,17 @@
+:host {
+  background: inherit;
+  display: inline-flex;
+}
+
+.control {
+  border: var(--border-width) solid var(--border-color);
+  display: inline-flex;
+}
+
+input {
+  line-height: var(--line-height);
+  color: inherit;
+  background: inherit;
+  border: none;
+  outline: none;
+}

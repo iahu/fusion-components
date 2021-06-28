@@ -6,7 +6,7 @@
   border-radius: var(--border-radius);
 }
 
-button {
+.control {
   outline: none;
   border: 1px solid transparent;
   display: inline-flex;
@@ -22,11 +22,11 @@ button {
   padding: var(--padding-t, 0) var(--padding-r, 0) var(--padding-b, 0) var(--padding-l, 0);
 }
 
-button .before,
-button .aftter {
+.control .before,
+.control .aftter {
   flex-grow: 0;
 }
-button .content {
+.control .content {
   flex: 1;
 }
 
@@ -38,29 +38,29 @@ button .content {
   background: var(--background-selected);
 }
 
-:host([outline]) button {
+:host([outline]) .control {
   border-color: var(--border-color);
 }
 
-button:not(:disabled):focus-visible {
+.control:not(:disabled):focus-visible {
   background: var(--background-hover);
   border-color: var(--border-active);
 }
 
-button:not(:disabled):hover {
+.control:not(:disabled):hover {
   background: var(--background-hover);
 }
 
-button:not(:disabled):active {
+.control:not(:disabled):active {
   background: var(--background-active);
 }
 
-button:disabled {
+.control:disabled {
   cursor: auto;
   color: var(--foreground-disabled);
   border-color: var(--border-color-disabled);
 }
 
-:host([selected]) button:disabled {
+:host([selected]) .control:disabled {
   background: var(--background-disabled);
 }

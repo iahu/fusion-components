@@ -20,7 +20,7 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['dist/*.js'],
+      files: ['dist/**/*.js', 'node_modules/**/*.stories.ts'],
       rules: {
         indent: ['warn', 4, { SwitchCase: 1 }],
         semi: 'off',

@@ -1,30 +1,34 @@
 :host {
   /*rset*/
   all: initial;
-  line-height: var(--host-line-height);
+  line-height: var(--line-height);
   --font-size: var(--font-size-xs);
   font-size: var(--font-size);
   user-select: var(--user-select);
+  color: var(--foreground);
   fill: currentColor;
 
+  --fc-size-unit: 1px;
   --user-select: none;
 
   /*size*/
   --host-line-height: 1;
   --line-height: 1.4;
-  --font-size-xs: 12px;
-  --font-size-s: 13px;
-  --font-size-m: 14px;
-  --font-size-l: 15px;
-  --font-size-xl: 16px;
-  --font-size-xxl: 17px;
-  --font-size-xxxl: 18px;
-  --border-radius: 2px;
+  --font-size-xs: calc(var(--fc-size-unit) * 12);
+  --font-size-s: calc(var(--fc-size-unit) * 13);
+  --font-size-m: calc(var(--fc-size-unit) * 14);
+  --font-size-l: calc(var(--fc-size-unit) * 15);
+  --font-size-xl: calc(var(--fc-size-unit) * 16);
+  --font-size-xxl: calc(var(--fc-size-unit) * 17);
+  --font-size-xxxl: calc(var(--fc-size-unit) * 18);
+  --border-radius: calc(var(--fc-size-unit) * 2);
 
   --padding-t: 0;
-  --padding-r: 4px;
+  --padding-r: calc(var(--fc-size-unit) * 4);
   --padding-b: 0;
-  --padding-l: 4px;
+  --padding-l: calc(var(--fc-size-unit) * 4);
+
+  --border-width: calc(var(--fc-size-unit) * 1);
 
   /*color variables*/
   --black: hsl(0, 0%, 0%);

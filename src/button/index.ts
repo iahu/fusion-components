@@ -1,20 +1,16 @@
 import { html, TemplateResult } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
-import { styleMap } from 'lit/directives/style-map.js'
-import FusionElement from '../fusion-element'
+import FusionComponent from '../fusion-component'
 import mergeStyles from '../merge-styles'
 
 import style from './style.css'
 
-@customElement('fu-button')
-export class Button extends FusionElement {
+@customElement('fc-button')
+export class Button extends FusionComponent {
   static styles = mergeStyles(style)
 
   @property()
   classes = {}
-
-  @property()
-  styles = {}
 
   @property({ type: Boolean })
   autofocus = false
@@ -24,6 +20,21 @@ export class Button extends FusionElement {
 
   @property()
   type: '' | 'button' | 'submit' | 'reset' | 'menu' = ''
+
+  @property()
+  form = ''
+
+  @property()
+  formaction = ''
+
+  @property()
+  formenctype = ''
+
+  @property()
+  formnovalidate = ''
+
+  @property()
+  formtarget = ''
 
   @property()
   name = ''
@@ -41,15 +52,22 @@ export class Button extends FusionElement {
   sharp = false
 
   render(): TemplateResult<1> {
-    const { autofocus, disabled, name, value, type, size, styles } = this
+    const { autofocus, disabled, name, value, type, size, form, formaction, formnovalidate, formtarget } = this
 
     return html`<button
-      part="fui-button"
+      class="control"
+      part="control"
+      part="fc-button"
       .disabled="${disabled}"
       .autofocus="${autofocus}"
+      data-size="${size}"
       name="${name}"
       value="${value}"
       type="${type}"
+      form="${form}"
+      formaction="${formaction}"
+      formnovalidate="${formnovalidate}"
+      formtarget="${formtarget}"
     >
       <span part="before" class="before"><slot name="before"></slot></span>
       <span part="content" class="content"><slot></slot></span>
