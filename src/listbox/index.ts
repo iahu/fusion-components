@@ -45,9 +45,6 @@ export default class ListBox extends FormAssociated {
     }
   }
 
-  @property()
-  value = ''
-
   @state()
   protected displayValue = ''
 

@@ -41,6 +41,8 @@
   box-sizing: border-box;
   background: var(--background);
   padding: var(--padding-t) var(--padding-r) var(--padding-b) var(--padding-l);
+  max-height: var(--max-height, 164px);
+  overflow: auto;
 }
 
 .listbox[hidden] {
