@@ -1,0 +1,46 @@
+:host {
+  position: relative;
+  fill: var(--foreground);
+  display: inline-block;
+  min-width: var(--control-min-width);
+}
+
+:host(:not(:focus-visible)) {
+  outline: none;
+}
+
+:host .control {
+  fill: inherit;
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  display: inline-flex;
+  border: var(--border-width) solid var(--border-color);
+  padding: var(--padding-t) var(--padding-l) var(--padding-b) var(--padding-l);
+  cursor: pointer;
+}
+
+.selected-value {
+  flex: 1;
+}
+
+.select-indicator {
+  width: var(--font-size);
+  height: var(--font-size);
+  vertical-align: middle;
+}
+
+.listbox {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  box-sizing: border-box;
+  background: var(--background);
+  padding: var(--padding-t) var(--padding-r) var(--padding-b) var(--padding-l);
+}
+
+.listbox[hidden] {
+  display: none;
+}

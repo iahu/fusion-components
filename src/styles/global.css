@@ -1,6 +1,6 @@
 :host {
   /*rset*/
-  all: initial;
+  /*all: initial;*/
   line-height: var(--line-height);
   --font-size: var(--font-size-xs);
   font-size: var(--font-size);
@@ -10,6 +10,7 @@
 
   --fc-size-unit: 1px;
   --user-select: none;
+  --control-min-width: calc(var(--fc-size-unit) * 200);
 
   /*size*/
   --host-line-height: 1;
@@ -23,22 +24,30 @@
   --font-size-xxxl: calc(var(--fc-size-unit) * 18);
   --border-radius: calc(var(--fc-size-unit) * 2);
 
-  --padding-t: 0;
-  --padding-r: calc(var(--fc-size-unit) * 4);
-  --padding-b: 0;
-  --padding-l: calc(var(--fc-size-unit) * 4);
+  --padding-l: clamp(
+    calc(var(--fc-size-unit) * 2),
+    calc(var(--font-size) - var(--fc-size-unit) * 7),
+    calc(var(--fc-size-unit) * 5)
+  );
+  --padding-r: var(--padding-l);
+  --padding-t: clamp(
+    calc(var(--fc-size-unit) * 2),
+    calc(var(--font-size) - var(--fc-size-unit) * 10),
+    calc(var(--fc-size-unit) * 5)
+  );
+  --padding-b: var(--padding-t);
 
   --border-width: calc(var(--fc-size-unit) * 1);
 
   /*color variables*/
   --black: hsl(0, 0%, 0%);
   --blue: hsl(210, 50%, 60%);
-  --bluevibrant: hsl(210, 70%, 70%);
-  --blue2: hsla(210, 13%, 40%, 0.7);
-  --blue3: hsl(210, 7%, 40%, 0.5);
-  --blue4: hsl(210, 13%, 45%);
-  --blue5: hsl(180, 36%, 54%);
-  --blue6: hsl(221, 12%, 69%);
+  --blue-vibrant: hsl(203, 98%, 56%);
+  --blue2: hsla(210, 13%, 40%, 0.75);
+  --blue3: hsla(210, 7%, 40%, 0.5);
+  --blue4: hsl(210, 7%, 40%);
+  --blue5: hsla(203, 98%, 56%, 0.5);
+  --blue6: hsl(203, 98%, 64%);
   --green: hsl(114, 31%, 68%);
   --darker-grey: hsl(0, 0%, 30%);
   --dark-grey: hsl(0, 0%, 40%);
@@ -55,21 +64,26 @@
   --white2: hsl(0, 0%, 97%);
   --white3: hsl(219, 28%, 88%);
 
-  /* globals colors*/
-  --foreground: var(--white3);
-  --foreground-disabled: var(--grey);
-  --background: var(--blue3);
-  --background-hover: var(--blue2);
-  --background-active: var(--blue4);
+  /* foreground colors*/
+  --foreground: var(--white);
+  --foreground-disabled: var(--lighter-grey);
 
-  --background-selected: var(--blue2);
-  --background-disabled: var(--blue3);
+  /*background colors*/
+  --background: hsla(203, 7%, 34%, 1);
+  --background-hover: hsla(203, 7%, 49%, 1);
+  --background-active: hsla(203, 7%, 44%, 1);
+  --background-selected: hsla(203, 74%, 47%, 1);
+  --background-disabled: hsla(203, 7%, 50%, 0.3);
 
-  --border-color: var(--blue2);
-  --border-active: var(--blue);
-  --border-color-disabled: var(--blue3);
+  /*border-colors*/
+  --border-color: hsla(203, 9%, 43%, 1);
+  --border-color-hover: hsla(203, 17%, 54%, 1);
+  --border-color-active: hsla(203, 17%, 64%, 1);
+  --border-color-disabled: hsla(203, 9%, 43%, 0.3);
 
   --accent: var(--blue-vibrant);
+  --accent-hover: var(--blue6);
+  --accent-disabled: var(--blue5);
   --caret: var(--orange);
   --line-highlight: var(--blue2);
   --selection: var(--blue2);
@@ -110,13 +124,34 @@
   outline: none;
 }
 
-:host > * {
+.control {
   font: inherit;
   color: inherit;
-  background: inherit;
   cursor: inherit;
   fill: inherit;
   border-radius: inherit;
   height: inherit;
   width: inherit;
+  will-change: border-color background-color;
+  transition: border-color 0.2s, background-color;
+}
+
+:host {
+  border-radius: var(--border-radius);
+}
+
+:host([sharp]) {
+  border-radius: 0;
+}
+
+:host([outline]) .control {
+  border-color: var(--border-color);
+}
+
+:host([outline]:hover) .control {
+  border-color: var(--border-color-hover);
+}
+
+:host([outline]:focus-within) .control {
+  border-color: var(--border-color-active);
 }

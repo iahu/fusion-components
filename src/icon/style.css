@@ -1,0 +1,13 @@
+:host {
+  display: inline-block;
+  width: var(--font-size);
+  height: var(--font-size);
+  fill: var(--foreground);
+  position: relative;
+}
+
+::slotted(*) {
+  width: 100%;
+  height: 100%;
+  fill: inherit;
+}

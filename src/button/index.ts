@@ -1,7 +1,9 @@
+import { prototype } from 'events'
 import { html, TemplateResult } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
 import FusionComponent from '../fusion-component'
 import mergeStyles from '../merge-styles'
+import { before, after } from '../pattern/before-after'
 
 import style from './style.css'
 
@@ -51,15 +53,18 @@ export class Button extends FusionComponent {
   @property({ type: Boolean })
   sharp = false
 
+  @property()
+  accent: 'primary' | 'scondary' | '' = 'primary'
+
   render(): TemplateResult<1> {
-    const { autofocus, disabled, name, value, type, size, form, formaction, formnovalidate, formtarget } = this
+    const { autofocus, disabled, name, value, type, size, form, formaction, formnovalidate, formtarget, accent } = this
 
     return html`<button
       class="control"
       part="control"
       part="fc-button"
-      .disabled="${disabled}"
-      .autofocus="${autofocus}"
+      ?disabled="${disabled}"
+      ?autofocus="${autofocus}"
       data-size="${size}"
       name="${name}"
       value="${value}"
@@ -68,10 +73,11 @@ export class Button extends FusionComponent {
       formaction="${formaction}"
       formnovalidate="${formnovalidate}"
       formtarget="${formtarget}"
+      data-accent="${accent}"
     >
-      <span part="before" class="before"><slot name="before"></slot></span>
+      ${before()}
       <span part="content" class="content"><slot></slot></span>
-      <span part="after" class="after"><slot name="after"></slot></span>
+      ${after()}
     </button>`
   }
 }

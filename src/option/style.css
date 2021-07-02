@@ -1,0 +1,49 @@
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--background);
+  --padding-l: 0;
+  /*--padding-r: 0;*/
+}
+
+:host(:hover) {
+  background: var(--background-hover);
+}
+
+:host(:focus) {
+  background-color: var(--background-active);
+}
+
+.control {
+  color: inherit;
+  display: flex;
+  align-items: center;
+  background-color: inherit;
+  cursor: pointer;
+  padding: var(--padding-t) var(--padding-r) var(--padding-b) var(--padding-l);
+  box-sizing: border-box;
+}
+
+.control:not(:focus-visible) {
+  outline: none;
+}
+
+.control[selected] {
+  background: var(--background-selected);
+}
+
+.icon {
+  display: inline-flex;
+  width: var(--font-size);
+  height: var(--font-size);
+  justify-content: center;
+  align-items: center;
+  transform: scale3d(0.6, 0.6, 0.6);
+  transform-origin: center center;
+}
+.icon svg {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}

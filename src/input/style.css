@@ -1,17 +1,61 @@
 :host {
-  background: inherit;
   display: inline-flex;
+  border-radius: var(--border-radius);
+  color: var(--foreground);
+}
+
+:host([sharp]) {
+  border-radius: 0;
+}
+
+.root {
+  border-radius: inherit;
+  border: var(--border-width) solid transparent;
+  display: inline-flex;
+  padding: var(--padding-t) var(--padding-r) var(--padding-b) var(--padding-l);
+  will-change: background-color;
+  background: var(--background);
+  transition: all 0.14s;
 }
 
 .control {
-  border: var(--border-width) solid var(--border-color);
-  display: inline-flex;
-}
-
-input {
-  line-height: var(--line-height);
+  border-radius: inherit;
+  padding: 0 var(--padding-r) 0 var(--padding-l);
+  height: calc(var(--fc-size-unit) * 16);
+  /*line-height: var(--line-height);*/
   color: inherit;
-  background: inherit;
+  background: transparent;
   border: none;
   outline: none;
+  caret-color: var(--caret);
+}
+
+.control::placeholder {
+  color: var(--light-grey);
+}
+
+:host(:not([disabled]):hover) .root {
+  background-color: var(--background-hover);
+}
+
+:host(:not([disabled]):focus-within) .root {
+  background-color: var(--background-active);
+}
+
+:host([disabled]) {
+  background: var(--background-disabled);
+  border-color: var(--border-color-disabled);
+  color: var(--foreground-disabled);
+}
+
+/*outline*/
+:host([outline]) .root {
+  border-color: var(--border-color);
+}
+
+:host([outline]:focus-within) .root {
+  border-color: var(--border-color-active);
+}
+:host([outline]:hover) .root {
+  border-color: var(--border-color-hover);
 }

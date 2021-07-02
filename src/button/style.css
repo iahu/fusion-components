@@ -4,22 +4,27 @@
   cursor: pointer;
   color: var(--foreground);
   border-radius: var(--border-radius);
+  background: var(--background);
 }
 
 .control {
+  background: inherit;
   outline: none;
   border: 1px solid transparent;
   display: inline-flex;
   justify-self: space-between;
   word-break: keep-all;
   white-space: nowrap;
-  --padding-l: clamp(2px, calc(var(--font-size) - 7px), 5px);
-  --padding-r: var(--padding-l);
-  --padding-t: clamp(2px, calc(var(--font-size) - 10px), 5px);
-  --padding-b: var(--padding-t);
   line-height: var(--line-height);
   user-select: none;
   padding: var(--padding-t, 0) var(--padding-r, 0) var(--padding-b, 0) var(--padding-l, 0);
+}
+
+.control:disabled {
+  cursor: auto;
+  color: var(--foreground-disabled);
+  border-color: var(--border-color-disabled);
+  /*background-color: var(--background-disabled);*/
 }
 
 .control .before,
@@ -38,13 +43,17 @@
   background: var(--background-selected);
 }
 
+:host([disabled]) {
+  opacity: 0.3;
+}
+
 :host([outline]) .control {
   border-color: var(--border-color);
 }
 
 .control:not(:disabled):focus-visible {
   background: var(--background-hover);
-  border-color: var(--border-active);
+  border-color: var(--border-color-active);
 }
 
 .control:not(:disabled):hover {
@@ -55,12 +64,30 @@
   background: var(--background-active);
 }
 
-.control:disabled {
-  cursor: auto;
-  color: var(--foreground-disabled);
-  border-color: var(--border-color-disabled);
+:host([selected]) .control[disabled] {
+  /*opacity: 0.5;*/
+  background: var(--background-disabled);
 }
 
-:host([selected]) .control:disabled {
-  background: var(--background-disabled);
+/*secondary*/
+.control[data-accent='secondary'] {
+  background: var(--accent);
+}
+.control:not(:disabled)[data-accent='secondary'] {
+  border-color: var(--accent-hover);
+}
+.control:not(:disabled)[data-accent='secondary']:hover {
+  background: var(--accent-hover);
+}
+
+.control:not(:disabled)[data-accent='secondary']:active {
+  background: var(--accent-hover);
+}
+
+.control[data-accent='secondary'] {
+  background: var(--accent);
+}
+
+.control[data-accent='secondary'][disabled] {
+  background: var(--accent-disabled);
 }

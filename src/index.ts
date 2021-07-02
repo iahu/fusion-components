@@ -1,2 +1,5 @@
 export * from './button/index'
 export * from './input/index'
+export * from './option/index'
+export * from './select/index'
+export * from './icon/index'
