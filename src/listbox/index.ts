@@ -28,7 +28,7 @@ export default class ListBox extends FormAssociated {
       option.toggleAttribute('sharp', isSharp)
     })
 
-    const selectedOption = this.options.find((o) => o.value === this.value)
+    const selectedOption = this.options.find((o) => !o.disabled && o.value === this.value)
     if (selectedOption) {
       const preSelectedOption = this.options.find((o) => o.selected && o.value !== this.value)
       if (preSelectedOption) preSelectedOption.selected = false
@@ -94,7 +94,7 @@ export default class ListBox extends FormAssociated {
   public set selectedIndex(idx: number) {
     const mergedIdx = Math.max(0, Math.min(idx, this.options.length - 1))
     this.options.forEach((o) => {
-      if (o.index === mergedIdx) {
+      if (o.index === mergedIdx && !o.disabled) {
         o.selected = true
         this.value = o.value
       } else {
@@ -121,7 +121,7 @@ export default class ListBox extends FormAssociated {
 
   handleClick(e: MouseEvent): void {
     const { srcElement } = e
-    if (srcElement instanceof HTMLElement && isOption(srcElement)) {
+    if (srcElement instanceof HTMLElement && isOption(srcElement) && !(srcElement as Option).disabled) {
       this.selectedIndex = this.options.findIndex((o) => o === srcElement)
     }
     this.hidden = !this.hidden
@@ -146,6 +146,7 @@ export default class ListBox extends FormAssociated {
     }
 
     const withCtrl = e.metaKey || e.ctrlKey || e.altKey ? this.options.length : 0
+    const preIndicatedIndex = this.indicatedIndex
     switch (e.key) {
       case 'ArrowDown':
         this.indicatedIndex += 1 + withCtrl
@@ -158,6 +159,21 @@ export default class ListBox extends FormAssociated {
         this.selectedIndex = this.indicatedIndex
         this.hidden = true
         break
+    }
+    // 如果新指向的 option 不可用，按规则换一个
+    if (this.options[this.indicatedIndex].disabled) {
+      if (withCtrl) {
+        const step = e.key === 'ArrowDown' ? -1 : 1
+        while (this.options[this.indicatedIndex]) {
+          this.indicatedIndex += step
+          const nextOption = this.options[this.indicatedIndex]
+          if (!nextOption.disabled) {
+            break
+          }
+        }
+      } else {
+        this.indicatedIndex = preIndicatedIndex
+      }
     }
   }
 

@@ -26,7 +26,10 @@ export default class Option extends FC {
   }
 
   willUpdate(props: PropertyValues): void {
-    if (props.has('selected')) {
+    if (this.disabled) {
+      this.selected = false
+      this.actived = false
+    } else if (props.has('selected')) {
       this.actived = this.selected
       if (props.get('selected') !== this.selected) {
         this.emit('selectionchange', this.selected)
