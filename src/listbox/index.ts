@@ -139,14 +139,14 @@ export default class ListBox extends FormAssociated {
   }
 
   handleKeydown(e: KeyboardEvent): void {
-    enum handledKeys {
+    enum HANDLED_KEYS {
       'ArrowDown' = 'ArrowDown',
       'ArrowUp' = 'ArrowUp',
       'Enter' = 'Enter',
       'Space' = ' ',
     }
 
-    if (!(Object.values(handledKeys) as string[]).includes(e.key)) {
+    if (!Object.values<string>(HANDLED_KEYS).includes(e.key)) {
       return
     }
 
@@ -158,14 +158,14 @@ export default class ListBox extends FormAssociated {
     const withCtrl = e.metaKey || e.ctrlKey || e.altKey ? this.options.length : 0
     const preIndicatedIndex = this.indicatedIndex
     switch (e.key) {
-      case handledKeys.ArrowDown:
+      case HANDLED_KEYS.ArrowDown:
         this.indicatedIndex += 1 + withCtrl
         break
-      case handledKeys.ArrowUp:
+      case HANDLED_KEYS.ArrowUp:
         this.indicatedIndex -= 1 + withCtrl
         break
-      case handledKeys.Space:
-      case handledKeys.Enter:
+      case HANDLED_KEYS.Space:
+      case HANDLED_KEYS.Enter:
         this.selectedIndex = this.indicatedIndex
         this.hidden = true
         break
