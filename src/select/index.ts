@@ -9,10 +9,6 @@ import style from './style.css'
 export default class Select extends ListBox {
   static styles = mergeStyles(style)
 
-  handleClickOption(e: MouseEvent): void {
-    console.log(e.currentTarget, e.srcElement)
-  }
-
   render(): TemplateResult<1> {
     return html`
       <div class="control" id="control" part="control" role="comobox" aria-haspopup="listbox">

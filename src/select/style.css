@@ -3,6 +3,7 @@
   fill: var(--foreground);
   display: inline-block;
   min-width: var(--control-min-width);
+  word-break: keep-all;
 }
 
 :host(:not(:focus-visible)) {
@@ -34,6 +35,7 @@
 
 .listbox {
   position: absolute;
+  z-index: 1;
   width: 100%;
   left: 0;
   box-sizing: border-box;

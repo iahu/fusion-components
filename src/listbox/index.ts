@@ -139,8 +139,18 @@ export default class ListBox extends FormAssociated {
   }
 
   handleKeydown(e: KeyboardEvent): void {
-    const handledKeys = ['ArrowUp', 'ArrowDown', 'Enter']
-    if (handledKeys.includes(e.key) && this.hidden) {
+    enum handledKeys {
+      'ArrowDown' = 'ArrowDown',
+      'ArrowUp' = 'ArrowUp',
+      'Enter' = 'Enter',
+      'Space' = ' ',
+    }
+
+    if (!(Object.values(handledKeys) as string[]).includes(e.key)) {
+      return
+    }
+
+    if (this.hidden) {
       this.hidden = false
       return
     }
@@ -148,18 +158,22 @@ export default class ListBox extends FormAssociated {
     const withCtrl = e.metaKey || e.ctrlKey || e.altKey ? this.options.length : 0
     const preIndicatedIndex = this.indicatedIndex
     switch (e.key) {
-      case 'ArrowDown':
+      case handledKeys.ArrowDown:
         this.indicatedIndex += 1 + withCtrl
         break
-      case 'ArrowUp':
+      case handledKeys.ArrowUp:
         this.indicatedIndex -= 1 + withCtrl
         break
-      case ' ':
-      case 'Enter':
+      case handledKeys.Space:
+      case handledKeys.Enter:
         this.selectedIndex = this.indicatedIndex
         this.hidden = true
         break
+      default:
+        // 其它按键不处理，并中断后面的逻辑
+        return
     }
+
     // 如果新指向的 option 不可用，按规则换一个
     if (this.options[this.indicatedIndex].disabled) {
       if (withCtrl) {
