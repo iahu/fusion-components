@@ -1,3 +1,4 @@
+import { PropertyValues } from 'lit'
 import { property, state } from 'lit/decorators'
 import FormAssociated from '../form-associated'
 import Option, { isOption } from '../option'
@@ -8,9 +9,7 @@ export default class ListBox extends FormAssociated {
     this.addEventListener('click', this.handleClick)
     this.addEventListener('focusout', this.handleFocusout)
     this.addEventListener('keydown', this.handleKeydown)
-    if (this.hasAttribute('value')) {
-      this.value = this.getAttribute('value') || ''
-    }
+    this.addEventListener('selectionchange', this.handleSelectionchange)
   }
 
   disconnectedCallback(): void {
@@ -20,22 +19,29 @@ export default class ListBox extends FormAssociated {
     this.removeEventListener('keydown', this.handleKeydown)
   }
 
-  updated(): void {
+  updated(props: PropertyValues): void {
     const isSharp = this.hasAttribute('sharp')
+    // 校验子元素，并传递要继承的属性
     this.options?.forEach((option) => {
       // 只保留合法的 Option 元素
-      if (!isOption(option)) option.remove()
-      if (option.value === this.value) this.displayValue = option.textContent || ''
+      if (!isOption(option)) return option.remove()
       option.toggleAttribute('sharp', isSharp)
     })
-  }
 
-  attributeChangedCallback(name: string, pre: string, next: string): void {
-    if (name === 'value') {
-      const preOpt = this.options.find((o) => o.value === pre)
-      if (preOpt) preOpt.selected = false
-      const nextOpt = this.options.find((o) => o.value === next)
-      if (nextOpt) nextOpt.selected = true
+    const selectedOption = this.options.find((o) => o.value === this.value)
+    if (selectedOption) {
+      const preSelectedOption = this.options.find((o) => o.selected && o.value !== this.value)
+      if (preSelectedOption) preSelectedOption.selected = false
+      this.value = selectedOption.value || ''
+      this.displayValue = selectedOption.text || ''
+      this.selectedIndex = selectedOption.index || -1
+    } else {
+      // 没有选中任何 option
+      this.displayValue = ''
+      this.value = ''
+    }
+    if (props.has('value') && props.get('value') !== this.value) {
+      this.emit('change', this.value)
     }
   }
 
@@ -43,7 +49,7 @@ export default class ListBox extends FormAssociated {
   value = ''
 
   @state()
-  displayValue = ''
+  protected displayValue = ''
 
   /**
    * 当前指向的 Option 的索引 ，但还没被选中，键盘或鼠标导航是用
@@ -139,22 +145,32 @@ export default class ListBox extends FormAssociated {
       return
     }
 
+    const withCtrl = e.metaKey || e.ctrlKey || e.altKey ? this.options.length : 0
     switch (e.key) {
       case 'ArrowDown':
-        this.indicatedIndex += 1
+        this.indicatedIndex += 1 + withCtrl
         break
       case 'ArrowUp':
-        this.indicatedIndex -= 1
+        this.indicatedIndex -= 1 + withCtrl
         break
+      case ' ':
       case 'Enter':
         this.selectedIndex = this.indicatedIndex
-        // this.value = this.options[this.indicatedIndex].value
         this.hidden = true
         break
+    }
+  }
 
-      default:
-        // code...
-        break
+  handleSelectionchange(e: Event): void {
+    if (e.target instanceof Option) {
+      if (e.target.selected) {
+        this.selectedIndex = e.target.index
+      }
+
+      // 取消选中当前 option
+      if (!e.target.selected && this.value && e.target.value === this.value) {
+        this.value = ''
+      }
     }
   }
 }

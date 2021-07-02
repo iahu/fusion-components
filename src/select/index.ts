@@ -1,5 +1,5 @@
 import { html, TemplateResult } from 'lit'
-import { customElement, state } from 'lit/decorators'
+import { customElement } from 'lit/decorators'
 import ListBox from '../listbox'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
@@ -8,9 +8,6 @@ import style from './style.css'
 @customElement('fc-select')
 export default class Select extends ListBox {
   static styles = mergeStyles(style)
-
-  @state()
-  displayValue = ''
 
   handleClickOption(e: MouseEvent): void {
     console.log(e.currentTarget, e.srcElement)

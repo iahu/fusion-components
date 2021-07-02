@@ -7,8 +7,9 @@ import style from './style.css'
 
 import '../icon/index'
 
-export const isOption = (el: Element): boolean =>
-  el.getAttribute('role') === 'option' || el instanceof HTMLOptionElement
+export const isOption = (el: Element): boolean => {
+  return el instanceof Option && el.getAttribute('role') === 'option'
+}
 
 @customElement('fc-option')
 export default class Option extends FC {
@@ -26,7 +27,10 @@ export default class Option extends FC {
 
   willUpdate(props: PropertyValues): void {
     if (props.has('selected')) {
-      this.actived = props.get('selected') as boolean
+      this.actived = this.selected
+      if (props.get('selected') !== this.selected) {
+        this.emit('selectionchange', this.selected)
+      }
     }
   }
 
@@ -48,7 +52,7 @@ export default class Option extends FC {
   }
 
   public get text(): string {
-    return this.textContent || ''
+    return this.getAttribute('label') || this.textContent || ''
   }
 
   @property({ type: Boolean })
@@ -72,7 +76,7 @@ export default class Option extends FC {
 
   defaultSelected = false
 
-  @property({ type: Boolean })
+  @property({ type: Boolean, reflect: true })
   disabled = false
 
   render(): TemplateResult<1> {

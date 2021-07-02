@@ -1,11 +1,11 @@
 import { html, LitElement, TemplateResult } from 'lit'
 import { property } from 'lit/decorators.js'
 
-class FusionComponent extends LitElement {
-  constructor() {
-    super()
-  }
+export interface FC {
+  attributeChangedCallback: (name: string, pre: string | null, next: string | null) => void
+}
 
+abstract class FusionComponent extends LitElement {
   public get root(): HTMLElement {
     return this.shadowRoot?.firstElementChild as HTMLElement
   }
