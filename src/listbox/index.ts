@@ -28,9 +28,17 @@ export default class ListBox extends FormAssociated {
       option.toggleAttribute('sharp', isSharp)
     })
 
-    const selectedOption = this.options.find((o) => !o.disabled && o.value === this.value)
+    const selectedOption = this.selectedOption
+    if (
+      selectedOption?.value === this.value &&
+      selectedOption.text === this.displayValue &&
+      selectedOption.index === this.selectedIndex
+    ) {
+      return
+    }
+
     if (selectedOption) {
-      const preSelectedOption = this.options.find((o) => o.selected && o.value !== this.value)
+      const preSelectedOption = this.options.find((o) => o.selected && o !== selectedOption)
       if (preSelectedOption) preSelectedOption.selected = false
       this.value = selectedOption.value || ''
       this.displayValue = selectedOption.text || ''
@@ -40,6 +48,7 @@ export default class ListBox extends FormAssociated {
       this.displayValue = ''
       this.value = ''
     }
+
     if (props.has('value') && props.get('value') !== this.value) {
       this.emit('change', this.value)
     }
@@ -47,6 +56,22 @@ export default class ListBox extends FormAssociated {
 
   @state()
   protected displayValue = ''
+
+  // 当多个 option 的 value 相同的时候，
+  // 不能根据 value 来判断当前选中的项
+  // 所以添加一个属性来记录用户行为选中的 option
+  __selectedOption?: Option
+  protected get selectedOption(): Option | undefined {
+    return this.__selectedOption || this.options.find((o) => !o.disabled && o.value === this.value)
+  }
+
+  protected set selectedOption(v: Option | undefined) {
+    if (this.__selectedOption !== v) {
+      this.__selectedOption = v
+
+      this.requestUpdate()
+    }
+  }
 
   /**
    * 当前指向的 Option 的索引 ，但还没被选中，键盘或鼠标导航是用
@@ -90,14 +115,18 @@ export default class ListBox extends FormAssociated {
 
   public set selectedIndex(idx: number) {
     const mergedIdx = Math.max(0, Math.min(idx, this.options.length - 1))
+    this.selectedOption = undefined
     this.options.forEach((o) => {
       if (o.index === mergedIdx && !o.disabled) {
         o.selected = true
         this.value = o.value
+        this.displayValue = o.text
+        this.selectedOption = o
       } else {
         o.selected = false
       }
     })
+    this.requestUpdate()
   }
 
   public get slottedElement(): HTMLSlotElement | null | undefined {
@@ -191,12 +220,14 @@ export default class ListBox extends FormAssociated {
   handleSelectionchange(e: Event): void {
     if (e.target instanceof Option) {
       if (e.target.selected) {
-        this.selectedIndex = e.target.index
+        this.selectedOption = e.target
+        // this.selectedIndex = e.target.index
       }
 
       // 取消选中当前 option
-      if (!e.target.selected && this.value && e.target.value === this.value) {
-        this.value = ''
+      if (!e.target.selected && this.value && e.target.text === this.displayValue) {
+        // this.value = ''
+        this.selectedOption = undefined
       }
     }
   }
