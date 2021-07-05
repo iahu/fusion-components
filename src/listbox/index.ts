@@ -14,7 +14,6 @@ export default class ListBox extends FormAssociated {
     super.connectedCallback()
     this.className = 'listbox'
     this.addEventListener('click', this.handleClick)
-    this.addEventListener('focusout', this.handleFocusout)
     this.addEventListener('keydown', this.handleKeydown)
     this.addEventListener('selectionchange', this.handleSelectionchange)
   }
@@ -22,8 +21,11 @@ export default class ListBox extends FormAssociated {
   disconnectedCallback(): void {
     super.disconnectedCallback()
     this.removeEventListener('click', this.handleClick)
-    this.removeEventListener('focusout', this.handleFocusout)
     this.removeEventListener('keydown', this.handleKeydown)
+  }
+
+  private get selectedOption(): Option | undefined {
+    return this.options.find((o) => !o.disabled && o.value === this.value)
   }
 
   updated(props: PropertyValues): void {
@@ -36,8 +38,7 @@ export default class ListBox extends FormAssociated {
     })
 
     // 多个 option 的 value 相同时，使用 selectedIndex 可以防止错乱
-    const selectedOption =
-      this.options[this.selectedIndex] || this.options.find((o) => !o.disabled && o.value === this.value)
+    const selectedOption = this.options[this.selectedIndex] || this.selectedOption
 
     if (
       selectedOption?.value === this.value &&
@@ -53,6 +54,7 @@ export default class ListBox extends FormAssociated {
       this.value = selectedOption.value || ''
       this.displayValue = selectedOption.text || ''
       this.selectedIndex = selectedOption.index || -1
+      selectedOption.selected = true
     } else {
       // 没有选中任何 option
       this.displayValue = ''
@@ -72,7 +74,11 @@ export default class ListBox extends FormAssociated {
    */
   private __indicatedIndex = -1
   public get indicatedIndex(): number {
-    return this.__indicatedIndex
+    const { selectedOption, __indicatedIndex } = this
+    if (__indicatedIndex < 0 && selectedOption) {
+      return selectedOption.index
+    }
+    return __indicatedIndex
   }
   public set indicatedIndex(v: number) {
     const mergedIdx = Math.max(0, Math.min(v, this.options.length - 1))
@@ -136,10 +142,6 @@ export default class ListBox extends FormAssociated {
     }
   }
 
-  handleFocusout(): void {
-    this.hidden = true
-  }
-
   handleKeydown(e: KeyboardEvent): void {
     enum HANDLED_KEYS {
       'ArrowDown' = 'ArrowDown',
@@ -148,10 +150,7 @@ export default class ListBox extends FormAssociated {
       'Space' = ' ',
     }
 
-    if (
-      !Object.values<string>(HANDLED_KEYS).includes(e.key) &&
-      !(e.target instanceof Option || this.indicatedIndex < 0)
-    ) {
+    if (!Object.values<string>(HANDLED_KEYS).includes(e.key)) {
       return
     }
 
@@ -177,9 +176,9 @@ export default class ListBox extends FormAssociated {
     // 如果新指向的 option 不可用，按规则换一个
     if (this.options[this.indicatedIndex]?.disabled) {
       const arrowDown = e.key === 'ArrowDown'
-      if (withCtrl) {
+      if (withCtrl || this.indicatedIndex === this.length - 1 || this.indicatedIndex === 0) {
         const step = arrowDown ? -1 : 1
-        this.focusNextOption(arrowDown ? this.length : 0, step)
+        this.focusNextOption(arrowDown ? this.length - 1 : 0, step)
       } else {
         const step = arrowDown ? 1 : -1
         this.focusNextOption(this.indicatedIndex, step)

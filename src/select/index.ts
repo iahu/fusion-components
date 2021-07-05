@@ -18,14 +18,16 @@ export default class Select extends ListBox {
 
   connectedCallback(): void {
     super.connectedCallback()
-    this.addEventListener('click', this.handleClick)
     this.addEventListener('keydown', this.handleKeydown)
+    this.addEventListener('focusin', this.handleFocusin)
+    this.addEventListener('focusout', this.handleFocusout)
   }
 
   disconnectedCallback(): void {
     super.disconnectedCallback()
-    this.removeEventListener('click', this.handleClick)
     this.removeEventListener('keydown', this.handleKeydown)
+    this.removeEventListener('focusin', this.handleFocusin)
+    this.removeEventListener('focusout', this.handleFocusout)
   }
 
   __hidden = true
@@ -36,15 +38,10 @@ export default class Select extends ListBox {
   public set hidden(v: boolean) {
     this.__hidden = v
     this.setAttribute('aria-expanded', (!v).toString())
-    if (!v) {
-      this.indicatedIndex = this.selectedIndex
-    }
+    // if (!v) {
+    //   this.indicatedIndex = this.selectedIndex
+    // }
     this.requestUpdate()
-  }
-
-  handleClick(e: MouseEvent): void {
-    super.handleClick(e)
-    this.hidden = !this.hidden
   }
 
   handleKeydown(e: KeyboardEvent): void {
@@ -68,6 +65,16 @@ export default class Select extends ListBox {
   public set position(v: Position) {
     this.setAttribute('position', v)
     this.requestUpdate()
+  }
+
+  private tid?: NodeJS.Timeout
+
+  handleFocusin(): void {
+    this.hidden = false
+  }
+
+  handleFocusout(): void {
+    this.hidden = true
   }
 
   render(): TemplateResult<1> {

@@ -2,12 +2,9 @@
   display: inline-flex;
   width: 100%;
   box-sizing: border-box;
-  /*height: 100%;*/
   background: var(--background);
   cursor: pointer;
-  /*--padding-l: 0;*/
-  padding: var(--padding-t) var(--padding-r) var(--padding-b) var(--padding-l);
-  /*--padding-r: 0;*/
+  /*overflow: hidden;*/
 }
 
 :host(:hover) {
@@ -31,10 +28,11 @@
 
 .control {
   color: inherit;
-  display: flex;
   align-items: center;
   background-color: inherit;
   box-sizing: border-box;
+  padding: var(--padding-t) var(--padding-r) var(--padding-b) var(--padding-l);
+  outline: none;
 }
 
 .control:not(:focus-visible) {

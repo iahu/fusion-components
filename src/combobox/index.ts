@@ -3,7 +3,6 @@ import { customElement } from 'lit/decorators'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
 import Select from '../select/index'
-
 import selectStyle from '../select/style.css'
 import style from './style.css'
 
@@ -11,32 +10,33 @@ import style from './style.css'
 export default class ComboBox extends Select {
   static styles = mergeStyles(selectStyle, style)
 
+  __inputValue = ''
+  public get inputValue(): string {
+    return this.value || this.__inputValue
+  }
+  public set inputValue(v: string) {
+    this.__inputValue = v
+  }
+
   handleLabelClick(e: MouseEvent): void {
     e.stopPropagation()
     const input = this.shadowRoot?.querySelector('.selected-value')
     if (input instanceof HTMLElement) input.focus()
   }
 
-  handleFocusout(): void {
-    return
-  }
-
   handleFocus(): void {
     this.hidden = false
   }
 
-  handleBlur(): void {
+  handleChange(e: Event): void {
     this.hidden = true
-  }
-
-  handleChange(): void {
-    this.hidden = true
+    const displayValue = (e.target as HTMLInputElement).value
+    this.selectedIndex = this.options.findIndex((o) => o.text === displayValue)
   }
 
   handleInput(e: InputEvent): void {
     const displayValue = (e.target as HTMLInputElement).value
-    this.displayValue = displayValue
-    this.selectedIndex = this.options.findIndex((o) => o.text === displayValue)
+    this.inputValue = displayValue
   }
 
   render(): TemplateResult<1> {
@@ -59,7 +59,6 @@ export default class ComboBox extends Select {
             @input="${this.handleInput}"
             @change="${this.handleChange}"
             @focus="${this.handleFocus}"
-            @blur="${this.handleBlur}"
           ></fc-input>
           <div class="indicator" part="indicator">
             <slot name="indicator">
