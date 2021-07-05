@@ -1,7 +1,8 @@
 :host {
   position: relative;
   fill: var(--foreground);
-  display: inline-block;
+  display: inline-flex;
+  flex-direction: column;
   min-width: var(--control-min-width);
   word-break: keep-all;
 }
@@ -27,7 +28,7 @@
   flex: 1;
 }
 
-.select-indicator {
+.icon-indicator {
   width: var(--font-size);
   height: var(--font-size);
   vertical-align: middle;
@@ -35,16 +36,52 @@
 
 .listbox {
   position: absolute;
+  display: flex;
+  flex-direction: column;
   z-index: 1;
   width: 100%;
   left: 0;
   box-sizing: border-box;
   background: var(--background);
+  --padding-t: calc(var(--fc-size-unit) * 4);
+  --padding-b: calc(var(--fc-size-unit) * 4);
   padding: var(--padding-t) var(--padding-r) var(--padding-b) var(--padding-l);
   max-height: var(--max-height, 164px);
   overflow: auto;
+  --client-height: calc(var(--border-width) + var(--padding-b) + var(--padding-t) + var(--font-size));
+}
+
+.listbox[position='bottom'] {
+  top: 0;
+  margin-top: var(--client-height);
+}
+
+.listbox[position='top'] {
+  bottom: 0;
+  margin-bottom: var(--client-height);
 }
 
 .listbox[hidden] {
   display: none;
 }
+
+.listbox[has-options] slot[name='empty'] {
+  display: none;
+}
+
+slot[name='empty'] {
+  color: var(--foreground-disabled);
+}
+
+.indicator {
+  pointer-events: none;
+}
+.indicator svg {
+  fill: currentColor;
+  width: calc(var(--font-size) * 0.8);
+  height: calc(var(--font-size) * 0.8);
+}
+/*
+:host([aria-expanded='true']) .select-indicator {
+  transform: rotateX(180deg);
+}*/

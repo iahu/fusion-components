@@ -1,0 +1,6 @@
+:host {
+  display: inline-flex;
+  flex-direction: column;
+  padding: var(--padding-t) var(--padding-l) var(--padding-b) var(--padding-l);
+  background: var(--background);
+}

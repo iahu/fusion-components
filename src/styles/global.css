@@ -67,20 +67,20 @@
 
   /* foreground colors*/
   --foreground: var(--white);
-  --foreground-disabled: var(--grey);
+  --foreground-disabled: var(--lighter-grey);
 
   /*background colors*/
-  --background: hsla(203, 7%, 34%, 1);
-  --background-hover: hsla(203, 7%, 49%, 1);
+  --background: hsla(203, 7%, 30%, 1);
+  --background-hover: hsla(203, 7%, 37%, 1);
   --background-active: hsla(203, 7%, 44%, 1);
   --background-selected: hsla(203, 74%, 47%, 1);
-  --background-disabled: hsla(203, 7%, 50%, 0.3);
+  --background-disabled: hsla(203, 7%, 44%, 1);
 
   /*border-colors*/
-  --border-color: hsla(203, 9%, 43%, 1);
-  --border-color-hover: hsla(203, 17%, 54%, 1);
-  --border-color-active: hsla(203, 17%, 64%, 1);
-  --border-color-disabled: hsla(203, 9%, 43%, 0.3);
+  --border-color: hsla(203, 9%, 37%, 1);
+  --border-color-hover: hsla(203, 17%, 47%, 1);
+  --border-color-active: hsla(203, 17%, 47%, 1);
+  --border-color-disabled: hsla(203, 9%, 37%, 0.3);
 
   --accent: var(--blue-vibrant);
   --accent-hover: var(--blue6);

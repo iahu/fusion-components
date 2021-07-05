@@ -9,6 +9,10 @@ import style from './style.css'
 export default class Input extends FusionComponent {
   static styles = mergeStyles(style)
 
+  private get input(): HTMLInputElement | null | undefined {
+    return this.shadowRoot?.querySelector('input')
+  }
+
   @property({ type: Boolean })
   outline = false
 
@@ -18,14 +22,29 @@ export default class Input extends FusionComponent {
   @property()
   name?: string
 
-  @property()
-  value?: string
+  public get value(): string {
+    return this.input?.value || ''
+  }
+  public set value(v: string) {
+    if (this.input) {
+      this.input.value = v
+      this.requestUpdate()
+    }
+  }
 
   @property()
   placeholder?: string
 
   @property({ type: Boolean })
   autofocus = false
+
+  focus(): void {
+    this.input?.focus()
+  }
+
+  blur(): void {
+    this.input?.blur()
+  }
 
   @property({ type: Boolean })
   checked = false
@@ -87,15 +106,6 @@ export default class Input extends FusionComponent {
   @property()
   width?: string
 
-  handleInput = (event: Event): void => {
-    this.value = (event.target as HTMLInputElement)?.value
-    this.emit('input', event)
-  }
-
-  handleChange = (event: Event): void => {
-    this.emit('change', event)
-  }
-
   render(): TemplateResult<1> {
     const {
       type,
@@ -124,7 +134,7 @@ export default class Input extends FusionComponent {
       inputMode,
     } = this
 
-    return html`<div class="root" id="root" part="root">
+    return html`
       ${before()}
       <input
         class="control"
@@ -154,10 +164,8 @@ export default class Input extends FusionComponent {
         src="${src}"
         step="${step}"
         width="${width}"
-        @input="${(e: Event) => this.handleInput(e)}"
-        @change="${(e: Event) => this.handleChange(e)}"
       />
       ${after()}
-    </div>`
+    `
   }
 }

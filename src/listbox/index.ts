@@ -1,11 +1,18 @@
-import { PropertyValues } from 'lit'
-import { property, state } from 'lit/decorators'
+import { html, PropertyValues, TemplateResult } from 'lit'
+import { customElement, property, state } from 'lit/decorators'
 import FormAssociated from '../form-associated'
+import mergeStyles from '../merge-styles'
 import Option, { isOption } from '../option'
 
+import style from './style.css'
+
+@customElement('fc-listbox')
 export default class ListBox extends FormAssociated {
+  static styles = mergeStyles(style)
+
   connectedCallback(): void {
     super.connectedCallback()
+    this.className = 'listbox'
     this.addEventListener('click', this.handleClick)
     this.addEventListener('focusout', this.handleFocusout)
     this.addEventListener('keydown', this.handleKeydown)
@@ -28,7 +35,10 @@ export default class ListBox extends FormAssociated {
       option.toggleAttribute('sharp', isSharp)
     })
 
-    const selectedOption = this.selectedOption
+    // 多个 option 的 value 相同时，使用 selectedIndex 可以防止错乱
+    const selectedOption =
+      this.options[this.selectedIndex] || this.options.find((o) => !o.disabled && o.value === this.value)
+
     if (
       selectedOption?.value === this.value &&
       selectedOption.text === this.displayValue &&
@@ -57,22 +67,6 @@ export default class ListBox extends FormAssociated {
   @state()
   protected displayValue = ''
 
-  // 当多个 option 的 value 相同的时候，
-  // 不能根据 value 来判断当前选中的项
-  // 所以添加一个属性来记录用户行为选中的 option
-  __selectedOption?: Option
-  protected get selectedOption(): Option | undefined {
-    return this.__selectedOption || this.options.find((o) => !o.disabled && o.value === this.value)
-  }
-
-  protected set selectedOption(v: Option | undefined) {
-    if (this.__selectedOption !== v) {
-      this.__selectedOption = v
-
-      this.requestUpdate()
-    }
-  }
-
   /**
    * 当前指向的 Option 的索引 ，但还没被选中，键盘或鼠标导航是用
    */
@@ -82,9 +76,13 @@ export default class ListBox extends FormAssociated {
   }
   public set indicatedIndex(v: number) {
     const mergedIdx = Math.max(0, Math.min(v, this.options.length - 1))
+    if (mergedIdx === this.__indicatedIndex) {
+      return
+    }
     this.__indicatedIndex = mergedIdx
     this.options.forEach((o) => {
-      o.actived = o.index === mergedIdx
+      if (o.index === mergedIdx) o.focus()
+      else o.blur()
     })
     this.requestUpdate()
   }
@@ -95,33 +93,19 @@ export default class ListBox extends FormAssociated {
   @property({ reflect: true })
   tabindex = '0'
 
-  __hidden = true
-
-  public get hidden(): boolean {
-    return this.__hidden
-  }
-  public set hidden(v: boolean) {
-    this.__hidden = v
-    this.setAttribute('aria-expanded', (!v).toString())
-    if (!v) {
-      this.indicatedIndex = this.selectedIndex
-    }
-    this.requestUpdate()
-  }
-
   public get selectedIndex(): number {
     return this.options.findIndex((o) => o.selected)
   }
 
   public set selectedIndex(idx: number) {
-    const mergedIdx = Math.max(0, Math.min(idx, this.options.length - 1))
-    this.selectedOption = undefined
+    if (idx === this.selectedIndex) {
+      return
+    }
     this.options.forEach((o) => {
-      if (o.index === mergedIdx && !o.disabled) {
+      if (o.index === idx && !o.disabled) {
         o.selected = true
         this.value = o.value
         this.displayValue = o.text
-        this.selectedOption = o
       } else {
         o.selected = false
       }
@@ -134,7 +118,7 @@ export default class ListBox extends FormAssociated {
   }
 
   public get options(): Option[] {
-    const optionSlot = this.shadowRoot?.querySelector('.listbox slot')
+    const optionSlot = this.shadowRoot?.querySelector('slot:not([name])')
     if (optionSlot instanceof HTMLSlotElement) {
       return optionSlot.assignedElements() as Option[]
     }
@@ -150,14 +134,6 @@ export default class ListBox extends FormAssociated {
     if (srcElement instanceof HTMLElement && isOption(srcElement) && !(srcElement as Option).disabled) {
       this.selectedIndex = this.options.findIndex((o) => o === srcElement)
     }
-    this.hidden = !this.hidden
-    if (!this.hidden) {
-      this.focus()
-      const first = this.options?.[0]
-      if (first instanceof HTMLElement) {
-        first.focus()
-      }
-    }
   }
 
   handleFocusout(): void {
@@ -172,17 +148,15 @@ export default class ListBox extends FormAssociated {
       'Space' = ' ',
     }
 
-    if (!Object.values<string>(HANDLED_KEYS).includes(e.key)) {
+    if (
+      !Object.values<string>(HANDLED_KEYS).includes(e.key) &&
+      !(e.target instanceof Option || this.indicatedIndex < 0)
+    ) {
       return
     }
 
-    if (this.hidden) {
-      this.hidden = false
-      return
-    }
-
-    const withCtrl = e.metaKey || e.ctrlKey || e.altKey ? this.options.length : 0
-    const preIndicatedIndex = this.indicatedIndex
+    e.preventDefault()
+    const withCtrl = e.metaKey || e.ctrlKey || e.altKey ? this.length : 0
     switch (e.key) {
       case HANDLED_KEYS.ArrowDown:
         this.indicatedIndex += 1 + withCtrl
@@ -201,18 +175,15 @@ export default class ListBox extends FormAssociated {
     }
 
     // 如果新指向的 option 不可用，按规则换一个
-    if (this.options[this.indicatedIndex].disabled) {
+    if (this.options[this.indicatedIndex]?.disabled) {
+      const arrowDown = e.key === 'ArrowDown'
       if (withCtrl) {
-        const step = e.key === 'ArrowDown' ? -1 : 1
-        while (this.options[this.indicatedIndex]) {
-          this.indicatedIndex += step
-          const nextOption = this.options[this.indicatedIndex]
-          if (!nextOption.disabled) {
-            break
-          }
-        }
+        const step = arrowDown ? -1 : 1
+        this.focusNextOption(arrowDown ? this.length : 0, step)
       } else {
-        this.indicatedIndex = preIndicatedIndex
+        const step = arrowDown ? 1 : -1
+        this.focusNextOption(this.indicatedIndex, step)
+        // this.indicatedIndex -= step
       }
     }
   }
@@ -220,15 +191,29 @@ export default class ListBox extends FormAssociated {
   handleSelectionchange(e: Event): void {
     if (e.target instanceof Option) {
       if (e.target.selected) {
-        this.selectedOption = e.target
-        // this.selectedIndex = e.target.index
+        this.selectedIndex = e.target.index
       }
 
       // 取消选中当前 option
       if (!e.target.selected && this.value && e.target.text === this.displayValue) {
-        // this.value = ''
-        this.selectedOption = undefined
+        this.selectedIndex = -1
       }
     }
+  }
+
+  private focusNextOption(start: number, step: number): void {
+    while (this.options[start]) {
+      const option = this.options[start]
+      if (!option.disabled) {
+        option.focus()
+        this.indicatedIndex = option.index
+        break
+      }
+      start += step
+    }
+  }
+
+  render(): TemplateResult<1> {
+    return html`<slot></slot>`
   }
 }

@@ -2,29 +2,27 @@
   display: inline-flex;
   border-radius: var(--border-radius);
   color: var(--foreground);
+  border: var(--border-width) solid transparent;
+  display: inline-flex;
+  padding: var(--padding-t) var(--padding-r) var(--padding-b) var(--padding-l);
+  will-change: background-color;
+  background-color: var(--background);
+  transition: all 0.14s;
 }
 
 :host([sharp]) {
   border-radius: 0;
 }
 
-.root {
-  border-radius: inherit;
-  border: var(--border-width) solid transparent;
-  display: inline-flex;
-  padding: var(--padding-t) var(--padding-r) var(--padding-b) var(--padding-l);
-  will-change: background-color;
-  background: var(--background);
-  transition: all 0.14s;
-}
-
 .control {
   border-radius: inherit;
-  padding: 0 var(--padding-r) 0 var(--padding-l);
+  padding: 0;
+  /*padding: 0 var(--padding-r) 0 var(--padding-l);*/
+  width: 100%;
   height: calc(var(--fc-size-unit) * 16);
   /*line-height: var(--line-height);*/
   color: inherit;
-  background: transparent;
+  background-color: transparent;
   border: none;
   outline: none;
   caret-color: var(--caret);
@@ -34,11 +32,11 @@
   color: var(--light-grey);
 }
 
-:host(:not([disabled]):hover) .root {
+:host(:not([disabled]):hover) {
   background-color: var(--background-hover);
 }
 
-:host(:not([disabled]):focus-within) .root {
+:host(:not([disabled]):focus-within) {
   background-color: var(--background-active);
 }
 
@@ -46,16 +44,17 @@
   background: var(--background-disabled);
   border-color: var(--border-color-disabled);
   color: var(--foreground-disabled);
+  cursor: not-allowed;
 }
 
 /*outline*/
-:host([outline]) .root {
+:host([outline]) {
   border-color: var(--border-color);
 }
 
-:host([outline]:focus-within) .root {
+:host([outline]:focus-within) {
   border-color: var(--border-color-active);
 }
-:host([outline]:hover) .root {
+:host([outline]:hover) {
   border-color: var(--border-color-hover);
 }

@@ -28,13 +28,13 @@ export default class Option extends FC {
   willUpdate(props: PropertyValues): void {
     if (this.disabled) {
       this.selected = false
-      this.actived = false
     } else if (props.has('selected')) {
-      this.actived = this.selected
       if (props.get('selected') !== this.selected) {
         this.emit('selectionchange', this.selected)
       }
     }
+
+    this.classList.toggle('selected', this.selected)
   }
 
   @property({ reflect: true, type: String })
@@ -42,9 +42,6 @@ export default class Option extends FC {
 
   @property()
   value = ''
-
-  @property()
-  actived = false
 
   public get form(): HTMLFormElement | null {
     return this.closest('form')
@@ -61,19 +58,6 @@ export default class Option extends FC {
   @property({ type: Boolean })
   selected = false
 
-  // public get ariaSelected(): boolean | undefined {
-  //   const map = {
-  //     true: true,
-  //     false: false,
-  //     undefined: undefined,
-  //   }
-  //   const attr = (this.getAttribute('aria-selected') || 'undefined') as keyof typeof map
-  //   return map[attr] || undefined
-  // }
-
-  // public set ariaSelected(v: boolean | undefined) {
-  //   this.toggleAttribute('aria-selected', Boolean(v))
-  // }
   @property({ attribute: 'aria-selected' })
   ariaSelected = false
 
@@ -101,7 +85,13 @@ export default class Option extends FC {
       </svg>
     </fc-icon>`
 
-    return html`<div class="control" part="control" role="option" ?selected="${this.actived}">
+    return html`<div
+      class="control"
+      part="control"
+      role="option"
+      tabindex="0"
+      ?foucsed="${this.getAttribute('foucsed')}"
+    >
       ${before()}
       <span class="icon">
         <slot name="icon">${this.selected ? defaultIcon : ''}</slot>

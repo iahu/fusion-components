@@ -11,7 +11,17 @@ abstract class FusionComponent extends LitElement {
   }
 
   public get control(): HTMLElement | null | undefined {
-    return this.shadowRoot?.querySelector('#control')
+    return this.shadowRoot?.querySelector('.control')
+  }
+
+  focus(): void {
+    this.setAttribute('focused', '')
+    this.control?.focus()
+  }
+
+  blur(): void {
+    this.removeAttribute('focused')
+    this.control?.blur()
   }
 
   @property()
