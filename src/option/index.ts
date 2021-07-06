@@ -85,13 +85,7 @@ export default class Option extends FC {
       </svg>
     </fc-icon>`
 
-    return html`<div
-      class="control"
-      part="control"
-      role="option"
-      tabindex="0"
-      ?foucsed="${this.getAttribute('foucsed')}"
-    >
+    return html`<div class="control" part="control" role="option" ?foucsed="${this.getAttribute('foucsed')}">
       ${before()}
       <span class="icon">
         <slot name="icon">${this.selected ? defaultIcon : ''}</slot>

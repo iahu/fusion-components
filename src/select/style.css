@@ -11,7 +11,7 @@
   outline: none;
 }
 
-:host .control {
+.control {
   fill: inherit;
   display: inline-flex;
   align-items: center;
@@ -22,6 +22,10 @@
   border: var(--border-width) solid var(--border-color);
   padding: var(--padding-t) var(--padding-l) var(--padding-b) var(--padding-l);
   cursor: pointer;
+}
+
+:host(:disabled) .control {
+  cursor: not-allowed;
 }
 
 .selected-value {

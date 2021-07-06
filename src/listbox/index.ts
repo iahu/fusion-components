@@ -22,6 +22,7 @@ export default class ListBox extends FormAssociated {
     super.disconnectedCallback()
     this.removeEventListener('click', this.handleClick)
     this.removeEventListener('keydown', this.handleKeydown)
+    this.removeEventListener('selectionchange', this.handleSelectionchange)
   }
 
   private get selectedOption(): Option | undefined {
@@ -30,11 +31,13 @@ export default class ListBox extends FormAssociated {
 
   updated(props: PropertyValues): void {
     const isSharp = this.hasAttribute('sharp')
+    const isDisabled = this.hasAttribute('disabled')
     // 校验子元素，并传递要继承的属性
     this.options?.forEach((option) => {
       // 只保留合法的 Option 元素
       if (!isOption(option)) return option.remove()
       option.toggleAttribute('sharp', isSharp)
+      option.toggleAttribute('disabled', isDisabled)
     })
 
     // 多个 option 的 value 相同时，使用 selectedIndex 可以防止错乱
@@ -138,7 +141,11 @@ export default class ListBox extends FormAssociated {
   handleClick(e: MouseEvent): void {
     const { srcElement } = e
     if (srcElement instanceof HTMLElement && isOption(srcElement) && !(srcElement as Option).disabled) {
-      this.selectedIndex = this.options.findIndex((o) => o === srcElement)
+      const selectedIndex = this.options.findIndex((o) => o === srcElement)
+      if (this.selectedIndex !== selectedIndex) {
+        this.selectedIndex = selectedIndex
+        this.emit('change')
+      }
     }
   }
 
@@ -150,10 +157,7 @@ export default class ListBox extends FormAssociated {
       'Space' = ' ',
     }
 
-    if (
-      !Object.values<string>(HANDLED_KEYS).includes(e.key)
-      // &&!(e.target instanceof Option || this.indicatedIndex < 0)
-    ) {
+    if (!Object.values<string>(HANDLED_KEYS).includes(e.key)) {
       return
     }
 
@@ -167,10 +171,14 @@ export default class ListBox extends FormAssociated {
         this.indicatedIndex -= 1 + withCtrl
         break
       case HANDLED_KEYS.Space:
-      case HANDLED_KEYS.Enter:
-        this.selectedIndex = this.indicatedIndex
-        this.hidden = true
+      case HANDLED_KEYS.Enter: {
+        const selectedIndex = this.indicatedIndex
+        if (selectedIndex !== this.selectedIndex) {
+          this.selectedIndex = selectedIndex
+          this.emit('change')
+        }
         break
+      }
       default:
         // 其它按键不处理，并中断后面的逻辑
         return

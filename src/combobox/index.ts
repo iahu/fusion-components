@@ -10,6 +10,16 @@ import style from './style.css'
 export default class ComboBox extends Select {
   static styles = mergeStyles(selectStyle, style)
 
+  connectedCallback(): void {
+    super.connectedCallback()
+    this.addEventListener('change', this.handleChange)
+  }
+
+  disconnectedCallback(): void {
+    super.disconnectedCallback()
+    this.removeEventListener('change', this.handleChange)
+  }
+
   __inputValue = ''
   public get inputValue(): string {
     return this.value || this.__inputValue
@@ -28,8 +38,12 @@ export default class ComboBox extends Select {
     this.hidden = false
   }
 
-  handleChange(e: Event): void {
+  handleChange(): void {
     this.hidden = true
+  }
+
+  handleInputChange(e: Event): void {
+    this.hidden = false
     const displayValue = (e.target as HTMLInputElement).value.trim()
     this.selectedIndex = this.options.findIndex((o) => o.text === displayValue)
   }
@@ -37,7 +51,7 @@ export default class ComboBox extends Select {
   handleInput(e: InputEvent): void {
     const displayValue = (e.target as HTMLInputElement).value
     this.inputValue = displayValue
-    this.hidden = false
+    this.hidden = true
   }
 
   render(): TemplateResult<1> {
@@ -53,14 +67,14 @@ export default class ComboBox extends Select {
       >
         ${before()}
         <slot name="button-container">
-          <fc-input
+          <input
             class="selected-value"
             part="selected-value"
             .value="${this.displayValue}"
             @input="${this.handleInput}"
-            @change="${this.handleChange}"
+            @change="${this.handleInputChange}"
             @focus="${this.handleFocus}"
-          ></fc-input>
+          ></input>
           <div class="indicator" part="indicator">
             <slot name="indicator">
               <svg

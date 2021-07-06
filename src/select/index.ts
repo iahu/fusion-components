@@ -21,6 +21,7 @@ export default class Select extends ListBox {
     this.addEventListener('keydown', this.handleKeydown)
     this.addEventListener('focusin', this.handleFocusin)
     this.addEventListener('focusout', this.handleFocusout)
+    this.addEventListener('change', this.handleChange)
   }
 
   disconnectedCallback(): void {
@@ -28,6 +29,7 @@ export default class Select extends ListBox {
     this.removeEventListener('keydown', this.handleKeydown)
     this.removeEventListener('focusin', this.handleFocusin)
     this.removeEventListener('focusout', this.handleFocusout)
+    this.removeEventListener('change', this.handleChange)
   }
 
   __hidden = true
@@ -38,10 +40,11 @@ export default class Select extends ListBox {
   public set hidden(v: boolean) {
     this.__hidden = v
     this.setAttribute('aria-expanded', (!v).toString())
-    // if (!v) {
-    //   this.indicatedIndex = this.selectedIndex
-    // }
     this.requestUpdate()
+  }
+
+  handleChange(): void {
+    this.hidden = true
   }
 
   handleKeydown(e: KeyboardEvent): void {

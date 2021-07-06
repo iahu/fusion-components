@@ -1,6 +1,13 @@
 .selected-value {
   width: 100%;
   background: transparent;
+  padding: 0;
+  width: 100%;
+  height: calc(var(--fc-size-unit) * 16);
+  color: inherit;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  caret-color: var(--caret);
+  font: inherit;
 }
-
-/*::part*/
