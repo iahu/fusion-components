@@ -30,13 +30,14 @@ export default class ComboBox extends Select {
 
   handleChange(e: Event): void {
     this.hidden = true
-    const displayValue = (e.target as HTMLInputElement).value
+    const displayValue = (e.target as HTMLInputElement).value.trim()
     this.selectedIndex = this.options.findIndex((o) => o.text === displayValue)
   }
 
   handleInput(e: InputEvent): void {
     const displayValue = (e.target as HTMLInputElement).value
     this.inputValue = displayValue
+    this.hidden = false
   }
 
   render(): TemplateResult<1> {

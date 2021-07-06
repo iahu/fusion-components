@@ -150,7 +150,10 @@ export default class ListBox extends FormAssociated {
       'Space' = ' ',
     }
 
-    if (!Object.values<string>(HANDLED_KEYS).includes(e.key)) {
+    if (
+      !Object.values<string>(HANDLED_KEYS).includes(e.key)
+      // &&!(e.target instanceof Option || this.indicatedIndex < 0)
+    ) {
       return
     }
 
@@ -204,7 +207,7 @@ export default class ListBox extends FormAssociated {
     while (this.options[start]) {
       const option = this.options[start]
       if (!option.disabled) {
-        option.focus()
+        option.toggleAttribute('focused', true)
         this.indicatedIndex = option.index
         break
       }

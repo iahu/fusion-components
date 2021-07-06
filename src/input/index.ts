@@ -106,6 +106,10 @@ export default class Input extends FusionComponent {
   @property()
   width?: string
 
+  handleChange(): void {
+    this.emit('change')
+  }
+
   render(): TemplateResult<1> {
     const {
       type,
@@ -164,6 +168,7 @@ export default class Input extends FusionComponent {
         src="${src}"
         step="${step}"
         width="${width}"
+        @change="${this.handleChange}"
       />
       ${after()}
     `
