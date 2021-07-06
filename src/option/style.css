@@ -22,6 +22,10 @@
   cursor: not-allowed;
 }
 
+:host([hidden]) {
+  display: none;
+}
+
 :host(.selected) {
   background: var(--background-selected);
 }

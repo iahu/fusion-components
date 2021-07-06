@@ -1,5 +1,5 @@
 import { html, TemplateResult } from 'lit'
-import { customElement } from 'lit/decorators'
+import { customElement, property } from 'lit/decorators'
 import ListBox from '../listbox'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
@@ -34,6 +34,9 @@ export default class Select extends ListBox {
 
   __hidden = true
 
+  @property({ reflect: true })
+  role = 'listbox'
+
   public get hidden(): boolean {
     return this.__hidden
   }
@@ -43,13 +46,12 @@ export default class Select extends ListBox {
     this.requestUpdate()
   }
 
-  handleChange(): void {
+  handleChange(e: Event): void {
     this.hidden = true
   }
 
   handleKeydown(e: KeyboardEvent): void {
     if (this.hidden) {
-      e.preventDefault()
       this.hidden = false
       return
     }

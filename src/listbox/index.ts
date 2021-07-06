@@ -29,7 +29,8 @@ export default class ListBox extends FormAssociated {
     return this.options.find((o) => !o.disabled && o.value === this.value)
   }
 
-  updated(props: PropertyValues): void {
+  willUpdate(p: PropertyValues): void {
+    super.willUpdate(p)
     const isSharp = this.hasAttribute('sharp')
     const isDisabled = this.hasAttribute('disabled')
     // 校验子元素，并传递要继承的属性
@@ -39,10 +40,11 @@ export default class ListBox extends FormAssociated {
       option.toggleAttribute('sharp', isSharp)
       option.toggleAttribute('disabled', isDisabled)
     })
+  }
 
+  updated(): void {
     // 多个 option 的 value 相同时，使用 selectedIndex 可以防止错乱
     const selectedOption = this.options[this.selectedIndex] || this.selectedOption
-
     if (
       selectedOption?.value === this.value &&
       selectedOption.text === this.displayValue &&
@@ -54,18 +56,11 @@ export default class ListBox extends FormAssociated {
     if (selectedOption) {
       const preSelectedOption = this.options.find((o) => o.selected && o !== selectedOption)
       if (preSelectedOption) preSelectedOption.selected = false
-      this.value = selectedOption.value || ''
-      this.displayValue = selectedOption.text || ''
-      this.selectedIndex = selectedOption.index || -1
       selectedOption.selected = true
-    } else {
+    } else if (this.value !== '' && this.displayValue !== '') {
       // 没有选中任何 option
       this.displayValue = ''
       this.value = ''
-    }
-
-    if (props.has('value') && props.get('value') !== this.value) {
-      this.emit('change', this.value)
     }
   }
 
@@ -90,36 +85,34 @@ export default class ListBox extends FormAssociated {
     }
     this.__indicatedIndex = mergedIdx
     this.options.forEach((o) => {
-      if (o.index === mergedIdx) o.focus()
-      else o.blur()
+      if (o.index === mergedIdx) {
+        o.focus()
+        o.scrollIntoView({ block: 'nearest' })
+      } else o.blur()
     })
     this.requestUpdate()
   }
 
   @property({ reflect: true })
-  role = 'comobox'
+  role = 'listbox'
 
   @property({ reflect: true })
   tabindex = '0'
 
   public get selectedIndex(): number {
-    return this.options.findIndex((o) => o.selected)
+    return this.options.findIndex((o) => !o.disabled && o.selected)
   }
 
   public set selectedIndex(idx: number) {
     if (idx === this.selectedIndex) {
       return
     }
-    this.options.forEach((o) => {
-      if (o.index === idx && !o.disabled) {
-        o.selected = true
-        this.value = o.value
-        this.displayValue = o.text
-      } else {
-        o.selected = false
-      }
-    })
-    this.requestUpdate()
+    const selectedOption = this.options.find((o) => !o.disabled && o.index === idx)
+    this.options.forEach((o) => (o.selected = false))
+    if (selectedOption) selectedOption.selected = true
+    this.value = selectedOption?.value || ''
+    this.displayValue = selectedOption?.text || ''
+    //this.requestUpdate()
   }
 
   public get slottedElement(): HTMLSlotElement | null | undefined {
@@ -129,13 +122,22 @@ export default class ListBox extends FormAssociated {
   public get options(): Option[] {
     const optionSlot = this.shadowRoot?.querySelector('slot:not([name])')
     if (optionSlot instanceof HTMLSlotElement) {
-      return optionSlot.assignedElements() as Option[]
+      return (optionSlot.assignedElements() as Option[]).filter((o) => !o.hidden)
     }
     return []
   }
 
+  public set options(v: Option[]) {
+    this.innerHTML = ''
+    v.forEach((o) => this.appendChild(o))
+    this.requestUpdate()
+  }
+
   public get length(): number {
     return this.options.length
+  }
+  public set length(v: number) {
+    this.options = this.options.slice(0, v)
   }
 
   handleClick(e: MouseEvent): void {
@@ -150,11 +152,14 @@ export default class ListBox extends FormAssociated {
   }
 
   handleKeydown(e: KeyboardEvent): void {
-    enum HANDLED_KEYS {
-      'ArrowDown' = 'ArrowDown',
-      'ArrowUp' = 'ArrowUp',
-      'Enter' = 'Enter',
-      'Space' = ' ',
+    const HANDLED_KEYS = {
+      ArrowDown: 'ArrowDown',
+      ArrowUp: 'ArrowUp',
+      Enter: 'Enter',
+      Space: 'Enter',
+    }
+    if (this.role === 'listbox') {
+      HANDLED_KEYS.Space = ' '
     }
 
     if (!Object.values<string>(HANDLED_KEYS).includes(e.key)) {
@@ -172,10 +177,11 @@ export default class ListBox extends FormAssociated {
         break
       case HANDLED_KEYS.Space:
       case HANDLED_KEYS.Enter: {
-        const selectedIndex = this.indicatedIndex
-        if (selectedIndex !== this.selectedIndex) {
-          this.selectedIndex = selectedIndex
-          this.emit('change')
+        const { displayValue, indicatedIndex } = this
+        const changed = this.options[indicatedIndex]?.text !== displayValue
+        if (changed) {
+          this.selectedIndex = indicatedIndex
+          this.emit('change', changed)
         }
         break
       }
@@ -216,6 +222,7 @@ export default class ListBox extends FormAssociated {
       const option = this.options[start]
       if (!option.disabled) {
         option.toggleAttribute('focused', true)
+        option.scrollIntoView()
         this.indicatedIndex = option.index
         break
       }

@@ -6,6 +6,7 @@ import { after, before } from '../pattern/before-after'
 import style from './style.css'
 
 import '../icon/index'
+import ListBox from '../listbox'
 
 export const isOption = (el: Element): boolean => {
   return el instanceof Option && el.getAttribute('role') === 'option'
@@ -18,6 +19,9 @@ export default class Option extends FC {
   static get formAssociated(): boolean {
     return true
   }
+
+  @property({ type: Boolean, reflect: true })
+  hidden = false
 
   connectedCallback(): void {
     super.connectedCallback()
@@ -48,7 +52,11 @@ export default class Option extends FC {
   }
 
   public get index(): number {
-    return Array.from(this.parentElement?.children || []).findIndex((e) => e === this)
+    const { parentElement } = this
+    if (parentElement instanceof ListBox) {
+      return parentElement.options.findIndex((e) => e === this)
+    }
+    return -1
   }
 
   public get text(): string {

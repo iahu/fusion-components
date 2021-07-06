@@ -1,6 +1,7 @@
-import { html, TemplateResult } from 'lit'
-import { customElement } from 'lit/decorators'
+import { html, PropertyValues, TemplateResult } from 'lit'
+import { customElement, property, state } from 'lit/decorators'
 import mergeStyles from '../merge-styles'
+import Option from '../option'
 import { after, before } from '../pattern/before-after'
 import Select from '../select/index'
 import selectStyle from '../select/style.css'
@@ -9,6 +10,15 @@ import style from './style.css'
 @customElement('fc-combobox')
 export default class ComboBox extends Select {
   static styles = mergeStyles(selectStyle, style)
+
+  @property({ reflect: true })
+  role = 'comobox'
+
+  @property()
+  autocomplete = ''
+
+  @property({ type: Boolean })
+  casesensitive = false
 
   connectedCallback(): void {
     super.connectedCallback()
@@ -20,13 +30,38 @@ export default class ComboBox extends Select {
     this.removeEventListener('change', this.handleChange)
   }
 
-  __inputValue = ''
-  public get inputValue(): string {
-    return this.value || this.__inputValue
+  willUpdate(p: PropertyValues): void {
+    super.willUpdate(p)
+    if (this.autocomplete) {
+      this.filter(this.inputValue)
+    }
   }
-  public set inputValue(v: string) {
-    this.__inputValue = v
+
+  caseCompaire(a: string, b: string): boolean {
+    return this.translateCase(a) == this.translateCase(b)
   }
+
+  translateCase(v: string): string {
+    return this.casesensitive ? v : v.toLowerCase()
+  }
+
+  public get allOptions(): Option[] {
+    return Array.from(this.querySelectorAll('fc-option'))
+  }
+
+  filter(text: string): Option[] {
+    return this.allOptions.filter((o) => {
+      o.hidden = text !== '' && !this.translateCase(o.text).startsWith(this.translateCase(text))
+      return !o.hidden
+    })
+  }
+
+  protected get input(): HTMLInputElement | null | undefined {
+    return this.shadowRoot?.querySelector('.selected-value')
+  }
+
+  @state()
+  inputValue = ''
 
   handleLabelClick(e: MouseEvent): void {
     e.stopPropagation()
@@ -38,20 +73,30 @@ export default class ComboBox extends Select {
     this.hidden = false
   }
 
-  handleChange(): void {
-    this.hidden = true
+  handleChange(e: Event): void {
+    if (e instanceof CustomEvent && e.detail) {
+      this.hidden = true
+    }
+    if (this.displayValue) {
+      this.inputValue = this.displayValue
+    }
   }
 
-  handleInputChange(e: Event): void {
-    this.hidden = false
-    const displayValue = (e.target as HTMLInputElement).value.trim()
-    this.selectedIndex = this.options.findIndex((o) => o.text === displayValue)
+  handleInputChange(): void {
+    this.hidden = true
+    const { inputValue } = this
+    this.selectedIndex = this.options.findIndex((o) => this.caseCompaire(o.text, inputValue.trim()))
   }
 
   handleInput(e: InputEvent): void {
-    const displayValue = (e.target as HTMLInputElement).value
-    this.inputValue = displayValue
-    this.hidden = true
+    e.stopPropagation()
+    this.hidden = false
+    const { value } = e.target as HTMLInputElement
+    const prevInputValue = this.inputValue
+    this.inputValue = value
+    if (prevInputValue.trim() !== value.trim() && this.selectedIndex >= 0) {
+      this.selectedIndex = -1
+    }
   }
 
   render(): TemplateResult<1> {
@@ -70,7 +115,7 @@ export default class ComboBox extends Select {
           <input
             class="selected-value"
             part="selected-value"
-            .value="${this.displayValue}"
+            .value="${this.inputValue}"
             @input="${this.handleInput}"
             @change="${this.handleInputChange}"
             @focus="${this.handleFocus}"
