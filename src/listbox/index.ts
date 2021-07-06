@@ -146,7 +146,7 @@ export default class ListBox extends FormAssociated {
       const selectedIndex = this.options.findIndex((o) => o === srcElement)
       if (this.selectedIndex !== selectedIndex) {
         this.selectedIndex = selectedIndex
-        this.emit('change')
+        this.emit('select')
       }
     }
   }
@@ -171,9 +171,11 @@ export default class ListBox extends FormAssociated {
     switch (e.key) {
       case HANDLED_KEYS.ArrowDown:
         this.indicatedIndex += 1 + withCtrl
+        this.emit('change')
         break
       case HANDLED_KEYS.ArrowUp:
         this.indicatedIndex -= 1 + withCtrl
+        this.emit('change')
         break
       case HANDLED_KEYS.Space:
       case HANDLED_KEYS.Enter: {
@@ -181,7 +183,7 @@ export default class ListBox extends FormAssociated {
         const changed = this.options[indicatedIndex]?.text !== displayValue
         if (changed) {
           this.selectedIndex = indicatedIndex
-          this.emit('change', changed)
+          this.emit('select', changed)
         }
         break
       }

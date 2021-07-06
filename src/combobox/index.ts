@@ -22,12 +22,12 @@ export default class ComboBox extends Select {
 
   connectedCallback(): void {
     super.connectedCallback()
-    this.addEventListener('change', this.handleChange)
+    this.addEventListener('select', this.handleSelect)
   }
 
   disconnectedCallback(): void {
     super.disconnectedCallback()
-    this.removeEventListener('change', this.handleChange)
+    this.removeEventListener('select', this.handleSelect)
   }
 
   willUpdate(p: PropertyValues): void {
@@ -73,7 +73,7 @@ export default class ComboBox extends Select {
     this.hidden = false
   }
 
-  handleChange(e: Event): void {
+  handleSelect(e: Event): void {
     if (e instanceof CustomEvent && e.detail) {
       this.hidden = true
     }

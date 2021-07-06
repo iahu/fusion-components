@@ -21,7 +21,7 @@ export default class Select extends ListBox {
     this.addEventListener('keydown', this.handleKeydown)
     this.addEventListener('focusin', this.handleFocusin)
     this.addEventListener('focusout', this.handleFocusout)
-    this.addEventListener('change', this.handleChange)
+    this.addEventListener('select', this.handleSelect)
   }
 
   disconnectedCallback(): void {
@@ -29,7 +29,7 @@ export default class Select extends ListBox {
     this.removeEventListener('keydown', this.handleKeydown)
     this.removeEventListener('focusin', this.handleFocusin)
     this.removeEventListener('focusout', this.handleFocusout)
-    this.removeEventListener('change', this.handleChange)
+    this.removeEventListener('select', this.handleSelect)
   }
 
   __hidden = true
@@ -46,7 +46,7 @@ export default class Select extends ListBox {
     this.requestUpdate()
   }
 
-  handleChange(e: Event): void {
+  handleSelect(e: Event): void {
     this.hidden = true
   }
 
