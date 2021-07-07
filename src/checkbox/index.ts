@@ -19,6 +19,7 @@ export default class Checkbox extends FormAssociated {
 
   disconnectedCallback(): void {
     this.removeEventListener('click', this.handleClick)
+    this.updateForm()
   }
 
   willUpdate(p: PropertyValues<this>): void {
@@ -50,8 +51,17 @@ export default class Checkbox extends FormAssociated {
   @property({ type: Boolean, reflect: true })
   readOnly = false
 
+  updateForm(): void {
+    const value = this.checked ? this.value : null
+    this.elementInternals.setFormValue(value, value)
+  }
+
   handleClick(e: MouseEvent): void {
-    if (!this.disabled && !this.readOnly) this.checked = !this.checked
+    this.updateForm()
+    if (!this.disabled && !this.readOnly) {
+      this.checked = !this.checked
+      this.emit('change')
+    }
   }
 
   render(): TemplateResult<1> {

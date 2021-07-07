@@ -6,7 +6,7 @@ import mergeStyles from '../merge-styles'
 import style from './style.css'
 
 @customElement('fc-radio')
-export default class Checkbox extends FormAssociated {
+export default class Radio extends FormAssociated {
   static styles = mergeStyles(style)
 
   connectedCallback(): void {
@@ -27,6 +27,12 @@ export default class Checkbox extends FormAssociated {
     this.setAttribute('aria-disabled', this.disabled.toString())
     this.setAttribute('aria-required', this.required.toString())
     this.classList.toggle('readonly', this.readOnly)
+    if (this.checked) {
+      this.uniqueChecked()
+      this.updateForm()
+    } else if (this.dirtyValue) {
+      this.checked = true
+    }
   }
 
   @property()
@@ -50,8 +56,27 @@ export default class Checkbox extends FormAssociated {
   @property({ type: Boolean, reflect: true })
   readOnly = false
 
+  uniqueChecked(): void {
+    if (!this.form) return
+    const silbings = Array.from(this.form.querySelectorAll(`fc-radio[name='${this.name}']`)) as Radio[]
+    silbings.forEach((e) => {
+      if (e !== this) {
+        e.checked = false
+      }
+    })
+  }
+
+  updateForm(): void {
+    const value = this.checked ? this.value : null
+    this.elementInternals.setFormValue(value)
+  }
+
   handleClick(e: MouseEvent): void {
-    if (!this.disabled && !this.readOnly) this.checked = !this.checked
+    if (!this.disabled && !this.readOnly && !this.checked) {
+      this.checked = !this.checked
+      this.updateForm()
+      this.emit('change')
+    }
   }
 
   render(): TemplateResult<1> {

@@ -88,14 +88,24 @@ export default class FormAssociated extends FC {
     this.elementInternals = (this as any).attachInternals()
   }
 
+  connectedCallback(): void {
+    super.connectedCallback()
+
+    this.initialValue = this.value || this.getAttribute('value') || this.initialValue
+  }
+
   willUpdate(p: PropertyValues<this>): void {
     super.willUpdate(p)
     this.value = this.getAttribute('value') || this.value
     this.elementInternals.setFormValue(this.value)
-    this.dirtyValue = true
     this.setAttribute('aria-disabled', this.disabled.toString())
     this.setAttribute('aria-required', this.required.toString())
+    if (this.initialValue !== this.value) {
+      this.dirtyValue = true
+    }
   }
+
+  initialValue = ''
 
   dirtyValue = false
 
