@@ -1,5 +1,5 @@
 import { html, PropertyValues, TemplateResult } from 'lit'
-import { customElement, property, state } from 'lit/decorators'
+import { customElement, property, state } from 'lit/decorators.js'
 import FormAssociated from '../form-associated'
 import mergeStyles from '../merge-styles'
 import Option, { isOption } from '../option'
@@ -29,14 +29,14 @@ export default class ListBox extends FormAssociated {
     return this.options.find((o) => !o.disabled && o.value === this.value)
   }
 
-  willUpdate(p: PropertyValues): void {
+  willUpdate(p: PropertyValues<this>): void {
     super.willUpdate(p)
     const isSharp = this.hasAttribute('sharp')
     const isDisabled = this.hasAttribute('disabled')
     // 校验子元素，并传递要继承的属性
     this.options?.forEach((option) => {
       // 只保留合法的 Option 元素
-      if (!isOption(option)) return option.remove()
+      if (!isOption(option)) return (option as HTMLElement).remove()
       option.toggleAttribute('sharp', isSharp)
       option.toggleAttribute('disabled', isDisabled)
     })
@@ -156,10 +156,7 @@ export default class ListBox extends FormAssociated {
       ArrowDown: 'ArrowDown',
       ArrowUp: 'ArrowUp',
       Enter: 'Enter',
-      Space: 'Enter',
-    }
-    if (this.role === 'listbox') {
-      HANDLED_KEYS.Space = ' '
+      Space: this.role === 'listbox' ? ' ' : 'Enter',
     }
 
     if (!Object.values<string>(HANDLED_KEYS).includes(e.key)) {
@@ -223,7 +220,7 @@ export default class ListBox extends FormAssociated {
     while (this.options[start]) {
       const option = this.options[start]
       if (!option.disabled) {
-        option.toggleAttribute('focused', true)
+        option.active = true
         option.scrollIntoView()
         this.indicatedIndex = option.index
         break

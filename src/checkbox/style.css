@@ -1,0 +1,72 @@
+:host {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+:host(:disabled) {
+  background: none;
+}
+
+.control {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: var(--font-size);
+  height: var(--font-size);
+  background: var(--background);
+  overflow: hidden;
+}
+
+:host([checked]) .control {
+  background: var(--background-selected);
+}
+
+:host([checked]) .checked-indicator {
+  display: block;
+}
+
+:host([disabled]) .control {
+  background: var(--background-disabled);
+  cursor: not-allowed;
+}
+:host([disabled]) .label {
+  color: var(--foreground-disabled);
+  cursor: not-allowed;
+}
+
+:host(.readonly),
+:host(.readonly) .control,
+:host(.readonly) .label {
+  cursor: auto;
+}
+
+.checked-indicator {
+  position: absolute;
+  display: none;
+  width: 60%;
+  height: 60%;
+}
+
+.indeterminate-indicator {
+  position: absolute;
+  display: none;
+  width: 50%;
+  height: 50%;
+  background: var(--foreground);
+  border-radius: var(--border-radius);
+}
+
+:host([indeterminate][checked]) .indeterminate-indicator {
+  display: inline-flex;
+}
+
+:host([indeterminate][checked]) .checked-indicator {
+  display: none;
+}
+
+.label {
+  margin-left: calc(var(--font-size) / 2);
+  cursor: pointer;
+}

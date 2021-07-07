@@ -12,7 +12,8 @@
 }
 
 :host(:focus),
-:host([focused]) {
+:host(.focused),
+:host(.active) {
   background-color: var(--background-active);
 }
 

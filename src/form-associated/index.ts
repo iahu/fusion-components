@@ -1,4 +1,5 @@
-import { property } from 'lit/decorators'
+import { PropertyValues } from 'lit'
+import { property } from 'lit/decorators.js'
 import { FC } from '../fusion-component'
 
 // copy from fast-element
@@ -85,6 +86,14 @@ export default class FormAssociated extends FC {
     super()
 
     this.elementInternals = (this as any).attachInternals()
+  }
+
+  willUpdate(p: PropertyValues<this>): void {
+    super.willUpdate(p)
+    this.value = this.getAttribute('value') || this.value
+    this.elementInternals.setFormValue(this.value)
+    this.setAttribute('aria-disabled', this.disabled.toString())
+    this.setAttribute('aria-required', this.required.toString())
   }
 
   public get form(): HTMLFormElement | null {

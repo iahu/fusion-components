@@ -1,7 +1,7 @@
-import litcss from 'rollup-plugin-lit-css'
-import typescript from 'rollup-plugin-typescript2'
 import resolve from '@rollup/plugin-node-resolve'
+import importCss from 'rollup-plugin-styles'
 import { terser } from 'rollup-plugin-terser'
+import typescript from 'rollup-plugin-typescript2'
 
 /**
  * @type {import('rollup').RollupOptions}
@@ -22,6 +22,6 @@ export default {
         },
       },
     }),
-    litcss(),
+    importCss(),
   ],
 }

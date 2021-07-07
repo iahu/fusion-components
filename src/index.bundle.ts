@@ -1,2 +1,2 @@
-export * from './button/index'
+export * from './index'
 export * from 'lit'

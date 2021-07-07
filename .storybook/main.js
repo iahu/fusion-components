@@ -20,7 +20,7 @@ module.exports = {
     const originalCssRuleIndex = config.module.rules.findIndex((rule) => rule.test.source === '\\.css$')
     config.module.rules.splice(originalCssRuleIndex, 1, {
       test: /\.css$/,
-      use: [{ loader: 'raw-loader', options: { esModule: false } }],
+      use: [{ loader: 'css-loader', options: { esModule: false } }],
     })
 
     const webComponentsRule = config.module.rules.find(

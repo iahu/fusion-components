@@ -1,6 +1,6 @@
-import typescript from 'rollup-plugin-typescript2'
 import multiInput from 'rollup-plugin-multi-input'
-import litcss from 'rollup-plugin-lit-css'
+import importCss from 'rollup-plugin-styles'
+import typescript from 'rollup-plugin-typescript2'
 
 /**
  * @type {import('rollup').RollupOptions}
@@ -17,6 +17,6 @@ export default {
         },
       },
     }),
-    litcss(),
+    importCss(),
   ],
 }

@@ -5,22 +5,24 @@
   color: var(--foreground);
   border-radius: var(--border-radius);
   background: var(--background);
+  padding: var(--padding-t, 0) var(--padding-r, 0) var(--padding-b, 0) var(--padding-l, 0);
+  border: 1px solid transparent;
 }
 
 .control {
-  background: inherit;
+  background: none;
   outline: none;
-  border: 1px solid transparent;
+  border: none;
   display: inline-flex;
   justify-self: space-between;
   word-break: keep-all;
   white-space: nowrap;
   line-height: var(--line-height);
-  user-select: none;
-  padding: var(--padding-t, 0) var(--padding-r, 0) var(--padding-b, 0) var(--padding-l, 0);
+  /*user-select: none;*/
+  padding: 0;
 }
 
-.control:disabled {
+:host(:disabled) {
   cursor: auto;
   color: var(--foreground-disabled);
   border-color: var(--border-color-disabled);
@@ -47,47 +49,47 @@
   opacity: 0.3;
 }
 
-:host([outline]) .control {
+:host([outline]) {
   border-color: var(--border-color);
 }
 
-.control:not(:disabled):focus-visible {
+:host(:not(:disabled):focus-visible) {
   background: var(--background-hover);
   border-color: var(--border-color-active);
 }
 
-.control:not(:disabled):hover {
+:host(:not(:disabled):hover) {
   background: var(--background-hover);
 }
 
-.control:not(:disabled):active {
+:host(:not(:disabled):active) {
   background: var(--background-active);
 }
 
-:host([selected]) .control[disabled] {
+:host([selected][disabled]) {
   /*opacity: 0.5;*/
   background: var(--background-disabled);
 }
 
 /*secondary*/
-.control[data-accent='secondary'] {
+:host([accent='secondary']) {
   background: var(--accent);
 }
-.control:not(:disabled)[data-accent='secondary'] {
+:host(:not([disabled])[accent='secondary']) {
   border-color: var(--accent-hover);
 }
-.control:not(:disabled)[data-accent='secondary']:hover {
+:host(:not([disabled])[accent='secondary']:hover) {
   background: var(--accent-hover);
 }
 
-.control:not(:disabled)[data-accent='secondary']:active {
+:host(:not([disabled])[accent='secondary']:active) {
   background: var(--accent-hover);
 }
 
-.control[data-accent='secondary'] {
+:host([accent='secondary']) {
   background: var(--accent);
 }
 
-.control[data-accent='secondary'][disabled] {
+:host([accent='secondary'][disabled]) {
   background: var(--accent-disabled);
 }

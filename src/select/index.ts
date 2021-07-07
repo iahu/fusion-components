@@ -1,5 +1,5 @@
 import { html, TemplateResult } from 'lit'
-import { customElement, property } from 'lit/decorators'
+import { customElement, property } from 'lit/decorators.js'
 import ListBox from '../listbox'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'

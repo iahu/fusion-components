@@ -1,4 +1,4 @@
-import { html, LitElement, TemplateResult } from 'lit'
+import { html, LitElement, PropertyValues, TemplateResult } from 'lit'
 import { property } from 'lit/decorators.js'
 
 export interface FC {
@@ -14,13 +14,21 @@ abstract class FusionComponent extends LitElement {
     return this.shadowRoot?.querySelector('.control')
   }
 
+  updated(p: PropertyValues<this>): void {
+    p.forEach((v, k) => {
+      if (!this[k] && this.control?.hasAttribute(k.toString())) {
+        this.control?.removeAttribute(k.toString())
+      }
+    })
+  }
+
   focus(): void {
-    this.setAttribute('focused', '')
+    this.classList.add('focused')
     this.control?.focus()
   }
 
   blur(): void {
-    this.removeAttribute('focused')
+    this.classList.remove('focused')
     this.control?.blur()
   }
 

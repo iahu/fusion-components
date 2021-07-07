@@ -1,10 +1,8 @@
-import { prototype } from 'events'
 import { html, TemplateResult } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
 import FusionComponent from '../fusion-component'
 import mergeStyles from '../merge-styles'
-import { before, after } from '../pattern/before-after'
-
+import { after, before } from '../pattern/before-after'
 import style from './style.css'
 
 @customElement('fc-button')
@@ -17,7 +15,7 @@ export class Button extends FusionComponent {
   @property({ type: Boolean })
   autofocus = false
 
-  @property({ type: Boolean })
+  @property({ type: Boolean, reflect: true })
   disabled = false
 
   @property()
@@ -62,7 +60,6 @@ export class Button extends FusionComponent {
     return html`<button
       class="control"
       part="control"
-      part="fc-button"
       ?disabled="${disabled}"
       ?autofocus="${autofocus}"
       data-size="${size}"

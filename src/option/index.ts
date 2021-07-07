@@ -1,5 +1,5 @@
 import { html, PropertyValues, TemplateResult } from 'lit'
-import { customElement, property } from 'lit/decorators'
+import { customElement, property } from 'lit/decorators.js'
 import { FC } from '../fusion-component'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
@@ -8,7 +8,7 @@ import style from './style.css'
 import '../icon/index'
 import ListBox from '../listbox'
 
-export const isOption = (el: Element): boolean => {
+export const isOption = (el: Element): el is Option => {
   return el instanceof Option && el.getAttribute('role') === 'option'
 }
 
@@ -25,11 +25,15 @@ export default class Option extends FC {
 
   connectedCallback(): void {
     super.connectedCallback()
-    this.setAttribute('role', 'option')
-    this.defaultSelected = this.hasAttribute('selected')
+    this.selected = this.hasAttribute('selected')
+    this.defaultSelected = this.selected
   }
 
   willUpdate(props: PropertyValues): void {
+    super.willUpdate(props)
+
+    this.setAttribute('aria-selected', this.selected.toString())
+    this.classList.toggle('active', this.active)
     if (this.disabled) {
       this.selected = false
     } else if (props.has('selected')) {
@@ -41,7 +45,7 @@ export default class Option extends FC {
     this.classList.toggle('selected', this.selected)
   }
 
-  @property({ reflect: true, type: String })
+  @property({ reflect: true })
   role = 'option'
 
   @property()
@@ -64,7 +68,15 @@ export default class Option extends FC {
   }
 
   @property({ type: Boolean })
-  selected = false
+  active = false
+
+  public get selected(): boolean {
+    return this.hasAttribute('selected')
+  }
+  public set selected(v: boolean) {
+    this.toggleAttribute('selected', v)
+    this.requestUpdate()
+  }
 
   @property({ attribute: 'aria-selected' })
   ariaSelected = false
@@ -93,7 +105,7 @@ export default class Option extends FC {
       </svg>
     </fc-icon>`
 
-    return html`<div class="control" part="control" role="option" ?foucsed="${this.getAttribute('foucsed')}">
+    return html`<div class="control" part="control" role="option">
       ${before()}
       <span class="icon">
         <slot name="icon">${this.selected ? defaultIcon : ''}</slot>

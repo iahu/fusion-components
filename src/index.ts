@@ -1,3 +1,4 @@
+export * from './anchor/index'
 export * from './button/index'
 export * from './input/index'
 export * from './option/index'

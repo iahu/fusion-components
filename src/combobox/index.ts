@@ -1,5 +1,5 @@
 import { html, PropertyValues, TemplateResult } from 'lit'
-import { customElement, property, state } from 'lit/decorators'
+import { customElement, property, state } from 'lit/decorators.js'
 import mergeStyles from '../merge-styles'
 import Option from '../option'
 import { after, before } from '../pattern/before-after'
@@ -30,7 +30,7 @@ export default class ComboBox extends Select {
     this.removeEventListener('select', this.handleSelect)
   }
 
-  willUpdate(p: PropertyValues): void {
+  willUpdate(p: PropertyValues<this>): void {
     super.willUpdate(p)
     if (this.autocomplete) {
       this.filter(this.inputValue)
