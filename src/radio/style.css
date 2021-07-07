@@ -14,10 +14,25 @@
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  width: var(--font-size);
-  height: var(--font-size);
+  width: calc(var(--font-size) * 1.167);
+  height: calc(var(--font-size) * 1.167);
   background: var(--background);
   overflow: hidden;
+  border-radius: 50%;
+}
+
+.checked-indicator {
+  position: absolute;
+  display: none;
+  width: calc(50% - 1px);
+  height: calc(50% - 1px);
+  border-radius: 50%;
+  background: var(--foreground);
+}
+
+.label {
+  margin-left: calc(var(--font-size) / 2);
+  cursor: pointer;
 }
 
 :host([checked]) .control {
@@ -32,6 +47,7 @@
   background: var(--background-disabled);
   cursor: not-allowed;
 }
+
 :host([disabled]) .label {
   color: var(--foreground-disabled);
   cursor: not-allowed;
@@ -41,33 +57,4 @@
 :host(.readonly) .control,
 :host(.readonly) .label {
   cursor: auto;
-}
-
-.checked-indicator {
-  position: absolute;
-  display: none;
-  width: 60%;
-  height: 60%;
-}
-
-.indeterminate-indicator {
-  position: absolute;
-  display: none;
-  width: 60%;
-  height: calc(var(--fc-size-unit) * 2);
-  background: var(--foreground);
-  border-radius: var(--border-radius);
-}
-
-:host([indeterminate][checked]) .indeterminate-indicator {
-  display: inline-flex;
-}
-
-:host([indeterminate][checked]) .checked-indicator {
-  display: none;
-}
-
-.label {
-  margin-left: calc(var(--font-size) / 2);
-  cursor: pointer;
 }

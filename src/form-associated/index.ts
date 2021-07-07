@@ -92,9 +92,12 @@ export default class FormAssociated extends FC {
     super.willUpdate(p)
     this.value = this.getAttribute('value') || this.value
     this.elementInternals.setFormValue(this.value)
+    this.dirtyValue = true
     this.setAttribute('aria-disabled', this.disabled.toString())
     this.setAttribute('aria-required', this.required.toString())
   }
+
+  dirtyValue = false
 
   public get form(): HTMLFormElement | null {
     return this.elementInternals.form
