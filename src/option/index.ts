@@ -32,9 +32,6 @@ export default class Option extends FC {
 
     this.setAttribute('aria-selected', this.selected.toString())
     this.classList.toggle('active', this.active)
-    // if (this.disabled) {
-    //   this.selected = false
-    // } else
     if (props.has('selected')) {
       if (props.get('selected') !== this.selected) {
         this.emit('selectionchange', this.selected)
@@ -52,10 +49,12 @@ export default class Option extends FC {
 
   focus(): void {
     this.classList.add('focused')
+    this.classList.add('active')
   }
 
   blur(): void {
     this.classList.remove('focused')
+    this.classList.remove('active')
   }
 
   public get form(): HTMLFormElement | null {
