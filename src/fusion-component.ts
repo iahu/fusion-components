@@ -22,14 +22,12 @@ abstract class FusionComponent extends LitElement {
     })
   }
 
-  focus(): void {
-    this.classList.add('focused')
-    this.control?.focus()
-  }
-
-  blur(): void {
-    this.classList.remove('focused')
-    this.control?.blur()
+  get slottedElements(): Element[] {
+    const slot = this.shadowRoot?.querySelector('slot:not([name])')
+    if (slot instanceof HTMLSlotElement) {
+      return slot.assignedElements() as Element[]
+    }
+    return []
   }
 
   @property()

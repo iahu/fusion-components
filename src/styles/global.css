@@ -54,7 +54,7 @@
   --dark-grey: hsl(0, 0%, 40%);
   --grey: hsl(0, 0%, 50%);
   --light-grey: hsl(0, 0%, 60%);
-  --lighter-grey: hsl(0, 0%, 70%);
+  --lighter-grey: hsl(0, 0%, 65%);
   --orange: hsl(32, 93%, 66%);
   --orange2: hsl(32, 85%, 55%);
   --orange3: hsl(40, 94%, 68%);
@@ -70,17 +70,20 @@
   --foreground-disabled: var(--lighter-grey);
 
   /*background colors*/
-  --background: hsla(203, 7%, 30%, 1);
+  --background: hsla(203, 7%, 34%, 1);
   --background-hover: hsla(203, 7%, 37%, 1);
   --background-active: hsla(203, 7%, 44%, 1);
   --background-selected: hsla(203, 74%, 47%, 1);
-  --background-disabled: hsla(203, 7%, 44%, 1);
+  --background-disabled: hsla(203, 7%, 24%, 1);
 
   /*border-colors*/
   --border-color: hsla(203, 9%, 37%, 1);
   --border-color-hover: hsla(203, 17%, 47%, 1);
   --border-color-active: hsla(203, 17%, 47%, 1);
   --border-color-disabled: hsla(203, 9%, 37%, 0.3);
+
+  --outline-width: calc(var(--fc-size-unit) * 2);
+  --outline-color: hsla(203, 44%, 47%, 0.7);
 
   --accent: var(--blue-vibrant);
   --accent-hover: var(--blue6);

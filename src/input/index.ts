@@ -1,16 +1,21 @@
 import { html, TemplateResult } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
-import FusionComponent from '../fusion-component'
+import FormAssociated from '../form-associated'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
 import style from './style.css'
 
 @customElement('fc-input')
-export default class Input extends FusionComponent {
+export default class Input extends FormAssociated {
   static styles = mergeStyles(style)
 
   private get input(): HTMLInputElement | null | undefined {
     return this.shadowRoot?.querySelector('input')
+  }
+
+  connectedCallback(): void {
+    super.connectedCallback()
+    this.value = this.input?.value || this.value
   }
 
   @property({ type: Boolean })
@@ -20,17 +25,10 @@ export default class Input extends FusionComponent {
   type = 'text'
 
   @property()
-  name?: string
+  name = 'text'
 
-  public get value(): string {
-    return this.input?.value || ''
-  }
-  public set value(v: string) {
-    if (this.input) {
-      this.input.value = v
-      this.requestUpdate()
-    }
-  }
+  @property()
+  value = ''
 
   @property()
   placeholder?: string
@@ -51,9 +49,6 @@ export default class Input extends FusionComponent {
 
   @property({ type: Boolean })
   disabled = false
-
-  @property()
-  form?: string
 
   @property()
   formaction?: string
@@ -94,8 +89,8 @@ export default class Input extends FusionComponent {
   @property({ type: Boolean })
   readonly?: string
 
-  @property({ type: Boolean })
-  required?: string
+  // @property({ type: Boolean })
+  // required?: string
 
   @property({ type: Boolean })
   src?: string

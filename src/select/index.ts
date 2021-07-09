@@ -19,7 +19,7 @@ export default class Select extends ListBox {
   connectedCallback(): void {
     super.connectedCallback()
     this.addEventListener('keydown', this.handleKeydown)
-    this.addEventListener('focusin', this.handleFocusin)
+    this.addEventListener('click', this.handleClick)
     this.addEventListener('focusout', this.handleFocusout)
     this.addEventListener('select', this.handleSelect)
   }
@@ -27,7 +27,7 @@ export default class Select extends ListBox {
   disconnectedCallback(): void {
     super.disconnectedCallback()
     this.removeEventListener('keydown', this.handleKeydown)
-    this.removeEventListener('focusin', this.handleFocusin)
+    this.removeEventListener('click', this.handleClick)
     this.removeEventListener('focusout', this.handleFocusout)
     this.removeEventListener('select', this.handleSelect)
   }
@@ -51,11 +51,12 @@ export default class Select extends ListBox {
   }
 
   handleKeydown(e: KeyboardEvent): void {
-    if (this.hidden) {
+    if (this.hidden && Object.values(this._HANDLED_KEYS).includes(e.key)) {
+      e.preventDefault()
       this.hidden = false
-      return
+    } else {
+      super.handleKeydown(e)
     }
-    super.handleKeydown(e)
   }
 
   get position(): Position {
@@ -74,8 +75,8 @@ export default class Select extends ListBox {
 
   private tid?: NodeJS.Timeout
 
-  handleFocusin(): void {
-    this.hidden = false
+  handleClick(e: MouseEvent): void {
+    this.hidden = !this.hidden
   }
 
   handleFocusout(): void {

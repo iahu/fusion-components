@@ -97,6 +97,9 @@ export default class FormAssociated extends FC {
   willUpdate(p: PropertyValues<this>): void {
     super.willUpdate(p)
     this.value = this.getAttribute('value') || this.value
+    this.disabled = this.hasAttribute('disabled')
+    this.required = this.hasAttribute('required')
+
     this.elementInternals.setFormValue(this.value)
     this.setAttribute('aria-disabled', this.disabled.toString())
     this.setAttribute('aria-required', this.required.toString())
@@ -145,17 +148,13 @@ export default class FormAssociated extends FC {
     this.elementInternals.setValidity(flags, message, anchor)
   }
 
-  @property()
+  @property({ reflect: true })
   name = ''
 
   @property()
   value = ''
 
-  public get type(): string | null {
-    return this.getAttribute('localName')
-  }
-
-  @property({ type: Boolean })
+  @property({ type: Boolean, reflect: true })
   disabled = this.hasAttribute('disabled')
 
   @property({ type: Boolean })

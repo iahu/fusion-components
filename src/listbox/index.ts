@@ -1,9 +1,8 @@
-import { html, PropertyValues, TemplateResult } from 'lit'
+import { html, TemplateResult } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
 import FormAssociated from '../form-associated'
 import mergeStyles from '../merge-styles'
 import Option, { isOption } from '../option'
-
 import style from './style.css'
 
 @customElement('fc-listbox')
@@ -13,6 +12,18 @@ export default class ListBox extends FormAssociated {
   connectedCallback(): void {
     super.connectedCallback()
     this.className = 'listbox'
+
+    this.updateComplete.then(() => {
+      const isSharp = this.hasAttribute('sharp')
+      const isDisabled = this.hasAttribute('disabled')
+      // 校验子元素，并传递要继承的属性
+      this.options?.forEach((option) => {
+        // 只保留合法的 Option 元素
+        if (!isOption(option)) return (option as HTMLElement).remove()
+        if (isSharp) option.toggleAttribute('sharp', isSharp)
+        if (isDisabled) option.disabled = true
+      })
+    })
     this.addEventListener('click', this.handleClick)
     this.addEventListener('keydown', this.handleKeydown)
     this.addEventListener('selectionchange', this.handleSelectionchange)
@@ -27,19 +38,6 @@ export default class ListBox extends FormAssociated {
 
   private get selectedOption(): Option | undefined {
     return this.options.find((o) => !o.disabled && o.value === this.value)
-  }
-
-  willUpdate(p: PropertyValues<this>): void {
-    super.willUpdate(p)
-    const isSharp = this.hasAttribute('sharp')
-    const isDisabled = this.hasAttribute('disabled')
-    // 校验子元素，并传递要继承的属性
-    this.options?.forEach((option) => {
-      // 只保留合法的 Option 元素
-      if (!isOption(option)) return (option as HTMLElement).remove()
-      option.toggleAttribute('sharp', isSharp)
-      option.toggleAttribute('disabled', isDisabled)
-    })
   }
 
   updated(): void {
@@ -112,19 +110,10 @@ export default class ListBox extends FormAssociated {
     if (selectedOption) selectedOption.selected = true
     this.value = selectedOption?.value || ''
     this.displayValue = selectedOption?.text || ''
-    //this.requestUpdate()
-  }
-
-  public get slottedElement(): HTMLSlotElement | null | undefined {
-    return this.shadowRoot?.querySelector('slot:not([name])')
   }
 
   public get options(): Option[] {
-    const optionSlot = this.shadowRoot?.querySelector('slot:not([name])')
-    if (optionSlot instanceof HTMLSlotElement) {
-      return (optionSlot.assignedElements() as Option[]).filter((o) => !o.hidden)
-    }
-    return []
+    return this.slottedElements.filter((o) => isOption(o) && !o.hidden) as Option[]
   }
 
   public set options(v: Option[]) {
@@ -151,37 +140,41 @@ export default class ListBox extends FormAssociated {
     }
   }
 
-  handleKeydown(e: KeyboardEvent): void {
-    const HANDLED_KEYS = {
+  public get _HANDLED_KEYS(): Record<string, string> {
+    return {
       ArrowDown: 'ArrowDown',
       ArrowUp: 'ArrowUp',
       Enter: 'Enter',
       Space: this.role === 'listbox' ? ' ' : 'Enter',
     }
+  }
 
-    if (!Object.values<string>(HANDLED_KEYS).includes(e.key)) {
+  handleKeydown(e: KeyboardEvent): void {
+    const { _HANDLED_KEYS } = this
+
+    if (!Object.values<string>(_HANDLED_KEYS).includes(e.key)) {
       return
     }
 
     e.preventDefault()
     const withCtrl = e.metaKey || e.ctrlKey || e.altKey ? this.length : 0
     switch (e.key) {
-      case HANDLED_KEYS.ArrowDown:
+      case _HANDLED_KEYS.ArrowDown:
         this.indicatedIndex += 1 + withCtrl
         this.emit('change')
         break
-      case HANDLED_KEYS.ArrowUp:
+      case _HANDLED_KEYS.ArrowUp:
         this.indicatedIndex -= 1 + withCtrl
         this.emit('change')
         break
-      case HANDLED_KEYS.Space:
-      case HANDLED_KEYS.Enter: {
+      case _HANDLED_KEYS.Space:
+      case _HANDLED_KEYS.Enter: {
         const { displayValue, indicatedIndex } = this
         const changed = this.options[indicatedIndex]?.text !== displayValue
         if (changed) {
           this.selectedIndex = indicatedIndex
-          this.emit('select', changed)
         }
+        this.emit('select', changed)
         break
       }
       default:

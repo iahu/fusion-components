@@ -2,7 +2,6 @@ import { html, PropertyValues, TemplateResult } from 'lit'
 import { customElement, property } from 'lit/decorators'
 import FormAssociated from '../form-associated'
 import mergeStyles from '../merge-styles'
-
 import style from './style.css'
 
 @customElement('fc-checkbox')
@@ -11,10 +10,9 @@ export default class Checkbox extends FormAssociated {
 
   connectedCallback(): void {
     super.connectedCallback()
+    this.addEventListener('click', this.handleClick)
     this.checked = this.hasAttribute('checked')
     this.defaultChecked = this.checked
-
-    this.addEventListener('click', this.handleClick)
   }
 
   disconnectedCallback(): void {
@@ -42,7 +40,7 @@ export default class Checkbox extends FormAssociated {
   @property({ type: Boolean, reflect: true })
   checked = false
 
-  @property({ type: Boolean })
+  @property({ type: Boolean, attribute: 'checked' })
   defaultChecked = false
 
   @property({ type: Boolean, reflect: true })
@@ -71,12 +69,13 @@ export default class Checkbox extends FormAssociated {
           <svg
             class="checked-indicator"
             xmlns="http://www.w3.org/2000/svg"
-            viewbox="0 0 38 28"
-            width="38"
-            height="28"
-            xmlns:v="https://vecta.io/nano"
+            viewBox="0 0 12 12"
+            style="enable-background:new 0 0 12 12"
+            xml:space="preserve"
           >
-            <path d="M12.422 22.635L2.708 12.569 0 15.252 12.422 28 38 2.683 35.292 0z" />
+            <path
+              d="M4.4 10c-.3 0-.5-.1-.7-.3l-3-3.1c-.4-.4-.4-1 0-1.4.4-.4 1-.4 1.4 0l2.3 2.4 5.5-5.3c.4-.4 1-.4 1.4 0 .4.4.4 1 0 1.4l-6.2 6c-.2.2-.4.3-.7.3z"
+            />
           </svg>
         </slot>
         <slot name="indeterminate-indicator">

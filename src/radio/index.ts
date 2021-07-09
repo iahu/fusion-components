@@ -1,5 +1,6 @@
 import { html, PropertyValues, TemplateResult } from 'lit'
 import { customElement, property } from 'lit/decorators'
+import { observer } from '../decorators'
 import FormAssociated from '../form-associated'
 import mergeStyles from '../merge-styles'
 
@@ -12,6 +13,7 @@ export default class Radio extends FormAssociated {
   connectedCallback(): void {
     super.connectedCallback()
     this.checked = this.hasAttribute('checked')
+    this.disabled = this.hasAttribute('disabled')
     this.defaultChecked = this.checked
 
     this.addEventListener('click', this.handleClick)
@@ -27,12 +29,6 @@ export default class Radio extends FormAssociated {
     this.setAttribute('aria-disabled', this.disabled.toString())
     this.setAttribute('aria-required', this.required.toString())
     this.classList.toggle('readonly', this.readOnly)
-    if (this.checked) {
-      this.uniqueChecked()
-      this.updateForm()
-    } else if (this.dirtyValue) {
-      this.checked = true
-    }
   }
 
   @property()
@@ -45,7 +41,15 @@ export default class Radio extends FormAssociated {
   tabindex = '0'
 
   @property({ type: Boolean, reflect: true })
+  @observer()
   checked = false
+  checkedChanged(): void {
+    if (this.checked) {
+      this.uniqueChecked()
+      this.updateForm()
+      this.emit('change')
+    }
+  }
 
   @property({ type: Boolean })
   defaultChecked = false
@@ -57,8 +61,9 @@ export default class Radio extends FormAssociated {
   readOnly = false
 
   uniqueChecked(): void {
-    if (!this.form) return
-    const silbings = Array.from(this.form.querySelectorAll(`fc-radio[name='${this.name}']`)) as Radio[]
+    const scope = this.form || this.closest('fc-radio-group') || this.ownerDocument.body
+    if (!scope) return
+    const silbings = Array.from(scope.querySelectorAll(`fc-radio[name='${this.name}']`)) as Radio[]
     silbings.forEach((e) => {
       if (e !== this) {
         e.checked = false
@@ -75,7 +80,6 @@ export default class Radio extends FormAssociated {
     if (!this.disabled && !this.readOnly && !this.checked) {
       this.checked = !this.checked
       this.updateForm()
-      this.emit('change')
     }
   }
 

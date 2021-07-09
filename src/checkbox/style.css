@@ -1,12 +1,14 @@
 :host {
   display: inline-flex;
   align-items: center;
+}
+
+:host(:not(:disabled)) {
   cursor: pointer;
 }
 
 :host(:disabled) {
   background: none;
-  cursor: auto;
 }
 
 .control {
@@ -28,18 +30,14 @@
   display: block;
 }
 
+:host(.readonly) .control,
 :host([disabled]) .control {
   background: var(--background-disabled);
   cursor: not-allowed;
 }
+:host(.readonly) .label,
 :host([disabled]) .label {
   color: var(--foreground-disabled);
-  cursor: not-allowed;
-}
-
-:host(.readonly),
-:host(.readonly) .control,
-:host(.readonly) .label {
   cursor: auto;
 }
 
