@@ -1,5 +1,6 @@
 import { PropertyValues } from 'lit'
 import { property } from 'lit/decorators.js'
+import { observer } from '../decorators'
 import { FC } from '../fusion-component'
 
 // copy from fast-element
@@ -99,6 +100,8 @@ export default class FormAssociated extends FC {
     this.value = this.getAttribute('value') || this.value
     this.disabled = this.hasAttribute('disabled')
     this.required = this.hasAttribute('required')
+    if (this.name) this.setAttribute('name', this.name)
+    else this.removeAttribute('name')
 
     this.elementInternals.setFormValue(this.value)
     this.setAttribute('aria-disabled', this.disabled.toString())
@@ -148,7 +151,7 @@ export default class FormAssociated extends FC {
     this.elementInternals.setValidity(flags, message, anchor)
   }
 
-  @property({ reflect: true })
+  @property()
   name = ''
 
   @property()

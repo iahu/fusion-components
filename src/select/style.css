@@ -39,6 +39,9 @@
 }
 
 .listbox {
+  --padding-t: calc(var(--fc-size-unit) * 4);
+  --padding-b: calc(var(--fc-size-unit) * 4);
+  --client-height: calc(var(--border-width) + var(--padding-b) + var(--padding-t) + var(--font-size));
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -47,12 +50,11 @@
   left: 0;
   box-sizing: border-box;
   background: var(--background);
-  --padding-t: calc(var(--fc-size-unit) * 4);
-  --padding-b: calc(var(--fc-size-unit) * 4);
   padding: var(--padding-t) var(--padding-r) var(--padding-b) var(--padding-l);
   max-height: var(--max-height, 164px);
   overflow: auto;
-  --client-height: calc(var(--border-width) + var(--padding-b) + var(--padding-t) + var(--font-size));
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--border-radius);
 }
 
 .listbox[position='bottom'] {

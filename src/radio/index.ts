@@ -40,8 +40,11 @@ export default class Radio extends FormAssociated {
   @property({ reflect: true })
   tabindex = '0'
 
-  @property({ type: Boolean, reflect: true })
-  @observer()
+  @observer({ reflect: true })
+  name = ''
+
+  // @property({ type: Boolean, reflect: true })
+  @observer({ reflect: true })
   checked = false
   checkedChanged(): void {
     if (this.checked) {
@@ -62,8 +65,9 @@ export default class Radio extends FormAssociated {
 
   uniqueChecked(): void {
     const scope = this.form || this.closest('fc-radio-group') || this.ownerDocument.body
-    if (!scope) return
-    const silbings = Array.from(scope.querySelectorAll(`fc-radio[name='${this.name}']`)) as Radio[]
+    const { name } = this
+    if (!scope || !name) return
+    const silbings = Array.from(scope.querySelectorAll(`fc-radio[name='${name}']`)) as Radio[]
     silbings.forEach((e) => {
       if (e !== this) {
         e.checked = false

@@ -2,7 +2,7 @@ import { html, LitElement, PropertyValues, TemplateResult } from 'lit'
 import { property } from 'lit/decorators.js'
 
 export interface FC {
-  attributeChangedCallback: (name: string, pre: string | null, next: string | null) => void
+  attributeChanged: (name: string, pre: string | null, next: string | null) => void
 }
 
 abstract class FusionComponent extends LitElement {
