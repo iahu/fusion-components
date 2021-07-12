@@ -46,7 +46,7 @@ type Observer = (proto: any, name: string) => void
 
 export const observer = function (options?: ObserverOptions): Observer {
   return function (proto: any, name: string): void {
-    const { type, reflect = false, attribute = true, converter, sync = true } = options || {}
+    const { type, reflect = false, attribute = true, converter, sync } = options || {}
 
     // attrs => props
     const userCallback = proto.connectedCallback
@@ -106,7 +106,7 @@ export const observer = function (options?: ObserverOptions): Observer {
           const callback = Reflect.get(this, name + 'Changed')
           if (typeof callback === 'function') {
             if (sync) {
-              //同步的回调
+              //同步的回调sync
               callback.call(this, value, nextValue)
             } else {
               this.updateComplete.then(() => callback.call(this, value, nextValue))
