@@ -116,6 +116,7 @@ export const observer = function (options?: ObserverOptions): Observer {
           if (value !== undefined && reflect) {
             updateAttribute(this, name, nextValue, isBol)
           }
+          this.requestUpdate(name)
         }
       },
     })
