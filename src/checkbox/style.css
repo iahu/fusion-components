@@ -52,7 +52,7 @@
   position: absolute;
   display: none;
   width: 60%;
-  height: calc(var(--fc-size-unit) * 2);
+  height: calc(var(--fc-unit-size) * 2);
   background: var(--foreground);
   border-radius: var(--border-radius);
 }

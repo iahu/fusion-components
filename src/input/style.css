@@ -19,7 +19,7 @@
   padding: 0;
   /*padding: 0 var(--padding-r) 0 var(--padding-l);*/
   width: 100%;
-  height: calc(var(--fc-size-unit) * 16);
+  height: calc(var(--fc-unit-size) * 16);
   /*line-height: var(--line-height);*/
   color: inherit;
   background-color: transparent;

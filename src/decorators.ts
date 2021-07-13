@@ -3,6 +3,7 @@ import { ReactiveElement } from 'lit'
 interface ReactiveElementWithObserver extends ReactiveElement {
   __observer?: boolean
   attributeChanged?: (name: string, oldValue: string | null, nextValue: string | null) => void
+  [k: string]: any
 }
 
 type ObserverType = 'string' | 'number' | 'boolean'
@@ -73,9 +74,11 @@ export const observer = function (options?: ObserverOptions): Observer {
             // 通过 attribute 变化，更新 property
             attribute && Reflect.set(this, name, mergedNextValue)
           }
-          // lit 改写了 `attributeChangedCallback`，只有使用了 @property() 装饰器的属性才会触发前述回调
-          // 这里加上一个通用的回调
-          this.attributeChanged?.(attributeName, oldValue, this.getAttribute(attributeName))
+          if (attributeName) {
+            // lit 改写了 `attributeChangedCallback`，只有使用了 @property() 装饰器的属性才会触发前述回调
+            // 这里加上一个通用的回调
+            this.attributeChanged?.(attributeName, oldValue, this.getAttribute(attributeName))
+          }
         })
       })
 
@@ -93,10 +96,14 @@ export const observer = function (options?: ObserverOptions): Observer {
     const ownPropertyDescriptor = Reflect.getOwnPropertyDescriptor(proto, name)
     Object.defineProperty(proto, name, {
       ...ownPropertyDescriptor,
-      get(this: ReactiveElement) {
-        return this[tempName]
+      get(this: ReactiveElementWithObserver) {
+        const tempValue = Reflect.get(this, tempName)
+        const typeofValue = type ?? typeof tempValue
+        const isBol = typeofValue === 'boolean'
+
+        return tempValue === undefined && attribute ? getValueFromAttribute(this, name, isBol) : tempValue
       },
-      set(this: ReactiveElement, nextValue: Value) {
+      set(this: ReactiveElementWithObserver, nextValue: Value) {
         const typeofValue = type ?? typeof Reflect.get(this, name)
         const isBol = typeofValue === 'boolean'
         const value = this[tempName]

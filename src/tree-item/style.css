@@ -1,0 +1,75 @@
+:host {
+  display: block;
+  margin: calc(var(--fc-unit-size) * 1) 0;
+}
+:host(:focus) {
+  outline: none;
+}
+
+:host(:not(:disabled)) {
+  cursor: pointer;
+}
+
+.control {
+  position: relative;
+  color: inherit;
+  display: flex;
+  align-items: center;
+  padding: var(--padding-t) var(--padding-r) var(--padding-b) var(--padding-l);
+}
+.control:hover {
+  background: var(--background-hover);
+}
+
+.expand-collapse-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  width: var(--font-size);
+  height: var(--font-size);
+  padding: 0 calc(var(--fc-unit-size) * 2);
+}
+
+:host(:not([flatten])) slot[name='expand-collapse-button'] {
+  display: block;
+  width: calc(var(--font-size) * 1.2);
+}
+
+.arrow-right {
+  width: 90%;
+  height: 90%;
+}
+
+.group {
+  display: block;
+  margin-left: calc(var(--font-size) * 1.2);
+}
+
+:host([expanded]) .arrow-right {
+  transform: rotateZ(90deg);
+}
+
+:host([selected]) .control {
+  /*color: var(--foreground-selected);*/
+  background: var(--background-selected);
+}
+
+:host([disabled]) {
+  color: var(--foreground-disabled);
+  cursor: not-allowed;
+}
+:host([disabled]) .control:hover {
+  background: transparent;
+}
+
+:host([focused]) .control:after {
+  content: '';
+  position: absolute;
+  left: calc(var(--outline-width) * -1);
+  width: 100%;
+  height: 100%;
+  /*box-sizing: content-box;*/
+  border-radius: var(--border-radius);
+  border: var(--outline-width) solid var(--outline-color);
+}

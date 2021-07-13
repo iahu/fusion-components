@@ -9,36 +9,36 @@
   fill: currentColor;
   /*overflow: hidden;*/
 
-  --fc-size-unit: 1px;
+  --fc-unit-size: 1px;
   --user-select: none;
-  --control-min-width: calc(var(--fc-size-unit) * 200);
+  --control-min-width: calc(var(--fc-unit-size) * 200);
 
   /*size*/
   --host-line-height: 1;
   --line-height: 1.4;
-  --font-size-xs: calc(var(--fc-size-unit) * 12);
-  --font-size-s: calc(var(--fc-size-unit) * 13);
-  --font-size-m: calc(var(--fc-size-unit) * 14);
-  --font-size-l: calc(var(--fc-size-unit) * 15);
-  --font-size-xl: calc(var(--fc-size-unit) * 16);
-  --font-size-xxl: calc(var(--fc-size-unit) * 17);
-  --font-size-xxxl: calc(var(--fc-size-unit) * 18);
-  --border-radius: calc(var(--fc-size-unit) * 2);
+  --font-size-xs: calc(var(--fc-unit-size) * 12);
+  --font-size-s: calc(var(--fc-unit-size) * 13);
+  --font-size-m: calc(var(--fc-unit-size) * 14);
+  --font-size-l: calc(var(--fc-unit-size) * 15);
+  --font-size-xl: calc(var(--fc-unit-size) * 16);
+  --font-size-xxl: calc(var(--fc-unit-size) * 17);
+  --font-size-xxxl: calc(var(--fc-unit-size) * 18);
+  --border-radius: calc(var(--fc-unit-size) * 2);
 
   --padding-l: clamp(
-    calc(var(--fc-size-unit) * 2),
-    calc(var(--font-size) - var(--fc-size-unit) * 7),
-    calc(var(--fc-size-unit) * 5)
+    calc(var(--fc-unit-size) * 2),
+    calc(var(--font-size) - var(--fc-unit-size) * 7),
+    calc(var(--fc-unit-size) * 5)
   );
   --padding-r: var(--padding-l);
   --padding-t: clamp(
-    calc(var(--fc-size-unit) * 2),
-    calc(var(--font-size) - var(--fc-size-unit) * 10),
-    calc(var(--fc-size-unit) * 5)
+    calc(var(--fc-unit-size) * 2),
+    calc(var(--font-size) - var(--fc-unit-size) * 10),
+    calc(var(--fc-unit-size) * 5)
   );
   --padding-b: var(--padding-t);
 
-  --border-width: calc(var(--fc-size-unit) * 1);
+  --border-width: calc(var(--fc-unit-size) * 1);
 
   /*color variables*/
   --black: hsl(0, 0%, 0%);
@@ -68,6 +68,7 @@
   /* foreground colors*/
   --foreground: var(--white);
   --foreground-disabled: var(--lighter-grey);
+  --foreground-selected: hsla(203, 74%, 47%, 1);
 
   /*background colors*/
   --background: hsla(203, 7%, 34%, 1);
@@ -82,8 +83,8 @@
   --border-color-active: hsla(203, 17%, 47%, 1);
   --border-color-disabled: hsla(203, 9%, 37%, 0.3);
 
-  --outline-width: calc(var(--fc-size-unit) * 2);
-  --outline-color: hsla(203, 44%, 47%, 0.7);
+  --outline-width: calc(var(--fc-unit-size) * 2);
+  --outline-color: hsla(32, 93%, 66%, 0.5);
 
   --accent: var(--blue-vibrant);
   --accent-hover: var(--blue6);

@@ -3,7 +3,7 @@
   background: transparent;
   padding: 0;
   width: 100%;
-  height: calc(var(--fc-size-unit) * 16);
+  height: calc(var(--fc-unit-size) * 16);
   color: inherit;
   background-color: transparent;
   border: none;

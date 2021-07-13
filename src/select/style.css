@@ -39,8 +39,8 @@
 }
 
 .listbox {
-  --padding-t: calc(var(--fc-size-unit) * 4);
-  --padding-b: calc(var(--fc-size-unit) * 4);
+  --padding-t: calc(var(--fc-unit-size) * 4);
+  --padding-b: calc(var(--fc-unit-size) * 4);
   --client-height: calc(var(--border-width) + var(--padding-b) + var(--padding-t) + var(--font-size));
   position: absolute;
   display: flex;
