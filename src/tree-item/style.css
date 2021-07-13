@@ -63,7 +63,7 @@
   background: transparent;
 }
 
-:host([focused]) .control:after {
+:host(:focus-visible[focused]) .control:after {
   content: '';
   position: absolute;
   left: calc(var(--outline-width) * -1);

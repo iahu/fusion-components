@@ -68,6 +68,7 @@ export default class TreeItem extends FC {
     if (this.disabled) {
       return
     }
+    this.focused = this.selected
     this.setAttribute('aria-selected', this.selected.toString())
     this.emit('selectionChange')
   }

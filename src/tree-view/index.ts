@@ -64,6 +64,11 @@ export default class TreeView extends FC {
 
   handleSelectionChange(e: Event): void {
     const { srcElement } = e
+    const mayFocusedItem = this.querySelector<TreeItem>('fc-tree-item[tabindex="0"]')
+    if (mayFocusedItem) {
+      mayFocusedItem.blur()
+      mayFocusedItem.tabIndex = -1
+    }
     if (srcElement instanceof HTMLElement && isTreeItem(srcElement)) {
       if (srcElement.selected) {
         if (this.selectedItem) this.selectedItem.selected = false
