@@ -1,6 +1,6 @@
 import book from './book.html'
 
-import '../option/index'
+import '../list-option/index'
 import './index'
 
 export default { title: 'Select', order: 3 }

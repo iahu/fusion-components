@@ -1,7 +1,8 @@
 import { html, PropertyValues, TemplateResult } from 'lit'
-import { customElement, property, state } from 'lit/decorators.js'
+import { customElement } from 'lit/decorators.js'
+import { observer } from '../decorators'
 import mergeStyles from '../merge-styles'
-import Option from '../option'
+import ListOption, { isOption } from '../list-option'
 import { after, before } from '../pattern/before-after'
 import Select from '../select/index'
 import selectStyle from '../select/style.css'
@@ -11,13 +12,13 @@ import style from './style.css'
 export default class ComboBox extends Select {
   static styles = mergeStyles(selectStyle, style)
 
-  @property({ reflect: true })
+  @observer({ reflect: true })
   role = 'comobox'
 
-  @property()
+  @observer()
   autocomplete = ''
 
-  @property({ type: Boolean })
+  @observer({ type: 'boolean' })
   casesensitive = false
 
   connectedCallback(): void {
@@ -45,12 +46,13 @@ export default class ComboBox extends Select {
     return this.casesensitive ? v : v.toLowerCase()
   }
 
-  public get allOptions(): Option[] {
-    return Array.from(this.querySelectorAll('fc-option'))
-  }
+  // public get allOptions(): ListOption[] {
+  //   return Array.from(this.children).filter(isOption)
+  //   // return Array.from(this.querySelectorAll('fc-list-option'))
+  // }
 
-  filter(text: string): Option[] {
-    return this.allOptions.filter((o) => {
+  filter(text: string): ListOption[] {
+    return this.options.filter((o) => {
       o.hidden = text !== '' && !this.translateCase(o.text).startsWith(this.translateCase(text))
       return !o.hidden
     })
@@ -60,7 +62,7 @@ export default class ComboBox extends Select {
     return this.shadowRoot?.querySelector('.selected-value')
   }
 
-  @state()
+  @observer({ attribute: false })
   inputValue = ''
 
   handleLabelClick(e: MouseEvent): void {
@@ -85,7 +87,7 @@ export default class ComboBox extends Select {
   handleInputChange(): void {
     this.hidden = true
     const { inputValue } = this
-    this.selectedIndex = this.options.findIndex((o) => this.caseCompaire(o.text, inputValue.trim()))
+    this.selectedOption = this.options.find((o) => this.caseCompaire(o.text, inputValue.trim()))
   }
 
   handleInput(e: InputEvent): void {
@@ -94,8 +96,8 @@ export default class ComboBox extends Select {
     const { value } = e.target as HTMLInputElement
     const prevInputValue = this.inputValue
     this.inputValue = value
-    if (prevInputValue.trim() !== value.trim() && this.selectedIndex >= 0) {
-      this.selectedIndex = -1
+    if (prevInputValue.trim() !== value.trim() && this.selectedOption) {
+      this.selectedOption = undefined
     }
   }
 

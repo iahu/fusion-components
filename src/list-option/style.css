@@ -2,7 +2,7 @@
   display: inline-flex;
   width: 100%;
   box-sizing: border-box;
-  background: var(--background);
+  /*background: var(--background);*/
   cursor: pointer;
   /*overflow: hidden;*/
 }
@@ -17,20 +17,24 @@
   background-color: var(--background-active);
 }
 
-:host(:disabled) {
-  color: var(--foreground-disabled);
-  background: var(--background);
-  cursor: not-allowed;
-}
-
 :host([hidden]) {
   display: none;
 }
 
-:host(.selected) {
-  background: var(--background-selected);
+:host([selected]) {
+  background: var(--accent-color);
 }
 
+:host(:disabled) {
+  color: var(--foreground-disabled);
+  background: var(--background-disabled);
+  background: transparent;
+  cursor: not-allowed;
+}
+
+:host([selected]:disabled) {
+  background: var(--accent-color-disabled);
+}
 .control {
   color: inherit;
   align-items: center;
@@ -53,7 +57,7 @@
   transform-origin: center center;
 }
 
-:host(:not(.selected)) .icon {
+:host(:not([selected])) .icon {
   visibility: hidden;
 }
 

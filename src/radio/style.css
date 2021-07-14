@@ -50,7 +50,8 @@
 }
 
 :host([checked]) .control {
-  background: var(--background-selected);
+  /*background: var(--background-selected);*/
+  background: var(--accent-color);
 }
 
 :host([checked]) .checked-indicator {
@@ -58,7 +59,7 @@
 }
 
 :host([disabled]) .control {
-  background: var(--background-disabled);
+  background: var(--accent-color-disabled);
   cursor: not-allowed;
 }
 

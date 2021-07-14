@@ -1,5 +1,6 @@
 import { html, TemplateResult } from 'lit'
-import { customElement, property } from 'lit/decorators.js'
+import { customElement } from 'lit/decorators.js'
+import { observer } from '../decorators'
 import FormAssociated from '../form-associated'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
@@ -18,22 +19,22 @@ export default class Input extends FormAssociated {
     this.value = this.input?.value || this.value
   }
 
-  @property({ type: Boolean })
+  @observer({ type: 'boolean' })
   outline = false
 
-  @property()
+  @observer()
   type = 'text'
 
-  @property()
+  @observer()
   name = 'text'
 
-  @property()
+  @observer()
   value = ''
 
-  @property()
+  @observer()
   placeholder?: string
 
-  @property({ type: Boolean })
+  @observer({ type: 'boolean' })
   autofocus = false
 
   focus(): void {
@@ -44,61 +45,61 @@ export default class Input extends FormAssociated {
     this.input?.blur()
   }
 
-  @property({ type: Boolean })
+  @observer({ type: 'boolean' })
   checked = false
 
-  @property({ type: Boolean })
+  @observer({ type: 'boolean' })
   disabled = false
 
-  @property()
+  @observer()
   formaction?: string
 
-  @property()
+  @observer()
   formenctype?: string
 
-  @property()
+  @observer()
   formmethod?: string
 
-  @property()
+  @observer()
   formnovalidate?: string
 
-  @property()
+  @observer()
   formtarget?: string
 
-  @property()
+  @observer()
   height?: string
 
-  @property()
+  @observer()
   list?: string
 
-  @property()
+  @observer()
   max?: string
 
-  @property()
+  @observer()
   maxlength?: string
 
-  @property()
+  @observer()
   min?: string
 
-  @property()
+  @observer()
   minlength?: string
 
-  @property()
+  @observer()
   pattern?: string
 
-  @property({ type: Boolean })
+  @observer({ type: 'boolean' })
   readonly?: string
 
-  // @property({ type: Boolean })
+  // @observer({ type: 'boolean' })
   // required?: string
 
-  @property({ type: Boolean })
+  @observer({ type: 'boolean' })
   src?: string
 
-  @property()
+  @observer()
   step?: string
 
-  @property()
+  @observer()
   width?: string
 
   handleChange(): void {

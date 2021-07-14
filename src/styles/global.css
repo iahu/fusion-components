@@ -65,34 +65,38 @@
   --white2: hsl(0, 0%, 97%);
   --white3: hsl(219, 28%, 88%);
 
+  --box-background: hsla(203, 7%, 24%, 1);
+
   /* foreground colors*/
-  --foreground: var(--white);
-  --foreground-disabled: var(--lighter-grey);
-  --foreground-selected: hsla(203, 74%, 47%, 1);
+  --foreground: hsla(255, 0%, 90%, 1);
+  --foreground-disabled: hsla(255, 0%, 62%, 1);
+  --foreground-selected: hsla(255, 0%, 100%, 1);
 
   /*background colors*/
   --background: hsla(203, 7%, 34%, 1);
   --background-hover: hsla(203, 7%, 37%, 1);
   --background-active: hsla(203, 7%, 44%, 1);
-  --background-selected: hsla(203, 74%, 47%, 1);
+  --background-selected: hsla(203, 11%, 37%, 1);
+  --background-selected-disabled: hsla(203, 34%, 47%, 1);
   --background-disabled: hsla(203, 0%, 27%, 1);
 
   /*border-colors*/
   --border-color: hsla(203, 9%, 37%, 1);
-  --border-color-hover: hsla(203, 9%, 47%, 1);
-  --border-color-active: hsla(203, 9%, 47%, 1);
-  --border-color-disabled: hsla(203, 0%, 29%, 1);
+  --border-color-hover: hsla(203, 9%, 37%, 1);
+  --border-color-selected: hsla(203, 9%, 37%, 1);
+  --border-color-active: hsla(203, 9%, 43%, 1);
+  --border-color-disabled: hsla(203, 0%, 34%, 1);
 
   --outline-offset: calc(var(--fc-unit-size) * 1);
   --outline-width: calc(var(--fc-unit-size) * 2);
   --outline-color: hsla(32, 93%, 66%, 0.5);
 
-  --accent: var(--blue-vibrant);
-  --accent-hover: var(--blue6);
-  --accent-disabled: var(--blue5);
-  --caret: var(--orange);
+  --accent-color: hsl(203, 92%, 56%);
+  --accent-color-hover: hsl(203, 98%, 64%);
+  --accent-color-disabled: hsla(203, 98%, 56%, 0.5);
+  --caret: hsl(32, 93%, 66%);
   --line-highlight: var(--blue2);
-  --selection: var(--blue2);
+  --selection: hsla(210, 13%, 40%, 0.75);
   --selection-border: var(--blue4);
   --inactive-selection: var(--blue2);
   --misspelling: var(--red);

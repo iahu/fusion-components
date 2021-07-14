@@ -1,5 +1,6 @@
 import { html, TemplateResult } from 'lit'
-import { customElement, property } from 'lit/decorators.js'
+import { customElement } from 'lit/decorators.js'
+import { observer } from '../decorators'
 import ListBox from '../listbox'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
@@ -21,7 +22,7 @@ export default class Select extends ListBox {
     this.addEventListener('keydown', this.handleKeydown)
     this.addEventListener('click', this.handleClick)
     this.addEventListener('focusout', this.handleFocusout)
-    this.addEventListener('select', this.handleSelect)
+    this.addEventListener('selection-change', this.handleSelect)
   }
 
   disconnectedCallback(): void {
@@ -29,12 +30,12 @@ export default class Select extends ListBox {
     this.removeEventListener('keydown', this.handleKeydown)
     this.removeEventListener('click', this.handleClick)
     this.removeEventListener('focusout', this.handleFocusout)
-    this.removeEventListener('select', this.handleSelect)
+    this.removeEventListener('selection-change', this.handleSelect)
   }
 
   __hidden = true
 
-  @property({ reflect: true })
+  @observer({ reflect: true })
   role = 'listbox'
 
   public get hidden(): boolean {

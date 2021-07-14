@@ -1,8 +1,9 @@
 import { html, TemplateResult } from 'lit'
-import { customElement, property, state } from 'lit/decorators.js'
+import { customElement, property } from 'lit/decorators.js'
+import { observer } from '../decorators'
 import FormAssociated from '../form-associated'
 import mergeStyles from '../merge-styles'
-import Option, { isOption } from '../option'
+import ListOption, { isOption } from '../list-option'
 import style from './style.css'
 
 @customElement('fc-listbox')
@@ -11,7 +12,6 @@ export default class ListBox extends FormAssociated {
 
   connectedCallback(): void {
     super.connectedCallback()
-    this.className = 'listbox'
 
     this.updateComplete.then(() => {
       const isSharp = this.hasAttribute('sharp')
@@ -24,120 +24,80 @@ export default class ListBox extends FormAssociated {
         if (isDisabled) option.disabled = true
       })
     })
-    this.addEventListener('click', this.handleClick)
     this.addEventListener('keydown', this.handleKeydown)
-    this.addEventListener('selectionchange', this.handleSelectionchange)
+    this.addEventListener('select', this.handleSelect)
+    this.addEventListener('blur', this.handleBlur)
   }
 
   disconnectedCallback(): void {
     super.disconnectedCallback()
-    this.removeEventListener('click', this.handleClick)
     this.removeEventListener('keydown', this.handleKeydown)
-    this.removeEventListener('selectionchange', this.handleSelectionchange)
+    this.removeEventListener('select', this.handleSelect)
+    this.removeEventListener('blur', this.handleBlur)
   }
 
-  private get selectedOption(): Option | undefined {
-    return this.options.find((o) => !o.disabled && o.value === this.value)
-  }
-
-  updated(): void {
-    // 多个 option 的 value 相同时，使用 selectedIndex 可以防止错乱
-    const selectedOption = this.options[this.selectedIndex] || this.selectedOption
-    if (
-      selectedOption?.value === this.value &&
-      selectedOption.text === this.displayValue &&
-      selectedOption.index === this.selectedIndex
-    ) {
-      return
-    }
-
-    if (selectedOption) {
-      const preSelectedOption = this.options.find((o) => o.selected && o !== selectedOption)
-      if (preSelectedOption) preSelectedOption.selected = false
-      selectedOption.selected = true
-    } else if (this.value !== '' && this.displayValue !== '') {
-      // 没有选中任何 option
-      this.displayValue = ''
-      this.value = ''
-    }
-  }
-
-  @state()
+  @observer({ attribute: false })
   protected displayValue = ''
 
-  /**
-   * 当前指向的 Option 的索引 ，但还没被选中，键盘或鼠标导航是用
-   */
-  private __indicatedIndex = -1
-  public get indicatedIndex(): number {
-    const { selectedOption, __indicatedIndex } = this
-    if (__indicatedIndex < 0 && selectedOption) {
-      return selectedOption.index
-    }
-    return __indicatedIndex
-  }
-  public set indicatedIndex(v: number) {
-    const mergedIdx = Math.max(0, Math.min(v, this.options.length - 1))
-    if (mergedIdx === this.__indicatedIndex) {
-      return
-    }
-    this.__indicatedIndex = mergedIdx
-    this.options.forEach((o) => {
-      if (o.index === mergedIdx) {
-        o.focus()
-        o.scrollIntoView({ block: 'nearest' })
-      } else o.blur()
-    })
-    this.requestUpdate()
-  }
-
-  @property({ reflect: true })
+  @observer({ reflect: true })
   role = 'listbox'
+
+  @observer()
+  value = ''
+  valueChanged(): void {
+    const { value, selectedOption } = this
+    if (value) {
+      const mergedSelectedOption = selectedOption ?? this.options.find((o) => o.value === value)
+      mergedSelectedOption?.select(true)
+    } else {
+      selectedOption?.select(false)
+      selectedOption?.focusItem(false)
+    }
+  }
 
   @property({ reflect: true })
   tabindex = '0'
 
-  public get selectedIndex(): number {
-    return this.options.findIndex((o) => !o.disabled && o.selected)
-  }
-
-  public set selectedIndex(idx: number) {
-    if (idx === this.selectedIndex) {
-      return
-    }
-    const selectedOption = this.options.find((o) => !o.disabled && o.index === idx)
-    this.options.forEach((o) => (o.selected = false))
-    if (selectedOption) selectedOption.selected = true
-    this.value = selectedOption?.value || ''
-    this.displayValue = selectedOption?.text || ''
-  }
-
-  public get options(): Option[] {
-    return this.slottedElements.filter((o) => isOption(o) && !o.hidden) as Option[]
-  }
-
-  public set options(v: Option[]) {
+  @observer({ attribute: false })
+  options = Array.from(this.children).filter(isOption)
+  optionsChanged(): void {
     this.innerHTML = ''
-    v.forEach((o) => this.appendChild(o))
+    this.options.forEach((o) => this.appendChild(o))
     this.requestUpdate()
   }
 
-  public get length(): number {
-    return this.options.length
-  }
-  public set length(v: number) {
-    this.options = this.options.slice(0, v)
+  @observer({ attribute: false })
+  length = this.options.length
+  lengthChanged(): void {
+    this.options = this.options.slice(0, this.length)
   }
 
-  handleClick(e: MouseEvent): void {
-    const { srcElement } = e
-    if (srcElement instanceof HTMLElement && isOption(srcElement) && !(srcElement as Option).disabled) {
-      const selectedIndex = this.options.findIndex((o) => o === srcElement)
-      if (this.selectedIndex !== selectedIndex) {
-        this.selectedIndex = selectedIndex
-        this.emit('select')
-      }
+  @observer({ attribute: false })
+  selectedOption = this.options.find((o) => !o.disabled && o.value === this.value)
+  selectedOptionChanged(old: ListOption | null): void {
+    old?.focusItem(false)
+    old?.select(false)
+    this.value = this.selectedOption?.value ?? ''
+    this.indicatedIndex = this.selectedOption?.index ?? -1
+  }
+
+  @observer({ attribute: false })
+  indicatedIndex = -1
+  indicatedIndexChanged(): void {
+    const indicatedIndex = this.indicatedIndex
+    const mergedIndex = Math.max(0, Math.min(indicatedIndex, this.length - 1))
+    if (mergedIndex !== indicatedIndex) {
+      Reflect.set(this, '__indicatedIndex', mergedIndex)
+      return
     }
+    this.options.forEach((o) => {
+      if (o.index === indicatedIndex) {
+        o.focusItem(true)
+        o.scrollIntoView({ block: 'nearest' })
+      } else {
+        o.focusItem(false)
+      }
+    })
   }
 
   public get _HANDLED_KEYS(): Record<string, string> {
@@ -161,20 +121,23 @@ export default class ListBox extends FormAssociated {
     switch (e.key) {
       case _HANDLED_KEYS.ArrowDown:
         this.indicatedIndex += 1 + withCtrl
-        this.emit('change')
+        this.emit('selection-change')
         break
       case _HANDLED_KEYS.ArrowUp:
         this.indicatedIndex -= 1 + withCtrl
-        this.emit('change')
+        this.emit('selection-change')
         break
       case _HANDLED_KEYS.Space:
       case _HANDLED_KEYS.Enter: {
         const { displayValue, indicatedIndex } = this
         const changed = this.options[indicatedIndex]?.text !== displayValue
         if (changed) {
-          this.selectedIndex = indicatedIndex
+          const selectedOption = this.options[indicatedIndex]
+          this.selectedOption = selectedOption
+          selectedOption.select(!selectedOption.selected)
         }
-        this.emit('select', changed)
+        // list-option 已经触发了 select 事件
+        // this.emit('select', changed)
         break
       }
       default:
@@ -196,30 +159,31 @@ export default class ListBox extends FormAssociated {
     }
   }
 
-  handleSelectionchange(e: Event): void {
-    if (e.target instanceof Option) {
-      if (e.target.selected) {
-        this.selectedIndex = e.target.index
-      }
-
-      // 取消选中当前 option
-      if (!e.target.selected && this.value && e.target.text === this.displayValue) {
-        this.selectedIndex = -1
+  handleSelect(e: Event): void {
+    if (e.target instanceof ListOption) {
+      if (e.target.hasAttribute('selected')) {
+        this.selectedOption?.focusItem(false)
+        this.selectedOption = e.target
       }
     }
   }
 
   private focusNextOption(start: number, step: number): void {
+    this.selectedOption?.focusItem(false)
     while (this.options[start]) {
       const option = this.options[start]
       if (!option.disabled) {
-        option.active = true
+        option.focusItem(true)
         option.scrollIntoView()
         this.indicatedIndex = option.index
         break
       }
       start += step
     }
+  }
+
+  handleBlur(): void {
+    this.indicatedIndex = -1
   }
 
   render(): TemplateResult<1> {

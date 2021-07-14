@@ -1,9 +1,8 @@
 import { html, PropertyValues, TemplateResult } from 'lit'
-import { customElement, property } from 'lit/decorators'
+import { customElement } from 'lit/decorators'
 import { observer } from '../decorators'
 import FormAssociated from '../form-associated'
 import mergeStyles from '../merge-styles'
-
 import style from './style.css'
 
 @customElement('fc-radio')
@@ -31,19 +30,19 @@ export default class Radio extends FormAssociated {
     this.classList.toggle('readonly', this.readOnly)
   }
 
-  @property()
+  @observer()
   value = 'on'
 
-  @property({ reflect: true })
+  @observer({ reflect: true })
   role = 'radio'
 
-  @property({ reflect: true })
+  @observer({ reflect: true })
   tabindex = '0'
 
   @observer({ reflect: true })
   name = ''
 
-  // @property({ type: Boolean, reflect: true })
+  // @observer({ type: Boolean, reflect: true })
   @observer({ reflect: true })
   checked = false
   checkedChanged(): void {
@@ -54,13 +53,13 @@ export default class Radio extends FormAssociated {
     }
   }
 
-  @property({ type: Boolean })
+  @observer({ type: 'boolean' })
   defaultChecked = false
 
-  @property({ type: Boolean, reflect: true })
+  @observer({ type: 'boolean', reflect: true })
   indeterminate = false
 
-  @property({ type: Boolean, reflect: true })
+  @observer({ type: 'boolean', reflect: true })
   readOnly = false
 
   uniqueChecked(): void {

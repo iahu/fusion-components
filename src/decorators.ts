@@ -7,7 +7,7 @@ interface ReactiveElementWithObserver extends ReactiveElement {
 }
 
 type ObserverType = 'string' | 'number' | 'boolean'
-type Converter = (v: any) => Value
+type Converter = (v: any, host: any) => Value
 type Value = string | number | boolean
 
 interface ObserverOptions {
@@ -77,7 +77,7 @@ export const observer = function (options?: ObserverOptions): Observer {
             const isBol = typeofValue === 'boolean'
             const nextValue = getValueFromAttribute(this, name, isBol)
             const mergedConverter = converter ?? getConverter(this, name, type)
-            const mergedNextValue = mergedConverter(nextValue)
+            const mergedNextValue = mergedConverter(nextValue, this)
             this.attributeChangedCallback(attributeName, oldValue, this.getAttribute(attributeName))
 
             // 通过 attribute 变化，更新 property
@@ -115,10 +115,12 @@ export const observer = function (options?: ObserverOptions): Observer {
         const typeofValue = type ?? typeof Reflect.get(this, name)
         const isBol = typeofValue === 'boolean'
         const tempValue = Reflect.get(this, tempName)
+        nextValue = converter ? converter.call(this, nextValue, this) : nextValue
 
         if (tempValue !== nextValue) {
           Reflect.set(this, tempName, nextValue)
           const callback = Reflect.get(this, name + 'Changed')
+          const bacCallback = Reflect.get(this, name + 'Change')
           if (typeof callback === 'function') {
             if (sync) {
               //同步的回调sync
@@ -126,6 +128,8 @@ export const observer = function (options?: ObserverOptions): Observer {
             } else {
               this.updateComplete.then(() => callback.call(this, tempValue, nextValue))
             }
+          } else if (typeof bacCallback === 'function') {
+            console.warn(`callback should be "${name}Changed", but not "${name}Change"!`)
           }
 
           // 初始化前，html 标签自带的 attribute 不能被覆盖

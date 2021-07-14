@@ -3,7 +3,14 @@
   display: inline-flex;
   flex-direction: column;
   padding: var(--padding-t) var(--padding-l) var(--padding-b) var(--padding-l);
-  background: var(--background);
+  background: var(--box-background);
+  border: var(--border-width) solid var(--border-color);
+}
+
+:host(:disabled) {
+  color: var(--foreground-disabled);
+  background-color: var(--background-disabled);
+  border-color: var(--border-color-disabled);
 }
 
 :host(:focus-visible) {

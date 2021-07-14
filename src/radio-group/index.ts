@@ -1,10 +1,9 @@
 import { html, TemplateResult } from 'lit'
-import { customElement, property } from 'lit/decorators'
+import { customElement } from 'lit/decorators'
 import { observer } from '../decorators'
 import { FC } from '../fusion-component'
 import mergeStyles from '../merge-styles'
 import Radio from '../radio'
-
 import style from './style.css'
 
 const KEY_MAP = {
@@ -48,8 +47,7 @@ export default class RadioGroup extends FC {
     return this.items.length
   }
 
-  @property({ type: Boolean, reflect: true })
-  @observer()
+  @observer({ type: 'boolean', reflect: true })
   disabled = false
   disabledChanged(): void {
     const { disabled } = this
@@ -59,7 +57,6 @@ export default class RadioGroup extends FC {
     })
   }
 
-  @property()
   @observer()
   name = ''
   nameChanged(): void {
@@ -69,11 +66,9 @@ export default class RadioGroup extends FC {
     })
   }
 
-  @property()
   @observer()
   role = 'radiogroup'
 
-  @property()
   @observer()
   value = ''
   valueChanged(): void {

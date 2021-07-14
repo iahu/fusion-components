@@ -1,5 +1,6 @@
 import { html, TemplateResult } from 'lit'
-import { customElement, property } from 'lit/decorators.js'
+import { customElement } from 'lit/decorators.js'
+import { observer } from '../decorators'
 import FusionComponent from '../fusion-component'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
@@ -9,49 +10,46 @@ import style from './style.css'
 export class Button extends FusionComponent {
   static styles = mergeStyles(style)
 
-  @property()
-  classes = {}
-
-  @property({ type: Boolean })
+  @observer({ type: 'boolean' })
   autofocus = false
 
-  @property({ type: Boolean, reflect: true })
+  @observer({ type: 'boolean', reflect: true })
   disabled = false
 
-  @property()
+  @observer()
   type: '' | 'button' | 'submit' | 'reset' | 'menu' = ''
 
-  @property()
+  @observer()
   form = ''
 
-  @property()
+  @observer()
   formaction = ''
 
-  @property()
+  @observer()
   formenctype = ''
 
-  @property()
+  @observer()
   formnovalidate = ''
 
-  @property()
+  @observer()
   formtarget = ''
 
-  @property()
+  @observer()
   name = ''
 
-  @property()
+  @observer()
   value = ''
 
-  @property({ type: Boolean })
+  @observer({ type: 'boolean', reflect: true })
   selected = false
 
-  @property({ type: Boolean })
+  @observer({ type: 'boolean' })
   outline = false
 
-  @property({ type: Boolean })
+  @observer({ type: 'boolean', reflect: true })
   sharp = false
 
-  @property()
+  @observer()
   accent: 'primary' | 'scondary' | '' = 'primary'
 
   render(): TemplateResult<1> {

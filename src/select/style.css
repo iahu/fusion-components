@@ -69,7 +69,7 @@
   width: 100%;
   left: 0;
   box-sizing: border-box;
-  background: var(--background);
+  background: var(--box-background);
   padding: var(--padding-t) var(--padding-r) var(--padding-b) var(--padding-l);
   max-height: var(--max-height, 164px);
   overflow: auto;

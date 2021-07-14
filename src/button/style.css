@@ -42,6 +42,8 @@
 }
 
 :host([selected]) {
+  border-color: var(--border-color-selected);
+  color: var(--foreground-selected);
   background: var(--background-selected);
 }
 
@@ -73,23 +75,23 @@
 
 /*secondary*/
 :host([accent='secondary']) {
-  background: var(--accent);
+  background: var(--accent-color);
 }
 :host(:not([disabled])[accent='secondary']) {
-  border-color: var(--accent-hover);
+  border-color: var(--accent-color-hover);
 }
 :host(:not([disabled])[accent='secondary']:hover) {
-  background: var(--accent-hover);
+  background: var(--accent-color-hover);
 }
 
 :host(:not([disabled])[accent='secondary']:active) {
-  background: var(--accent-hover);
+  background: var(--accent-color-hover);
 }
 
 :host([accent='secondary']) {
-  background: var(--accent);
+  background: var(--accent-color);
 }
 
 :host([accent='secondary'][disabled]) {
-  background: var(--accent-disabled);
+  background: var(--accent-color-disabled);
 }

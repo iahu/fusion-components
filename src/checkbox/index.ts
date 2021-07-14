@@ -1,5 +1,6 @@
 import { html, PropertyValues, TemplateResult } from 'lit'
-import { customElement, property } from 'lit/decorators'
+import { customElement } from 'lit/decorators'
+import { observer } from '../decorators'
 import FormAssociated from '../form-associated'
 import mergeStyles from '../merge-styles'
 import style from './style.css'
@@ -28,25 +29,25 @@ export default class Checkbox extends FormAssociated {
     this.classList.toggle('readonly', this.readOnly)
   }
 
-  @property()
+  @observer()
   value = 'on'
 
-  @property({ reflect: true })
+  @observer({ reflect: true })
   role = 'checkbox'
 
-  @property({ reflect: true })
+  @observer({ reflect: true })
   tabindex = '0'
 
-  @property({ type: Boolean, reflect: true })
+  @observer({ type: 'boolean', reflect: true })
   checked = false
 
-  @property({ type: Boolean, attribute: 'checked' })
+  @observer({ type: 'boolean', attribute: 'checked' })
   defaultChecked = false
 
-  @property({ type: Boolean, reflect: true })
+  @observer({ type: 'boolean', reflect: true })
   indeterminate = false
 
-  @property({ type: Boolean, reflect: true })
+  @observer({ type: 'boolean', reflect: true })
   readOnly = false
 
   updateForm(): void {

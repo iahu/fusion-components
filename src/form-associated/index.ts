@@ -151,15 +151,15 @@ export default class FormAssociated extends FC {
     this.elementInternals.setValidity(flags, message, anchor)
   }
 
-  @property()
+  @observer({ reflect: true })
   name = ''
 
-  @property()
+  @observer()
   value = ''
 
-  @property({ type: Boolean, reflect: true })
-  disabled = this.hasAttribute('disabled')
+  @observer({ type: 'boolean', reflect: true })
+  disabled = false
 
-  @property({ type: Boolean })
-  required = this.hasAttribute('required')
+  @observer({ type: 'boolean' })
+  required = false
 }

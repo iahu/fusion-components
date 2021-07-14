@@ -53,16 +53,24 @@
 }
 
 :host([selected]) .control {
-  /*color: var(--foreground-selected);*/
-  background: var(--background-selected);
+  color: var(--foreground-selected);
+  background: var(--accent-color);
 }
 
 :host([disabled]) {
   color: var(--foreground-disabled);
+  background-color: var(--background-disabled);
   cursor: not-allowed;
 }
 :host([disabled]) .control:hover {
-  background: transparent;
+  background-color: var(--background-disabled);
+}
+
+:host([selected][disabled]) .control {
+  background-color: var(--accent-color-disabled);
+}
+:host([selected][disabled]) .control:hover {
+  background-color: var(--accent-color-disabled);
 }
 
 :host(:focus-visible[focused]) .control:after {

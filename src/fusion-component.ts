@@ -1,5 +1,5 @@
 import { html, LitElement, PropertyValues, TemplateResult } from 'lit'
-import { property } from 'lit/decorators.js'
+import { observer } from './decorators'
 
 export interface FC {
   attributeChanged: (name: string, pre: string | null, next: string | null) => void
@@ -30,10 +30,10 @@ abstract class FusionComponent extends LitElement {
     return []
   }
 
-  @property()
+  @observer({ reflect: true })
   size: '' | 'xs' | 's' | 'm' | 'l' | 'xl' | 'xxl' | 'xxxl' = 'xs'
 
-  @property({ type: Boolean })
+  @observer({ type: 'boolean' })
   sharp = false
 
   emit<T = unknown>(type: string, detail?: T): void {

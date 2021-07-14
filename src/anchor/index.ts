@@ -1,6 +1,7 @@
 import { html, TemplateResult } from 'lit'
-import { customElement, property } from 'lit/decorators.js'
+import { customElement } from 'lit/decorators.js'
 import { ifDefined } from 'lit/directives/if-defined.js'
+import { observer } from '../decorators'
 import { FC } from '../fusion-component'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
@@ -10,28 +11,28 @@ import style from './style.css'
 export class Anchor extends FC {
   static styles = mergeStyles(style)
 
-  @property()
+  @observer({ reflect: true })
   appearance = 'button'
 
-  @property()
+  @observer({ reflect: true })
   download = ''
 
-  @property()
+  @observer()
   href = ''
 
-  @property()
+  @observer()
   hreflang = ''
 
-  @property()
+  @observer()
   ping = ''
 
-  @property()
+  @observer()
   ref = ''
 
-  @property()
+  @observer()
   target = ''
 
-  @property()
+  @observer()
   type = ''
 
   render(): TemplateResult<1> {

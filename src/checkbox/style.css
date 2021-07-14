@@ -23,7 +23,7 @@
 }
 
 :host([checked]) .control {
-  background: var(--background-selected);
+  background: var(--accent-color);
 }
 
 :host([checked]) .checked-indicator {
@@ -34,6 +34,10 @@
 :host([disabled]) .control {
   background: var(--background-disabled);
   cursor: not-allowed;
+}
+:host(.readonly[checked]) .control,
+:host([disabled][checked]) .control {
+  background: var(--accent-color-disabled);
 }
 :host(.readonly) .label,
 :host([disabled]) .label {

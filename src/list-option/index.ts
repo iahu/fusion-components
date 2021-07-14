@@ -1,60 +1,45 @@
-import { html, PropertyValues, TemplateResult } from 'lit'
-import { customElement, property } from 'lit/decorators.js'
+import { html, TemplateResult } from 'lit'
+import { customElement } from 'lit/decorators.js'
+import { observer } from '../decorators'
 import { FC } from '../fusion-component'
 import ListBox from '../listbox'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
 import style from './style.css'
 
-export const isOption = (el: Element): el is Option => {
-  return el instanceof Option && el.role === 'option'
-}
+export const isOption = (el: Element): el is ListOption =>
+  el.tagName.toLowerCase() === 'fc-list-option' || el instanceof ListOption
 
-@customElement('fc-option')
-export default class Option extends FC {
+@customElement('fc-list-option')
+export default class ListOption extends FC {
   static styles = mergeStyles(style)
 
   static get formAssociated(): boolean {
     return true
   }
 
-  @property({ type: Boolean, reflect: true })
+  @observer({ type: 'boolean', reflect: true })
   hidden = false
 
   connectedCallback(): void {
     super.connectedCallback()
-    this.selected = this.hasAttribute('selected')
-    this.defaultSelected = this.selected
+    this.addEventListener('click', this.handleClick)
+  }
+  disconnectedCallback(): void {
+    super.disconnectedCallback()
+    this.removeEventListener('click', this.handleClick)
   }
 
-  willUpdate(props: PropertyValues): void {
-    super.willUpdate(props)
-
-    this.setAttribute('aria-selected', this.selected.toString())
-    this.classList.toggle('active', this.active)
-    if (props.has('selected')) {
-      if (props.get('selected') !== this.selected) {
-        this.emit('selectionchange', this.selected)
-      }
-    }
-
-    this.classList.toggle('selected', this.selected)
-  }
-
-  @property({ reflect: true })
+  @observer({ reflect: true })
   role = 'option'
 
-  @property()
+  @observer()
   value = ''
 
-  focus(): void {
-    this.classList.add('focused')
-    this.classList.add('active')
-  }
-
-  blur(): void {
-    this.classList.remove('focused')
-    this.classList.remove('active')
+  // 不能真的获取焦点，因为在 comobox 下，焦点应该在输入框上
+  focusItem(focused = true): void {
+    this.classList.toggle('focused', focused)
+    this.classList.toggle('active', focused)
   }
 
   public get form(): HTMLFormElement | null {
@@ -73,24 +58,32 @@ export default class Option extends FC {
     return this.getAttribute('label') || this.textContent || ''
   }
 
-  @property({ type: Boolean })
-  active = false
+  @observer({ reflect: true })
+  selected = false
+  selectedChanged(): void {
+    this.ariaSelected = this.selected
+    this.setAttribute('aria-selected', this.selected.toString())
 
-  public get selected(): boolean {
-    return this.hasAttribute('selected')
-  }
-  public set selected(v: boolean) {
-    this.toggleAttribute('selected', v)
-    this.requestUpdate()
+    this.emit('select')
   }
 
-  @property({ attribute: 'aria-selected' })
+  select(selected = true): void {
+    this.selected = selected
+  }
+
+  @observer({ attribute: 'aria-selected', reflect: true })
   ariaSelected = false
 
-  defaultSelected = false
+  @observer({ attribute: false })
+  defaultSelected = this.hasAttribute('selected')
 
-  @property({ type: Boolean, reflect: true })
+  @observer({ type: 'boolean', reflect: true })
   disabled = false
+
+  handleClick(e: MouseEvent): void {
+    e.preventDefault()
+    this.selected = !this.selected
+  }
 
   render(): TemplateResult<1> {
     return html`<div class="control" part="control" role="option">
