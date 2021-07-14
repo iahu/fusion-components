@@ -1,8 +1,8 @@
 import { html, PropertyValues, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { observer } from '../decorators'
-import mergeStyles from '../merge-styles'
 import ListOption, { isOption } from '../list-option'
+import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
 import Select from '../select/index'
 import selectStyle from '../select/style.css'
@@ -31,13 +31,6 @@ export default class ComboBox extends Select {
     this.removeEventListener('select', this.handleSelect)
   }
 
-  willUpdate(p: PropertyValues<this>): void {
-    super.willUpdate(p)
-    if (this.autocomplete) {
-      this.filter(this.inputValue)
-    }
-  }
-
   caseCompaire(a: string, b: string): boolean {
     return this.translateCase(a) == this.translateCase(b)
   }
@@ -46,16 +39,19 @@ export default class ComboBox extends Select {
     return this.casesensitive ? v : v.toLowerCase()
   }
 
-  // public get allOptions(): ListOption[] {
-  //   return Array.from(this.children).filter(isOption)
-  //   // return Array.from(this.querySelectorAll('fc-list-option'))
-  // }
-
-  filter(text: string): ListOption[] {
-    return this.options.filter((o) => {
-      o.hidden = text !== '' && !this.translateCase(o.text).startsWith(this.translateCase(text))
-      return !o.hidden
+  filterOptions(text: string): void {
+    let someMatched = false
+    this.options.forEach((o) => {
+      const matched = text === '' || this.translateCase(o.text).startsWith(this.translateCase(text))
+      o.hidden = !matched
+      if (matched && text === o.text) {
+        this.selectedOption = o
+        someMatched = true
+      }
     })
+    if (!someMatched) {
+      this.selectedOption = undefined
+    }
   }
 
   protected get input(): HTMLInputElement | null | undefined {
@@ -76,11 +72,11 @@ export default class ComboBox extends Select {
   }
 
   handleSelect(e: Event): void {
-    if (e instanceof CustomEvent && e.detail) {
+    const { srcElement } = e
+    if (srcElement instanceof HTMLElement && isOption(srcElement) && srcElement.selected) {
       this.hidden = true
-    }
-    if (this.displayValue) {
-      this.inputValue = this.displayValue
+      this.inputValue = srcElement.text
+      this.value = srcElement.value
     }
   }
 
@@ -94,11 +90,12 @@ export default class ComboBox extends Select {
     e.stopPropagation()
     this.hidden = false
     const { value } = e.target as HTMLInputElement
-    const prevInputValue = this.inputValue
-    this.inputValue = value
-    if (prevInputValue.trim() !== value.trim() && this.selectedOption) {
-      this.selectedOption = undefined
-    }
+    this.filterOptions(value.trim())
+    // const prevInputValue = this.inputValue
+    // this.inputValue = value
+    // if (prevInputValue.trim() !== value.trim() && this.selectedOption) {
+    //   this.selectedOption = undefined
+    // }
   }
 
   render(): TemplateResult<1> {

@@ -75,8 +75,11 @@ export default class ListBox extends FormAssociated {
   @observer({ attribute: false })
   selectedOption = this.options.find((o) => !o.disabled && o.value === this.value)
   selectedOptionChanged(old: ListOption | null): void {
-    old?.focusItem(false)
-    old?.select(false)
+    if (old) {
+      old.focusItem(false)
+      old.select(false)
+    }
+
     this.value = this.selectedOption?.value ?? ''
     this.indicatedIndex = this.selectedOption?.index ?? -1
   }
@@ -134,7 +137,7 @@ export default class ListBox extends FormAssociated {
         if (changed) {
           const selectedOption = this.options[indicatedIndex]
           this.selectedOption = selectedOption
-          selectedOption.select(!selectedOption.selected)
+          selectedOption.select(true)
         }
         // list-option 已经触发了 select 事件
         // this.emit('select', changed)
