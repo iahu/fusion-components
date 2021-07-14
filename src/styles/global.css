@@ -75,14 +75,15 @@
   --background-hover: hsla(203, 7%, 37%, 1);
   --background-active: hsla(203, 7%, 44%, 1);
   --background-selected: hsla(203, 74%, 47%, 1);
-  --background-disabled: hsla(203, 7%, 24%, 1);
+  --background-disabled: hsla(203, 0%, 27%, 1);
 
   /*border-colors*/
   --border-color: hsla(203, 9%, 37%, 1);
-  --border-color-hover: hsla(203, 17%, 47%, 1);
-  --border-color-active: hsla(203, 17%, 47%, 1);
-  --border-color-disabled: hsla(203, 9%, 37%, 0.3);
+  --border-color-hover: hsla(203, 9%, 47%, 1);
+  --border-color-active: hsla(203, 9%, 47%, 1);
+  --border-color-disabled: hsla(203, 0%, 29%, 1);
 
+  --outline-offset: calc(var(--fc-unit-size) * 1);
   --outline-width: calc(var(--fc-unit-size) * 2);
   --outline-color: hsla(32, 93%, 66%, 0.5);
 
@@ -162,5 +163,6 @@
 }
 
 :host(:disabled) {
-  background: var(--background);
+  background-color: var(--background-disabled);
+  border-color: var(--border-color-disabled);
 }
