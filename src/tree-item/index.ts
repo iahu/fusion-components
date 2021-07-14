@@ -34,21 +34,15 @@ export default class TreeItem extends FC {
       this.nested = siblingNested
     })
 
-    this.value = this.getAttribute('value') || this.value
-    this.disabled = this.hasAttribute('disabled')
-    this.selected = this.hasAttribute('selected')
-
     this.addEventListener('blur', this.handleBlur)
   }
 
-  @observer({ reflect: true })
-  focused = false
-  focusedChanged(): void {
-    if (this.focused) {
-      this.tabIndex = 0
+  focusItem(focused = true): void {
+    this.toggleAttribute('focused', focused)
+    this.tabIndex = Number(focused) - 1
+    if (focused) {
       this.focus()
     } else {
-      this.tabIndex = -1
       this.blur()
     }
   }
@@ -68,7 +62,7 @@ export default class TreeItem extends FC {
     if (this.disabled) {
       return
     }
-    this.focused = this.selected
+    // this.focusItem(this.selected)
     this.setAttribute('aria-selected', this.selected.toString())
     this.emit('selectionChange')
   }
@@ -116,11 +110,13 @@ export default class TreeItem extends FC {
 
   handleFocus(e: FocusEvent): void {
     e.preventDefault()
-    this.focused = true
+    this.focusItem(true)
   }
   handleBlur(e: FocusEvent): void {
     e.preventDefault()
-    this.focused = false
+    if (!this.selected) {
+      this.focusItem(false)
+    }
   }
 
   render(): TemplateResult<1> {

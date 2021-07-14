@@ -32,8 +32,10 @@
 }
 
 :host(:not([flatten])) slot[name='expand-collapse-button'] {
-  display: block;
-  width: calc(var(--font-size) * 1.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: calc(var(--font-size) * 1.334);
 }
 
 .arrow-right {

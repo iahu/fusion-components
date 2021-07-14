@@ -11,13 +11,6 @@ export const isTreeView = (e: Node): e is TreeView => e instanceof TreeView
 export default class TreeView extends FC {
   connectedCallback(): void {
     super.connectedCallback()
-
-    Array.from(this.children).forEach((item) => {
-      if (!isTreeItem(item)) {
-        item.remove()
-      }
-    })
-
     this.addEventListener('selectionChange', this.handleSelectionChange)
     this.addEventListener('keydown', this.handleKeydown)
   }
@@ -29,20 +22,34 @@ export default class TreeView extends FC {
   }
 
   willUpdate(): void {
-    const { focusedItem, firstElementChild } = this
-    if (!focusedItem && firstElementChild && isTreeItem(firstElementChild)) firstElementChild.tabIndex = 0
+    const { firstElementChild } = this
+    const tabTarget = this.querySelector('fc-tree-item[tabindex="0"]')
+    if (firstElementChild instanceof HTMLElement && !tabTarget) firstElementChild.tabIndex = 0
   }
 
   @observer({ reflect: true })
   role = 'tree'
 
   @observer()
+  value = ''
+  valueChanged(): void {
+    const { value } = this
+    if (!value) {
+      return
+    }
+
+    const target = Array.from(this.querySelectorAll<TreeItem>('fc-tree-item')).find((e) => e.value === value)
+    if (target) {
+      target.toggleAttribute('selected', true)
+    }
+  }
+
+  @observer()
   selectedItem?: TreeItem
 
   private __focusedItem?: TreeItem | null
   public get focusedItem(): TreeItem | undefined | null {
-    // focsedItem or selectedItem or fc-tree-item[tabindex="0"]
-    return this.__focusedItem || this.selectedItem || this.querySelector<TreeItem>('fc-tree-item[tabindex="0"]')
+    return this.__focusedItem || this.selectedItem
   }
   public set focusedItem(v: TreeItem | undefined | null) {
     this.__focusedItem = v
@@ -64,19 +71,21 @@ export default class TreeView extends FC {
 
   handleSelectionChange(e: Event): void {
     const { srcElement } = e
-    const mayFocusedItem = this.querySelector<TreeItem>('fc-tree-item[tabindex="0"]')
-    if (mayFocusedItem) {
-      mayFocusedItem.blur()
-      mayFocusedItem.tabIndex = -1
+    if (!(srcElement instanceof HTMLElement && isTreeItem(srcElement))) {
+      return
     }
-    if (srcElement instanceof HTMLElement && isTreeItem(srcElement)) {
-      if (srcElement.selected) {
-        if (this.selectedItem) this.selectedItem.selected = false
-        this.selectedItem = srcElement
-      } else if (this.selectedItem === srcElement) {
-        this.selectedItem.selected = false
-        this.selectedItem = undefined
-      }
+
+    if (srcElement.selected) {
+      const mayFocusedItem = this.querySelector<TreeItem>('fc-tree-item[tabindex="0"]')
+      // reset prev
+      if (mayFocusedItem && mayFocusedItem !== srcElement) mayFocusedItem.focusItem(false)
+      // update current
+      if (this.selectedItem && this.selectedItem !== srcElement) this.selectedItem.selected = false
+      // sync the selectedItem
+      this.selectedItem = srcElement
+    } else if (this.selectedItem === srcElement) {
+      this.selectedItem.selected = false
+      this.selectedItem = undefined
     }
   }
 
@@ -121,7 +130,7 @@ export default class TreeView extends FC {
           nextIdx += delta
           continue
         }
-        next.focused = true
+        next.focusItem(true)
         this.focusedItem = next
         break
       }
@@ -145,12 +154,12 @@ export default class TreeView extends FC {
 
     if (focusedItem.expanded) {
       focusedItem.expanded = false
-      focusedItem.focused = true
+      focusedItem.focusItem(true)
     } else {
       const { parentElement } = focusedItem
       if (parentElement && isTreeItem(parentElement)) {
         parentElement.selected = true
-        parentElement.focused = true
+        parentElement.focusItem(true)
         this.focusedItem = parentElement
       }
     }
