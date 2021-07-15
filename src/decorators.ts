@@ -7,8 +7,8 @@ interface ReactiveElementWithObserver extends ReactiveElement {
 }
 
 type ObserverType = 'string' | 'number' | 'boolean'
-type Converter = (v: any, host: any) => Value
 type Value = string | number | boolean
+type Converter<T = any> = (v: any, host: any) => T
 
 interface ObserverOptions {
   type?: ObserverType
@@ -55,7 +55,7 @@ export const observer = function (options?: ObserverOptions): Observer {
     proto.connectedCallback = function (this: ReactiveElementWithObserver) {
       userCallback.call(this)
 
-      // init props by props
+      // init props from attributes
       if (attribute && this.hasAttribute(name)) {
         const typeofValue = type ?? typeof Reflect.get(this, name)
         const isBol = typeofValue === 'boolean'
@@ -123,7 +123,7 @@ export const observer = function (options?: ObserverOptions): Observer {
           const bacCallback = Reflect.get(this, name + 'Change')
           if (typeof callback === 'function') {
             if (sync) {
-              //同步的回调sync
+              // 同步的回调
               callback.call(this, tempValue, nextValue)
             } else {
               this.updateComplete.then(() => callback.call(this, tempValue, nextValue))

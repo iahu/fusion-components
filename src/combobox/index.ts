@@ -83,13 +83,14 @@ export default class ComboBox extends Select {
   handleInputChange(): void {
     this.hidden = true
     const { inputValue } = this
-    this.selectedOption = this.options.find((o) => this.caseCompaire(o.text, inputValue.trim()))
+    this.selectedOption = this.visibleOptions.find((o) => this.caseCompaire(o.text, inputValue.trim()))
   }
 
   handleInput(e: InputEvent): void {
     e.stopPropagation()
     this.hidden = false
     const { value } = e.target as HTMLInputElement
+    this.indicatedIndex = -1
     this.filterOptions(value.trim())
     // const prevInputValue = this.inputValue
     // this.inputValue = value
@@ -138,7 +139,7 @@ export default class ComboBox extends Select {
       </label>
       <div
         class="listbox"
-        ?has-options="${this.options.length > 0}"
+        ?has-options="${this.length > 0}"
         part="listbox"
         ?hidden=${this.hidden}
         role="listbox"

@@ -58,18 +58,44 @@ export default class ListBox extends FormAssociated {
   @property({ reflect: true })
   tabindex = '0'
 
-  @observer({ attribute: false })
-  options = Array.from(this.children).filter(isOption)
+  public get visibleOptions(): ListOption[] {
+    return Array.from(this.children)
+      .filter(isOption)
+      .filter((o) => !o.hidden)
+  }
+  public set visibleOptions(options: ListOption[]) {
+    this.innerHTML = ''
+    options.forEach((op) => this.appendChild(op))
+  }
+
+  @observer({
+    attribute: false,
+    converter(op: ListOption[], host: ListBox) {
+      return Array.from(host.children)
+        .filter(isOption)
+        .map((e) => e.cloneNode(true) as ListOption)
+    },
+  })
+  options = [] as ListOption[]
   optionsChanged(): void {
     this.innerHTML = ''
     this.options.forEach((o) => this.appendChild(o))
     this.requestUpdate()
   }
 
-  @observer({ attribute: false })
+  @observer({
+    attribute: false,
+    converter(v: number, host: ListBox) {
+      return host.options.length
+    },
+  })
   length = this.options.length
   lengthChanged(): void {
     this.options = this.options.slice(0, this.length)
+  }
+
+  getItem(index: number): ListOption | undefined {
+    return this.visibleOptions.find((o) => o.index === index)
   }
 
   @observer({ attribute: false })
@@ -88,7 +114,10 @@ export default class ListBox extends FormAssociated {
   indicatedIndex = -1
   indicatedIndexChanged(): void {
     const indicatedIndex = this.indicatedIndex
-    const mergedIndex = Math.max(0, Math.min(indicatedIndex, this.length - 1))
+    const mergedIndex = Math.max(-1, Math.min(indicatedIndex, this.length - 1))
+    if (mergedIndex === -1) {
+      this.getItem(this.indicatedIndex)?.focusItem(false)
+    }
     if (mergedIndex !== indicatedIndex) {
       Reflect.set(this, '__indicatedIndex', mergedIndex)
       return
@@ -104,12 +133,7 @@ export default class ListBox extends FormAssociated {
   }
 
   public get _HANDLED_KEYS(): Record<string, string> {
-    return {
-      ArrowDown: 'ArrowDown',
-      ArrowUp: 'ArrowUp',
-      Enter: 'Enter',
-      Space: this.role === 'listbox' ? ' ' : 'Enter',
-    }
+    return { ArrowDown: 'ArrowDown', ArrowUp: 'ArrowUp', Enter: 'Enter' }
   }
 
   handleKeydown(e: KeyboardEvent): void {
@@ -119,46 +143,20 @@ export default class ListBox extends FormAssociated {
       return
     }
 
-    e.preventDefault()
     const withCtrl = e.metaKey || e.ctrlKey || e.altKey ? this.length : 0
     switch (e.key) {
       case _HANDLED_KEYS.ArrowDown:
-        this.indicatedIndex += 1 + withCtrl
-        this.emit('selection-change')
+        e.preventDefault()
+        this.focusNextOption(this.indicatedIndex, 1 + withCtrl)
         break
       case _HANDLED_KEYS.ArrowUp:
-        this.indicatedIndex -= 1 + withCtrl
-        this.emit('selection-change')
+        e.preventDefault()
+        this.focusNextOption(this.indicatedIndex, -1 - withCtrl)
         break
-      case _HANDLED_KEYS.Space:
-      case _HANDLED_KEYS.Enter: {
-        const { displayValue, indicatedIndex } = this
-        const changed = this.options[indicatedIndex]?.text !== displayValue
-        if (changed) {
-          const selectedOption = this.options[indicatedIndex]
-          this.selectedOption = selectedOption
-          selectedOption.select(true)
-        }
-        // list-option 已经触发了 select 事件
-        // this.emit('select', changed)
+      case _HANDLED_KEYS.Enter:
+        e.preventDefault()
+        this.select(this.indicatedIndex)
         break
-      }
-      default:
-        // 其它按键不处理，并中断后面的逻辑
-        return
-    }
-
-    // 如果新指向的 option 不可用，按规则换一个
-    if (this.options[this.indicatedIndex]?.disabled) {
-      const arrowDown = e.key === 'ArrowDown'
-      if (withCtrl || this.indicatedIndex === this.length - 1 || this.indicatedIndex === 0) {
-        const step = arrowDown ? -1 : 1
-        this.focusNextOption(arrowDown ? this.length - 1 : 0, step)
-      } else {
-        const step = arrowDown ? 1 : -1
-        this.focusNextOption(this.indicatedIndex, step)
-        // this.indicatedIndex -= step
-      }
     }
   }
 
@@ -171,17 +169,23 @@ export default class ListBox extends FormAssociated {
     }
   }
 
-  private focusNextOption(start: number, step: number): void {
+  focusNextOption(start = this.indicatedIndex, step = 1): void {
+    const { visibleOptions } = this
     this.selectedOption?.focusItem(false)
-    while (this.options[start]) {
-      const option = this.options[start]
-      if (!option.disabled) {
-        option.focusItem(true)
-        option.scrollIntoView()
-        this.indicatedIndex = option.index
-        break
-      }
-      start += step
+    const nextOption = visibleOptions[start + step]
+    nextOption?.focusItem(true)
+    this.indicatedIndex = nextOption?.index ?? this.indicatedIndex
+    this.emit('selection-change')
+  }
+
+  select(index: number): void {
+    const { displayValue } = this
+    const targetItem = this.getItem(index)
+    const changed = targetItem?.text !== displayValue
+    if (changed) {
+      const selectedOption = targetItem
+      this.selectedOption = selectedOption
+      selectedOption?.select(true)
     }
   }
 

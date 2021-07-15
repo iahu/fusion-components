@@ -104,7 +104,7 @@ export default class Select extends ListBox {
       </div>
       <div
         class="listbox"
-        ?has-options="${this.options.length > 0}"
+        ?has-options="${this.length > 0}"
         part="listbox"
         ?hidden=${this.hidden}
         role="listbox"

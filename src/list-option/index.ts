@@ -48,8 +48,9 @@ export default class ListOption extends FC {
 
   public get index(): number {
     const { parentElement } = this
+    // index 只与 ListBox 绑定
     if (parentElement instanceof ListBox) {
-      return parentElement.options.findIndex((e) => e === this)
+      return parentElement.visibleOptions.findIndex((e) => e === this)
     }
     return -1
   }
