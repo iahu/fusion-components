@@ -12,18 +12,6 @@ export default class ListBox extends FormAssociated {
 
   connectedCallback(): void {
     super.connectedCallback()
-
-    this.updateComplete.then(() => {
-      const isSharp = this.hasAttribute('sharp')
-      const isDisabled = this.hasAttribute('disabled')
-      // 校验子元素，并传递要继承的属性
-      this.options?.forEach((option) => {
-        // 只保留合法的 Option 元素
-        if (!isOption(option)) return (option as HTMLElement).remove()
-        if (isSharp) option.toggleAttribute('sharp', isSharp)
-        if (isDisabled) option.disabled = true
-      })
-    })
     this.addEventListener('keydown', this.handleKeydown)
     this.addEventListener('select', this.handleSelect)
     this.addEventListener('blur', this.handleBlur)
@@ -34,6 +22,18 @@ export default class ListBox extends FormAssociated {
     this.removeEventListener('keydown', this.handleKeydown)
     this.removeEventListener('select', this.handleSelect)
     this.removeEventListener('blur', this.handleBlur)
+  }
+
+  updated(): void {
+    const isSharp = this.hasAttribute('sharp')
+    const isDisabled = this.hasAttribute('disabled')
+    // 校验子元素，并传递要继承的属性
+    this.options?.forEach((option) => {
+      // 只保留合法的 Option 元素
+      if (!isOption(option)) return (option as HTMLElement).remove()
+      if (isSharp) option.toggleAttribute('sharp', isSharp)
+      if (isDisabled) option.disabled = true
+    })
   }
 
   @observer({ attribute: false })
@@ -80,7 +80,6 @@ export default class ListBox extends FormAssociated {
   optionsChanged(): void {
     this.innerHTML = ''
     this.options.forEach((o) => this.appendChild(o))
-    this.requestUpdate()
   }
 
   @observer({
@@ -99,7 +98,7 @@ export default class ListBox extends FormAssociated {
   }
 
   @observer({ attribute: false })
-  selectedOption = this.options.find((o) => !o.disabled && o.value === this.value)
+  selectedOption = this.options.find((o) => !o.disabled && this.hasAttribute('value') && o.value === this.value)
   selectedOptionChanged(old: ListOption | null): void {
     if (old) {
       old.focusItem(false)
@@ -117,6 +116,7 @@ export default class ListBox extends FormAssociated {
     const mergedIndex = Math.max(-1, Math.min(indicatedIndex, this.length - 1))
     if (mergedIndex === -1) {
       this.getItem(this.indicatedIndex)?.focusItem(false)
+      return
     }
     if (mergedIndex !== indicatedIndex) {
       Reflect.set(this, '__indicatedIndex', mergedIndex)
@@ -190,6 +190,7 @@ export default class ListBox extends FormAssociated {
   }
 
   handleBlur(): void {
+    this.getItem(this.indicatedIndex)?.focusItem(false)
     this.indicatedIndex = -1
   }
 
