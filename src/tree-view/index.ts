@@ -30,6 +30,9 @@ export default class TreeView extends FC {
   @observer({ reflect: true })
   role = 'tree'
 
+  @observer({ reflect: true })
+  tabindex = '0'
+
   @observer()
   value = ''
   valueChanged(): void {

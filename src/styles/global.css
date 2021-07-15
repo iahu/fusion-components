@@ -89,7 +89,7 @@
 
   --outline-offset: calc(var(--fc-unit-size) * 1);
   --outline-width: calc(var(--fc-unit-size) * 2);
-  --outline-color: hsla(32, 93%, 66%, 0.5);
+  --outline-color: hsla(32, 92%, 66%, 0.7);
 
   --accent-color: hsl(203, 92%, 56%);
   --accent-color-hover: hsl(203, 98%, 64%);

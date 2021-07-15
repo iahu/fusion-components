@@ -1,6 +1,5 @@
 :host {
   display: block;
-  margin: calc(var(--fc-unit-size) * 1) 0;
 }
 :host(:focus) {
   outline: none;
@@ -8,6 +7,9 @@
 
 :host(:not(:disabled)) {
   cursor: pointer;
+}
+:host(:focus-visible) {
+  outline: none;
 }
 
 .control {
@@ -78,11 +80,11 @@
 :host(:focus-visible[focused]) .control:after {
   content: '';
   position: absolute;
-  left: calc(var(--outline-width) * -1);
-  top: calc(var(--outline-width) * -1);
+  left: 0;
+  top: 0;
   width: 100%;
   height: 100%;
-  box-sizing: content-box;
+  box-sizing: border-box;
   border-radius: var(--border-radius);
   border: var(--outline-width) solid var(--outline-color);
 }
