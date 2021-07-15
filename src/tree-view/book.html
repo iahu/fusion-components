@@ -62,24 +62,6 @@
     <fc-tree-item><span slot="expand-collapse-button">🍊</span>橘子</fc-tree-item>
     <fc-tree-item value="banana"><span slot="expand-collapse-button">🍌</span>香蕉</fc-tree-item>
   </fc-tree-item>
-  <fc-tree-item>
-    <span>蔬菜</span>
-    <fc-tree-item>
-      <span>茄果类</span>
-      <fc-tree-item><span slot="expand-collapse-button">🍆</span>茄子</fc-tree-item>
-      <fc-tree-item><span slot="expand-collapse-button">🍅</span>西红柿</fc-tree-item>
-      <fc-tree-item disabled><span slot="expand-collapse-button">🥒</span>黄瓜</fc-tree-item>
-      <fc-tree-item><span slot="expand-collapse-button">🎃</span>南瓜</fc-tree-item>
-    </fc-tree-item>
-    <fc-tree-item>
-      <span>根茎类</span>
-      <fc-tree-item><span slot="expand-collapse-button">🥕</span>胡萝卜</fc-tree-item>
-      <fc-tree-item><span slot="expand-collapse-button">🌽</span>玉米</fc-tree-item>
-      <fc-tree-item><span slot="expand-collapse-button">🍠</span>地瓜</fc-tree-item>
-      <fc-tree-item><span slot="expand-collapse-button">🥔</span>土豆</fc-tree-item>
-    </fc-tree-item>
-  </fc-tree-item>
-  <fc-tree-item>粮油</fc-tree-item>
 </fc-tree-view>
 
 <h4>默认选中</h4>
@@ -90,22 +72,31 @@
     <fc-tree-item><span slot="expand-collapse-button">🍊</span>橘子</fc-tree-item>
     <fc-tree-item value="banana"><span slot="expand-collapse-button">🍌</span>香蕉</fc-tree-item>
   </fc-tree-item>
-  <fc-tree-item>
-    <span>蔬菜</span>
-    <fc-tree-item>
-      <span>茄果类</span>
-      <fc-tree-item><span slot="expand-collapse-button">🍆</span>茄子</fc-tree-item>
-      <fc-tree-item><span slot="expand-collapse-button">🍅</span>西红柿</fc-tree-item>
-      <fc-tree-item disabled><span slot="expand-collapse-button">🥒</span>黄瓜</fc-tree-item>
-      <fc-tree-item><span slot="expand-collapse-button">🎃</span>南瓜</fc-tree-item>
-    </fc-tree-item>
-    <fc-tree-item>
-      <span>根茎类</span>
-      <fc-tree-item><span slot="expand-collapse-button">🥕</span>胡萝卜</fc-tree-item>
-      <fc-tree-item><span slot="expand-collapse-button">🌽</span>玉米</fc-tree-item>
-      <fc-tree-item><span slot="expand-collapse-button">🍠</span>地瓜</fc-tree-item>
-      <fc-tree-item><span slot="expand-collapse-button">🥔</span>土豆</fc-tree-item>
-    </fc-tree-item>
+</fc-tree-view>
+
+<h4>标题可展开</h4>
+<fc-tree-view>
+  <fc-tree-item expandable>
+    <span>水果</span>
+    <fc-tree-item selected><span slot="expand-collapse-button">🍎</span>苹果</fc-tree-item>
+    <fc-tree-item><span slot="expand-collapse-button">🍊</span>橘子</fc-tree-item>
+    <fc-tree-item value="banana"><span slot="expand-collapse-button">🍌</span>香蕉</fc-tree-item>
   </fc-tree-item>
-  <fc-tree-item>粮油</fc-tree-item>
+  <fc-tree-item readonly expandable>
+    <span>蔬菜</span>
+    <fc-tree-item><span slot="expand-collapse-button">🍆</span>茄子</fc-tree-item>
+    <fc-tree-item><span slot="expand-collapse-button">🍅</span>西红柿</fc-tree-item>
+    <fc-tree-item disabled><span slot="expand-collapse-button">🥒</span>黄瓜</fc-tree-item>
+    <fc-tree-item><span slot="expand-collapse-button">🎃</span>南瓜</fc-tree-item>
+  </fc-tree-item>
+</fc-tree-view>
+
+<h4>不可选</h4>
+<fc-tree-view>
+  <fc-tree-item expanded readonly>
+    <span>水果(不可选)</span>
+    <fc-tree-item selected><span slot="expand-collapse-button">🍎</span>苹果</fc-tree-item>
+    <fc-tree-item><span slot="expand-collapse-button">🍊</span>橘子</fc-tree-item>
+    <fc-tree-item value="banana" readonly><span slot="expand-collapse-button">🍌</span>香蕉(不可选)</fc-tree-item>
+  </fc-tree-item>
 </fc-tree-view>

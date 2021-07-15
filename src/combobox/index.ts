@@ -92,11 +92,6 @@ export default class ComboBox extends Select {
     const { value } = e.target as HTMLInputElement
     this.indicatedIndex = -1
     this.filterOptions(value.trim())
-    // const prevInputValue = this.inputValue
-    // this.inputValue = value
-    // if (prevInputValue.trim() !== value.trim() && this.selectedOption) {
-    //   this.selectedOption = undefined
-    // }
   }
 
   render(): TemplateResult<1> {

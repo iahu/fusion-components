@@ -103,7 +103,7 @@ export default class TreeView extends FC {
       }
       case 'ArrowRight': {
         e.preventDefault()
-        this.expanedAndFocusNext()
+        this.expandedAndFocusNext()
         break
       }
       case 'ArrowLeft': {
@@ -137,7 +137,7 @@ export default class TreeView extends FC {
     })
   }
 
-  expanedAndFocusNext(): void {
+  expandedAndFocusNext(): void {
     const { focusedItem } = this
     if (!focusedItem) {
       return

@@ -39,8 +39,8 @@ const updateAttribute = (host: ReactiveElement, name: string, value: Value, isBo
   }
 }
 
-const getValueFromAttribute = (host: ReactiveElement, name: string, isBol: boolean) => {
-  return isBol ? host.hasAttribute(name) : host.getAttribute(name)
+const getValueFromAttribute = (host: ReactiveElement, attributeName: string, isBol: boolean) => {
+  return isBol ? host.hasAttribute(attributeName) : host.getAttribute(attributeName)
 }
 
 type Observer = (proto: any, name: string) => void
@@ -48,6 +48,7 @@ type Observer = (proto: any, name: string) => void
 export const observer = function (options?: ObserverOptions): Observer {
   return function (proto: any, name: string): void {
     const { type, reflect = false, attribute = true, converter, sync } = options || {}
+    const mergedAttributeName = typeof attribute === 'string' ? attribute : name
     const tempName = '__' + name
 
     // attrs => props
@@ -56,10 +57,10 @@ export const observer = function (options?: ObserverOptions): Observer {
       userCallback.call(this)
 
       // init props from attributes
-      if (attribute && this.hasAttribute(name)) {
+      if (attribute && this.hasAttribute(mergedAttributeName)) {
         const typeofValue = type ?? typeof Reflect.get(this, name)
         const isBol = typeofValue === 'boolean'
-        Reflect.set(this, name, getValueFromAttribute(this, name, isBol))
+        Reflect.set(this, name, getValueFromAttribute(this, mergedAttributeName, isBol))
       }
 
       if (this.__observer) {
@@ -72,10 +73,10 @@ export const observer = function (options?: ObserverOptions): Observer {
         mutationsList.forEach((mutation) => {
           const { attributeName, oldValue } = mutation
 
-          if (attributeName === name) {
+          if (attributeName === mergedAttributeName) {
             const typeofValue = type ?? typeof Reflect.get(this, name)
             const isBol = typeofValue === 'boolean'
-            const nextValue = getValueFromAttribute(this, name, isBol)
+            const nextValue = getValueFromAttribute(this, mergedAttributeName, isBol)
             const mergedConverter = converter ?? getConverter(this, name, type)
             const mergedNextValue = mergedConverter(nextValue, this)
             this.attributeChangedCallback(attributeName, oldValue, this.getAttribute(attributeName))
@@ -109,7 +110,9 @@ export const observer = function (options?: ObserverOptions): Observer {
         const typeofValue = type ?? typeof tempValue
         const isBol = typeofValue === 'boolean'
 
-        return tempValue === undefined && attribute ? getValueFromAttribute(this, name, isBol) : tempValue
+        return tempValue === undefined && attribute
+          ? getValueFromAttribute(this, mergedAttributeName, isBol)
+          : tempValue
       },
       set(this: ReactiveElementWithObserver, nextValue: Value) {
         const typeofValue = type ?? typeof Reflect.get(this, name)

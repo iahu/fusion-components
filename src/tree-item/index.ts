@@ -57,6 +57,9 @@ export default class TreeItem extends FC {
   disabled = false
 
   @observer({ reflect: true })
+  readonly = false
+
+  @observer({ reflect: true })
   selected = false
   selectedChanged(): void {
     if (this.disabled) {
@@ -93,19 +96,29 @@ export default class TreeItem extends FC {
   expanded = false
   expandedChanged(): void {
     this.setAttribute('aria-expanded', this.expanded.toString())
-    this.emit('expaned')
+    this.emit('expand')
   }
 
-  handleClick(e: MouseEvent): void {
-    if (this.disabled) {
-      return
+  @observer({ reflect: true })
+  expandable = false
+
+  handleTitleClick(e: MouseEvent): void {
+    e.preventDefault()
+    if (!this.disabled) {
+      if (this.expandable) {
+        this.expanded = !this.expanded
+      }
+      if (!this.readonly) {
+        this.selected = !this.selected
+      }
     }
-    this.selected = !this.selected
   }
 
-  handleExpandClick(e: MouseEvent): void {
+  handleButtonClick(e: MouseEvent): void {
     e.stopPropagation()
-    this.expanded = !this.expanded
+    if (!this.disabled) {
+      this.expanded = !this.expanded
+    }
   }
 
   handleFocus(e: FocusEvent): void {
@@ -120,7 +133,7 @@ export default class TreeItem extends FC {
   }
 
   render(): TemplateResult<1> {
-    const expandCollapseBtn = html`<div role="button" class="expand-collapse-button" @click="${this.handleExpandClick}">
+    const expandCollapseBtn = html`<div role="button" class="expand-collapse-button" @click="${this.handleButtonClick}">
       <svg class="arrow-right" viewBox="0 0 12 12" width="12" height="12" xmlns="http://www.w3.org/2000/svg">
         <path d="m9 6-6 5.5V.5z" fill-rule="evenodd" />
       </svg>
@@ -130,7 +143,7 @@ export default class TreeItem extends FC {
     </div>`
 
     return html`
-      <div class="control" part="control" @click="${this.handleClick}" ?data-has-child="${this.length > 0}">
+      <div class="control" part="control" @click="${this.handleTitleClick}" ?data-has-child="${this.length > 0}">
         ${before()}
         <slot name="expand-collapse-button"> ${this.length ? expandCollapseBtn : null} </slot>
         <div class="content" part="content">
