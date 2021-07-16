@@ -1,5 +1,5 @@
 import { html, PropertyValues, TemplateResult } from 'lit'
-import { customElement } from 'lit/decorators'
+import { customElement } from 'lit/decorators.js'
 import { observer } from '../decorators'
 import FormAssociated from '../form-associated'
 import mergeStyles from '../merge-styles'

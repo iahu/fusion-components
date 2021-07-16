@@ -1,5 +1,5 @@
 import { html, TemplateResult } from 'lit'
-import { customElement } from 'lit/decorators'
+import { customElement } from 'lit/decorators.js'
 import { observer } from '../decorators'
 import { FC } from '../fusion-component'
 import mergeStyles from '../merge-styles'

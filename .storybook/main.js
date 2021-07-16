@@ -5,6 +5,10 @@ module.exports = {
   addons: ['@storybook/addon-links' /*, '@storybook/addon-essentials'*/],
   features: { postcss: false },
 
+  /**
+   * webpackFinal
+   * @param  {import('webpack').Configuration} config webpack config
+   */
   webpackFinal: async (config) => {
     config.module.rules.push(
       {
@@ -29,6 +33,11 @@ module.exports = {
 
     webComponentsRule.test.push(new RegExp(`node_modules(\\/|\\\\)lit/src(.*)\\.js$`))
 
+    config.watchOptions = {
+      aggregateTimeout: 10,
+      // ignored: /node_modules/,
+    }
+    config.resolve.symlinks = true
     return config
   },
 }

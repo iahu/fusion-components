@@ -90,21 +90,18 @@ export default class Input extends FormAssociated {
   @observer({ type: 'boolean' })
   readonly?: string
 
-  // @observer({ type: 'boolean' })
-  // required?: string
-
   @observer({ type: 'boolean' })
   src?: string
 
-  @observer()
-  step?: string
+  @observer({
+    converter(v) {
+      return Number(v)
+    },
+  })
+  step?: number
 
   @observer()
   width?: string
-
-  handleChange(): void {
-    this.emit('change')
-  }
 
   render(): TemplateResult<1> {
     const {
@@ -164,7 +161,6 @@ export default class Input extends FormAssociated {
         src="${src}"
         step="${step}"
         width="${width}"
-        @change="${this.handleChange}"
       />
       ${after()}
     `
