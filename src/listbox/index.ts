@@ -15,6 +15,16 @@ export default class ListBox extends FormAssociated {
     this.addEventListener('keydown', this.handleKeydown)
     this.addEventListener('select', this.handleSelect)
     this.addEventListener('blur', this.handleBlur)
+
+    this.updateComplete.then(() => {
+      // 校验子元素，并传递要继承的属性
+      this.options?.forEach((option) => {
+        // 只保留合法的 Option 元素
+        if (!isOption(option)) {
+          ;(option as HTMLElement).remove()
+        }
+      })
+    })
   }
 
   disconnectedCallback(): void {
@@ -22,18 +32,6 @@ export default class ListBox extends FormAssociated {
     this.removeEventListener('keydown', this.handleKeydown)
     this.removeEventListener('select', this.handleSelect)
     this.removeEventListener('blur', this.handleBlur)
-  }
-
-  updated(): void {
-    const isSharp = this.hasAttribute('sharp')
-    const isDisabled = this.hasAttribute('disabled')
-    // 校验子元素，并传递要继承的属性
-    this.options?.forEach((option) => {
-      // 只保留合法的 Option 元素
-      if (!isOption(option)) return (option as HTMLElement).remove()
-      if (isSharp) option.toggleAttribute('sharp', isSharp)
-      if (isDisabled) option.disabled = true
-    })
   }
 
   @observer({ attribute: false })
@@ -44,15 +42,13 @@ export default class ListBox extends FormAssociated {
 
   @observer()
   value = ''
-  valueChanged(): void {
-    const { value, selectedOption } = this
-    if (value) {
-      const mergedSelectedOption = selectedOption ?? this.options.find((o) => o.value === value)
-      mergedSelectedOption?.select(true)
-    } else {
-      selectedOption?.select(false)
-      selectedOption?.focusItem(false)
-    }
+  valueChanged(old: string, next: string): void {
+    const mergedSelectedOption =
+      Reflect.ownKeys(this).includes('__value') && this.selectedOption
+        ? this.selectedOption
+        : this.options.find((o) => o.getAttribute('value') === next)
+
+    mergedSelectedOption?.select(true)
   }
 
   @property({ reflect: true })
@@ -79,7 +75,7 @@ export default class ListBox extends FormAssociated {
   options = [] as ListOption[]
   optionsChanged(): void {
     this.innerHTML = ''
-    this.options.forEach((o) => this.appendChild(o))
+    this.options.forEach((o) => isOption(o) && this.appendChild(o))
   }
 
   @observer({
@@ -97,16 +93,20 @@ export default class ListBox extends FormAssociated {
     return this.visibleOptions.find((o) => o.index === index)
   }
 
+  // 可以避免 value 相同时，设置 value 导致选择错乱的问题
   @observer({ attribute: false })
-  selectedOption = this.options.find((o) => !o.disabled && this.hasAttribute('value') && o.value === this.value)
+  selectedOption?: ListOption
   selectedOptionChanged(old: ListOption | null): void {
     if (old) {
       old.focusItem(false)
       old.select(false)
     }
 
-    this.value = this.selectedOption?.value ?? ''
-    this.indicatedIndex = this.selectedOption?.index ?? -1
+    const { selectedOption } = this
+    this.value = selectedOption?.value ?? ''
+    this.displayValue = selectedOption?.text || ''
+    this.indicatedIndex = selectedOption?.index ?? -1
+    selectedOption?.focusItem(true)
   }
 
   @observer({ attribute: false })
@@ -163,8 +163,7 @@ export default class ListBox extends FormAssociated {
   handleSelect(e: Event): void {
     if (e.target instanceof ListOption) {
       if (e.target.hasAttribute('selected')) {
-        this.selectedOption?.focusItem(false)
-        this.selectedOption = e.target
+        this.select(e.target.index)
       }
     }
   }
@@ -175,15 +174,16 @@ export default class ListBox extends FormAssociated {
     const nextOption = visibleOptions[start + step]
     nextOption?.focusItem(true)
     this.indicatedIndex = nextOption?.index ?? this.indicatedIndex
-    this.emit('selection-change')
+    if (nextOption !== this.selectedOption) {
+      this.emit('selection-change')
+    }
   }
 
   select(index: number): void {
-    const { displayValue } = this
-    const targetItem = this.getItem(index)
-    const changed = targetItem?.text !== displayValue
+    const { selectedOption } = this
+    const changed = index !== selectedOption?.index
     if (changed) {
-      const selectedOption = targetItem
+      const selectedOption = this.getItem(index)
       this.selectedOption = selectedOption
       selectedOption?.select(true)
     }

@@ -5439,7 +5439,7 @@ execa@^1.0.0:
 
 "exp-calc@https://github.com/iahu/exp-calc.git":
   version "1.0.0"
-  resolved "https://github.com/iahu/exp-calc.git#6ba4dc2856446817f3b73b381052c33c79389551"
+  resolved "https://github.com/iahu/exp-calc.git#0190c66159be1c29663aad7099215e66428efda8"
 
 expand-brackets@^2.1.4:
   version "2.1.4"

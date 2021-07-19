@@ -20,34 +20,28 @@ export default class Select extends ListBox {
   connectedCallback(): void {
     super.connectedCallback()
     this.addEventListener('keydown', this.handleKeydown)
-    this.addEventListener('click', this.handleClick)
     this.addEventListener('focusout', this.handleFocusout)
-    this.addEventListener('selection-change', this.handleSelect)
+    this.addEventListener('select', this.handleSelect)
   }
 
   disconnectedCallback(): void {
     super.disconnectedCallback()
     this.removeEventListener('keydown', this.handleKeydown)
-    this.removeEventListener('click', this.handleClick)
     this.removeEventListener('focusout', this.handleFocusout)
-    this.removeEventListener('selection-change', this.handleSelect)
+    this.removeEventListener('select', this.handleSelect)
   }
-
-  __hidden = true
 
   @observer({ reflect: true })
   role = 'listbox'
 
-  public get hidden(): boolean {
-    return this.__hidden
-  }
-  public set hidden(v: boolean) {
-    this.__hidden = v
-    this.setAttribute('aria-expanded', (!v).toString())
-    this.requestUpdate()
+  @observer()
+  hidden = true
+  hiddenChanged(): void {
+    this.setAttribute('aria-expanded', (!this.hidden).toString())
   }
 
   handleSelect(e: Event): void {
+    super.handleSelect(e)
     this.hidden = true
   }
 
@@ -74,10 +68,10 @@ export default class Select extends ListBox {
     this.requestUpdate()
   }
 
-  private tid?: NodeJS.Timeout
-
   handleClick(e: MouseEvent): void {
-    this.hidden = !this.hidden
+    if (!this.disabled) {
+      this.hidden = !this.hidden
+    }
   }
 
   handleFocusout(): void {
@@ -86,7 +80,15 @@ export default class Select extends ListBox {
 
   render(): TemplateResult<1> {
     return html`
-      <div class="control" id="control" part="control" role="comobox" aria-haspopup="listbox">
+      <div
+        class="control"
+        id="control"
+        part="control"
+        role="comobox"
+        aria-haspopup="listbox"
+        @click="${this.handleClick}"
+        disabled="${this.disabled}"
+      >
         ${before()}
         <slot name="button-container">
           <div class="selected-value" part="selected-value">${this.displayValue}</div>

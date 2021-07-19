@@ -83,6 +83,7 @@ export default class ListOption extends FC {
 
   handleClick(e: MouseEvent): void {
     e.preventDefault()
+    e.stopPropagation()
     this.selected = !this.selected
   }
 

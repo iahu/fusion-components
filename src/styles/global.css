@@ -31,11 +31,12 @@
     calc(var(--fc-unit-size) * 5)
   );
   --padding-r: var(--padding-l);
-  --padding-t: clamp(
+  --padding-t: calc(var(--fc-unit-size) * 1);
+  /*clamp(
     calc(var(--fc-unit-size) * 2),
     calc(var(--font-size) - var(--fc-unit-size) * 10),
     calc(var(--fc-unit-size) * 5)
-  );
+  );*/
   --padding-b: var(--padding-t);
 
   --border-width: calc(var(--fc-unit-size) * 1);

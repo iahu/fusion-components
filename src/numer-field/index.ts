@@ -4,7 +4,7 @@ import { createRef, Ref, ref } from 'lit/directives/ref.js'
 import { observer } from '../decorators'
 import Input from '../input'
 import { after, before } from '../pattern/before-after'
-import expCalc, { normalize, Express } from 'exp-calc'
+import expCalc, { normalize, Formula } from 'exp-calc'
 
 @customElement('fc-number-field')
 export default class NumberFiled extends Input {
@@ -64,9 +64,9 @@ export default class NumberFiled extends Input {
   }
 
   nextStep(delta: number): void {
-    const exp = [this.number, '+', delta].reduce((exp, op) => exp.op(op), new Express())
+    const formula = [this.number, '+', delta].reduce((exp, op) => exp.op(op), new Formula())
 
-    this.value = exp.toString()
+    this.value = formula.toString()
   }
 
   render(): TemplateResult<1> {

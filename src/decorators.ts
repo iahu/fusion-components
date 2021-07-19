@@ -140,7 +140,7 @@ export const observer = function (options?: ObserverOptions): Observer {
           if (reflect && shouldUpdate) {
             updateAttribute(this, name, nextValue, isBol)
           }
-          this.requestUpdate(name)
+          this.requestUpdate(name, tempValue)
         }
       },
     })
