@@ -69,7 +69,9 @@ export default class ListOption extends FC {
   }
 
   select(selected = true): void {
-    this.selected = selected
+    if (selected !== this.selected) {
+      this.selected = selected
+    }
   }
 
   @observer({ attribute: 'aria-selected', reflect: true })

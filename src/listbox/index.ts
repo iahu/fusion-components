@@ -43,12 +43,17 @@ export default class ListBox extends FormAssociated {
   @observer()
   value = ''
   valueChanged(old: string, next: string): void {
-    const mergedSelectedOption =
-      Reflect.ownKeys(this).includes('__value') && this.selectedOption
-        ? this.selectedOption
-        : this.options.find((o) => o.getAttribute('value') === next)
-
-    mergedSelectedOption?.select(true)
+    // unselect previous selectedOption
+    if (this.selectedOption && this.dirtyValue) {
+      this.selectedOption.select(false)
+    } else {
+      let selectedOption: ListOption | undefined = undefined
+      this.options.forEach((op) => {
+        if (op.getAttribute('value') === next) selectedOption = op
+        op.select(op.getAttribute('value') === next)
+      })
+      this.selectedOption = selectedOption
+    }
   }
 
   @property({ reflect: true })
@@ -96,12 +101,11 @@ export default class ListBox extends FormAssociated {
   // 可以避免 value 相同时，设置 value 导致选择错乱的问题
   @observer({ attribute: false })
   selectedOption?: ListOption
-  selectedOptionChanged(old: ListOption | null): void {
+  selectedOptionChanged(old: ListOption | undefined, next: ListOption | undefined): void {
     if (old) {
       old.focusItem(false)
       old.select(false)
     }
-
     const { selectedOption } = this
     this.value = selectedOption?.value ?? ''
     this.displayValue = selectedOption?.text || ''

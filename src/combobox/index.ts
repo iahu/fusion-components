@@ -1,7 +1,7 @@
-import { html, PropertyValues, TemplateResult } from 'lit'
+import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { observer } from '../decorators'
-import ListOption, { isOption } from '../list-option'
+import { isOption } from '../list-option'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
 import Select from '../select/index'
@@ -90,7 +90,8 @@ export default class ComboBox extends Select {
     e.stopPropagation()
     this.hidden = false
     const { value } = e.target as HTMLInputElement
-    this.indicatedIndex = -1
+    this.selectedOption = undefined
+    this.inputValue = value.trim()
     this.filterOptions(value.trim())
   }
 
