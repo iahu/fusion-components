@@ -1,13 +1,17 @@
+import expCalc, { normalize } from 'exp-calc'
 import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { createRef, Ref, ref } from 'lit/directives/ref.js'
 import { observer } from '../decorators'
 import Input from '../input'
+import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
-import expCalc, { normalize, Formula } from 'exp-calc'
+import style from './style.css'
 
 @customElement('fc-number-field')
 export default class NumberFiled extends Input {
+  static styles = mergeStyles(style)
+
   inputRef: Ref<HTMLInputElement> = createRef<HTMLInputElement>()
   connectedCallback(): void {
     super.connectedCallback()
@@ -23,8 +27,17 @@ export default class NumberFiled extends Input {
     this.value = normalize(this.value)
   }
 
-  @observer()
-  value = this.getAttribute('value') ?? ''
+  @observer({ init: false, converter: normalize })
+  value = ''
+  valueChanged(old: string, next: string): void {
+    if (this.inputRef.value) {
+      this.inputRef.value.value = this.valueWithUnit
+    }
+  }
+
+  public get valueWithUnit(): string {
+    return [this.value, this.unit].filter((v) => v).join(' ')
+  }
 
   public get number(): number {
     return Number(this.value)
@@ -32,6 +45,9 @@ export default class NumberFiled extends Input {
 
   @observer()
   step = 1
+
+  @observer()
+  unit = ''
 
   handleChange(e: Event): void {
     if (!(e.target instanceof HTMLInputElement)) {
@@ -42,9 +58,6 @@ export default class NumberFiled extends Input {
     if (!isNaN(computedResult)) {
       const nextValue = computedResult.toString()
       this.value = nextValue
-    }
-    if (this.inputRef.value) {
-      this.inputRef.value.value = this.value
     }
   }
 
@@ -64,9 +77,7 @@ export default class NumberFiled extends Input {
   }
 
   nextStep(delta: number): void {
-    const formula = [this.number, '+', delta].reduce((exp, op) => exp.op(op), new Formula())
-
-    this.value = formula.toString()
+    this.value = normalize((this.number + delta).toString())
   }
 
   render(): TemplateResult<1> {
@@ -77,12 +88,13 @@ export default class NumberFiled extends Input {
         class="control"
         part="control"
         ${ref(this.inputRef)}
-        .value="${this.value}"
+        .value="${this.valueWithUnit}"
         @change="${this.handleChange}"
+        placeholder="${this.placeholder}"
       />
       <div class="controls">
-        <div class="step-up"></div>
-        <div class="step-down"></div>
+        <div class="step-up" @click="${() => this.nextStep(1)}"></div>
+        <div class="step-down" @click="${() => this.nextStep(-1)}"></div>
       </div>
       ${after()}
     `

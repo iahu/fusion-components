@@ -139,7 +139,7 @@ export default class Input extends FormAssociated {
         part="control"
         type="${type}"
         name="${name}"
-        value="${value}"
+        .value="${value}"
         placeholder="${placeholder}"
         ?autofocus="${autofocus}"
         ?checked="${checked}"

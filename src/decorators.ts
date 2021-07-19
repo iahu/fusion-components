@@ -16,6 +16,7 @@ interface ObserverOptions {
   attribute?: string | boolean
   converter?: Converter
   sync?: boolean
+  init?: boolean
 }
 
 const typeCotrMap: Record<string, Converter> = {
@@ -47,7 +48,7 @@ type Observer = (proto: any, name: string) => void
 
 export const observer = function (options?: ObserverOptions): Observer {
   return function (proto: any, name: string): void {
-    const { type, reflect = false, attribute = true, converter, sync } = options || {}
+    const { type, reflect = false, attribute = true, converter, sync, init = true } = options || {}
     const mergedAttributeName = typeof attribute === 'string' ? attribute : name
     const tempName = '__' + name
 
@@ -57,7 +58,7 @@ export const observer = function (options?: ObserverOptions): Observer {
       userCallback.call(this)
 
       // init props from attributes
-      if (attribute && this.hasAttribute(mergedAttributeName)) {
+      if (init && attribute && this.hasAttribute(mergedAttributeName)) {
         const typeofValue = type ?? typeof Reflect.get(this, name)
         const isBol = typeofValue === 'boolean'
         Reflect.set(this, name, getValueFromAttribute(this, mergedAttributeName, isBol))
