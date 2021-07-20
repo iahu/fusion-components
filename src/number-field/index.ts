@@ -164,15 +164,37 @@ export default class NumberFiled extends Input {
     return html`
       ${before()}
       <input
+        class="control"
+        id="control"
+        part="control"
         type="text"
         class="control"
         part="control"
-        ?disabled="${this.disabled}"
-        ?readonly="${this.readonly}"
+        name="${this.name}"
         ${ref(this.inputRef)}
         .value="${this.valueWithUnit}"
         @change="${this.handleChange}"
         placeholder="${this.placeholder}"
+        ?autofocus="${this.autofocus}"
+        ?checked="${this.checked}"
+        ?disabled="${this.disabled}"
+        form="${this.form}"
+        formaction="${this.formaction}"
+        formtarget="${this.formtarget}"
+        formnovalidate="${this.formnovalidate}"
+        height="${this.height}"
+        inputmode="${this.inputMode}"
+        list="${this.list}"
+        max="${this.max}"
+        maxlength="${this.maxlength}"
+        min="${this.min}"
+        minlength="${this.minlength}"
+        pattern="${this.pattern}"
+        ?readonly="${this.readonly}"
+        ?required="${this.required}"
+        src="${this.src}"
+        step="${this.step}"
+        width="${this.width}"
       />
       <div class="controls" part="controls">
         <div class="step-up" @click="${() => this.handleClickStep(1)}"></div>
