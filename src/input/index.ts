@@ -19,7 +19,7 @@ export default class Input extends FormAssociated {
     this.value = this.input?.value || this.value
   }
 
-  @observer({ type: 'boolean' })
+  @observer()
   outline = false
 
   @observer()
@@ -34,7 +34,7 @@ export default class Input extends FormAssociated {
   @observer()
   placeholder?: string
 
-  @observer({ type: 'boolean' })
+  @observer()
   autofocus = false
 
   focus(): void {
@@ -45,10 +45,10 @@ export default class Input extends FormAssociated {
     this.input?.blur()
   }
 
-  @observer({ type: 'boolean' })
+  @observer()
   checked = false
 
-  @observer({ type: 'boolean' })
+  @observer()
   disabled = false
 
   @observer()
@@ -87,11 +87,14 @@ export default class Input extends FormAssociated {
   @observer()
   pattern?: string
 
-  @observer({ type: 'boolean' })
-  readonly?: string
+  @observer()
+  readonly = false
+  readonlyChanged(): void {
+    this.classList.toggle('read-only', this.readonly)
+  }
 
-  @observer({ type: 'boolean' })
-  src?: string
+  @observer()
+  src = ''
 
   @observer()
   step?: string

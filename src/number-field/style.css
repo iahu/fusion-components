@@ -34,7 +34,7 @@
   visibility: visible;
 }
 
-:host(:read-only) .controls,
+:host(.read-only) .controls,
 :host(:disabled) .controls {
   display: none;
 }
