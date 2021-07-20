@@ -93,22 +93,6 @@ export default class FormAssociated extends FC {
     this.initialValue = this.value || this.getAttribute('value') || this.initialValue
   }
 
-  // willUpdate(p: PropertyValues<this>): void {
-  //   super.willUpdate(p)
-  //   this.value = this.getAttribute('value') || this.value
-  //   this.disabled = this.hasAttribute('disabled')
-  //   this.required = this.hasAttribute('required')
-  //   if (this.name) this.setAttribute('name', this.name)
-  //   else this.removeAttribute('name')
-
-  //   this.elementInternals.setFormValue(this.value)
-  //   this.setAttribute('aria-disabled', this.disabled.toString())
-  //   this.setAttribute('aria-required', this.required.toString())
-  //   if (this.initialValue !== this.value) {
-  //     this.dirtyValue = true
-  //   }
-  // }
-
   initialValue = ''
 
   dirtyValue = false
@@ -152,7 +136,7 @@ export default class FormAssociated extends FC {
   @observer({ reflect: true })
   name = ''
 
-  @observer()
+  @observer({ init: false })
   value = ''
   valueChanged(old: string, next: string): void {
     this.dirtyValue = true

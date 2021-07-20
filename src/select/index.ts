@@ -38,6 +38,11 @@ export default class Select extends ListBox {
   hidden = true
   hiddenChanged(): void {
     this.setAttribute('aria-expanded', (!this.hidden).toString())
+    if (!this.hidden) {
+      this.updateComplete.then(() => {
+        this.selectedOption?.scrollIntoView({ block: 'nearest' })
+      })
+    }
   }
 
   handleSelect(e: Event): void {

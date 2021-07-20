@@ -31,7 +31,7 @@ abstract class FusionComponent extends LitElement {
   }
 
   @observer({ reflect: true })
-  size: '' | 'xs' | 's' | 'm' | 'l' | 'xl' | 'xxl' | 'xxxl' = 'xs'
+  size: '' | 'xs' | 's' | 'm' | 'l' | 'xl' | 'xxl' | 'xxxl' = ''
 
   @observer({ type: 'boolean' })
   sharp = false

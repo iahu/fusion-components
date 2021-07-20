@@ -1,0 +1,18 @@
+:host {
+  display: flex;
+
+  flex-direction: column;
+}
+
+.tablist {
+  display: flex;
+}
+
+.panels {
+  display: flex;
+  flex-direction: column;
+}
+
+.tablist .tab {
+  margin: 0 2px;
+}

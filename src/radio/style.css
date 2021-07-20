@@ -59,13 +59,16 @@
 }
 
 :host([disabled]) .control {
-  background: var(--accent-color-disabled);
+  background-color: var(--background-disabled);
   cursor: not-allowed;
 }
 
 :host([disabled]) .label {
   color: var(--foreground-disabled);
   cursor: not-allowed;
+}
+:host([checked][disabled]) .control {
+  background-color: var(--accent-color-disabled);
 }
 :host([disabled]) .checked-indicator {
   background-color: var(--foreground-disabled);

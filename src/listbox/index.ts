@@ -37,11 +37,19 @@ export default class ListBox extends FormAssociated {
   @observer({ attribute: false })
   protected displayValue = ''
 
+  @observer()
+  disabled = false
+  disabledChanged(): void {
+    if (this.disabled) {
+      this.options.forEach((op) => (op.disabled = true))
+    }
+  }
+
   @observer({ reflect: true })
   role = 'listbox'
 
   @observer()
-  value = ''
+  value = this.getAttribute('value') || ''
   valueChanged(old: string, next: string): void {
     // unselect previous selectedOption
     if (this.selectedOption && this.dirtyValue) {
@@ -49,8 +57,12 @@ export default class ListBox extends FormAssociated {
     } else {
       let selectedOption: ListOption | undefined = undefined
       this.options.forEach((op) => {
-        if (op.getAttribute('value') === next) selectedOption = op
-        op.select(op.getAttribute('value') === next)
+        if (op.getAttribute('value') === next) {
+          selectedOption = op
+          op.select(true)
+        } else {
+          op.select(false)
+        }
       })
       this.selectedOption = selectedOption
     }
@@ -106,6 +118,7 @@ export default class ListBox extends FormAssociated {
       old.focusItem(false)
       old.select(false)
     }
+
     const { selectedOption } = this
     this.value = selectedOption?.value ?? ''
     this.displayValue = selectedOption?.text || ''

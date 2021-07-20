@@ -30,13 +30,13 @@ const getConverter = (host: ReactiveElement, name: string, type?: ObserverType) 
   return typeCotrMap[typeofValue] || String
 }
 
-const updateAttribute = (host: ReactiveElement, name: string, value: Value, isBol: boolean) => {
-  if (isBol) {
-    host.toggleAttribute(name, Boolean(value))
-  } else if (value) {
-    host.setAttribute(name, String(value))
+const updateAttribute = (host: ReactiveElement, attributeName: string, value: Value, isBol: boolean) => {
+  if (isBol || typeof value === 'boolean') {
+    host.toggleAttribute(attributeName, Boolean(value))
+  } else if (String(value)) {
+    host.setAttribute(attributeName, String(value))
   } else {
-    host.removeAttribute(name)
+    host.removeAttribute(attributeName)
   }
 }
 
@@ -116,7 +116,7 @@ export const observer = function (options?: ObserverOptions): Observer {
           : tempValue
       },
       set(this: ReactiveElementWithObserver, nextValue: Value) {
-        const typeofValue = type ?? typeof Reflect.get(this, name)
+        const typeofValue = type ?? typeof (Reflect.get(this, name) ?? nextValue)
         const isBol = typeofValue === 'boolean'
         const tempValue = Reflect.get(this, tempName)
         nextValue = converter ? converter.call(this, nextValue, this) : nextValue
@@ -139,7 +139,7 @@ export const observer = function (options?: ObserverOptions): Observer {
           // 初始化前，html 标签自带的 attribute 不能被覆盖
           const shouldUpdate = !(this.hasAttribute(name) && tempValue === undefined)
           if (reflect && shouldUpdate) {
-            updateAttribute(this, name, nextValue, isBol)
+            updateAttribute(this, mergedAttributeName, nextValue, isBol)
           }
           this.requestUpdate(name, tempValue)
         }

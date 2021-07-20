@@ -59,10 +59,9 @@ export default class ListOption extends FC {
     return this.getAttribute('label') || this.textContent || ''
   }
 
-  @observer({ reflect: true })
+  @observer({ type: 'boolean', reflect: true })
   selected = false
   selectedChanged(): void {
-    this.ariaSelected = this.selected
     this.setAttribute('aria-selected', this.selected.toString())
 
     this.emit('select')
@@ -73,9 +72,6 @@ export default class ListOption extends FC {
       this.selected = selected
     }
   }
-
-  @observer({ attribute: 'aria-selected', reflect: true })
-  ariaSelected = false
 
   @observer({ attribute: false })
   defaultSelected = this.hasAttribute('selected')

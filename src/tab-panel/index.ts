@@ -6,18 +6,21 @@ import mergeStyles from '../merge-styles'
 
 import style from './style.css'
 
-@customElement('fc-tab')
+@customElement('fc-tab-panel')
 export default class Tab extends FC {
   static styles = mergeStyles(style)
 
   @observer({ reflect: true })
-  role = 'tab'
+  role = 'tabpanel'
 
   @observer({ reflect: true })
-  tabIndex = -1
+  tabIndex = 0
 
   @observer()
   disabled = false
+  disabledChanged(): void {
+    this.setAttribute('aria-disabled', this.disabled.toString())
+  }
 
   render(): TemplateResult<1> {
     return html`<slot></slot>`
