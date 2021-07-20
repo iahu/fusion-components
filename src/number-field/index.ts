@@ -129,7 +129,9 @@ export default class NumberFiled extends Input {
   }
 
   handleClickStep(director: 1 | -1): void {
-    this.nextStep(director * toNumber(this.step))
+    if (!this.disabled) {
+      this.nextStep(director * toNumber(this.step))
+    }
   }
 
   nextStep(delta: number): void {
@@ -165,6 +167,8 @@ export default class NumberFiled extends Input {
         type="text"
         class="control"
         part="control"
+        ?disabled="${this.disabled}"
+        ?readonly="${this.readonly}"
         ${ref(this.inputRef)}
         .value="${this.valueWithUnit}"
         @change="${this.handleChange}"

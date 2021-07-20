@@ -34,6 +34,11 @@
   visibility: visible;
 }
 
+:host(:read-only) .controls,
+:host(:disabled) .controls {
+  display: none;
+}
+
 @keyframes vibrate {
   0% {
     transform: translate(calc(var(--font-size) * -0.5));
