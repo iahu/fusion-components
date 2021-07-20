@@ -3,30 +3,50 @@
 .controls {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-around;
   visibility: hidden;
   --size: calc(var(--font-size) / 2);
   padding: var(--padding-t) 0;
 }
 
-.step-up {
+.step-up,
+.step-down {
   width: 0;
   height: 0;
   border-style: solid;
   border-width: 0 var(--size) var(--size) var(--size);
   border-color: transparent transparent var(--foreground) transparent;
   cursor: pointer;
+  opacity: 0.4;
 }
 
 .step-down {
-  width: 0;
-  height: 0;
-  border-style: solid;
   border-width: var(--size) var(--size) 0 var(--size);
   border-color: var(--foreground) transparent transparent transparent;
-  cursor: pointer;
+}
+
+.step-up:hover,
+.step-down:hover {
+  opacity: 1;
 }
 
 :host(:hover) .controls {
   visibility: visible;
+}
+
+@keyframes vibrate {
+  0% {
+    transform: translate(calc(var(--font-size) * -0.5));
+  }
+  50% {
+    transform: translate(0);
+  }
+  100% {
+    transform: translate(calc(var(--font-size) * 0.5));
+  }
+}
+
+:host([vibrate].is-max),
+:host([vibrate].is-min) {
+  animation: vibrate 0.06s ease-in-out 3;
 }

@@ -93,12 +93,8 @@ export default class Input extends FormAssociated {
   @observer({ type: 'boolean' })
   src?: string
 
-  @observer({
-    converter(v) {
-      return Number(v)
-    },
-  })
-  step?: number
+  @observer()
+  step?: string
 
   @observer()
   width?: string
