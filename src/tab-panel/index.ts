@@ -6,15 +6,14 @@ import mergeStyles from '../merge-styles'
 
 import style from './style.css'
 
+export const isTabPanel = (e: Element) => e instanceof TabPanel || e.tagName.toLowerCase() === 'fc-tab-panel'
+
 @customElement('fc-tab-panel')
-export default class Tab extends FC {
+export default class TabPanel extends FC {
   static styles = mergeStyles(style)
 
   @observer({ reflect: true })
   role = 'tabpanel'
-
-  @observer({ reflect: true })
-  tabIndex = 0
 
   @observer()
   disabled = false

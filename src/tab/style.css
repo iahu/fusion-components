@@ -1,9 +1,53 @@
 :host {
+  position: relative;
   display: inline-block;
   padding: var(--padding-t) var(--padding-r) var(--padding-b) var(--padding-l);
   cursor: pointer;
 }
 
+:host(:focus-visible) {
+  outline: none;
+}
+
+:host(:focus-visible)::after {
+  position: absolute;
+  --outline-offset: 0px;
+  left: calc((var(--outline-width) + var(--outline-offset)) * -1);
+  top: calc((var(--outline-width) + var(--outline-offset)) * -1);
+  display: block;
+  content: '';
+  width: 100%;
+  height: 100%;
+  box-sizing: content-box;
+  border-radius: var(--border-radius);
+  padding: var(--outline-offset);
+  border: var(--outline-width) solid var(--outline-color);
+  z-index: 999;
+}
+
+:host(:not([disabled]):hover) {
+  background: var(--background-hover);
+}
+
 :host([aria-selected='true']) {
-  background: var(--background);
+  color: var(--foreground);
+  background: var(--accent-color);
+}
+
+:host([aria-selected='true'][disabled]) {
+  color: var(--foreground-disabled);
+  background: var(--accent-color-disabled);
+}
+
+:host([disabled]) {
+  color: var(--foreground-disabled);
+  cursor: not-allowed;
+}
+
+:host([direction='column']) {
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
+}
+
+:host([direction='row']) {
+  border-radius: var(--border-radius) 0 0 var(--border-radius);
 }

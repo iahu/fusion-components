@@ -75,7 +75,7 @@
 
   /*background colors*/
   --background: hsla(203, 7%, 34%, 1);
-  --background-hover: hsla(203, 7%, 37%, 1);
+  --background-hover: hsla(203, 3%, 44%, 1);
   --background-active: hsla(203, 7%, 44%, 1);
   --background-selected: hsla(203, 11%, 37%, 1);
   --background-selected-disabled: hsla(203, 34%, 47%, 1);
@@ -170,4 +170,8 @@
 :host(:disabled) {
   background-color: var(--background-disabled);
   border-color: var(--border-color-disabled);
+}
+
+:host([hidden]) {
+  display: none;
 }

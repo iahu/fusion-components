@@ -1,4 +1,30 @@
 :host {
+  position: relative;
   display: inline-block;
+
+  --padding-t: var(--padding-l);
   padding: var(--padding-t) var(--padding-r) var(--padding-b) var(--padding-l);
+}
+
+:host(:focus-visible) {
+  outline: none;
+}
+
+:host(:focus-visible)::after {
+  position: absolute;
+  --outline-offset: 0px;
+  left: calc((var(--outline-width) + var(--outline-offset)) * -1);
+  top: calc((var(--outline-width) + var(--outline-offset)) * -1);
+  display: block;
+  content: '';
+  width: 100%;
+  height: 100%;
+  box-sizing: content-box;
+  border-radius: var(--border-radius);
+  padding: var(--outline-offset);
+  border: var(--outline-width) solid var(--outline-color);
+}
+
+:host([disabled]) {
+  color: var(--foreground-disabled);
 }

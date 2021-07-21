@@ -6,6 +6,8 @@ import mergeStyles from '../merge-styles'
 
 import style from './style.css'
 
+export const isTab = (e: Element) => e instanceof Tab || e.tagName.toLowerCase() === 'fc-tab'
+
 @customElement('fc-tab')
 export default class Tab extends FC {
   static styles = mergeStyles(style)
@@ -13,11 +15,11 @@ export default class Tab extends FC {
   @observer({ reflect: true })
   role = 'tab'
 
-  @observer({ reflect: true })
-  tabIndex = -1
-
   @observer()
   disabled = false
+  disabledChanged(): void {
+    this.setAttribute('aria-disabled', this.disabled.toString())
+  }
 
   render(): TemplateResult<1> {
     return html`<slot></slot>`

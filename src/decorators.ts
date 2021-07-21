@@ -147,3 +147,27 @@ export const observer = function (options?: ObserverOptions): Observer {
     })
   }
 }
+
+export function queryAssignedNodes(slotName = '', flatten = false, selector = '') {
+  return (proto: any, key: string): void => {
+    Object.defineProperty(proto, key, {
+      get(this: ReactiveElement) {
+        const slotSelector = `slot${slotName ? `[name=${slotName}]` : ':not([name])'}`
+        const slot = this.renderRoot.querySelector(slotSelector)
+        console.log('what', slot)
+        let nodes = (slot as HTMLSlotElement)?.assignedNodes({ flatten })
+        if (nodes && selector) {
+          nodes = nodes.filter(
+            (node) =>
+              node.nodeType === Node.ELEMENT_NODE &&
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              (node as Element).matches(selector)
+          )
+        }
+        return nodes
+      },
+      enumerable: true,
+      configurable: true,
+    })
+  }
+}

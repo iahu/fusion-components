@@ -1,15 +1,27 @@
 :host {
   display: flex;
-
   flex-direction: column;
 }
 
 .tablist {
   display: flex;
+  padding: var(--padding-t) var(--padding-r) var(--padding-b) var(--padding-l);
+}
+
+::part(tab) {
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
 }
 
 .panels {
   display: flex;
+  flex-direction: column;
+}
+
+:host([direction='row']) {
+  flex-direction: row;
+}
+
+:host([direction='row']) .tablist {
   flex-direction: column;
 }
 
