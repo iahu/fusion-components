@@ -30,6 +30,11 @@ export default class Tooltip extends FC {
   @observer({ init: false })
   anchor?: string | null
 
+  @observer({
+    converter(v) {
+      return Math.max(0, v)
+    },
+  })
   delay = 300
 
   @observer()
