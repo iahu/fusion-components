@@ -1,0 +1,14 @@
+:host {
+  display: inline-block;
+  z-index: 999;
+}
+
+.tooltip {
+  all: inherit;
+  display: inline-block;
+  position: fixed;
+  border: var(--border-width) solid var(--border-color);
+  padding: var(--padding-t) var(--padding-r) var(--padding-b) var(--padding-l);
+  background: var(--background);
+  visibility: hidden;
+}

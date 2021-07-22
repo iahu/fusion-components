@@ -1,6 +1,6 @@
 import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
-import { observer, queryAssignedNodes } from '../decorators'
+import { observer } from '../decorators'
 import { FC } from '../fusion-component'
 import { focusable } from '../helper'
 import mergeStyles from '../merge-styles'
@@ -22,9 +22,6 @@ export default class Tabs extends FC {
     this.panels = Array.from(this.children).filter((e) => e.getAttribute('slot') === 'tabpanel')
     this.activeid = this.getAttribute('activeid') || this.nextFocusableTab(1)?.getAttribute('id') || null
   }
-
-  @queryAssignedNodes('tabpanel')
-  tabpanel?: Element[]
 
   @observer({ attribute: false, init: false })
   tabs = [] as Element[]

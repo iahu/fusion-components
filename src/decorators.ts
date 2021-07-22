@@ -1,4 +1,4 @@
-import { ReactiveElement } from 'lit'
+import { ReactiveElement } from '@lit/reactive-element'
 
 interface ReactiveElementWithObserver extends ReactiveElement {
   __observer?: boolean
@@ -27,7 +27,7 @@ const typeCotrMap: Record<string, Converter> = {
 
 const getConverter = (host: ReactiveElement, name: string, type?: ObserverType) => {
   const typeofValue = type ?? typeof Reflect.get(host, name)
-  return typeCotrMap[typeofValue] || String
+  return typeCotrMap[typeofValue]
 }
 
 const updateAttribute = (host: ReactiveElement, attributeName: string, value: Value, isBol: boolean) => {
@@ -61,7 +61,11 @@ export const observer = function (options?: ObserverOptions): Observer {
       if (init && attribute && this.hasAttribute(mergedAttributeName)) {
         const typeofValue = type ?? typeof Reflect.get(this, name)
         const isBol = typeofValue === 'boolean'
-        Reflect.set(this, name, getValueFromAttribute(this, mergedAttributeName, isBol))
+        const nextValue = getValueFromAttribute(this, mergedAttributeName, isBol)
+        const mergedConverter = converter ?? getConverter(this, name, type)
+        const mergedNextValue = mergedConverter ? mergedConverter(nextValue, this) : nextValue
+
+        Reflect.set(this, name, mergedNextValue)
       }
 
       if (this.__observer) {
@@ -79,7 +83,7 @@ export const observer = function (options?: ObserverOptions): Observer {
             const isBol = typeofValue === 'boolean'
             const nextValue = getValueFromAttribute(this, mergedAttributeName, isBol)
             const mergedConverter = converter ?? getConverter(this, name, type)
-            const mergedNextValue = mergedConverter(nextValue, this)
+            const mergedNextValue = mergedConverter ? mergedConverter(nextValue, this) : nextValue
             this.attributeChangedCallback(attributeName, oldValue, this.getAttribute(attributeName))
 
             // 通过 attribute 变化，更新 property
@@ -107,19 +111,14 @@ export const observer = function (options?: ObserverOptions): Observer {
     Object.defineProperty(proto, name, {
       ...ownPropertyDescriptor,
       get(this: ReactiveElementWithObserver) {
-        const tempValue = Reflect.get(this, tempName)
-        const typeofValue = type ?? typeof tempValue
-        const isBol = typeofValue === 'boolean'
-
-        return tempValue === undefined && attribute
-          ? getValueFromAttribute(this, mergedAttributeName, isBol)
-          : tempValue
+        return Reflect.get(this, tempName)
       },
       set(this: ReactiveElementWithObserver, nextValue: Value) {
         const typeofValue = type ?? typeof (Reflect.get(this, name) ?? nextValue)
         const isBol = typeofValue === 'boolean'
         const tempValue = Reflect.get(this, tempName)
-        nextValue = converter ? converter.call(this, nextValue, this) : nextValue
+        const mergedConverter = converter ?? getConverter(this, name, type)
+        nextValue = mergedConverter ? mergedConverter(nextValue, this) : nextValue
 
         if (tempValue !== nextValue) {
           Reflect.set(this, tempName, nextValue)
@@ -144,30 +143,6 @@ export const observer = function (options?: ObserverOptions): Observer {
           this.requestUpdate(name, tempValue)
         }
       },
-    })
-  }
-}
-
-export function queryAssignedNodes(slotName = '', flatten = false, selector = '') {
-  return (proto: any, key: string): void => {
-    Object.defineProperty(proto, key, {
-      get(this: ReactiveElement) {
-        const slotSelector = `slot${slotName ? `[name=${slotName}]` : ':not([name])'}`
-        const slot = this.renderRoot.querySelector(slotSelector)
-        console.log('what', slot)
-        let nodes = (slot as HTMLSlotElement)?.assignedNodes({ flatten })
-        if (nodes && selector) {
-          nodes = nodes.filter(
-            (node) =>
-              node.nodeType === Node.ELEMENT_NODE &&
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              (node as Element).matches(selector)
-          )
-        }
-        return nodes
-      },
-      enumerable: true,
-      configurable: true,
     })
   }
 }
