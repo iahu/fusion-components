@@ -1,7 +1,7 @@
 import { ReactiveElement } from '@lit/reactive-element'
 
 interface ReactiveElementWithObserver extends ReactiveElement {
-  __observer?: boolean
+  __observer?: Map<string, string>
   attributeChanged?: (name: string, oldValue: string | null, nextValue: string | null) => void
   [k: string]: any
 }
@@ -41,7 +41,12 @@ const updateAttribute = (host: ReactiveElement, attributeName: string, value: Va
 }
 
 const getValueFromAttribute = (host: ReactiveElement, attributeName: string, isBol: boolean) => {
-  return isBol ? host.hasAttribute(attributeName) : host.getAttribute(attributeName)
+  if (!isBol) return host.getAttribute(attributeName)
+
+  const value = host.getAttribute(attributeName)
+  if (value === 'true') return true
+  if (value === 'false') return false
+  return host.hasAttribute(attributeName)
 }
 
 type Observer = (proto: any, name: string) => void
@@ -68,41 +73,45 @@ export const observer = function (options?: ObserverOptions): Observer {
         Reflect.set(this, name, mergedNextValue)
       }
 
-      if (this.__observer) {
-        return
+      if (!this.__observer) {
+        this.__observer = new Map()
+
+        // mutation observer attributes
+        const domObserver = new MutationObserver((mutationsList) => {
+          mutationsList.forEach((mutation) => {
+            const { attributeName, oldValue } = mutation
+            if (!attributeName) return
+            const rawName = this.__observer?.get(attributeName)
+            if (rawName) {
+              const typeofValue = type ?? typeof Reflect.get(this, rawName)
+              const isBol = typeofValue === 'boolean'
+              const nextValue = getValueFromAttribute(this, attributeName, isBol)
+              const mergedConverter = converter ?? getConverter(this, rawName, type)
+              const mergedNextValue = mergedConverter ? mergedConverter(nextValue, this) : nextValue
+              this.attributeChangedCallback(attributeName, oldValue, this.getAttribute(attributeName))
+
+              // 通过 attribute 变化，更新 property
+              Reflect.set(this, rawName, mergedNextValue)
+            }
+            if (attributeName) {
+              // lit 改写了 `attributeChangedCallback`，只有使用了 @property() 装饰器的属性才会触发前述回调
+              // 这里加上一个通用的回调
+              this.attributeChanged?.(attributeName, oldValue, this.getAttribute(attributeName))
+            }
+          })
+        })
+
+        domObserver.observe(this, { attributes: true })
+
+        const userDisconnectedCallback = this.disconnectedCallback
+        this.disconnectedCallback = function () {
+          userDisconnectedCallback.call(this)
+          domObserver.disconnect()
+        }
       }
 
-      // mutation observer attributes
-      this.__observer = true
-      const domObserver = new MutationObserver((mutationsList) => {
-        mutationsList.forEach((mutation) => {
-          const { attributeName, oldValue } = mutation
-
-          if (attributeName === mergedAttributeName) {
-            const typeofValue = type ?? typeof Reflect.get(this, name)
-            const isBol = typeofValue === 'boolean'
-            const nextValue = getValueFromAttribute(this, mergedAttributeName, isBol)
-            const mergedConverter = converter ?? getConverter(this, name, type)
-            const mergedNextValue = mergedConverter ? mergedConverter(nextValue, this) : nextValue
-            this.attributeChangedCallback(attributeName, oldValue, this.getAttribute(attributeName))
-
-            // 通过 attribute 变化，更新 property
-            attribute && Reflect.set(this, name, mergedNextValue)
-          }
-          if (attributeName) {
-            // lit 改写了 `attributeChangedCallback`，只有使用了 @property() 装饰器的属性才会触发前述回调
-            // 这里加上一个通用的回调
-            this.attributeChanged?.(attributeName, oldValue, this.getAttribute(attributeName))
-          }
-        })
-      })
-
-      domObserver.observe(this, { attributes: true })
-
-      const userDisconnectedCallback = this.disconnectedCallback
-      this.disconnectedCallback = function () {
-        userDisconnectedCallback.call(this)
-        domObserver.disconnect()
+      if (attribute) {
+        this.__observer.set(mergedAttributeName, name)
       }
     }
 

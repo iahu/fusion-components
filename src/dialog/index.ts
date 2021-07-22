@@ -29,11 +29,14 @@ export default class Dialog extends FC {
   @observer()
   anchor: string | null = ''
 
+  @observer({ reflect: true })
+  model = true
+
   @observer({ attribute: 'overlay-closable' })
-  overlayClosable = false
+  overlayClosable = true
 
   @observer({ attribute: 'esc-closable' })
-  escClosable = false
+  escClosable = true
 
   private anchorElements?: HTMLElement[] | null
   private currentAnchorElement?: HTMLElement | null
@@ -46,6 +49,14 @@ export default class Dialog extends FC {
 
   @observer({ reflect: true })
   protected role = 'dialog'
+
+  show(): void {
+    this.hidden = false
+  }
+
+  hide(): void {
+    this.hidden = true
+  }
 
   handleClick = (e: MouseEvent): void => {
     e.preventDefault()
@@ -63,13 +74,22 @@ export default class Dialog extends FC {
     e.preventDefault()
     if (this.overlayClosable) {
       this.hidden = true
+      this.emit('dismiss')
     }
   }
 
   render(): TemplateResult<1> {
     return html`
-      <div class="overlay" part="overlay" @click="${this.handleClickOverlay}"></div>
-      <div class="dialog" part="dialog">
+      ${this.model
+        ? html`<div
+            class="overlay"
+            part="overlay"
+            role="presentation"
+            tabindex="-1"
+            @click="${this.handleClickOverlay}"
+          ></div>`
+        : ''}
+      <div class="control" part="control" role="dialog">
         <slot></slot>
       </div>
     `
