@@ -7,8 +7,8 @@ import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
 import style from './style.css'
 
-@customElement('fc-anchor')
-export class Anchor extends FC {
+@customElement('fc-link')
+export class link extends FC {
   static styles = mergeStyles(style)
 
   @observer({ reflect: true })
@@ -28,6 +28,9 @@ export class Anchor extends FC {
 
   @observer()
   ref = ''
+
+  @observer({ reflect: true })
+  role = 'link'
 
   @observer()
   target = ''
