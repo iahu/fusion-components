@@ -15,10 +15,11 @@
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  width: calc(var(--font-size) * 1.334);
-  height: calc(var(--font-size) * 1.334);
+  width: var(--font-size);
+  height: var(--font-size);
   background: var(--background);
   border-radius: 50%;
+  box-shadow: var(--stroke);
 }
 
 :host(:focus-visible) .control:after {
@@ -27,7 +28,6 @@
   content: '';
   width: 100%;
   height: 100%;
-  /*transform: scale(1.25);*/
   transform-origin: center center;
   box-sizing: content-box;
   border-radius: 50%;
@@ -36,8 +36,7 @@
 }
 
 .checked-indicator {
-  position: absolute;
-  display: none;
+  visibility: hidden;
   width: 50%;
   height: 50%;
   border-radius: 50%;
@@ -50,12 +49,11 @@
 }
 
 :host([checked]) .control {
-  /*background: var(--background-selected);*/
   background: var(--accent-color);
 }
 
 :host([checked]) .checked-indicator {
-  display: block;
+  visibility: visible;
 }
 
 :host([disabled]) .control {

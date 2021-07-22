@@ -88,11 +88,11 @@ export default class Radio extends FormAssociated {
 
   render(): TemplateResult<1> {
     return html`
-      <div class="control" part="control">
-        <slot name="checked-indicator">
+      <slot name="checked-indicator">
+        <div class="control" part="control">
           <div class="checked-indicator"></div>
-        </slot>
-      </div>
+        </div>
+      </slot>
       <label class="label" part="label"><slot></slot></label>
     `
   }

@@ -25,11 +25,20 @@
 <fc-button id="jys-4">静夜思</fc-button> <span>1000s</span>
 <fc-tooltip anchor="#jys-4" delay="1000">李白</fc-tooltip>
 
-<h4>多个</h4>
+<h4>一个元素多个提示</h4>
 <div style="padding: 50px 100px; background: #444">
   <fc-button id="anchor-1">🌱🌙<br />静夜思</fc-button>
   <fc-tooltip anchor="#anchor-1" position="left"> 床前明月光</fc-tooltip>
   <fc-tooltip anchor="#anchor-1" position="right"> 疑似地上霜</fc-tooltip>
   <fc-tooltip anchor="#anchor-1" position="top"> 举头望明月</fc-tooltip>
   <fc-tooltip anchor="#anchor-1" position="bottom"> 低头思故乡</fc-tooltip>
+</div>
+
+<h4>多个元素共用一个提示</h4>
+<div style="padding: 50px 100px; background: #444">
+  <fc-button class="anchor-2" position="left"> 床前明月光</fc-button>
+  <fc-button class="anchor-2" position="right"> 疑似地上霜</fc-button>
+  <fc-button class="anchor-2" position="top"> 举头望明月</fc-button>
+  <fc-button class="anchor-2" position="bottom"> 低头思故乡</fc-button>
+  <fc-tooltip anchor=".anchor-2">🌱🌙<br />静夜思</fc-tooltip>
 </div>

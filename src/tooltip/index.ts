@@ -43,6 +43,9 @@ export default class Tooltip extends FC {
   @observer()
   offsetY = 6
 
+  @observer({ reflect: true })
+  role = 'tooltip'
+
   protected anchorElements?: HTMLElement[] | null
 
   protected currentAnchorElement?: HTMLElement | null
@@ -52,6 +55,7 @@ export default class Tooltip extends FC {
   @observer()
   visible = false
   visibleChanged(): void {
+    this.setAttribute('aria-hidden', (!this.visible).toString())
     if (this.visible) {
       this.visibleTimeout = setTimeout(() => {
         const { anchorPosition, tooltip } = this
@@ -68,6 +72,7 @@ export default class Tooltip extends FC {
   }
 
   @observer()
+  // @TODO auto
   position = 'bottom'
 
   @query('.tooltip')

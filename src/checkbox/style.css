@@ -20,6 +20,7 @@
   height: var(--font-size);
   background: var(--background);
   overflow: hidden;
+  box-shadow: var(--stroke);
 }
 
 :host([checked]) .control {
