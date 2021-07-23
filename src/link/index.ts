@@ -8,7 +8,7 @@ import { after, before } from '../pattern/before-after'
 import style from './style.css'
 
 @customElement('fc-link')
-export class link extends FC {
+export default class FCLink extends FC {
   static styles = mergeStyles(style)
 
   @observer({ reflect: true })
@@ -17,7 +17,7 @@ export class link extends FC {
   @observer({ reflect: true })
   download = ''
 
-  @observer()
+  @observer({ reflect: true })
   href = ''
 
   @observer()

@@ -12,7 +12,7 @@ export * from '../tab-panel/index'
 export * from '../tab/index'
 
 @customElement('fc-tabs')
-export default class Tabs extends FC {
+export default class FCTabs extends FC {
   static styles = mergeStyles(style)
 
   connectedCallback(): void {

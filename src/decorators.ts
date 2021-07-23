@@ -147,7 +147,8 @@ export const observer = function (options?: ObserverOptions): Observer {
           // 初始化前，html 标签自带的 attribute 不能被覆盖
           const shouldUpdate = !(this.hasAttribute(name) && tempValue === undefined)
           if (reflect && shouldUpdate) {
-            updateAttribute(this, mergedAttributeName, nextValue, isBol)
+            const p = this.hasUpdated ? Promise.resolve(true) : this.updateComplete
+            p.then(() => updateAttribute(this, mergedAttributeName, nextValue, isBol))
           }
           this.requestUpdate(name, tempValue)
         }

@@ -6,7 +6,7 @@ import mergeStyles from '../merge-styles'
 import style from './style.css'
 
 @customElement('fc-radio')
-export default class Radio extends FormAssociated {
+export default class FCRadio extends FormAssociated {
   static styles = mergeStyles(style)
 
   connectedCallback(): void {
@@ -66,7 +66,7 @@ export default class Radio extends FormAssociated {
     const scope = this.form || this.closest('fc-radio-group') || this.ownerDocument.body
     const { name } = this
     if (!scope || !name) return
-    const silbings = Array.from(scope.querySelectorAll(`fc-radio[name='${name}']`)) as Radio[]
+    const silbings = Array.from(scope.querySelectorAll(`fc-radio[name='${name}']`)) as FCRadio[]
     silbings.forEach((e) => {
       if (e !== this) {
         e.checked = false

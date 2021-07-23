@@ -6,11 +6,11 @@ import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
 import style from './style.css'
 
-export const isTreeItem = (e: Node): e is TreeItem =>
+export const isTreeItem = (e: Node): e is FCTreeItem =>
   e instanceof HTMLElement && e.nodeName.toLowerCase() === 'fc-tree-item'
 
 @customElement('fc-tree-item')
-export default class TreeItem extends FC {
+export default class FCTreeItem extends FC {
   static styles = mergeStyles(style)
 
   private clonedNodes = [] as Node[]
@@ -85,7 +85,7 @@ export default class TreeItem extends FC {
   }
 
   // 子节点
-  public get items(): TreeItem[] {
+  public get items(): FCTreeItem[] {
     return this.clonedNodes.filter(isTreeItem)
   }
   public get length(): number {

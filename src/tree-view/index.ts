@@ -5,10 +5,10 @@ import { FC } from '../fusion-component'
 
 import TreeItem, { isTreeItem } from '../tree-item'
 
-export const isTreeView = (e: Node): e is TreeView => e instanceof TreeView
+export const isTreeView = (e: Node): e is FCTreeView => e instanceof FCTreeView
 
 @customElement('fc-tree-view')
-export default class TreeView extends FC {
+export default class FCTreeView extends FC {
   connectedCallback(): void {
     super.connectedCallback()
     this.addEventListener('selectionChange', this.handleSelectionChange)

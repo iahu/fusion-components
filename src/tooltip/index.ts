@@ -6,7 +6,7 @@ import mergeStyles from '../merge-styles'
 import style from './style.css'
 
 @customElement('fc-tooltip')
-export default class Tooltip extends FC {
+export default class FCTooltip extends FC {
   static styles = mergeStyles(style)
 
   connectedCallback(): void {

@@ -14,7 +14,7 @@ const KEY_MAP = {
 }
 
 @customElement('fc-radio-group')
-export default class RadioGroup extends FC {
+export default class FCRadioGroup extends FC {
   static styles = mergeStyles(style)
 
   connectedCallback(): void {

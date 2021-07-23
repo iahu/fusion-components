@@ -7,7 +7,7 @@ import { after, before } from '../pattern/before-after'
 import style from './style.css'
 
 @customElement('fc-button')
-export class Button extends FusionComponent {
+export default class FCButton extends FusionComponent {
   static styles = mergeStyles(style)
 
   @observer({ type: 'boolean' })

@@ -7,7 +7,7 @@ import { after, before } from '../pattern/before-after'
 import style from './style.css'
 
 @customElement('fc-input')
-export default class Input extends FormAssociated {
+export default class FCInput extends FormAssociated {
   static styles = mergeStyles(style)
 
   private get input(): HTMLInputElement | null | undefined {

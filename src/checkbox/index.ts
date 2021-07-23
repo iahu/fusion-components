@@ -6,7 +6,7 @@ import mergeStyles from '../merge-styles'
 import style from './style.css'
 
 @customElement('fc-checkbox')
-export default class Checkbox extends FormAssociated {
+export default class FCCheckbox extends FormAssociated {
   static styles = mergeStyles(style)
 
   connectedCallback(): void {

@@ -14,7 +14,7 @@ export enum POSTION {
 type Position = keyof typeof POSTION
 
 @customElement('fc-select')
-export default class Select extends ListBox {
+export default class FCSelect extends ListBox {
   static styles = mergeStyles(style)
 
   connectedCallback(): void {

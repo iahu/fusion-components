@@ -11,7 +11,7 @@ import style from './style.css'
 const safeToNumber = (v: any) => (isDigit(v) ? toNumber(v) : NaN)
 
 @customElement('fc-number-field')
-export default class NumberFiled extends Input {
+export default class FCNumberFiled extends Input {
   static styles = mergeStyles(style)
 
   inputRef: Ref<HTMLInputElement> = createRef<HTMLInputElement>()
@@ -58,7 +58,7 @@ export default class NumberFiled extends Input {
 
   @observer({
     init: false,
-    converter(v: string, host: NumberFiled) {
+    converter(v: string, host: FCNumberFiled) {
       if (!v) {
         return v
       }

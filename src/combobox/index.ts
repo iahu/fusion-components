@@ -9,7 +9,7 @@ import selectStyle from '../select/style.css'
 import style from './style.css'
 
 @customElement('fc-combobox')
-export default class ComboBox extends Select {
+export default class FCComboBox extends Select {
   static styles = mergeStyles(selectStyle, style)
 
   @observer({ reflect: true })

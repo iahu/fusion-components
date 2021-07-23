@@ -7,7 +7,7 @@ import ListOption, { isOption } from '../list-option'
 import style from './style.css'
 
 @customElement('fc-listbox')
-export default class ListBox extends FormAssociated {
+export default class FCListBox extends FormAssociated {
   static styles = mergeStyles(style)
 
   connectedCallback(): void {
@@ -83,7 +83,7 @@ export default class ListBox extends FormAssociated {
 
   @observer({
     attribute: false,
-    converter(op: ListOption[], host: ListBox) {
+    converter(op: ListOption[], host: FCListBox) {
       return Array.from(host.children)
         .filter(isOption)
         .map((e) => e.cloneNode(true) as ListOption)
@@ -97,7 +97,7 @@ export default class ListBox extends FormAssociated {
 
   @observer({
     attribute: false,
-    converter(v: number, host: ListBox) {
+    converter(v: number, host: FCListBox) {
       return host.options.length
     },
   })

@@ -7,11 +7,11 @@ import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
 import style from './style.css'
 
-export const isOption = (el: Element): el is ListOption =>
-  el.tagName.toLowerCase() === 'fc-list-option' || el instanceof ListOption
+export const isOption = (el: Element): el is FCListOption =>
+  el.tagName.toLowerCase() === 'fc-list-option' || el instanceof FCListOption
 
 @customElement('fc-list-option')
-export default class ListOption extends FC {
+export default class FCListOption extends FC {
   static styles = mergeStyles(style)
 
   static get formAssociated(): boolean {
