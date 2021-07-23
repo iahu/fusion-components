@@ -30,7 +30,7 @@ export default class Dialog extends FC {
   anchor: string | null = ''
 
   @observer({ reflect: true })
-  model = true
+  modal = true
 
   @observer({ attribute: 'overlay-closable' })
   overlayClosable = true
@@ -80,7 +80,7 @@ export default class Dialog extends FC {
 
   render(): TemplateResult<1> {
     return html`
-      ${this.model
+      ${this.modal
         ? html`<div
             class="overlay"
             part="overlay"
