@@ -4,7 +4,7 @@
   "description": "一套面向类桌面应用的沉浸式风格 Web Components UI 库",
   "main": "dist/bundle.js",
   "module": "dist/esm/index.js",
-  "type": "dist/dts/index.d.ts",
+  "types": "dist/dts/index.d.ts",
   "files": [
     "dist",
     "types"
