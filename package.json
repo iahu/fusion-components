@@ -2,7 +2,7 @@
   "name": "@egret/fusion-components",
   "version": "1.0.2",
   "description": "一套面向类桌面应用的沉浸式风格 Web Components UI 库",
-  "main": "dist/bundle.js",
+  "main": "dist/fusion-components.js",
   "module": "dist/esm/index.js",
   "types": "dist/dts/index.d.ts",
   "files": [

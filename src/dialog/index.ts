@@ -13,21 +13,25 @@ export default class FCDialog extends FC {
   connectedCallback(): void {
     super.connectedCallback()
 
-    this.anchor = this.getAttribute('anchor')
-    if (this.anchor) {
-      this.anchorElements = Array.from(this.renderRoot.ownerDocument.querySelectorAll(this.anchor))
-      this.anchorElements.forEach((e) => e.addEventListener('click', this.handleClick))
-    }
     this.renderRoot.ownerDocument.addEventListener('keydown', this.handleKeydown)
   }
   disconnectedCallback(): void {
     super.disconnectedCallback()
-    this.anchorElements?.forEach((e) => e.removeEventListener('click', this.handleClick))
     this.renderRoot.ownerDocument.removeEventListener('keydown', this.handleKeydown)
   }
 
   @observer()
-  anchor: string | null = ''
+  anchor: string | null = this.getAttribute('anchor')
+  anchorChanged() {
+    const { anchor } = this
+    if (anchor) {
+      // removeEventListener on old elements
+      this.anchorElements?.forEach((e) => e.removeEventListener('click', this.handleClick))
+      this.anchorElements = Array.from(this.renderRoot.ownerDocument.querySelectorAll(anchor))
+      // addEventListener on new elements
+      this.anchorElements.forEach((e) => e.addEventListener('click', this.handleClick))
+    }
+  }
 
   @observer({ reflect: true })
   modal = true

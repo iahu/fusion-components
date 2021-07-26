@@ -15,12 +15,28 @@ export * from '../tab/index'
 export default class FCTabs extends FC {
   static styles = mergeStyles(style)
 
+  private static index = 0
+
+  constructor() {
+    super()
+
+    FCTabs.index += 1
+  }
+
   connectedCallback(): void {
     super.connectedCallback()
 
     this.tabs = Array.from(this.children).filter((e) => e.getAttribute('slot') === 'tab')
     this.panels = Array.from(this.children).filter((e) => e.getAttribute('slot') === 'tabpanel')
     this.activeid = this.getAttribute('activeid') || this.nextFocusableTab(1)?.getAttribute('id') || null
+
+    this.addEventListener('select', this.handleSelect)
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback()
+
+    this.removeEventListener('select', this.handleSelect)
   }
 
   @observer({ attribute: false, init: false })
@@ -36,10 +52,11 @@ export default class FCTabs extends FC {
   @observer({ attribute: false, init: false })
   panels = [] as Element[]
   panelsChanged(): void {
+    const { index } = FCTabs
     const { activeTab } = this
     this.panels?.forEach((p, idx) => {
       if (!p.getAttribute('id')) {
-        p.setAttribute('id', `panel-${idx}`)
+        p.setAttribute('id', `panel-${index}-${idx}`)
       }
       const panelId = p.getAttribute('id') as string
 
@@ -67,7 +84,7 @@ export default class FCTabs extends FC {
     this.tabs.forEach((t) => {
       if (focusable(t)) {
         t.setAttribute('tabindex', '-1')
-        t.setAttribute('aria-selected', 'false')
+        t.toggleAttribute('selected', false)
       }
     })
     this.panels.forEach((p) => {
@@ -78,7 +95,7 @@ export default class FCTabs extends FC {
     const { activeTab } = this
     if (!activeTab) return
 
-    activeTab.setAttribute('aria-selected', 'true')
+    activeTab.toggleAttribute('selected', true)
     if (focusable(activeTab)) {
       activeTab.setAttribute('tabindex', '0')
     }
@@ -115,7 +132,7 @@ export default class FCTabs extends FC {
     this.tabs.forEach((t) => t.setAttribute('direction', direction))
   }
 
-  handleClick(e: MouseEvent): void {
+  handleSelect(e: Event): void {
     const { srcElement } = e
     if (srcElement instanceof Tab && !this.disabled) {
       e.preventDefault()
@@ -191,7 +208,7 @@ export default class FCTabs extends FC {
 
   render(): TemplateResult<1> {
     return html`
-      <div class="tablist" part="tablist" role="tablist" @click="${this.handleClick}" @keydown="${this.handleKeydonw}">
+      <div class="tablist" part="tablist" role="tablist" @keydown="${this.handleKeydonw}">
         ${before()}
         <slot name="tab" class="tab" part="tab"></slot>
         ${after()}

@@ -59,3 +59,11 @@ export default class FCLink extends FC {
     </a>`
   }
 }
+
+declare global {
+  namespace JSX {
+    interface IntrinisicElements {
+      'fc-link': FCLink
+    }
+  }
+}

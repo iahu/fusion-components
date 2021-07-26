@@ -12,13 +12,43 @@ export const isTab = (e: Element) => e instanceof FCTab || e.tagName.toLowerCase
 export default class FCTab extends FC {
   static styles = mergeStyles(style)
 
+  connectedCallback() {
+    super.connectedCallback()
+    this.addEventListener('click', this.handleClick)
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback()
+    this.removeEventListener('click', this.handleClick)
+  }
+
   @observer({ reflect: true })
   role = 'tab'
+
+  @observer({ reflect: true })
+  selected = false
+  selectedChanged(old: boolean, next: boolean) {
+    this.setAttribute('aria-selected', this.selected.toString())
+    if (this.selected) {
+      this.emit('select')
+    }
+  }
 
   @observer()
   disabled = false
   disabledChanged(): void {
     this.setAttribute('aria-disabled', this.disabled.toString())
+  }
+
+  @observer({ reflect: true })
+  readonly = this.hasAttribute('readonly')
+  readonlyChanged() {
+    this.setAttribute('aria-disabled', this.readonly.toString())
+  }
+
+  handleClick(e: MouseEvent) {
+    e.preventDefault()
+    this.selected = true
   }
 
   render(): TemplateResult<1> {

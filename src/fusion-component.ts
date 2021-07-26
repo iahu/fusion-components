@@ -1,10 +1,6 @@
 import { html, LitElement, PropertyValues, TemplateResult } from 'lit'
 import { observer } from './decorators'
 
-export interface FC {
-  attributeChanged: (name: string, pre: string | null, next: string | null) => void
-}
-
 abstract class FusionComponent extends LitElement {
   public get root(): HTMLElement {
     return this.shadowRoot?.firstElementChild as HTMLElement
@@ -13,7 +9,7 @@ abstract class FusionComponent extends LitElement {
   public get control(): HTMLElement | null | undefined {
     return this.shadowRoot?.querySelector('.control')
   }
-
+  attributeChanged(name: string, pre: string | null, next: string | null): void {}
   updated(p: PropertyValues<this>): void {
     p.forEach((v, k) => {
       if (!this[k] && this.control?.hasAttribute(k.toString())) {

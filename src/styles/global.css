@@ -70,6 +70,7 @@
 
   /* foreground colors*/
   --foreground: hsla(255, 0%, 90%, 1);
+  --foreground-hover: hsla(255, 0%, 62%, 1);
   --foreground-disabled: hsla(255, 0%, 62%, 1);
   --foreground-selected: hsla(255, 0%, 100%, 1);
 

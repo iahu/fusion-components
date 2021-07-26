@@ -30,8 +30,12 @@
 }
 
 :host([aria-selected='true']) {
-  color: var(--foreground);
+  color: var(--foreground-selected);
   background: var(--accent-color);
+}
+:host([aria-selected='true']:hover) {
+  /*color: var(--foreground-hover);*/
+  background: var(--accent-color-hover);
 }
 
 :host([aria-selected='true'][disabled]) {
