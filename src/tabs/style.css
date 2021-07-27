@@ -5,7 +5,6 @@
 
 .tablist {
   display: flex;
-  padding: var(--padding-t) var(--padding-r) var(--padding-b) var(--padding-l);
 }
 
 ::part(tab) {
