@@ -10,7 +10,7 @@ export const isTreeItem = (e: Node): e is FCTreeItem =>
   e instanceof HTMLElement && e.nodeName.toLowerCase() === 'fc-tree-item'
 
 @customElement('fc-tree-item')
-export default class FCTreeItem extends FC {
+export class FCTreeItem extends FC {
   static styles = mergeStyles(style)
 
   private clonedNodes = [] as Node[]

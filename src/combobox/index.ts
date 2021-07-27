@@ -4,12 +4,12 @@ import { observer } from '../decorators'
 import { isOption } from '../list-option'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
-import Select from '../select/index'
+import { FCSelect } from '../select/index'
 import selectStyle from '../select/style.css'
 import style from './style.css'
 
 @customElement('fc-combobox')
-export default class FCComboBox extends Select {
+export class FCComboBox extends FCSelect {
   static styles = mergeStyles(selectStyle, style)
 
   @observer({ reflect: true })

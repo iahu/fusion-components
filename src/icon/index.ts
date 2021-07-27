@@ -5,7 +5,7 @@ import mergeStyles from '../merge-styles'
 import style from './style.css'
 
 @customElement('fc-icon')
-export default class FCIcon extends FC {
+export class FCIcon extends FC {
   static styles = mergeStyles(style)
 
   render(): TemplateResult<1> {

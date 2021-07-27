@@ -8,7 +8,7 @@ import { after, before } from '../pattern/before-after'
 import style from './style.css'
 
 @customElement('fc-link')
-export default class FCLink extends FC {
+export class FCLink extends FC {
   static styles = mergeStyles(style)
 
   @observer({ reflect: true })
@@ -57,13 +57,5 @@ export default class FCLink extends FC {
       <span part="content"><slot></slot></span>
       ${after()}
     </a>`
-  }
-}
-
-declare global {
-  namespace JSX {
-    interface IntrinisicElements {
-      'fc-link': FCLink
-    }
   }
 }

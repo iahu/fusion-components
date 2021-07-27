@@ -3,7 +3,7 @@ import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { createRef, Ref, ref } from 'lit/directives/ref.js'
 import { observer } from '../decorators'
-import Input from '../input'
+import { FCInput } from '../input'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
 import style from './style.css'
@@ -11,7 +11,7 @@ import style from './style.css'
 const safeToNumber = (v: any) => (isDigit(v) ? toNumber(v) : NaN)
 
 @customElement('fc-number-field')
-export default class FCNumberFiled extends Input {
+export class FCNumberFiled extends FCInput {
   static styles = mergeStyles(style)
 
   inputRef: Ref<HTMLInputElement> = createRef<HTMLInputElement>()

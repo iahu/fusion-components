@@ -80,6 +80,7 @@
   --background-active: hsla(203, 7%, 44%, 1);
   --background-selected: hsla(203, 11%, 37%, 1);
   --background-selected-disabled: hsla(203, 34%, 47%, 1);
+  --background-selected-hover: var(--background-selected);
   --background-disabled: hsla(203, 0%, 27%, 1);
 
   /*border-colors*/

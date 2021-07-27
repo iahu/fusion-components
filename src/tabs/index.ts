@@ -5,14 +5,14 @@ import { FC } from '../fusion-component'
 import { focusable } from '../helper'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
-import Tab from '../tab/index'
+import { FCTab } from '../tab/index'
 import style from './style.css'
 
 export * from '../tab-panel/index'
 export * from '../tab/index'
 
 @customElement('fc-tabs')
-export default class FCTabs extends FC {
+export class FCTabs extends FC {
   static styles = mergeStyles(style)
 
   private static index = 0
@@ -134,14 +134,14 @@ export default class FCTabs extends FC {
 
   handleSelect(e: Event): void {
     const { srcElement } = e
-    if (srcElement instanceof Tab && !this.disabled) {
+    if (srcElement instanceof FCTab && !this.disabled) {
       e.preventDefault()
       this.activeTab = srcElement
     }
   }
 
   handleKeydonw(e: KeyboardEvent): void {
-    if (!(e.srcElement instanceof Tab)) {
+    if (!(e.srcElement instanceof FCTab)) {
       return
     }
 
@@ -169,7 +169,7 @@ export default class FCTabs extends FC {
         break
       case 'Enter': {
         e.preventDefault()
-        if (e.srcElement instanceof Tab) {
+        if (e.srcElement instanceof FCTab) {
           this.activeTab = e.srcElement
         }
         break
@@ -177,7 +177,7 @@ export default class FCTabs extends FC {
     }
   }
 
-  nextFocusableTab(delta: number): Tab | undefined {
+  nextFocusableTab(delta: number): FCTab | undefined {
     const { activeElement } = this.ownerDocument
 
     let idx = this.tabs.findIndex((t) => t === activeElement)
@@ -187,12 +187,12 @@ export default class FCTabs extends FC {
       idx += delta
       const next = this.tabs[(idx + length) % length]
       if (next && focusable(next)) {
-        return next as Tab
+        return next as FCTab
       }
     }
   }
 
-  focusTab(tab?: Tab): void {
+  focusTab(tab?: FCTab): void {
     if (!tab || !focusable(tab)) {
       return
     }

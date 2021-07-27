@@ -11,7 +11,7 @@ export default {
   output: [
     { file: './dist/fusion-components.js', format: 'esm' },
     { file: './dist/fusion-components-min.js', format: 'esm', plugins: [terser()] },
-    { file: './dist/fusion-components-iife.js', format: 'iife', plugins: [terser()] },
+    { file: './dist/fusion-components-iife.js', format: 'iife', plugins: [terser()], name: 'FCComponents' },
   ],
   plugins: [
     resolve(),

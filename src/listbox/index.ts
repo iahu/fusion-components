@@ -3,11 +3,11 @@ import { customElement, property } from 'lit/decorators.js'
 import { observer } from '../decorators'
 import FormAssociated from '../form-associated'
 import mergeStyles from '../merge-styles'
-import ListOption, { isOption } from '../list-option'
+import { FCListOption, isOption } from '../list-option'
 import style from './style.css'
 
 @customElement('fc-listbox')
-export default class FCListBox extends FormAssociated {
+export class FCListBox extends FormAssociated {
   static styles = mergeStyles(style)
 
   connectedCallback(): void {
@@ -55,7 +55,7 @@ export default class FCListBox extends FormAssociated {
     if (this.selectedOption && this.dirtyValue) {
       this.selectedOption.select(false)
     } else {
-      let selectedOption: ListOption | undefined = undefined
+      let selectedOption: FCListOption | undefined = undefined
       this.options.forEach((op) => {
         if (op.getAttribute('value') === next) {
           selectedOption = op
@@ -71,25 +71,25 @@ export default class FCListBox extends FormAssociated {
   @property({ reflect: true })
   tabindex = '0'
 
-  public get visibleOptions(): ListOption[] {
+  public get visibleOptions(): FCListOption[] {
     return Array.from(this.children)
       .filter(isOption)
       .filter((o) => !o.hidden)
   }
-  public set visibleOptions(options: ListOption[]) {
+  public set visibleOptions(options: FCListOption[]) {
     this.innerHTML = ''
     options.forEach((op) => this.appendChild(op))
   }
 
   @observer({
     attribute: false,
-    converter(op: ListOption[], host: FCListBox) {
+    converter(op: FCListOption[], host: FCListBox) {
       return Array.from(host.children)
         .filter(isOption)
-        .map((e) => e.cloneNode(true) as ListOption)
+        .map((e) => e.cloneNode(true) as FCListOption)
     },
   })
-  options = [] as ListOption[]
+  options = [] as FCListOption[]
   optionsChanged(): void {
     this.innerHTML = ''
     this.options.forEach((o) => isOption(o) && this.appendChild(o))
@@ -106,14 +106,14 @@ export default class FCListBox extends FormAssociated {
     this.options = this.options.slice(0, this.length)
   }
 
-  getItem(index: number): ListOption | undefined {
+  getItem(index: number): FCListOption | undefined {
     return this.visibleOptions.find((o) => o.index === index)
   }
 
   // 可以避免 value 相同时，设置 value 导致选择错乱的问题
   @observer({ attribute: false })
-  selectedOption?: ListOption
-  selectedOptionChanged(old: ListOption | undefined, next: ListOption | undefined): void {
+  selectedOption?: FCListOption
+  selectedOptionChanged(old: FCListOption | undefined, next: FCListOption | undefined): void {
     if (old) {
       old.focusItem(false)
       old.select(false)
@@ -178,7 +178,7 @@ export default class FCListBox extends FormAssociated {
   }
 
   handleSelect(e: Event): void {
-    if (e.target instanceof ListOption) {
+    if (e.target instanceof FCListOption) {
       if (e.target.hasAttribute('selected')) {
         this.select(e.target.index)
       }

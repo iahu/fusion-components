@@ -43,7 +43,6 @@
 }
 
 :host([selected]) {
-  border-color: var(--border-color-selected);
   color: var(--foreground-selected);
   background: var(--background-selected);
 }
@@ -54,6 +53,10 @@
 
 :host([outline]) {
   border-color: var(--border-color);
+}
+
+:host([outline][selected]) {
+  border-color: var(--border-color-selected);
 }
 
 :host(:not(:disabled):focus-visible) {
@@ -72,6 +75,15 @@
 :host([selected][disabled]) {
   /*opacity: 0.5;*/
   background: var(--background-disabled);
+}
+
+:host([selected][disabled]) {
+  /*opacity: 0.5;*/
+  background: var(--background-disabled);
+}
+
+:host([selected]:hover) {
+  background: var(--background-selected-hover);
 }
 
 /*secondary*/

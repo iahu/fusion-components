@@ -7,7 +7,7 @@ import mergeStyles from '../merge-styles'
 import style from './style.css'
 
 @customElement('fc-dialog')
-export default class FCDialog extends FC {
+export class FCDialog extends FC {
   static styles = mergeStyles(style)
 
   connectedCallback(): void {

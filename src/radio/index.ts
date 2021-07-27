@@ -6,7 +6,7 @@ import mergeStyles from '../merge-styles'
 import style from './style.css'
 
 @customElement('fc-radio')
-export default class FCRadio extends FormAssociated {
+export class FCRadio extends FormAssociated {
   static styles = mergeStyles(style)
 
   connectedCallback(): void {

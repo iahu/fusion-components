@@ -7,7 +7,7 @@ import { after, before } from '../pattern/before-after'
 import style from './style.css'
 
 @customElement('fc-button')
-export default class FCButton extends FusionComponent {
+export class FCButton extends FusionComponent {
   static styles = mergeStyles(style)
 
   @observer({ type: 'boolean' })
@@ -43,14 +43,20 @@ export default class FCButton extends FusionComponent {
   @observer({ type: 'boolean', reflect: true })
   selected = false
 
-  @observer({ type: 'boolean' })
+  @observer({reflect: true})
   outline = false
+
+  @observer()
+  readonly = false
 
   @observer({ type: 'boolean', reflect: true })
   sharp = false
 
   @observer()
   accent: 'primary' | 'scondary' | '' = 'primary'
+
+  @observer()
+  hotkey?: string
 
   render(): TemplateResult<1> {
     const { autofocus, disabled, name, value, type, size, form, formaction, formnovalidate, formtarget, accent } = this

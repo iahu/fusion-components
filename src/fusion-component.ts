@@ -26,6 +26,13 @@ abstract class FusionComponent extends LitElement {
     return []
   }
 
+  @observer()
+  className = ''
+  classNameChanged() {
+    this.className.split(/\s+/g).forEach(cls => cls && this.classList.add(cls))
+    this.removeAttribute('className')
+  }
+
   @observer({ reflect: true })
   size: '' | 'xs' | 's' | 'm' | 'l' | 'xl' | 'xxl' | 'xxxl' = ''
 

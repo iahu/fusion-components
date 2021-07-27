@@ -2,7 +2,7 @@ import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { observer } from '../decorators'
 import { FC } from '../fusion-component'
-import ListBox from '../listbox'
+import { FCListBox } from '../listbox'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
 import style from './style.css'
@@ -11,7 +11,7 @@ export const isOption = (el: Element): el is FCListOption =>
   el.tagName.toLowerCase() === 'fc-list-option' || el instanceof FCListOption
 
 @customElement('fc-list-option')
-export default class FCListOption extends FC {
+export class FCListOption extends FC {
   static styles = mergeStyles(style)
 
   static get formAssociated(): boolean {
@@ -49,7 +49,7 @@ export default class FCListOption extends FC {
   public get index(): number {
     const { parentElement } = this
     // index 只与 ListBox 绑定
-    if (parentElement instanceof ListBox) {
+    if (parentElement instanceof FCListBox) {
       return parentElement.visibleOptions.findIndex((e) => e === this)
     }
     return -1

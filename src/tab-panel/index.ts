@@ -9,7 +9,7 @@ import style from './style.css'
 export const isTabPanel = (e: Element) => e instanceof FCTabPanel || e.tagName.toLowerCase() === 'fc-tab-panel'
 
 @customElement('fc-tab-panel')
-export default class FCTabPanel extends FC {
+export class FCTabPanel extends FC {
   static styles = mergeStyles(style)
 
   @observer({ reflect: true })

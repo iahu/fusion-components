@@ -3,12 +3,12 @@ import { customElement } from 'lit/decorators.js'
 import { observer } from '../decorators'
 import { FC } from '../fusion-component'
 
-import TreeItem, { isTreeItem } from '../tree-item'
+import { FCTreeItem, isTreeItem } from '../tree-item'
 
 export const isTreeView = (e: Node): e is FCTreeView => e instanceof FCTreeView
 
 @customElement('fc-tree-view')
-export default class FCTreeView extends FC {
+export class FCTreeView extends FC {
   connectedCallback(): void {
     super.connectedCallback()
     this.addEventListener('selectionChange', this.handleSelectionChange)
@@ -41,26 +41,26 @@ export default class FCTreeView extends FC {
       return
     }
 
-    const target = Array.from(this.querySelectorAll<TreeItem>('fc-tree-item')).find((e) => e.value === value)
+    const target = Array.from(this.querySelectorAll<FCTreeItem>('fc-tree-item')).find((e) => e.value === value)
     if (target) {
       target.toggleAttribute('selected', true)
     }
   }
 
   @observer()
-  selectedItem?: TreeItem
+  selectedItem?: FCTreeItem
 
-  private __focusedItem?: TreeItem | null
-  public get focusedItem(): TreeItem | undefined | null {
+  private __focusedItem?: FCTreeItem | null
+  public get focusedItem(): FCTreeItem | undefined | null {
     return this.__focusedItem || this.selectedItem
   }
-  public set focusedItem(v: TreeItem | undefined | null) {
+  public set focusedItem(v: FCTreeItem | undefined | null) {
     this.__focusedItem = v
   }
 
-  public get focusableItems(): TreeItem[] {
-    const items = Array.from(this.querySelectorAll<TreeItem>('fc-tree-item'))
-    // as unknown as TreeItem[]
+  public get focusableItems(): FCTreeItem[] {
+    const items = Array.from(this.querySelectorAll<FCTreeItem>('fc-tree-item'))
+    // as unknown as FCTreeItem[]
     return items.filter((e) => {
       const { parentElement } = e
       if (!parentElement || !isTreeItem(parentElement)) {
@@ -79,7 +79,7 @@ export default class FCTreeView extends FC {
     }
 
     if (srcElement.selected) {
-      const mayFocusedItem = this.querySelector<TreeItem>('fc-tree-item[tabindex="0"]')
+      const mayFocusedItem = this.querySelector<FCTreeItem>('fc-tree-item[tabindex="0"]')
       // reset prev
       if (mayFocusedItem && mayFocusedItem !== srcElement) mayFocusedItem.focusItem(false)
       // update current

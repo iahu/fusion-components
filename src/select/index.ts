@@ -1,7 +1,7 @@
 import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { observer } from '../decorators'
-import ListBox from '../listbox'
+import { FCListBox } from '../listbox'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
 import style from './style.css'
@@ -14,7 +14,7 @@ export enum POSTION {
 type Position = keyof typeof POSTION
 
 @customElement('fc-select')
-export default class FCSelect extends ListBox {
+export class FCSelect extends FCListBox {
   static styles = mergeStyles(style)
 
   connectedCallback(): void {

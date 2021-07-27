@@ -3,7 +3,7 @@ import { customElement } from 'lit/decorators.js'
 import { observer } from '../decorators'
 import { FC } from '../fusion-component'
 import mergeStyles from '../merge-styles'
-import Radio from '../radio'
+import { FCRadio } from '../radio'
 import style from './style.css'
 
 const KEY_MAP = {
@@ -14,7 +14,7 @@ const KEY_MAP = {
 }
 
 @customElement('fc-radio-group')
-export default class FCRadioGroup extends FC {
+export class FCRadioGroup extends FC {
   static styles = mergeStyles(style)
 
   connectedCallback(): void {
@@ -39,8 +39,8 @@ export default class FCRadioGroup extends FC {
     this.removeEventListener('keydown', this.handleKeydown)
   }
 
-  public get items(): Radio[] {
-    return this.slottedElements.filter((o) => o instanceof Radio) as Radio[]
+  public get items(): FCRadio[] {
+    return this.slottedElements.filter((o) => o instanceof FCRadio) as FCRadio[]
   }
 
   public get length(): number {
@@ -109,7 +109,7 @@ export default class FCRadioGroup extends FC {
   handleChange(e: Event): void {
     if (e instanceof CustomEvent) {
       const { srcElement } = e
-      if (srcElement instanceof Radio && srcElement.checked) {
+      if (srcElement instanceof FCRadio && srcElement.checked) {
         if (this.value !== srcElement.value) {
           this.value = srcElement.value
         }
