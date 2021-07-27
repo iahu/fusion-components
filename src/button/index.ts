@@ -58,6 +58,9 @@ export class FCButton extends FusionComponent {
   @observer()
   hotkey?: string
 
+  @observer({reflect: true})
+  tabindex = '0'
+
   render(): TemplateResult<1> {
     const { autofocus, disabled, name, value, type, size, form, formaction, formnovalidate, formtarget, accent } = this
 
@@ -75,6 +78,7 @@ export class FCButton extends FusionComponent {
       formnovalidate="${formnovalidate}"
       formtarget="${formtarget}"
       data-accent="${accent}"
+      tabindex="-1"
     >
       ${before()}
       <span part="content" class="content"><slot></slot></span>

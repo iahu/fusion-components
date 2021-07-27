@@ -1,4 +1,6 @@
 export * from './fusion-component'
+export * from './helper'
+export * from './decorators'
 export { FCIcon } from './icon/index'
 export { FCButton } from './button/index'
 export { FCCheckbox } from './checkbox/index'
