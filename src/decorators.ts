@@ -1,5 +1,4 @@
 import { ReactiveElement } from '@lit/reactive-element'
-import { Ref } from 'lit/directives/ref'
 
 interface ReactiveElementWithObserver extends ReactiveElement {
   __observer?: Map<string, string>
