@@ -28,8 +28,8 @@ abstract class FusionComponent extends LitElement {
 
   @observer()
   className = ''
-  classNameChanged() {
-    this.className.split(/\s+/g).forEach(cls => cls && this.classList.add(cls))
+  classNameChanged(): void {
+    this.className.split(/\s+/g).forEach((cls) => cls && this.classList.add(cls))
     this.removeAttribute('className')
   }
 
@@ -44,7 +44,7 @@ abstract class FusionComponent extends LitElement {
     this.dispatchEvent(event)
   }
 
-  render(): TemplateResult<1> {
+  render(): TemplateResult {
     return html``
   }
 }

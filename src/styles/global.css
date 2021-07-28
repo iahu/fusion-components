@@ -1,14 +1,4 @@
 :host {
-  /*rset*/
-  /*all: initial;*/
-  line-height: var(--line-height);
-  --font-size: var(--font-size-xs);
-  font-size: var(--font-size);
-  user-select: var(--user-select);
-  color: var(--foreground);
-  fill: currentColor;
-  /*overflow: hidden;*/
-
   --fc-unit-size: 1px;
   --user-select: none;
   --control-min-width: calc(var(--fc-unit-size) * 200);
@@ -38,6 +28,7 @@
     calc(var(--fc-unit-size) * 5)
   );*/
   --padding-b: var(--padding-t);
+  --padding: var(--padding-t) var(--padding-r) var(--padding-b) var(--padding-l);
 
   --border-width: calc(var(--fc-unit-size) * 1);
 
@@ -123,6 +114,44 @@
     var(--box-shadow-offset-spread) var(--box-shadow-color);
 }
 
+:host {
+  line-height: var(--line-height);
+  --font-size: var(--font-size-xs);
+  font-size: var(--font-size);
+  user-select: var(--user-select);
+  color: var(--foreground);
+  fill: currentColor;
+}
+
+:host {
+  border-radius: var(--border-radius);
+}
+
+:host([sharp]) {
+  border-radius: 0;
+}
+
+:host([outline]) .control {
+  border-color: var(--border-color);
+}
+
+:host([outline]:hover) .control {
+  border-color: var(--border-color-hover);
+}
+
+:host([outline]:focus-within) .control {
+  border-color: var(--border-color-active);
+}
+
+:host(:disabled) {
+  background-color: var(--background-disabled);
+  border-color: var(--border-color-disabled);
+}
+
+:host([hidden]) {
+  display: none;
+}
+
 :host([size='xs']) {
   --font-size: var(--font-size-xs);
 }
@@ -159,33 +188,4 @@
   width: inherit;
   will-change: border-color background-color;
   transition: border-color 0.2s, background-color;
-}
-
-:host {
-  border-radius: var(--border-radius);
-}
-
-:host([sharp]) {
-  border-radius: 0;
-}
-
-:host([outline]) .control {
-  border-color: var(--border-color);
-}
-
-:host([outline]:hover) .control {
-  border-color: var(--border-color-hover);
-}
-
-:host([outline]:focus-within) .control {
-  border-color: var(--border-color-active);
-}
-
-:host(:disabled) {
-  background-color: var(--background-disabled);
-  border-color: var(--border-color-disabled);
-}
-
-:host([hidden]) {
-  display: none;
 }

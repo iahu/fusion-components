@@ -40,10 +40,23 @@ export class FCButton extends FusionComponent {
   @observer()
   value = ''
 
-  @observer({ type: 'boolean', reflect: true })
-  selected = false
+  @observer({ reflect: true })
+  selectable = true
 
-  @observer({reflect: true})
+  @observer({
+    reflect: true,
+    type: 'boolean',
+    converter(v: boolean, host: FCButton) {
+      console.log('what', host.selectable, v)
+      return host.selectable && v
+    },
+  })
+  selected = false
+  selectedChanged(): void {
+    this.setAttribute('aria-selected', String(this.selected))
+  }
+
+  @observer({ reflect: true })
   outline = false
 
   @observer()
@@ -58,7 +71,7 @@ export class FCButton extends FusionComponent {
   @observer()
   hotkey?: string
 
-  @observer({reflect: true})
+  @observer({ reflect: true })
   tabindex = '0'
 
   render(): TemplateResult<1> {
