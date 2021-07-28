@@ -47,7 +47,6 @@ export class FCButton extends FusionComponent {
     reflect: true,
     type: 'boolean',
     converter(v: boolean, host: FCButton) {
-      console.log('what', host.selectable, v)
       return host.selectable && v
     },
   })
