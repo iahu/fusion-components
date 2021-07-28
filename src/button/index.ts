@@ -10,6 +10,18 @@ import style from './style.css'
 export class FCButton extends FusionComponent {
   static styles = mergeStyles(style)
 
+  connectedCallback(): void {
+    super.connectedCallback()
+
+    this.addEventListener('click', this.handleClick)
+  }
+
+  disconnectedCallback(): void {
+    super.disconnectedCallback()
+
+    this.removeEventListener('click', this.handleClick)
+  }
+
   @observer({ type: 'boolean' })
   autofocus = false
 
@@ -41,7 +53,7 @@ export class FCButton extends FusionComponent {
   value = ''
 
   @observer({ reflect: true })
-  selectable = true
+  selectable = false
 
   @observer({
     reflect: true,
@@ -72,6 +84,10 @@ export class FCButton extends FusionComponent {
 
   @observer({ reflect: true })
   tabindex = '0'
+
+  handleClick(e: MouseEvent): void {
+    if (this.selectable) this.selected = !this.selected
+  }
 
   render(): TemplateResult<1> {
     const { autofocus, disabled, name, value, type, size, form, formaction, formnovalidate, formtarget, accent } = this

@@ -1,7 +1,7 @@
 import { ReactiveElement } from '@lit/reactive-element'
 
 interface ReactiveElementWithObserver extends ReactiveElement {
-  __observer?: Map<string, string>
+  __observer?: Map<string, ObserverOptions & { name: string }>
   attributeChanged?: (name: string, oldValue: string | null, nextValue: string | null) => void
   [k: string]: any
 }
@@ -81,12 +81,18 @@ export const observer = function (options?: ObserverOptions): Observer {
           mutationsList.forEach((mutation) => {
             const { attributeName, oldValue } = mutation
             if (!attributeName) return
-            const rawName = this.__observer?.get(attributeName)
-            if (rawName) {
+            const rawOptions = this.__observer?.get(attributeName)
+            if (rawOptions?.name) {
+              const { name, converter } = rawOptions
+              const typeofValue = type ?? typeof Reflect.get(this, name)
+              const isBol = typeofValue === 'boolean'
+              const nextValue = getValueFromAttribute(this, attributeName, isBol)
+              const mergedConverter = converter ?? getConverter(this, name, type)
+              const mergedNextValue = mergedConverter ? mergedConverter(nextValue, this) : nextValue
               this.attributeChangedCallback(attributeName, oldValue, this.getAttribute(attributeName))
 
               // 通过 attribute 变化，更新 property
-              Reflect.set(this, rawName, this.getAttribute(attributeName))
+              Reflect.set(this, name, mergedNextValue)
             }
             if (attributeName) {
               // lit 改写了 `attributeChangedCallback`，只有使用了 @property() 装饰器的属性才会触发前述回调
@@ -106,7 +112,7 @@ export const observer = function (options?: ObserverOptions): Observer {
       }
 
       if (attribute) {
-        this.__observer.set(mergedAttributeName, name)
+        this.__observer.set(mergedAttributeName, { type, reflect, attribute, converter, sync, init, name })
       }
     }
 
@@ -124,14 +130,10 @@ export const observer = function (options?: ObserverOptions): Observer {
         const mergedConverter = converter ?? getConverter(this, name, type)
         const mergedNextValue = mergedConverter ? mergedConverter(nextValue, this) : nextValue
 
-        if (reflect && nextValue !== mergedNextValue) {
-          updateAttribute(this, mergedAttributeName, mergedNextValue, isBol)
-        }
-
         if (tempValue !== mergedNextValue) {
           Reflect.set(this, tempName, mergedNextValue)
           const callback = Reflect.get(this, name + 'Changed')
-          const bacCallback = Reflect.get(this, name + 'Change')
+          const badCallback = Reflect.get(this, name + 'Change')
           if (typeof callback === 'function') {
             if (sync) {
               // 同步的回调
@@ -139,7 +141,7 @@ export const observer = function (options?: ObserverOptions): Observer {
             } else {
               this.updateComplete.then(() => callback.call(this, tempValue, mergedNextValue))
             }
-          } else if (typeof bacCallback === 'function') {
+          } else if (typeof badCallback === 'function') {
             console.warn(`callback should be "${name}Changed", but not "${name}Change"!`)
           }
 
