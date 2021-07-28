@@ -65,6 +65,7 @@ export class FCButton extends FusionComponent {
   selected = false
   selectedChanged(): void {
     this.setAttribute('aria-selected', String(this.selected))
+    this.emit('select')
   }
 
   @observer({ reflect: true })
