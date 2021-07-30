@@ -6,6 +6,7 @@ import { FCDataGridRow } from '../data-grid-row'
 import { observer } from '../decorators'
 import assignedElements from '../decorators/assigned-elements'
 import { FC } from '../fusion-component'
+import { add } from '../helper'
 import mergeStyles from '../merge-styles'
 import style from './style.css'
 
@@ -23,13 +24,23 @@ export class FCDataGrid extends FC {
   sticky = false
 
   @observer({ attribute: false })
+  maxLines = 10
+
+  @observer({ attribute: false })
   @assignedElements('', 'fc-data-grid-row')
   rows?: FCDataGridRow[]
   rowsChanged(): void {
-    if (this.rows) {
-      const counts = this.rows.map((r) => r.cells?.length || 0)
+    const { rows, maxLines } = this
+    if (rows) {
+      const rowsHeight = [] as number[]
+      const counts = rows.map((r) => {
+        rowsHeight.push(r.offsetHeight)
+        return r.cells?.length || 0
+      })
       const maxCellCount = Math.max(...counts)
-      this.style.cssText = `${this.style.cssText}; --max-cell-count: ${maxCellCount}`
+      const maxRowsHeight =
+        maxLines < rowsHeight.length ? rowsHeight.slice(0, maxLines).reduce(add, 0) + 'px' : undefined
+      this.style.cssText = `${this.style.cssText}; max-height: ${maxRowsHeight}; --max-cell-count: ${maxCellCount}`
     }
   }
 
