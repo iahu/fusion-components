@@ -1,4 +1,9 @@
 :host {
   display: inline-block;
   padding: var(--padding);
+  --outline-offset: 0px;
+}
+
+:host([focused]:focus-visible) {
+  background: var(--background-hover);
 }

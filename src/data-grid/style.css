@@ -2,9 +2,10 @@
   display: block;
   width: 100%;
   overflow-y: auto;
-  max-height: calc(
-    (var(--font-size) * var(--line-height) + var(--padding-t) + var(--padding-b) + var(--border-width)) * 11
+  --item-height: calc(
+    var(--font-size) * var(--line-height) + var(--padding-t) + var(--padding-b) + var(--border-width)
   );
+  max-height: calc(var(--item-height) * 11);
 }
 
 ::slotted(fc-grid-data-row) {
@@ -16,4 +17,5 @@
   left: 0;
   top: 0;
   background: var(--background);
+  z-index: 2;
 }

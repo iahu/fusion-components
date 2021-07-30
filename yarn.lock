@@ -5440,9 +5440,10 @@ execa@^1.0.0:
     signal-exit "^3.0.0"
     strip-eof "^1.0.0"
 
-"exp-calc@https://github.com/iahu/exp-calc.git":
-  version "1.0.0"
-  resolved "https://github.com/iahu/exp-calc.git#96e355ba3288e7201db6f1d4368560d2fc3e5b0f"
+exp-calc@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.nlark.com/exp-calc/download/exp-calc-1.0.1.tgz#c935e6ee32614bf00304dd7f96751f00592ad587"
+  integrity sha1-yTXm7jJhS/ADBN1/lnUfAFkq1Yc=
 
 expand-brackets@^2.1.4:
   version "2.1.4"

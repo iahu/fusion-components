@@ -13,7 +13,11 @@ export class FCDataGridCell extends FC {
   @observer({ reflect: true })
   role = 'cell'
 
+  @observer({ reflect: true })
   tabIndex = -1
+  private tabIndexChanged() {
+    this.toggleAttribute('focused', Boolean(this.tabIndex + 1))
+  }
 
   render(): TemplateResult {
     return html`<slot></slot>`
