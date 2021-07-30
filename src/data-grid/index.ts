@@ -28,11 +28,8 @@ export class FCDataGrid extends FC {
   rowsChanged(): void {
     if (this.rows) {
       const counts = this.rows.map((r) => r.cells?.length || 0)
-      this.maxCellCount = Math.max(...counts)
-
-      this.rows.forEach((r) => {
-        r.style.gridTemplateColumns = `repeat(${this.maxCellCount}, 1fr)`
-      })
+      const maxCellCount = Math.max(...counts)
+      this.style.cssText = `${this.style.cssText}; --max-cell-count: ${maxCellCount}`
     }
   }
 

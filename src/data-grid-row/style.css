@@ -1,6 +1,7 @@
 :host {
   display: grid;
   grid-auto-flow: row;
+  grid-template-columns: repeat(var(--max-cell-count), 1fr);
   /*grid: 1fr / auto-flow auto;*/
   border-bottom: var(--border-width) solid var(--border-color);
   border-radius: 0;

@@ -8,6 +8,10 @@
   border-radius: 0;
 }
 
+::slotted(fc-grid-data-row) {
+  grid-template-columns: repeat(var(--max-cell-count), 1fr);
+}
+
 :host([sticky]) ::slotted([slot='row-header']) {
   position: sticky;
   left: 0;
