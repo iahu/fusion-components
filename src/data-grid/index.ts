@@ -12,7 +12,7 @@ import style from './style.css'
 
 @customElement('fc-data-grid')
 /**
- * data-grid 是 grid 的一种表形式，有别与另一种布局的 grid
+ * data-grid 是 grid 的一种表形式，有别于另一种 layout-grid
  */
 export class FCDataGrid extends FC {
   static styles = mergeStyles(style)
@@ -38,9 +38,8 @@ export class FCDataGrid extends FC {
         return r.cells?.length || 0
       })
       const maxCellCount = Math.max(...counts)
-      const maxRowsHeight =
-        maxLines < rowsHeight.length ? rowsHeight.slice(0, maxLines).reduce(add, 0) + 'px' : undefined
-      this.style.cssText = `${this.style.cssText}; max-height: ${maxRowsHeight}; --max-cell-count: ${maxCellCount}`
+      const maxRowsHeight = maxLines < rowsHeight.length ? rowsHeight.slice(0, maxLines).reduce(add, 0) : ''
+      this.style.cssText = `${this.style.cssText}; max-height: ${maxRowsHeight}px; --max-cell-count: ${maxCellCount}`
     }
   }
 
