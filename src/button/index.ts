@@ -85,8 +85,7 @@ export class FCButton extends FusionComponent {
   @observer()
   hotkey?: string
 
-  @observer({ reflect: true })
-  tabindex = '0'
+  tabIndex = 0
 
   handleClick(e: MouseEvent): void {
     e.preventDefault()

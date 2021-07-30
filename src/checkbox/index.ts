@@ -27,8 +27,7 @@ export class FCCheckbox extends FormAssociated {
   @observer({ reflect: true })
   role = 'checkbox'
 
-  @observer({ reflect: true })
-  tabindex = '0'
+  tabIndex = 0
 
   @observer({ type: 'boolean', reflect: true })
   checked = false

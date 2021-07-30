@@ -68,8 +68,7 @@ export class FCListBox extends FormAssociated {
     }
   }
 
-  @property({ reflect: true })
-  tabindex = '0'
+  tabIndex = 0
 
   public get visibleOptions(): FCListOption[] {
     return Array.from(this.children)

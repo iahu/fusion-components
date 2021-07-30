@@ -1,4 +1,4 @@
-import { html, PropertyValues, TemplateResult } from 'lit'
+import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { observer } from '../decorators'
 import FormAssociated from '../form-associated'
@@ -28,8 +28,7 @@ export class FCRadio extends FormAssociated {
   @observer({ reflect: true })
   role = 'radio'
 
-  @observer({ reflect: true })
-  tabindex = '0'
+  tabIndex = 0
 
   @observer({ reflect: true })
   name = ''

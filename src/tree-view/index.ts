@@ -30,8 +30,7 @@ export class FCTreeView extends FC {
   @observer({ reflect: true })
   role = 'tree'
 
-  @observer({ reflect: true })
-  tabindex = '0'
+  tabIndex = 0
 
   @observer()
   value = ''

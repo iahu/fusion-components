@@ -53,7 +53,7 @@ export class FCRadioGroup extends FC {
     const { disabled } = this
     this.items.forEach((radio) => {
       radio.disabled = disabled
-      radio.tabindex = '-1'
+      radio.tabIndex = -1
     })
   }
 
