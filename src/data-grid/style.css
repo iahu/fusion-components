@@ -1,0 +1,16 @@
+:host {
+  display: block;
+  width: 100%;
+  overflow-y: auto;
+  max-height: calc(
+    (var(--font-size) * var(--line-height) + var(--padding-t) + var(--padding-b) + var(--border-width)) * 11
+  );
+  border-radius: 0;
+}
+
+:host([sticky]) ::slotted([slot='row-header']) {
+  position: sticky;
+  left: 0;
+  top: 0;
+  background: var(--background);
+}

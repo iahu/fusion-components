@@ -5,7 +5,7 @@
 
   /*size*/
   --host-line-height: 1;
-  --line-height: 1.4;
+  --line-height: 1.5;
   --font-size-xs: calc(var(--fc-unit-size) * 12);
   --font-size-s: calc(var(--fc-unit-size) * 13);
   --font-size-m: calc(var(--fc-unit-size) * 14);
