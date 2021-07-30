@@ -19,7 +19,8 @@
     "build:dts": "tsc -p tsconfig.json --emitDeclarationOnly",
     "build:bundle": "rollup --config rollup.config.bundle.js",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "prettier": "prettier --fix --write ./src/**/*.ts"
   },
   "keywords": [
     "web components",

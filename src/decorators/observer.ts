@@ -77,8 +77,8 @@ export const observer = function (options?: ObserverOptions): Observer {
         this.__observer = new Map()
 
         // mutation observer attributes
-        const domObserver = new MutationObserver((mutationsList) => {
-          mutationsList.forEach((mutation) => {
+        const domObserver = new MutationObserver(mutationsList => {
+          mutationsList.forEach(mutation => {
             const { attributeName, oldValue } = mutation
             if (!attributeName) return
             const rawOptions = this.__observer?.get(attributeName)

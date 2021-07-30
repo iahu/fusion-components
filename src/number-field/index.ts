@@ -81,7 +81,7 @@ export class FCNumberFiled extends FCInput {
   }
 
   public get valueWithUnit(): string {
-    return [this.value, this.unit].filter((v) => v).join(' ')
+    return [this.value, this.unit].filter(v => v).join(' ')
   }
 
   public get number(): number {

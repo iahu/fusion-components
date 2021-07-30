@@ -61,7 +61,7 @@ export class FCRadio extends FormAssociated {
     const { name } = this
     if (!scope || !name) return
     const silbings = Array.from(scope.querySelectorAll(`fc-radio[name='${name}']`)) as FCRadio[]
-    silbings.forEach((e) => {
+    silbings.forEach(e => {
       if (e !== this) {
         e.checked = false
       }

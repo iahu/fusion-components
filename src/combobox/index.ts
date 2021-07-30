@@ -41,7 +41,7 @@ export class FCComboBox extends FCSelect {
 
   filterOptions(text: string): void {
     let someMatched = false
-    this.options.forEach((o) => {
+    this.options.forEach(o => {
       const matched = text === '' || this.translateCase(o.text).startsWith(this.translateCase(text))
       o.hidden = !matched
       if (matched && text === o.text) {
@@ -83,7 +83,7 @@ export class FCComboBox extends FCSelect {
   handleInputChange(): void {
     this.hidden = true
     const { inputValue } = this
-    this.selectedOption = this.visibleOptions.find((o) => this.caseCompaire(o.text, inputValue.trim()))
+    this.selectedOption = this.visibleOptions.find(o => this.caseCompaire(o.text, inputValue.trim()))
   }
 
   handleInput(e: InputEvent): void {

@@ -19,7 +19,7 @@ export class FCTreeItem extends FC {
     super.connectedCallback()
 
     // 是否嵌套子项，nested
-    this.childNodes.forEach((e) => {
+    this.childNodes.forEach(e => {
       this.clonedNodes.push(e.cloneNode(true))
       if (isTreeItem(e)) {
         e.setAttribute('slot', 'item')
@@ -30,7 +30,7 @@ export class FCTreeItem extends FC {
     this.updateComplete.then(() => {
       // 泛化成与兄弟元素一样的 nested 状态
       const siblings = Array.from(this.parentElement?.children || []).filter(isTreeItem)
-      const siblingNested = siblings.some((e) => e.nested)
+      const siblingNested = siblings.some(e => e.nested)
       this.nested = siblingNested
     })
 
@@ -80,7 +80,7 @@ export class FCTreeItem extends FC {
 
   // 本节点内容
   public get content(): Node[] {
-    return this.clonedNodes.filter((e) => !isTreeItem(e))
+    return this.clonedNodes.filter(e => !isTreeItem(e))
   }
 
   // 子节点

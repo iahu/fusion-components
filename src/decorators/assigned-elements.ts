@@ -15,7 +15,7 @@ const assignedElements = function <T extends Element>(
 
         const allElements = slots.reduce((allElements, slot) => {
           const elements = slot?.assignedElements(options ?? { flatten: true })
-          const matched = (filterSelector ? elements?.filter((e) => e.matches(filterSelector)) : elements) as T[]
+          const matched = (filterSelector ? elements?.filter(e => e.matches(filterSelector)) : elements) as T[]
           return allElements.concat(matched)
         }, [] as T[])
 

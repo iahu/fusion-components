@@ -26,7 +26,7 @@ export class FCRadioGroup extends FC {
       this.value = this.getAttribute('value') || this.value
       this.name = this.getAttribute('name') || this.name
 
-      this.items.forEach((radio) => {
+      this.items.forEach(radio => {
         radio.checked = radio.value === this.value
         radio.toggleAttribute('disabled', this.disabled)
       })
@@ -40,7 +40,7 @@ export class FCRadioGroup extends FC {
   }
 
   public get items(): FCRadio[] {
-    return this.slottedElements.filter((o) => o instanceof FCRadio) as FCRadio[]
+    return this.slottedElements.filter(o => o instanceof FCRadio) as FCRadio[]
   }
 
   public get length(): number {
@@ -51,7 +51,7 @@ export class FCRadioGroup extends FC {
   disabled = false
   protected disabledChanged(): void {
     const { disabled } = this
-    this.items.forEach((radio) => {
+    this.items.forEach(radio => {
       radio.disabled = disabled
       radio.tabIndex = -1
     })
@@ -61,7 +61,7 @@ export class FCRadioGroup extends FC {
   name = ''
   protected nameChanged(): void {
     const { name } = this
-    this.items.forEach((radio) => {
+    this.items.forEach(radio => {
       radio.name = name
     })
   }
@@ -82,7 +82,7 @@ export class FCRadioGroup extends FC {
     }
 
     const { activeElement } = this.ownerDocument
-    let idx = this.items.findIndex((r) => r === activeElement)
+    let idx = this.items.findIndex(r => r === activeElement)
     while (this.items.length && this.items[idx]) {
       idx += step
       const radio = this.items[idx % this.items.length]
@@ -96,7 +96,7 @@ export class FCRadioGroup extends FC {
 
   reorderTabindex(): void {
     let includeChecked = false
-    this.items.forEach((r) => {
+    this.items.forEach(r => {
       const { checked } = r
       r.tabIndex = checked ? 0 : -1
       if (checked) includeChecked = true

@@ -26,10 +26,10 @@ export class FCDialog extends FC {
     const { anchor } = this
     if (anchor) {
       // removeEventListener on old elements
-      this.anchorElements?.forEach((e) => e.removeEventListener('click', this.handleClick))
+      this.anchorElements?.forEach(e => e.removeEventListener('click', this.handleClick))
       this.anchorElements = Array.from(this.renderRoot.ownerDocument.querySelectorAll(anchor))
       // addEventListener on new elements
-      this.anchorElements.forEach((e) => e.addEventListener('click', this.handleClick))
+      this.anchorElements.forEach(e => e.addEventListener('click', this.handleClick))
     }
   }
 

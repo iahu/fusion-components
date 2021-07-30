@@ -40,7 +40,7 @@ export class FCTreeView extends FC {
       return
     }
 
-    const target = Array.from(this.querySelectorAll<FCTreeItem>('fc-tree-item')).find((e) => e.value === value)
+    const target = Array.from(this.querySelectorAll<FCTreeItem>('fc-tree-item')).find(e => e.value === value)
     if (target) {
       target.toggleAttribute('selected', true)
     }
@@ -60,7 +60,7 @@ export class FCTreeView extends FC {
   public get focusableItems(): FCTreeItem[] {
     const items = Array.from(this.querySelectorAll<FCTreeItem>('fc-tree-item'))
     // as unknown as FCTreeItem[]
-    return items.filter((e) => {
+    return items.filter(e => {
       const { parentElement } = e
       if (!parentElement || !isTreeItem(parentElement)) {
         return true
@@ -123,7 +123,7 @@ export class FCTreeView extends FC {
   focusNext(delta: number): void {
     const { focusableItems } = this
     this.updateComplete.then(() => {
-      const idx = focusableItems.findIndex((e) => e === this.focusedItem)
+      const idx = focusableItems.findIndex(e => e === this.focusedItem)
       let nextIdx = idx + delta
 
       while (this.focusableItems[nextIdx]) {

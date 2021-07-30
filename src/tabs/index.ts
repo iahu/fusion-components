@@ -26,8 +26,8 @@ export class FCTabs extends FC {
   connectedCallback(): void {
     super.connectedCallback()
 
-    this.tabs = Array.from(this.children).filter((e) => e.getAttribute('slot') === 'tab')
-    this.panels = Array.from(this.children).filter((e) => e.getAttribute('slot') === 'tabpanel')
+    this.tabs = Array.from(this.children).filter(e => e.getAttribute('slot') === 'tab')
+    this.panels = Array.from(this.children).filter(e => e.getAttribute('slot') === 'tabpanel')
     this.activeid = this.getAttribute('activeid') || this.nextFocusableTab(1)?.getAttribute('id') || null
 
     this.addEventListener('select', this.handleSelect)
@@ -81,13 +81,13 @@ export class FCTabs extends FC {
   protected activeTabChanged(): void {
     this.activeid = this.activeTab?.id || null
 
-    this.tabs.forEach((t) => {
+    this.tabs.forEach(t => {
       if (focusable(t)) {
         t.setAttribute('tabindex', '-1')
         t.toggleAttribute('selected', false)
       }
     })
-    this.panels.forEach((p) => {
+    this.panels.forEach(p => {
       p.setAttribute('hidden', 'true')
       p.removeAttribute('tabindex')
     })
@@ -101,7 +101,7 @@ export class FCTabs extends FC {
     }
 
     const controlsId = activeTab.getAttribute('aria-controls')
-    const controlsPanel = this.panels.find((p) => p.getAttribute('id') === controlsId)
+    const controlsPanel = this.panels.find(p => p.getAttribute('id') === controlsId)
     if (controlsPanel) {
       controlsPanel.removeAttribute('hidden')
       if (focusable(activeTab)) {
@@ -114,14 +114,14 @@ export class FCTabs extends FC {
   activeid: string | null = ''
   protected activeidChanged(): void {
     const { activeid } = this
-    this.activeTab = this.tabs.find((t) => t.getAttribute('id') === activeid)
+    this.activeTab = this.tabs.find(t => t.getAttribute('id') === activeid)
   }
 
   @observer({ init: false })
   disabled = this.hasAttribute('disabled')
   protected disabledChanged(): void {
     if (this.disabled) {
-      this.tabs.forEach((t) => t.toggleAttribute('disabled', true))
+      this.tabs.forEach(t => t.toggleAttribute('disabled', true))
     }
   }
 
@@ -129,7 +129,7 @@ export class FCTabs extends FC {
   direction = 'column'
   protected directionChanged(): void {
     const { direction } = this
-    this.tabs.forEach((t) => t.setAttribute('direction', direction))
+    this.tabs.forEach(t => t.setAttribute('direction', direction))
   }
 
   handleSelect(e: Event): void {
@@ -180,7 +180,7 @@ export class FCTabs extends FC {
   nextFocusableTab(delta: number): FCTab | undefined {
     const { activeElement } = this.ownerDocument
 
-    let idx = this.tabs.findIndex((t) => t === activeElement)
+    let idx = this.tabs.findIndex(t => t === activeElement)
     const { length } = this.tabs
 
     while (idx < length) {
@@ -196,7 +196,7 @@ export class FCTabs extends FC {
     if (!tab || !focusable(tab)) {
       return
     }
-    this.tabs.forEach((t) => {
+    this.tabs.forEach(t => {
       if (focusable(t)) {
         t.setAttribute('tabindex', '-1')
       }

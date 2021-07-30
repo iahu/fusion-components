@@ -18,7 +18,7 @@ export class FCListBox extends FormAssociated {
 
     this.updateComplete.then(() => {
       // 校验子元素，并传递要继承的属性
-      this.options?.forEach((option) => {
+      this.options?.forEach(option => {
         // 只保留合法的 Option 元素
         if (!isOption(option)) {
           ;(option as HTMLElement).remove()
@@ -41,7 +41,7 @@ export class FCListBox extends FormAssociated {
   disabled = false
   protected disabledChanged(): void {
     if (this.disabled) {
-      this.options.forEach((op) => (op.disabled = true))
+      this.options.forEach(op => (op.disabled = true))
     }
   }
 
@@ -56,7 +56,7 @@ export class FCListBox extends FormAssociated {
       this.selectedOption.select(false)
     } else {
       let selectedOption: FCListOption | undefined = undefined
-      this.options.forEach((op) => {
+      this.options.forEach(op => {
         if (op.getAttribute('value') === next) {
           selectedOption = op
           op.select(true)
@@ -73,11 +73,11 @@ export class FCListBox extends FormAssociated {
   public get visibleOptions(): FCListOption[] {
     return Array.from(this.children)
       .filter(isOption)
-      .filter((o) => !o.hidden)
+      .filter(o => !o.hidden)
   }
   public set visibleOptions(options: FCListOption[]) {
     this.innerHTML = ''
-    options.forEach((op) => this.appendChild(op))
+    options.forEach(op => this.appendChild(op))
   }
 
   @observer({
@@ -85,13 +85,13 @@ export class FCListBox extends FormAssociated {
     converter(op: FCListOption[], host: FCListBox) {
       return Array.from(host.children)
         .filter(isOption)
-        .map((e) => e.cloneNode(true) as FCListOption)
+        .map(e => e.cloneNode(true) as FCListOption)
     },
   })
   options = [] as FCListOption[]
   protected optionsChanged(): void {
     this.innerHTML = ''
-    this.options.forEach((o) => isOption(o) && this.appendChild(o))
+    this.options.forEach(o => isOption(o) && this.appendChild(o))
   }
 
   @observer({
@@ -106,7 +106,7 @@ export class FCListBox extends FormAssociated {
   }
 
   getItem(index: number): FCListOption | undefined {
-    return this.visibleOptions.find((o) => o.index === index)
+    return this.visibleOptions.find(o => o.index === index)
   }
 
   // 可以避免 value 相同时，设置 value 导致选择错乱的问题
@@ -138,7 +138,7 @@ export class FCListBox extends FormAssociated {
       Reflect.set(this, '__indicatedIndex', mergedIndex)
       return
     }
-    this.options.forEach((o) => {
+    this.options.forEach(o => {
       if (o.index === indicatedIndex) {
         o.focusItem(true)
         o.scrollIntoView({ block: 'nearest' })

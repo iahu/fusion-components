@@ -50,7 +50,7 @@ export class FCListOption extends FC {
     const { parentElement } = this
     // index 只与 ListBox 绑定
     if (parentElement instanceof FCListBox) {
-      return parentElement.visibleOptions.findIndex((e) => e === this)
+      return parentElement.visibleOptions.findIndex(e => e === this)
     }
     return -1
   }

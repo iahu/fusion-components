@@ -14,14 +14,14 @@ export class FCTooltip extends FC {
 
     this.anchor = this.getAttribute('anchor')
     this.anchorElements = this.anchor ? Array.from(this.renderRoot.ownerDocument.querySelectorAll(this.anchor)) : null
-    this.anchorElements?.forEach((e) => {
+    this.anchorElements?.forEach(e => {
       e.addEventListener('mouseenter', this.handleMouseenter)
       e.addEventListener('mouseleave', this.handleMouseleave)
     })
   }
   disconnectedCallback(): void {
     super.disconnectedCallback()
-    this.anchorElements?.forEach((e) => {
+    this.anchorElements?.forEach(e => {
       e.removeEventListener('mouseenter', this.handleMouseenter)
       e.removeEventListener('mouseleave', this.handleMouseleave)
     })

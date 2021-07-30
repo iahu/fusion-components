@@ -33,7 +33,7 @@ export class FCDataGrid extends FC {
     const { rows, maxLines } = this
     if (rows) {
       const rowsHeight = [] as number[]
-      const counts = rows.map((r) => {
+      const counts = rows.map(r => {
         rowsHeight.push(r.offsetHeight)
         return r.cells?.length || 0
       })
