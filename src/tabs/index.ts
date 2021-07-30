@@ -33,7 +33,7 @@ export class FCTabs extends FC {
     this.addEventListener('select', this.handleSelect)
   }
 
-  disconnectedCallback() {
+  disconnectedCallback(): void {
     super.disconnectedCallback()
 
     this.removeEventListener('select', this.handleSelect)
@@ -41,7 +41,7 @@ export class FCTabs extends FC {
 
   @observer({ attribute: false, init: false })
   tabs = [] as Element[]
-  tabsChanged(): void {
+  protected tabsChanged(): void {
     this.tabs?.forEach((e, idx) => {
       if (!e.getAttribute('id')) {
         e.setAttribute('id', `tab-${idx}`)
@@ -51,7 +51,7 @@ export class FCTabs extends FC {
 
   @observer({ attribute: false, init: false })
   panels = [] as Element[]
-  panelsChanged(): void {
+  protected panelsChanged(): void {
     const { index } = FCTabs
     const { activeTab } = this
     this.panels?.forEach((p, idx) => {
@@ -78,7 +78,7 @@ export class FCTabs extends FC {
 
   @observer({ attribute: false, init: false })
   activeTab?: Element
-  activeTabChanged(): void {
+  protected activeTabChanged(): void {
     this.activeid = this.activeTab?.id || null
 
     this.tabs.forEach((t) => {
@@ -112,14 +112,14 @@ export class FCTabs extends FC {
 
   @observer({ init: false })
   activeid: string | null = ''
-  activeidChanged(): void {
+  protected activeidChanged(): void {
     const { activeid } = this
     this.activeTab = this.tabs.find((t) => t.getAttribute('id') === activeid)
   }
 
   @observer({ init: false })
   disabled = this.hasAttribute('disabled')
-  disabledChanged(): void {
+  protected disabledChanged(): void {
     if (this.disabled) {
       this.tabs.forEach((t) => t.toggleAttribute('disabled', true))
     }
@@ -127,7 +127,7 @@ export class FCTabs extends FC {
 
   @observer({ reflect: true })
   direction = 'column'
-  directionChanged(): void {
+  protected directionChanged(): void {
     const { direction } = this
     this.tabs.forEach((t) => t.setAttribute('direction', direction))
   }

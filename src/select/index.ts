@@ -36,8 +36,7 @@ export class FCSelect extends FCListBox {
 
   @observer()
   hidden = true
-  hiddenChanged(): void {
-    this.setAttribute('aria-expanded', (!this.hidden).toString())
+  protected hiddenChanged(): void {
     if (!this.hidden) {
       this.updateComplete.then(() => {
         this.selectedOption?.scrollIntoView({ block: 'nearest' })

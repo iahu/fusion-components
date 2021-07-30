@@ -68,10 +68,11 @@
   /*background colors*/
   --background: hsla(203, 7%, 34%, 1);
   --background-hover: hsla(203, 3%, 44%, 1);
-  --background-active: hsla(203, 7%, 44%, 1);
-  --background-selected: hsla(203, 11%, 37%, 1);
+  --background-active: hsla(203, 3%, 49%, 1);
+  --background-selected: hsla(203, 14%, 42%, 1);
   --background-selected-disabled: hsla(203, 34%, 47%, 1);
   --background-selected-hover: var(--background-selected);
+  --background-selected-active: var(--background-selected);
   --background-disabled: hsla(203, 0%, 27%, 1);
 
   /*border-colors*/

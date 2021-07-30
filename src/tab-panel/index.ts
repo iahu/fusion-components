@@ -17,9 +17,6 @@ export class FCTabPanel extends FC {
 
   @observer()
   disabled = false
-  disabledChanged(): void {
-    this.setAttribute('aria-disabled', this.disabled.toString())
-  }
 
   render(): TemplateResult<1> {
     return html`<slot></slot>`

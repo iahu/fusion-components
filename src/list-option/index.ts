@@ -61,9 +61,7 @@ export class FCListOption extends FC {
 
   @observer({ type: 'boolean', reflect: true })
   selected = false
-  selectedChanged(): void {
-    this.setAttribute('aria-selected', this.selected.toString())
-
+  protected selectedChanged(): void {
     this.emit('select')
   }
 

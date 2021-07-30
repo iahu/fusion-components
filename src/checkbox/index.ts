@@ -21,14 +21,6 @@ export class FCCheckbox extends FormAssociated {
     this.updateForm()
   }
 
-  willUpdate(p: PropertyValues<this>): void {
-    super.willUpdate(p)
-    this.setAttribute('aria-checked', this.checked.toString())
-    this.setAttribute('aria-disabled', this.disabled.toString())
-    this.setAttribute('aria-required', this.required.toString())
-    this.classList.toggle('readonly', this.readOnly)
-  }
-
   @observer()
   value = 'on'
 
@@ -49,6 +41,9 @@ export class FCCheckbox extends FormAssociated {
 
   @observer({ type: 'boolean', reflect: true })
   readOnly = false
+  readOnlyChanged(): void {
+    this.classList.toggle('readonly', this.readOnly)
+  }
 
   updateForm(): void {
     const value = this.checked ? this.value : null

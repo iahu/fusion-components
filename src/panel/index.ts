@@ -21,8 +21,7 @@ export class FCPanel extends FC {
 
   @observer({ reflect: true })
   hidden = false
-  private hiddenChanged(): void {
-    this.setAttribute('aria-hidden', this.hidden.toString())
+  protected hiddenChanged(): void {
     this.emit('visibleChange')
   }
 

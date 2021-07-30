@@ -22,14 +22,6 @@ export class FCRadio extends FormAssociated {
     this.removeEventListener('click', this.handleClick)
   }
 
-  willUpdate(p: PropertyValues<this>): void {
-    super.willUpdate(p)
-    this.setAttribute('aria-checked', this.checked.toString())
-    this.setAttribute('aria-disabled', this.disabled.toString())
-    this.setAttribute('aria-required', this.required.toString())
-    this.classList.toggle('readonly', this.readOnly)
-  }
-
   @observer()
   value = 'on'
 
@@ -45,7 +37,7 @@ export class FCRadio extends FormAssociated {
   // @observer({ type: Boolean, reflect: true })
   @observer({ reflect: true })
   checked = false
-  checkedChanged(): void {
+  protected checkedChanged(): void {
     if (this.checked) {
       this.uniqueChecked()
       this.updateForm()
@@ -61,6 +53,9 @@ export class FCRadio extends FormAssociated {
 
   @observer({ type: 'boolean', reflect: true })
   readOnly = false
+  readOnlyChanged(): void {
+    this.classList.toggle('readonly', this.readOnly)
+  }
 
   uniqueChecked(): void {
     const scope = this.form || this.closest('fc-radio-group') || this.ownerDocument.body

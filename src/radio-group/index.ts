@@ -49,7 +49,7 @@ export class FCRadioGroup extends FC {
 
   @observer({ type: 'boolean', reflect: true })
   disabled = false
-  disabledChanged(): void {
+  protected disabledChanged(): void {
     const { disabled } = this
     this.items.forEach((radio) => {
       radio.disabled = disabled
@@ -59,7 +59,7 @@ export class FCRadioGroup extends FC {
 
   @observer()
   name = ''
-  nameChanged(): void {
+  protected nameChanged(): void {
     const { name } = this
     this.items.forEach((radio) => {
       radio.name = name
@@ -71,7 +71,7 @@ export class FCRadioGroup extends FC {
 
   @observer()
   value = ''
-  valueChanged(): void {
+  protected valueChanged(): void {
     this.reorderTabindex()
   }
 

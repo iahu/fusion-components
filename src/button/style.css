@@ -48,9 +48,9 @@
   background: var(--background-selected);
 }
 
-:host([disabled]) {
+/*:host([disabled]) {
   opacity: 0.3;
-}
+}*/
 
 :host([outline]) {
   border-color: var(--border-color);
@@ -65,26 +65,30 @@
   border-color: var(--border-color-active);
 }
 
-:host(:not(:disabled):hover) {
+:host(:not([disabled]):hover) {
   background: var(--background-hover);
 }
 
-:host(:not(:disabled):active) {
+:host([selected]:not([disabled]):hover) {
+  background: var(--background-selected-hover);
+}
+
+:host([selected][disabled]) {
+  background: var(--background-disabled);
+}
+
+:host(:not([disabled]):active) {
   background: var(--background-active);
 }
 
-:host([selected][disabled]) {
-  /*opacity: 0.5;*/
-  background: var(--background-disabled);
+:host(:not([disabled])[selectable]:active) {
+  background: var(--background-selected-active);
 }
 
-:host([selected][disabled]) {
-  /*opacity: 0.5;*/
+:host([disabled]) {
+  opacity: 0.3;
   background: var(--background-disabled);
-}
-
-:host([selected]:hover) {
-  background: var(--background-selected-hover);
+  cursor: not-allowed;
 }
 
 /*secondary*/

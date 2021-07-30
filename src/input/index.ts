@@ -89,7 +89,7 @@ export class FCInput extends FormAssociated {
 
   @observer()
   readonly = false
-  readonlyChanged(): void {
+  protected readonlyChanged(): void {
     this.classList.toggle('read-only', this.readonly)
   }
 

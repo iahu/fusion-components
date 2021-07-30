@@ -22,7 +22,7 @@ export class FCDialog extends FC {
 
   @observer()
   anchor: string | null = this.getAttribute('anchor')
-  anchorChanged(): void {
+  protected anchorChanged(): void {
     const { anchor } = this
     if (anchor) {
       // removeEventListener on old elements
@@ -47,9 +47,6 @@ export class FCDialog extends FC {
 
   @observer({ reflect: true })
   hidden = true
-  hiddenChanged(): void {
-    this.setAttribute('aria-hidden', this.hidden.toString())
-  }
 
   @observer({ reflect: true })
   protected role = 'dialog'

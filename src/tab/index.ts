@@ -6,18 +6,18 @@ import mergeStyles from '../merge-styles'
 
 import style from './style.css'
 
-export const isTab = (e: Element) => e instanceof FCTab || e.tagName.toLowerCase() === 'fc-tab'
+export const isTab = (e: Element): e is FCTab => e instanceof FCTab || e.tagName.toLowerCase() === 'fc-tab'
 
 @customElement('fc-tab')
 export class FCTab extends FC {
   static styles = mergeStyles(style)
 
-  connectedCallback() {
+  connectedCallback(): void {
     super.connectedCallback()
     this.addEventListener('click', this.handleClick)
   }
 
-  disconnectedCallback() {
+  disconnectedCallback(): void {
     super.disconnectedCallback()
     this.removeEventListener('click', this.handleClick)
   }
@@ -27,8 +27,7 @@ export class FCTab extends FC {
 
   @observer({ reflect: true })
   selected = false
-  selectedChanged(old: boolean, next: boolean) {
-    this.setAttribute('aria-selected', this.selected.toString())
+  protected selectedChanged(old: boolean, next: boolean): void {
     if (this.selected) {
       this.emit('select')
     }
@@ -36,17 +35,11 @@ export class FCTab extends FC {
 
   @observer()
   disabled = false
-  disabledChanged(): void {
-    this.setAttribute('aria-disabled', this.disabled.toString())
-  }
 
   @observer({ reflect: true })
   readonly = this.hasAttribute('readonly')
-  readonlyChanged() {
-    this.setAttribute('aria-disabled', this.readonly.toString())
-  }
 
-  handleClick(e: MouseEvent) {
+  handleClick(e: MouseEvent): void {
     e.preventDefault()
     this.selected = true
   }

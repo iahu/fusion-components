@@ -35,7 +35,7 @@ export class FCTreeView extends FC {
 
   @observer()
   value = ''
-  valueChanged(): void {
+  protected valueChanged(): void {
     const { value } = this
     if (!value) {
       return

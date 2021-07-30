@@ -1,6 +1,17 @@
 import { html, LitElement, PropertyValues, TemplateResult } from 'lit'
 import { observer } from './decorators'
 
+const boolAriaAttrNameList = [
+  'selected',
+  'hidden',
+  'disabled',
+  'readonly',
+  'readOnly',
+  'expanded',
+  'checked',
+  'required',
+]
+
 abstract class FusionComponent extends LitElement {
   public get root(): HTMLElement {
     return this.shadowRoot?.firstElementChild as HTMLElement
@@ -9,7 +20,22 @@ abstract class FusionComponent extends LitElement {
   public get control(): HTMLElement | null | undefined {
     return this.shadowRoot?.querySelector('.control')
   }
-  attributeChanged(name: string, pre: string | null, next: string | null): void {}
+
+  connectedCallback(): void {
+    super.connectedCallback()
+    boolAriaAttrNameList.forEach((name) => {
+      if (Reflect.ownKeys(this).includes(`__${name}`)) {
+        this.setAttribute(`aria-${name}`, this.hasAttribute(name).toString())
+      }
+    })
+  }
+
+  protected attributeChanged(name: string, old: string | null, next: string | null): void {
+    if (boolAriaAttrNameList.includes(name)) {
+      this.setAttribute(`aria-${name}`, Reflect.get(this, name))
+    }
+  }
+
   updated(p: PropertyValues<this>): void {
     p.forEach((v, k) => {
       if (!this[k] && this.control?.hasAttribute(k.toString())) {
@@ -28,7 +54,7 @@ abstract class FusionComponent extends LitElement {
 
   @observer()
   className = ''
-  classNameChanged(): void {
+  protected classNameChanged(old: string, next: string): void {
     this.className.split(/\s+/g).forEach((cls) => cls && this.classList.add(cls))
     this.removeAttribute('className')
   }

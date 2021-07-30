@@ -76,7 +76,7 @@ export class FCNumberFiled extends FCInput {
     },
   })
   value = ''
-  valueChanged(old: string, next: string): void {
+  protected valueChanged(old: string, next: string): void {
     this.updateInputValue(this.valueWithUnit)
   }
 

@@ -54,8 +54,7 @@ export class FCTooltip extends FC {
 
   @observer()
   visible = false
-  visibleChanged(): void {
-    this.setAttribute('aria-hidden', (!this.visible).toString())
+  protected visibleChanged(): void {
     if (this.visible) {
       this.visibleTimeout = setTimeout(() => {
         const { anchorPosition, tooltip } = this

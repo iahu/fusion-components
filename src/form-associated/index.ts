@@ -138,7 +138,7 @@ export default class FormAssociated extends FC {
 
   @observer({ init: false })
   value = ''
-  valueChanged(old: string, next: string): void {
+  protected valueChanged(old: string, next: string): void {
     this.dirtyValue = true
   }
 

@@ -39,7 +39,7 @@ export class FCListBox extends FormAssociated {
 
   @observer()
   disabled = false
-  disabledChanged(): void {
+  protected disabledChanged(): void {
     if (this.disabled) {
       this.options.forEach((op) => (op.disabled = true))
     }
@@ -50,7 +50,7 @@ export class FCListBox extends FormAssociated {
 
   @observer()
   value = this.getAttribute('value') || ''
-  valueChanged(old: string, next: string): void {
+  protected valueChanged(old: string, next: string): void {
     // unselect previous selectedOption
     if (this.selectedOption && this.dirtyValue) {
       this.selectedOption.select(false)
@@ -90,7 +90,7 @@ export class FCListBox extends FormAssociated {
     },
   })
   options = [] as FCListOption[]
-  optionsChanged(): void {
+  protected optionsChanged(): void {
     this.innerHTML = ''
     this.options.forEach((o) => isOption(o) && this.appendChild(o))
   }
@@ -102,7 +102,7 @@ export class FCListBox extends FormAssociated {
     },
   })
   length = this.options.length
-  lengthChanged(): void {
+  protected lengthChanged(): void {
     this.options = this.options.slice(0, this.length)
   }
 
@@ -113,7 +113,7 @@ export class FCListBox extends FormAssociated {
   // 可以避免 value 相同时，设置 value 导致选择错乱的问题
   @observer({ attribute: false })
   selectedOption?: FCListOption
-  selectedOptionChanged(old: FCListOption | undefined, next: FCListOption | undefined): void {
+  protected selectedOptionChanged(old: FCListOption | undefined, next: FCListOption | undefined): void {
     if (old) {
       old.focusItem(false)
       old.select(false)
@@ -128,7 +128,7 @@ export class FCListBox extends FormAssociated {
 
   @observer({ attribute: false })
   indicatedIndex = -1
-  indicatedIndexChanged(): void {
+  protected indicatedIndexChanged(): void {
     const indicatedIndex = this.indicatedIndex
     const mergedIndex = Math.max(-1, Math.min(indicatedIndex, this.length - 1))
     if (mergedIndex === -1) {

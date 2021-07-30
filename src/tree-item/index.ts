@@ -61,18 +61,17 @@ export class FCTreeItem extends FC {
 
   @observer({ reflect: true })
   selected = false
-  selectedChanged(): void {
+  protected selectedChanged(): void {
     if (this.disabled) {
       return
     }
     // this.focusItem(this.selected)
-    this.setAttribute('aria-selected', this.selected.toString())
     this.emit('selectionChange')
   }
 
   @observer()
   nested = false
-  nestedChanged(): void {
+  protected nestedChanged(): void {
     this.classList.toggle('nested', this.nested)
   }
 
@@ -94,8 +93,7 @@ export class FCTreeItem extends FC {
 
   @observer({ reflect: true })
   expanded = false
-  expandedChanged(): void {
-    this.setAttribute('aria-expanded', this.expanded.toString())
+  protected expandedChanged(): void {
     this.emit('expand')
   }
 

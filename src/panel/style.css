@@ -7,17 +7,9 @@
   background: var(--box-background);
   color: var(--foreground);
 }
-.panel-header {
-  min-height: calc(var(--font-size) + var(--padding-t) + var(--padding-b));
-}
+
 .panel-body {
   flex: 1;
   position: relative;
   overflow-y: auto;
-}
-
-::part(close-button),
-fc-panel-header:defined {
-  background: inherit;
-  color: inherit;
 }
