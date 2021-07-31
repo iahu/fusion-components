@@ -41,7 +41,7 @@ export class FCTab extends FC {
 
   handleClick(e: MouseEvent): void {
     e.preventDefault()
-    this.selected = true
+    this.selected = !this.disabled
   }
 
   render(): TemplateResult<1> {
