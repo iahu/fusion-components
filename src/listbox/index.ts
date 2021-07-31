@@ -5,6 +5,8 @@ import FormAssociated from '../form-associated'
 import mergeStyles from '../merge-styles'
 import { FCListOption, isOption } from '../list-option'
 import style from './style.css'
+import assignedElements from '../decorators/assigned-elements'
+import { focusable } from '../helper'
 
 @customElement('fc-listbox')
 export class FCListBox extends FormAssociated {
@@ -13,24 +15,14 @@ export class FCListBox extends FormAssociated {
   connectedCallback(): void {
     super.connectedCallback()
     this.addEventListener('keydown', this.handleKeydown)
-    this.addEventListener('select', this.handleSelect)
+    this.addEventListener('click', this.handleClick)
     this.addEventListener('blur', this.handleBlur)
-
-    this.updateComplete.then(() => {
-      // 校验子元素，并传递要继承的属性
-      this.options?.forEach(option => {
-        // 只保留合法的 Option 元素
-        if (!isOption(option)) {
-          ;(option as HTMLElement).remove()
-        }
-      })
-    })
   }
 
   disconnectedCallback(): void {
     super.disconnectedCallback()
     this.removeEventListener('keydown', this.handleKeydown)
-    this.removeEventListener('select', this.handleSelect)
+    this.removeEventListener('click', this.handleClick)
     this.removeEventListener('blur', this.handleBlur)
   }
 
@@ -41,7 +33,9 @@ export class FCListBox extends FormAssociated {
   disabled = false
   protected disabledChanged(): void {
     if (this.disabled) {
-      this.options.forEach(op => (op.disabled = true))
+      this.updateComplete.then(() => {
+        this.options.forEach(op => (op.disabled = true))
+      })
     }
   }
 
@@ -51,25 +45,32 @@ export class FCListBox extends FormAssociated {
   @observer()
   value = this.getAttribute('value') || ''
   protected valueChanged(old: string, next: string): void {
-    // unselect previous selectedOption
-    if (this.selectedOption && this.dirtyValue) {
-      this.selectedOption.select(false)
-    } else {
-      let selectedOption: FCListOption | undefined = undefined
-      this.options.forEach(op => {
-        if (op.getAttribute('value') === next) {
-          selectedOption = op
-          op.select(true)
-        } else {
-          op.select(false)
-        }
-      })
-      this.selectedOption = selectedOption
+    if (!this.selectable) {
+      return
     }
+
+    this.updateComplete.then(() => {
+      this.visibleOptions.find(op => op.select)?.select(false)
+      const nextOption = this.visibleOptions.find(op => op.value === next)
+      if (nextOption) {
+        nextOption.select(true)
+        this.selectedOption = nextOption
+      }
+    })
+  }
+
+  @observer()
+  selectable = true
+  selectableChanged(old: boolean, next: boolean): void {
+    this.updateComplete.then(() => {
+      if (!this.selectable) {
+        this.options.forEach(op => (op.selectable = false))
+      }
+    })
   }
 
   @observer({ reflect: true })
-  tabIndex = 0
+  tabIndex = -1
 
   public get visibleOptions(): FCListOption[] {
     return Array.from(this.children)
@@ -81,27 +82,17 @@ export class FCListBox extends FormAssociated {
     options.forEach(op => this.appendChild(op))
   }
 
-  @observer({
-    attribute: false,
-    converter(op: FCListOption[], host: FCListBox) {
-      return Array.from(host.children)
-        .filter(isOption)
-        .map(e => e.cloneNode(true) as FCListOption)
-    },
-  })
+  @observer({ attribute: false })
+  @assignedElements()
   options = [] as FCListOption[]
-  protected optionsChanged(): void {
-    this.innerHTML = ''
-    this.options.forEach(o => isOption(o) && this.appendChild(o))
-  }
 
   @observer({
     attribute: false,
     converter(v: number, host: FCListBox) {
-      return host.options.length
+      return host.visibleOptions.length
     },
   })
-  length = this.options.length
+  length = this.visibleOptions.length
   protected lengthChanged(): void {
     this.options = this.options.slice(0, this.length)
   }
@@ -118,7 +109,7 @@ export class FCListBox extends FormAssociated {
       old.focusItem(false)
       old.select(false)
     }
-
+    // 没有 next 就清空
     const { selectedOption } = this
     this.value = selectedOption?.value ?? ''
     this.displayValue = selectedOption?.text || ''
@@ -128,26 +119,6 @@ export class FCListBox extends FormAssociated {
 
   @observer({ attribute: false })
   indicatedIndex = -1
-  protected indicatedIndexChanged(): void {
-    const indicatedIndex = this.indicatedIndex
-    const mergedIndex = Math.max(-1, Math.min(indicatedIndex, this.length - 1))
-    if (mergedIndex === -1) {
-      this.getItem(this.indicatedIndex)?.focusItem(false)
-      return
-    }
-    if (mergedIndex !== indicatedIndex) {
-      Reflect.set(this, '__indicatedIndex', mergedIndex)
-      return
-    }
-    this.options.forEach(o => {
-      if (o.index === indicatedIndex) {
-        o.focusItem(true)
-        o.scrollIntoView({ block: 'nearest' })
-      } else {
-        o.focusItem(false)
-      }
-    })
-  }
 
   public get _HANDLED_KEYS(): Record<string, string> {
     return { ArrowDown: 'ArrowDown', ArrowUp: 'ArrowUp', Enter: 'Enter' }
@@ -177,22 +148,26 @@ export class FCListBox extends FormAssociated {
     }
   }
 
-  handleSelect(e: Event): void {
-    if (e.target instanceof FCListOption) {
-      if (e.target.hasAttribute('selected')) {
-        this.select(e.target.index)
+  handleClick(e: MouseEvent): void {
+    const { srcElement } = e
+    if (srcElement instanceof FCListOption) {
+      if (focusable(srcElement) && srcElement.selected) {
+        this.selectedOption = srcElement
       }
     }
   }
 
   focusNextOption(start = this.indicatedIndex, step = 1): void {
-    const { visibleOptions } = this
-    this.selectedOption?.focusItem(false)
-    const nextOption = visibleOptions[start + step]
-    nextOption?.focusItem(true)
-    this.indicatedIndex = nextOption?.index ?? this.indicatedIndex
-    if (nextOption !== this.selectedOption) {
-      this.emit('selection-change')
+    const { visibleOptions, length } = this
+    this.visibleOptions.forEach(op => op.focusItem(false))
+    const nextIdx = (start + step + length) % length
+    const nextOption = visibleOptions[nextIdx]
+    if (nextOption) {
+      nextOption.focusItem(true)
+      this.indicatedIndex = nextOption.index
+      if (nextOption !== this.selectedOption) {
+        this.emit('selection-change')
+      }
     }
   }
 
@@ -207,11 +182,10 @@ export class FCListBox extends FormAssociated {
   }
 
   handleBlur(): void {
-    this.getItem(this.indicatedIndex)?.focusItem(false)
     this.indicatedIndex = -1
   }
 
-  render(): TemplateResult<1> {
+  render(): TemplateResult {
     return html`<slot></slot>`
   }
 }

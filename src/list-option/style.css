@@ -12,8 +12,7 @@
 }
 
 :host(:focus),
-:host(.focused),
-:host(.active) {
+:host([focused]) {
   background-color: var(--background-active);
 }
 
@@ -23,6 +22,9 @@
 
 :host([selected]) {
   background: var(--accent-color);
+}
+:host([selected][focused]) {
+  background: var(--accent-color-hover);
 }
 
 :host(:disabled) {

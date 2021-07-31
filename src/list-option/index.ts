@@ -34,12 +34,39 @@ export class FCListOption extends FC {
   role = 'option'
 
   @observer()
+  selectable = true
+
+  @observer({
+    type: 'boolean',
+    reflect: true,
+    converter(v: boolean, host: FCListOption) {
+      return host.selectable && v
+    },
+  })
+  selected = false
+  protected selectedChanged(): void {
+    this.emit('select')
+  }
+
+  select(selected = true): void {
+    if (selected !== this.selected) {
+      this.selected = selected
+    }
+  }
+
+  @observer({ attribute: false })
+  defaultSelected = this.hasAttribute('selected')
+
+  @observer({ type: 'boolean', reflect: true })
+  disabled = false
+
+  @observer()
   value = ''
 
   // 不能真的获取焦点，因为在 comobox 下，焦点应该在输入框上
   focusItem(focused = true): void {
-    this.classList.toggle('focused', focused)
-    this.classList.toggle('active', focused)
+    this.toggleAttribute('focused', focused)
+    this.scrollIntoView({ block: 'nearest' })
   }
 
   public get form(): HTMLFormElement | null {
@@ -59,31 +86,12 @@ export class FCListOption extends FC {
     return this.getAttribute('label') || this.textContent || ''
   }
 
-  @observer({ type: 'boolean', reflect: true })
-  selected = false
-  protected selectedChanged(): void {
-    this.emit('select')
-  }
-
-  select(selected = true): void {
-    if (selected !== this.selected) {
-      this.selected = selected
-    }
-  }
-
-  @observer({ attribute: false })
-  defaultSelected = this.hasAttribute('selected')
-
-  @observer({ type: 'boolean', reflect: true })
-  disabled = false
-
   handleClick(e: MouseEvent): void {
     e.preventDefault()
-    e.stopPropagation()
-    this.selected = !this.selected
+    this.selected = !this.disabled && this.selectable
   }
 
-  render(): TemplateResult<1> {
+  render(): TemplateResult {
     return html`<div class="control" part="control" role="option">
       ${before()}
       <span class="icon">

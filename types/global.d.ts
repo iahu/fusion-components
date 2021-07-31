@@ -11,4 +11,5 @@ declare module '*.css' {
 declare interface CSSStyleDeclaration {
   '--grid-template-columns': string
   '--max-cell-count': string
+  '--client-height': string
 }

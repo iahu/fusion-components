@@ -1,6 +1,7 @@
 import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { observer } from '../decorators'
+import { joinParams, parseParams } from '../helper'
 import { FCListBox } from '../listbox'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
@@ -19,39 +20,40 @@ export class FCSelect extends FCListBox {
 
   connectedCallback(): void {
     super.connectedCallback()
-    this.addEventListener('keydown', this.handleKeydown)
     this.addEventListener('focusout', this.handleFocusout)
-    this.addEventListener('select', this.handleSelect)
   }
 
   disconnectedCallback(): void {
     super.disconnectedCallback()
-    this.removeEventListener('keydown', this.handleKeydown)
     this.removeEventListener('focusout', this.handleFocusout)
-    this.removeEventListener('select', this.handleSelect)
+  }
+
+  @observer()
+  displayValue = ''
+  displayValueChanged(): void {
+    this.opened = false
   }
 
   @observer({ reflect: true })
   role = 'listbox'
 
   @observer({ reflect: true })
+  tabIndex = 0
+
+  @observer({ reflect: true })
   opened = false
   protected openedChanged(): void {
     if (this.opened) {
-      this.style.cssText += `; --client-height: ${this.clientHeight}px`
+      const cssText = parseParams(this.style.cssText)
+      this.style.cssText = joinParams({ '--client-height': `${this.clientHeight}px`, ...cssText })
       this.updateComplete.then(() => {
         this.selectedOption?.scrollIntoView({ block: 'nearest' })
       })
     }
   }
 
-  handleSelect(e: Event): void {
-    super.handleSelect(e)
-    this.opened = false
-  }
-
   handleKeydown(e: KeyboardEvent): void {
-    if (this.opened && Object.values(this._HANDLED_KEYS).includes(e.key)) {
+    if (!this.opened && Object.values(this._HANDLED_KEYS).includes(e.key)) {
       e.preventDefault()
       this.opened = true
     } else {
@@ -72,17 +74,16 @@ export class FCSelect extends FCListBox {
   })
   position = 'bottom'
 
-  handleClick(e: MouseEvent): void {
-    if (!this.disabled) {
-      this.opened = !this.opened
-    }
+  handleClickControl(e: MouseEvent): void {
+    e.preventDefault()
+    this.opened = !this.opened
   }
 
   handleFocusout(): void {
     this.opened = false
   }
 
-  render(): TemplateResult<1> {
+  render(): TemplateResult {
     return html`
       <div
         class="control"
@@ -90,7 +91,7 @@ export class FCSelect extends FCListBox {
         part="control"
         role="comobox"
         aria-haspopup="listbox"
-        @click="${this.handleClick}"
+        @click="${this.handleClickControl}"
         disabled="${this.disabled}"
       >
         ${before()}
@@ -116,6 +117,7 @@ export class FCSelect extends FCListBox {
         role="listbox"
         ?disabled="${this.disabled}"
         position="${this.position}"
+        tabindex="${this.opened ? '0' : ''}"
       >
         <slot></slot>
         <slot name="empty">--空--</slot>

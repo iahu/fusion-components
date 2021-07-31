@@ -46,6 +46,7 @@
 }
 
 .listbox {
+  outline: none;
   --padding-t: calc(var(--fc-unit-size) * 4);
   --padding-b: calc(var(--fc-unit-size) * 4);
   position: absolute;
@@ -61,6 +62,10 @@
   overflow: auto;
   border: var(--border-width) solid var(--border-color);
   border-radius: var(--border-radius);
+}
+
+.listbox:focus-visible {
+  border-color: var(--outline-color);
 }
 
 .listbox[position='bottom'] {

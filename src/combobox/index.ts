@@ -140,6 +140,7 @@ export class FCComboBox extends FCSelect {
         role="listbox"
         ?disabled="${this.disabled}"
         position="${this.position}"
+        tabindex="${this.opened ? '0' : ''}"
       >
         <slot></slot>
         <slot name="empty">--空--</slot>

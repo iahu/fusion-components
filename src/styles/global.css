@@ -87,7 +87,7 @@
   --outline-color: hsla(32, 92%, 66%, 0.7);
 
   --accent-color: hsl(203, 92%, 56%);
-  --accent-color-hover: hsl(203, 98%, 64%);
+  --accent-color-hover: hsl(203, 92%, 66%);
   --accent-color-disabled: hsla(203, 98%, 56%, 0.5);
   --caret: hsl(32, 93%, 66%);
   --line-highlight: var(--blue2);
