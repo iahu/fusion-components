@@ -1,9 +1,17 @@
 :host {
-  display: inline-block;
+  position: relative;
+  display: flex;
+  justify-content: var(--data-grid-align);
   padding: var(--padding);
   --outline-offset: 0px;
+  --border-radius: 0;
+  border-right: var(--border-right-width) solid var(--border-color);
 }
 
-:host([focused]:focus-visible) {
-  background: var(--background-hover);
+:host(:last-child) {
+  border-right: 0;
+}
+
+:host(:focus)::after {
+  content: '';
 }

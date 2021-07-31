@@ -1,3 +1,14 @@
+<style>
+  .inline-grid {
+    display: inline-grid;
+    width: auto;
+    margin-right: 16px;
+  }
+  .inline-grid > p {
+    margin-bottom: 6px;
+  }
+</style>
+
 <h4>简单使用</h4>
 <fc-data-grid>
   <fc-data-grid-row>
@@ -21,7 +32,7 @@
 </fc-data-grid>
 
 <h4>带表头</h4>
-<fc-data-grid>
+<fc-data-grid class="inline-grid">
   <fc-data-grid-row slot="row-header">
     <fc-data-grid-cell>姓名</fc-data-grid-cell>
     <fc-data-grid-cell>性别</fc-data-grid-cell>
@@ -47,6 +58,159 @@
     <fc-data-grid-cell>导游</fc-data-grid-cell>
   </fc-data-grid-row>
 </fc-data-grid>
+
+<h4>显示边框</h4>
+<fc-data-grid outline class="inline-grid">
+  <fc-data-grid-row>
+    <fc-data-grid-cell>张三</fc-data-grid-cell>
+    <fc-data-grid-cell>男</fc-data-grid-cell>
+    <fc-data-grid-cell>20岁</fc-data-grid-cell>
+    <fc-data-grid-cell>学生</fc-data-grid-cell>
+  </fc-data-grid-row>
+  <fc-data-grid-row>
+    <fc-data-grid-cell>李四</fc-data-grid-cell>
+    <fc-data-grid-cell>男</fc-data-grid-cell>
+    <fc-data-grid-cell>23岁</fc-data-grid-cell>
+    <fc-data-grid-cell>工人</fc-data-grid-cell>
+  </fc-data-grid-row>
+  <fc-data-grid-row>
+    <fc-data-grid-cell>王五</fc-data-grid-cell>
+    <fc-data-grid-cell>男</fc-data-grid-cell>
+    <fc-data-grid-cell>24岁</fc-data-grid-cell>
+    <fc-data-grid-cell>导游</fc-data-grid-cell>
+  </fc-data-grid-row>
+</fc-data-grid>
+
+<h4>显示网格</h4>
+<fc-data-grid outline grid class="inline-grid">
+  <fc-data-grid-row>
+    <fc-data-grid-cell>张三</fc-data-grid-cell>
+    <fc-data-grid-cell>男</fc-data-grid-cell>
+    <fc-data-grid-cell>20岁</fc-data-grid-cell>
+    <fc-data-grid-cell>学生</fc-data-grid-cell>
+  </fc-data-grid-row>
+  <fc-data-grid-row>
+    <fc-data-grid-cell>李四</fc-data-grid-cell>
+    <fc-data-grid-cell>男</fc-data-grid-cell>
+    <fc-data-grid-cell>23岁</fc-data-grid-cell>
+    <fc-data-grid-cell>工人</fc-data-grid-cell>
+  </fc-data-grid-row>
+  <fc-data-grid-row>
+    <fc-data-grid-cell>王五</fc-data-grid-cell>
+    <fc-data-grid-cell>男</fc-data-grid-cell>
+    <fc-data-grid-cell>24岁</fc-data-grid-cell>
+    <fc-data-grid-cell>导游</fc-data-grid-cell>
+  </fc-data-grid-row>
+</fc-data-grid>
+<fc-data-grid grid class="inline-grid">
+  <fc-data-grid-row>
+    <fc-data-grid-cell>张三</fc-data-grid-cell>
+    <fc-data-grid-cell>男</fc-data-grid-cell>
+    <fc-data-grid-cell>20岁</fc-data-grid-cell>
+    <fc-data-grid-cell>学生</fc-data-grid-cell>
+  </fc-data-grid-row>
+  <fc-data-grid-row>
+    <fc-data-grid-cell>李四</fc-data-grid-cell>
+    <fc-data-grid-cell>男</fc-data-grid-cell>
+    <fc-data-grid-cell>23岁</fc-data-grid-cell>
+    <fc-data-grid-cell>工人</fc-data-grid-cell>
+  </fc-data-grid-row>
+  <fc-data-grid-row>
+    <fc-data-grid-cell>王五</fc-data-grid-cell>
+    <fc-data-grid-cell>男</fc-data-grid-cell>
+    <fc-data-grid-cell>24岁</fc-data-grid-cell>
+    <fc-data-grid-cell>导游</fc-data-grid-cell>
+  </fc-data-grid-row>
+</fc-data-grid>
+
+<h4>显示序列号</h4>
+<div class="inline-grid">
+  <p>不展开表头</p>
+  <fc-data-grid outline grid render-row-index style="display: inline-grid; width: fit-content">
+    <fc-data-grid-row>
+      <fc-data-grid-cell>张三</fc-data-grid-cell>
+      <fc-data-grid-cell>男</fc-data-grid-cell>
+      <fc-data-grid-cell>20岁</fc-data-grid-cell>
+      <fc-data-grid-cell>学生</fc-data-grid-cell>
+    </fc-data-grid-row>
+    <fc-data-grid-row>
+      <fc-data-grid-cell>李四</fc-data-grid-cell>
+      <fc-data-grid-cell>男</fc-data-grid-cell>
+      <fc-data-grid-cell>23岁</fc-data-grid-cell>
+      <fc-data-grid-cell>工人</fc-data-grid-cell>
+    </fc-data-grid-row>
+    <fc-data-grid-row>
+      <fc-data-grid-cell>王五</fc-data-grid-cell>
+      <fc-data-grid-cell>男</fc-data-grid-cell>
+      <fc-data-grid-cell>24岁</fc-data-grid-cell>
+      <fc-data-grid-cell>导游</fc-data-grid-cell>
+    </fc-data-grid-row>
+  </fc-data-grid>
+</div>
+
+<div class="inline-grid">
+  <p>显示表头</p>
+  <fc-data-grid outline grid render-row-index style="display: inline-grid">
+    <fc-data-grid-row slot="row-header">
+      <fc-data-grid-cell>姓名</fc-data-grid-cell>
+      <fc-data-grid-cell>性别</fc-data-grid-cell>
+      <fc-data-grid-cell>年龄</fc-data-grid-cell>
+      <fc-data-grid-cell>职业</fc-data-grid-cell>
+    </fc-data-grid-row>
+
+    <fc-data-grid-row>
+      <fc-data-grid-cell>张三</fc-data-grid-cell>
+      <fc-data-grid-cell>男</fc-data-grid-cell>
+      <fc-data-grid-cell>20岁</fc-data-grid-cell>
+      <fc-data-grid-cell>学生</fc-data-grid-cell>
+    </fc-data-grid-row>
+    <fc-data-grid-row>
+      <fc-data-grid-cell>李四</fc-data-grid-cell>
+      <fc-data-grid-cell>男</fc-data-grid-cell>
+      <fc-data-grid-cell>23岁</fc-data-grid-cell>
+      <fc-data-grid-cell>工人</fc-data-grid-cell>
+    </fc-data-grid-row>
+    <fc-data-grid-row>
+      <fc-data-grid-cell>王五</fc-data-grid-cell>
+      <fc-data-grid-cell>男</fc-data-grid-cell>
+      <fc-data-grid-cell>24岁</fc-data-grid-cell>
+      <fc-data-grid-cell>导游</fc-data-grid-cell>
+    </fc-data-grid-row>
+  </fc-data-grid>
+</div>
+
+<div class="inline-grid">
+  <p>自定义序号内容</p>
+  <fc-data-grid outline grid render-row-index style="display: inline-grid; width: ">
+    <fc-data-grid-row slot="row-header">
+      <fc-data-grid-cell slot="row-index">工号</fc-data-grid-cell>
+      <fc-data-grid-cell>姓名</fc-data-grid-cell>
+      <fc-data-grid-cell>性别</fc-data-grid-cell>
+      <fc-data-grid-cell>年龄</fc-data-grid-cell>
+      <fc-data-grid-cell>职业</fc-data-grid-cell>
+    </fc-data-grid-row>
+
+    <fc-data-grid-row>
+      <fc-data-grid-cell slot="row-index">A001</fc-data-grid-cell>
+      <fc-data-grid-cell>张三</fc-data-grid-cell>
+      <fc-data-grid-cell>男</fc-data-grid-cell>
+      <fc-data-grid-cell>50岁</fc-data-grid-cell>
+      <fc-data-grid-cell>老板</fc-data-grid-cell>
+    </fc-data-grid-row>
+    <fc-data-grid-row>
+      <fc-data-grid-cell>李四</fc-data-grid-cell>
+      <fc-data-grid-cell>男</fc-data-grid-cell>
+      <fc-data-grid-cell>23岁</fc-data-grid-cell>
+      <fc-data-grid-cell>设计师</fc-data-grid-cell>
+    </fc-data-grid-row>
+    <fc-data-grid-row>
+      <fc-data-grid-cell>王五</fc-data-grid-cell>
+      <fc-data-grid-cell>男</fc-data-grid-cell>
+      <fc-data-grid-cell>24岁</fc-data-grid-cell>
+      <fc-data-grid-cell>产品经理</fc-data-grid-cell>
+    </fc-data-grid-row>
+  </fc-data-grid>
+</div>
 
 <h4>固定表头</h4>
 

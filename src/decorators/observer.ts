@@ -126,32 +126,32 @@ export const observer = function (options?: ObserverOptions): Observer {
       set(this: ReactiveElementWithObserver, nextValue: Value) {
         const typeofValue = type ?? typeof (Reflect.get(this, name) ?? nextValue)
         const isBol = typeofValue === 'boolean'
-        const tempValue = Reflect.get(this, tempName)
+        const oldValue = Reflect.get(this, tempName)
         const mergedConverter = converter ?? getConverter(this, name, type)
         const mergedNextValue = mergedConverter ? mergedConverter(nextValue, this) : nextValue
 
-        if (tempValue !== mergedNextValue) {
+        if (oldValue !== mergedNextValue) {
           Reflect.set(this, tempName, mergedNextValue)
           const callback = Reflect.get(this, name + 'Changed')
           const badCallback = Reflect.get(this, name + 'Change')
           if (typeof callback === 'function') {
             if (sync) {
               // 同步的回调
-              callback.call(this, tempValue, mergedNextValue)
+              callback.call(this, oldValue, mergedNextValue)
             } else {
-              this.updateComplete.then(() => callback.call(this, tempValue, mergedNextValue))
+              this.updateComplete.then(() => callback.call(this, oldValue, mergedNextValue))
             }
           } else if (typeof badCallback === 'function') {
             console.warn(`callback should be "${name}Changed", but not "${name}Change"!`)
           }
 
           // 初始化前，html 标签自带的 attribute 不能被覆盖
-          const shouldUpdate = !(this.hasAttribute(name) && tempValue === undefined)
+          const shouldUpdate = !(this.hasAttribute(name) && oldValue === undefined)
           if (reflect && shouldUpdate) {
             const p = this.hasUpdated ? Promise.resolve(true) : this.updateComplete
             p.then(() => updateAttribute(this, mergedAttributeName, mergedNextValue, isBol))
           }
-          this.requestUpdate(name, mergedNextValue)
+          this.requestUpdate(name, oldValue)
         }
       },
     })

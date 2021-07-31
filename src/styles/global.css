@@ -83,7 +83,7 @@
   --border-color-disabled: hsla(203, 0%, 34%, 1);
 
   --outline-offset: calc(var(--fc-unit-size) * 1);
-  --outline-width: calc(var(--fc-unit-size) * 2);
+  --outline-width: calc(var(--fc-unit-size) * 1);
   --outline-color: hsla(32, 92%, 66%, 0.7);
 
   --accent-color: hsl(203, 92%, 56%);
@@ -122,9 +122,7 @@
   user-select: var(--user-select);
   color: var(--foreground);
   fill: currentColor;
-}
-
-:host {
+  vertical-align: top;
   border-radius: var(--border-radius);
 }
 
@@ -196,15 +194,18 @@
   outline: none;
 }
 
-:host(:focus-visible)::after {
+:host(:focus)::after {
   position: absolute;
   left: calc(var(--outline-offset) * -1);
   top: calc(var(--outline-offset) * -1);
   display: block;
-  content: '';
   width: calc(100% + var(--outline-offset) * 2 - var(--outline-width) * 2);
   height: calc(100% + var(--outline-offset) * 2 - var(--outline-width) * 2);
   box-sizing: content-box;
   border-radius: var(--border-radius);
   border: var(--outline-width) solid var(--outline-color);
+}
+
+:host(:focus-visible)::after {
+  content: '';
 }

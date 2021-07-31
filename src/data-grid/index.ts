@@ -5,7 +5,7 @@ import { FCDataGridRow } from '../data-grid-row'
 import { observer } from '../decorators'
 import assignedElements from '../decorators/assigned-elements'
 import { FC } from '../fusion-component'
-import { add, focusCurrentOrNext } from '../helper'
+import { add, focusCurrentOrNext, joinParams, parseParams } from '../helper'
 import mergeStyles from '../merge-styles'
 import style from './style.css'
 
@@ -58,25 +58,46 @@ export class FCDataGrid extends FC {
   maxLines = 10
 
   @observer({ attribute: false })
-  @assignedElements('', 'fc-data-grid-row')
+  @assignedElements('[name=row-header]')
+  rowHeader?: FCDataGridRow[]
+
+  @observer({ attribute: false })
+  @assignedElements('slot, slot[name="row-header"]')
   rows?: FCDataGridRow[]
   rowsChanged(): void {
-    const { rows, maxLines } = this
+    const { rows, maxLines, renderRowIndex, rowHeader = [] } = this
     if (rows) {
       if (!this.activeElement) {
         this.activeElement = rows?.[0].cells?.[0]
       }
 
+      const { length } = rowHeader
+      const rowIndexOffset = length + 1
+      const dataIndexOffset = length - 1
       const rowsHeight = [] as number[]
-      const counts = rows.map(r => {
-        rowsHeight.push(r.offsetHeight)
-        return r.cells?.length || 0
-      })
-      const maxCellCount = Math.max(...counts)
+      const cellsList = rows.map(r => r.cells.length)
+      const maxCells = Math.max(...cellsList)
       const maxRowsHeight = maxLines < rowsHeight.length ? rowsHeight.slice(0, maxLines).reduce(add, 0) : ''
-      this.style.cssText = `${this.style.cssText}; max-height: ${maxRowsHeight}px; --max-cell-count: ${maxCellCount}`
+      rows.forEach((r, i) => {
+        rowsHeight.push(r.offsetHeight)
+        r.rowIndex = i + rowIndexOffset
+        r.dataset.index = (i - dataIndexOffset).toString()
+        r.renderRowIndex = renderRowIndex
+        r.maxCells = maxCells
+      })
+
+      const oldCSS = parseParams(this.style.cssText)
+      const nextCSS = {
+        '--grid-template-columns': `repeat(${maxCells}, 1fr)`,
+        maxHeight: `${maxRowsHeight}px`,
+        ...oldCSS,
+      }
+      this.style.cssText = joinParams(nextCSS)
     }
   }
+
+  @observer({ attribute: 'render-row-index' })
+  renderRowIndex = false
 
   handleKeydown(e: KeyboardEvent): void {
     const { activeElement, activeRow, activeCol } = this

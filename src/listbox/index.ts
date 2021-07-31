@@ -68,6 +68,7 @@ export class FCListBox extends FormAssociated {
     }
   }
 
+  @observer({ reflect: true })
   tabIndex = 0
 
   public get visibleOptions(): FCListOption[] {

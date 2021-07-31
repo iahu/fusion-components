@@ -26,3 +26,20 @@ export const focusCurrentOrNext = <T extends HTMLElement>(targets: T[], delta: n
     if (loop) idx = mod(idx, length)
   }
 }
+
+const trim = (s: string) => s.trim()
+export const parseParams = (paramsString: string, split = ';', equal = ':') => {
+  return paramsString.split(split).reduce((params, item) => {
+    const [key, value] = item.split(equal).map(trim)
+    if (key !== '') {
+      params[key] = value
+    }
+    return params
+  }, {} as Record<string, string>)
+}
+
+export const joinParams = (params: Record<string, string | number>, split = ';', equal = ':') => {
+  return Object.entries(params)
+    .map(([key, value]) => [key, value].join(equal))
+    .join(split)
+}

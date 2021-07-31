@@ -9,8 +9,9 @@ const assignedElements = function <T extends Element>(
     const userConnectedCallback = proto.connectedCallback
     proto.connectedCallback = function (this: LitElement) {
       userConnectedCallback.call(this)
-      this.updateComplete.then(() => {
-        const mergedSelector = typeof selector === 'string' ? `slot${selector}` : 'slot:not([name])'
+
+      const getElements = () => {
+        const mergedSelector = typeof selector === 'string' ? selector : 'slot:not([name])'
         const slots = Array.from(this.renderRoot.querySelectorAll<HTMLSlotElement>(mergedSelector) || [])
 
         const allElements = slots.reduce((allElements, slot) => {
@@ -20,7 +21,9 @@ const assignedElements = function <T extends Element>(
         }, [] as T[])
 
         Reflect.set(this, key, allElements)
-      })
+      }
+
+      this.updateComplete.then(getElements)
     }
   }
 }

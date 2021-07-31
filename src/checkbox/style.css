@@ -11,6 +11,23 @@
   background: none;
 }
 
+:host(:focus-visible)::after {
+  content: unset;
+}
+
+:host(:focus-visible) .control::after {
+  content: '';
+  position: absolute;
+  left: calc(var(--outline-offset) * -1);
+  top: calc(var(--outline-offset) * -1);
+  display: block;
+  width: calc(100% + var(--outline-offset) * 2 - var(--outline-width) * 2);
+  height: calc(100% + var(--outline-offset) * 2 - var(--outline-width) * 2);
+  box-sizing: content-box;
+  border-radius: var(--border-radius);
+  border: var(--outline-width) solid var(--outline-color);
+}
+
 .control {
   position: relative;
   display: inline-flex;

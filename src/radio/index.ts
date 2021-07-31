@@ -28,6 +28,7 @@ export class FCRadio extends FormAssociated {
   @observer({ reflect: true })
   role = 'radio'
 
+  @observer({ reflect: true })
   tabIndex = 0
 
   @observer({ reflect: true })
