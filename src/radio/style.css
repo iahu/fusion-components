@@ -21,6 +21,9 @@
   border-radius: 50%;
   box-shadow: var(--stroke);
 }
+:host(:focus-visible)::after {
+  content: none;
+}
 
 :host(:focus-visible) .control:after {
   position: absolute;
