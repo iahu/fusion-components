@@ -34,10 +34,11 @@ export class FCSelect extends FCListBox {
   @observer({ reflect: true })
   role = 'listbox'
 
-  @observer()
-  hidden = true
-  protected hiddenChanged(): void {
-    if (!this.hidden) {
+  @observer({ reflect: true })
+  opened = false
+  protected openedChanged(): void {
+    if (this.opened) {
+      this.style.cssText += `; --client-height: ${this.clientHeight}px`
       this.updateComplete.then(() => {
         this.selectedOption?.scrollIntoView({ block: 'nearest' })
       })
@@ -46,40 +47,39 @@ export class FCSelect extends FCListBox {
 
   handleSelect(e: Event): void {
     super.handleSelect(e)
-    this.hidden = true
+    this.opened = false
   }
 
   handleKeydown(e: KeyboardEvent): void {
-    if (this.hidden && Object.values(this._HANDLED_KEYS).includes(e.key)) {
+    if (this.opened && Object.values(this._HANDLED_KEYS).includes(e.key)) {
       e.preventDefault()
-      this.hidden = false
+      this.opened = true
     } else {
       super.handleKeydown(e)
     }
   }
 
-  get position(): Position {
-    const position = this.getAttribute('position') || ''
-    if (Object.keys(POSTION).includes(position)) {
-      return position as Position
-    }
+  @observer({
+    converter(pos: string | null, host: FCSelect) {
+      const position = host.getAttribute('position') || ''
+      if (Object.keys(POSTION).includes(position)) {
+        return position as Position
+      }
 
-    const { top, height } = this.getBoundingClientRect()
-    return top + height / 2 > window.innerHeight / 2 ? 'top' : 'bottom'
-  }
-  public set position(v: Position) {
-    this.setAttribute('position', v)
-    this.requestUpdate()
-  }
+      const { top, height } = host.getBoundingClientRect()
+      return top + height / 2 > window.innerHeight / 2 ? 'top' : 'bottom'
+    },
+  })
+  position = 'bottom'
 
   handleClick(e: MouseEvent): void {
     if (!this.disabled) {
-      this.hidden = !this.hidden
+      this.opened = !this.opened
     }
   }
 
   handleFocusout(): void {
-    this.hidden = true
+    this.opened = false
   }
 
   render(): TemplateResult<1> {
@@ -112,11 +112,10 @@ export class FCSelect extends FCListBox {
         class="listbox"
         ?has-options="${this.length > 0}"
         part="listbox"
-        ?hidden=${this.hidden}
+        ?hidden=${!this.opened}
         role="listbox"
         ?disabled="${this.disabled}"
         position="${this.position}"
-        style="--client-height: ${this.clientHeight}px"
       >
         <slot></slot>
         <slot name="empty">--空--</slot>

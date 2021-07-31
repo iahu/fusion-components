@@ -5,6 +5,7 @@
   flex-direction: column;
   min-width: var(--control-min-width);
   word-break: keep-all;
+  --client-height: calc(var(--border-width) + var(--padding-b) + var(--padding-t) + var(--font-size));
 }
 
 :host {
@@ -47,7 +48,6 @@
 .listbox {
   --padding-t: calc(var(--fc-unit-size) * 4);
   --padding-b: calc(var(--fc-unit-size) * 4);
-  --client-height: calc(var(--border-width) + var(--padding-b) + var(--padding-t) + var(--font-size));
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -73,7 +73,7 @@
   margin-bottom: calc(var(--client-height) - var(--border-width));
 }
 
-.listbox[hidden] {
+:host(:not([opened])) .listbox {
   display: none;
 }
 

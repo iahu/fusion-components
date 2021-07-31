@@ -68,27 +68,27 @@ export class FCComboBox extends FCSelect {
   }
 
   handleFocus(): void {
-    this.hidden = false
+    this.opened = true
   }
 
   handleSelect(e: Event): void {
     const { srcElement } = e
     if (srcElement instanceof HTMLElement && isOption(srcElement) && srcElement.selected) {
-      this.hidden = true
+      this.opened = false
       this.inputValue = srcElement.text
       this.value = srcElement.value
     }
   }
 
   handleInputChange(): void {
-    this.hidden = true
+    this.opened = false
     const { inputValue } = this
     this.selectedOption = this.visibleOptions.find(o => this.caseCompaire(o.text, inputValue.trim()))
   }
 
   handleInput(e: InputEvent): void {
     e.stopPropagation()
-    this.hidden = false
+    this.opened = true
     const { value } = e.target as HTMLInputElement
     this.selectedOption = undefined
     this.inputValue = value.trim()
@@ -137,11 +137,9 @@ export class FCComboBox extends FCSelect {
         class="listbox"
         ?has-options="${this.length > 0}"
         part="listbox"
-        ?hidden=${this.hidden}
         role="listbox"
         ?disabled="${this.disabled}"
         position="${this.position}"
-        style="--client-height: ${this.clientHeight}px"
       >
         <slot></slot>
         <slot name="empty">--空--</slot>
