@@ -86,9 +86,9 @@ export class FCListBox extends FormAssociated {
   @assignedElements()
   options = [] as FCListOption[]
 
-  @observer({
+  @observer<FCListBox, number>({
     attribute: false,
-    converter(v: number, host: FCListBox) {
+    converter(v, host) {
       return host.visibleOptions.length
     },
   })
@@ -149,10 +149,10 @@ export class FCListBox extends FormAssociated {
   }
 
   handleClick(e: MouseEvent): void {
-    const { srcElement } = e
-    if (srcElement instanceof FCListOption) {
-      if (focusable(srcElement) && srcElement.selected) {
-        this.selectedOption = srcElement
+    const { target } = e
+    if (target instanceof FCListOption) {
+      if (focusable(target) && target.selected) {
+        this.selectedOption = target
       }
     }
   }

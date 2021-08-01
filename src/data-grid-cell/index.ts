@@ -6,6 +6,7 @@ import mergeStyles from '../merge-styles'
 
 import '../data-grid-cell'
 import style from './style.css'
+import { FCDataGridRow } from '../data-grid-row'
 
 @customElement('fc-data-grid-cell')
 export class FCDataGridCell extends FC {
@@ -36,9 +37,21 @@ export class FCDataGridCell extends FC {
     }
   }
 
-  @observer({ reflect: true })
+  @observer<FCDataGridCell>({
+    reflect: true,
+    init(host) {
+      const { parentElement } = host
+      if (parentElement instanceof FCDataGridRow && parentElement.role == 'rowheader') {
+        return 'columnheader'
+      }
+      return 'cell'
+    },
+  })
   role = 'cell'
 
+  /**
+   * @todo 实现 'span' 功能
+   */
   // @observer()
   // span = 1
   // spanChanged() {
@@ -55,10 +68,12 @@ export class FCDataGridCell extends FC {
 
   handleBlur = (e: FocusEvent): void => {
     this.focusItem(false)
+    // this.tabIndex = -1
   }
 
   handleClick = (e: MouseEvent) => {
     this.focus()
+    this.tabIndex = 0
   }
 
   render(): TemplateResult {

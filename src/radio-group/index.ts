@@ -108,10 +108,10 @@ export class FCRadioGroup extends FC {
 
   handleChange(e: Event): void {
     if (e instanceof CustomEvent) {
-      const { srcElement } = e
-      if (srcElement instanceof FCRadio && srcElement.checked) {
-        if (this.value !== srcElement.value) {
-          this.value = srcElement.value
+      const { target } = e
+      if (target instanceof FCRadio && target.checked) {
+        if (this.value !== target.value) {
+          this.value = target.value
         }
       }
     }

@@ -133,15 +133,15 @@ export class FCTabs extends FC {
   }
 
   handleSelect(e: Event): void {
-    const { srcElement } = e
-    if (srcElement instanceof FCTab && !this.disabled) {
+    const { target } = e
+    if (target instanceof FCTab && !this.disabled) {
       e.preventDefault()
-      this.activeTab = srcElement
+      this.activeTab = target
     }
   }
 
   handleKeydonw(e: KeyboardEvent): void {
-    if (!(e.srcElement instanceof FCTab)) {
+    if (!(e.target instanceof FCTab)) {
       return
     }
 
@@ -169,8 +169,8 @@ export class FCTabs extends FC {
         break
       case 'Enter': {
         e.preventDefault()
-        if (e.srcElement instanceof FCTab) {
-          this.activeTab = e.srcElement
+        if (e.target instanceof FCTab) {
+          this.activeTab = e.target
         }
         break
       }

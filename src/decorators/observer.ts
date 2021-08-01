@@ -1,22 +1,27 @@
 import { ReactiveElement } from '@lit/reactive-element'
 
-interface ReactiveElementWithObserver extends ReactiveElement {
-  __observer?: Map<string, ObserverOptions & { name: string }>
+export interface ReactiveElementWithObserver<T, V = any> extends ReactiveElement {
+  __observer?: Map<string, ObserverOptions<T, V> & { name: string }>
   attributeChanged?: (name: string, oldValue: string | null, nextValue: string | null) => void
-  [k: string]: any
+  [propName: string]: any
 }
 
-type ObserverType = 'string' | 'number' | 'boolean'
-type Value = string | number | boolean
-type Converter<T = any> = (v: any, host: any) => T
+export type ObserverType = 'string' | 'number' | 'boolean'
+export type Value = string | number | boolean | null
+export type Converter<V = any, T = any> = (
+  v: V | number | string | boolean | null,
+  host: ReactiveElementWithObserver<T, V>
+) => any
 
-interface ObserverOptions {
+export type InitFunction<T = any> = (host: T) => Value
+
+interface ObserverOptions<T, V = any> {
   type?: ObserverType
   reflect?: boolean
   attribute?: string | boolean
-  converter?: Converter
+  converter?: Converter<V, T>
   sync?: boolean
-  init?: boolean
+  init?: boolean | InitFunction<ReactiveElementWithObserver<T, V>>
 }
 
 const typeCotrMap: Record<string, Converter> = {
@@ -25,9 +30,9 @@ const typeCotrMap: Record<string, Converter> = {
   boolean: Boolean,
 }
 
-const getConverter = (host: ReactiveElement, name: string, type?: ObserverType) => {
+const getConverter = <T = any, V = Value>(host: ReactiveElement, name: string, type?: ObserverType) => {
   const typeofValue = type ?? typeof Reflect.get(host, name)
-  return typeCotrMap[typeofValue]
+  return typeCotrMap[typeofValue] as Converter<V, T>
 }
 
 const updateAttribute = (host: ReactiveElement, attributeName: string, value: Value, isBol: boolean) => {
@@ -49,26 +54,29 @@ const getValueFromAttribute = (host: ReactiveElement, attributeName: string, isB
   return host.hasAttribute(attributeName)
 }
 
-type Observer = (proto: any, name: string) => void
+type Observer<T> = (proto: T, name: string) => void
 
-export const observer = function (options?: ObserverOptions): Observer {
-  return function (proto: any, name: string): void {
+export const observer = function <T extends ReactiveElement, V = any>(options?: ObserverOptions<T, V>): Observer<T> {
+  return function (proto: T, name: string): void {
     const { type, reflect = false, attribute = true, converter, sync, init = true } = options || {}
     const mergedAttributeName = typeof attribute === 'string' ? attribute : name
     const tempName = '__' + name
 
     // attrs => props
     const userCallback = proto.connectedCallback
-    proto.connectedCallback = function (this: ReactiveElementWithObserver) {
+    proto.connectedCallback = function (this: ReactiveElementWithObserver<T, V>) {
       userCallback.call(this)
 
       // init props from attributes
       if (init && attribute && this.hasAttribute(mergedAttributeName)) {
+        if (typeof init === 'function') {
+          Reflect.set(this, name, init(this))
+        }
         const typeofValue = type ?? typeof Reflect.get(this, name)
         const isBol = typeofValue === 'boolean'
         const nextValue = getValueFromAttribute(this, mergedAttributeName, isBol)
-        const mergedConverter = converter ?? getConverter(this, name, type)
-        const mergedNextValue = mergedConverter ? mergedConverter(nextValue, this) : nextValue
+        const mergedConverter = converter ?? getConverter<T, V>(this, name, type)
+        const mergedNextValue = mergedConverter?.(nextValue, this) ?? nextValue
 
         Reflect.set(this, name, mergedNextValue)
       }
@@ -120,15 +128,15 @@ export const observer = function (options?: ObserverOptions): Observer {
     const ownPropertyDescriptor = Reflect.getOwnPropertyDescriptor(proto, name)
     Object.defineProperty(proto, name, {
       ...ownPropertyDescriptor,
-      get(this: ReactiveElementWithObserver) {
+      get(this: ReactiveElementWithObserver<T>) {
         return Reflect.get(this, tempName)
       },
-      set(this: ReactiveElementWithObserver, nextValue: Value) {
+      set(this: ReactiveElementWithObserver<T>, nextValue: Value) {
         const typeofValue = type ?? typeof (Reflect.get(this, name) ?? nextValue)
         const isBol = typeofValue === 'boolean'
         const oldValue = Reflect.get(this, tempName)
         const mergedConverter = converter ?? getConverter(this, name, type)
-        const mergedNextValue = mergedConverter ? mergedConverter(nextValue, this) : nextValue
+        const mergedNextValue = mergedConverter?.(nextValue, this) ?? nextValue
 
         if (oldValue !== mergedNextValue) {
           Reflect.set(this, tempName, mergedNextValue)

@@ -36,10 +36,9 @@ export class FCListOption extends FC {
   @observer()
   selectable = true
 
-  @observer({
-    type: 'boolean',
+  @observer<FCListOption>({
     reflect: true,
-    converter(v: boolean, host: FCListOption) {
+    converter(v: boolean, host) {
       return host.selectable && v
     },
   })

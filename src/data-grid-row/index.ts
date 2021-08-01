@@ -27,22 +27,13 @@ export class FCDataGridRow extends FC {
 
   maxCells = 0
 
-  @observer({
+  @observer<FCDataGridRow>({
     reflect: true,
-    converter(role: string, host: FCDataGridRow) {
+    converter(role: string, host) {
       return host.slot === 'row-header' ? 'rowheader' : 'row'
     },
   })
   role = 'row'
-  roleChanged(old: string, next: string): void {
-    if (next === 'rowheader') {
-      this.updateComplete.then(() => {
-        this.cells?.forEach(c => {
-          c.role = 'columnheader'
-        })
-      })
-    }
-  }
 
   @observer()
   rowIndex = -1

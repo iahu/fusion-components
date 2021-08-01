@@ -56,9 +56,9 @@ export class FCNumberFiled extends FCInput {
   @observer({ reflect: true })
   vibrate = false
 
-  @observer({
+  @observer<FCNumberFiled>({
     init: false,
-    converter(v: string, host: FCNumberFiled) {
+    converter(v: string, host) {
       if (!v) {
         return v
       }

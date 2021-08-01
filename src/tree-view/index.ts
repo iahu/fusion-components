@@ -73,20 +73,20 @@ export class FCTreeView extends FC {
   }
 
   handleSelectionChange(e: Event): void {
-    const { srcElement } = e
-    if (!(srcElement instanceof HTMLElement && isTreeItem(srcElement))) {
+    const { target } = e
+    if (!(target instanceof HTMLElement && isTreeItem(target))) {
       return
     }
 
-    if (srcElement.selected) {
+    if (target.selected) {
       const mayFocusedItem = this.querySelector<FCTreeItem>('fc-tree-item[tabindex="0"]')
       // reset prev
-      if (mayFocusedItem && mayFocusedItem !== srcElement) mayFocusedItem.focusItem(false)
+      if (mayFocusedItem && mayFocusedItem !== target) mayFocusedItem.focusItem(false)
       // update current
-      if (this.selectedItem && this.selectedItem !== srcElement) this.selectedItem.selected = false
+      if (this.selectedItem && this.selectedItem !== target) this.selectedItem.selected = false
       // sync the selectedItem
-      this.selectedItem = srcElement
-    } else if (this.selectedItem === srcElement) {
+      this.selectedItem = target
+    } else if (this.selectedItem === target) {
       this.selectedItem.selected = false
       this.selectedItem = undefined
     }

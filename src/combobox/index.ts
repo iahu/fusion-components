@@ -72,11 +72,11 @@ export class FCComboBox extends FCSelect {
   }
 
   handleSelect(e: Event): void {
-    const { srcElement } = e
-    if (srcElement instanceof HTMLElement && isOption(srcElement) && srcElement.selected) {
+    const { target } = e
+    if (target instanceof HTMLElement && isOption(target) && target.selected) {
       this.opened = false
-      this.inputValue = srcElement.text
-      this.value = srcElement.value
+      this.inputValue = target.text
+      this.value = target.value
     }
   }
 

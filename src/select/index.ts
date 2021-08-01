@@ -61,8 +61,8 @@ export class FCSelect extends FCListBox {
     }
   }
 
-  @observer({
-    converter(pos: string | null, host: FCSelect) {
+  @observer<FCSelect, string>({
+    converter(pos, host) {
       const position = host.getAttribute('position') || ''
       if (Object.keys(POSTION).includes(position)) {
         return position as Position
