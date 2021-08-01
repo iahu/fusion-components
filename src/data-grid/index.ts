@@ -2,10 +2,9 @@ import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { FCDataGridCell } from '../data-grid-cell'
 import { FCDataGridRow } from '../data-grid-row'
-import { observer } from '../decorators'
-import assignedElements from '../decorators/assigned-elements'
+import { observer, assignedElements, queryAll } from '../decorators'
 import { FC } from '../fusion-component'
-import { add, focusCurrentOrNext, joinParams, parseParams } from '../helper'
+import { focusCurrentOrNext, joinParams, parseParams } from '../helper'
 import mergeStyles from '../merge-styles'
 import style from './style.css'
 
@@ -54,8 +53,8 @@ export class FCDataGrid extends FC {
   @observer({ reflect: true })
   sticky = false
 
-  @observer({ attribute: false })
-  maxLines = 10
+  @observer()
+  maxRows = 10
 
   @observer({ attribute: false })
   @assignedElements('[name=row-header]')
@@ -64,47 +63,60 @@ export class FCDataGrid extends FC {
   @observer({ attribute: false })
   @assignedElements('slot, slot[name="row-header"]')
   rows?: FCDataGridRow[]
-  rowsChanged(old?: FCDataGridCell[], next?: FCDataGridCell[]): void {
-    const { rows = [], maxLines, renderRowIndex, rowHeader = [] } = this
+  rowsChanged(old?: FCDataGridRow[], next = [] as FCDataGridRow[]): void {
+    const { maxRows, renderRowIndex, rowHeader = [] } = this
 
     if (!this.activeElement) {
-      this.activeElement = rows?.[0].cells?.[0]
+      this.activeElement = next?.[0]?.cells[0]
     }
 
-    const { length } = rowHeader
-    const rowIndexOffset = length + 1
-    const dataIndexOffset = length - 1
-    const rowsHeight = [] as number[]
-    const cellsList = rows.map(r => r.cells.length)
-    const maxCells = Math.max(...cellsList)
-    const maxRowsHeight = maxLines < rowsHeight.length ? rowsHeight.slice(0, maxLines).reduce(add, 0) : ''
-    rows.forEach((r, i) => {
-      rowsHeight.push(r.offsetHeight)
-      r.rowIndex = i + rowIndexOffset
-      r.dataset.index = (i - dataIndexOffset).toString()
+    const dataIndexOffset = Number(!rowHeader.length)
+    next.forEach((r, i) => {
+      r.rowIndex = i + 1
+      r.dataset.index = (i + dataIndexOffset).toString()
       r.renderRowIndex = renderRowIndex
-      r.maxCells = maxCells
     })
 
+    const cellsList = next.map(r => r.childElementCount)
+    const maxColCount = Math.max(...cellsList)
+    const maxRow = next?.[maxRows]
+    let maxHeight = ''
+    if (maxRow) {
+      maxHeight = maxRow.offsetTop + maxRow.offsetHeight + 'px'
+    }
     const oldCSS = parseParams(this.style.cssText)
     const nextCSS = {
-      '--grid-template-columns': `repeat(${maxCells}, 1fr)`,
-      maxHeight: `${maxRowsHeight}px`,
+      'max-height': maxHeight,
+      '--grid-template-columns': `repeat(${maxColCount}, 1fr)`,
       ...oldCSS,
     }
     this.style.cssText = joinParams(nextCSS)
-    this.setAttribute('aria-rowcount', rows.length.toString())
-    this.setAttribute('aria-colcount', maxCells.toString())
+    this.setAttribute('aria-rowcount', next.length.toString())
+    this.setAttribute('aria-colcount', maxColCount.toString())
+    this.colCount = maxColCount
+  }
+
+  private colCount = -1
+
+  @queryAll('fc-data-grid-row:not([slot])')
+  dataRows?: NodeListOf<FCDataGridRow>
+  dataRowsChanged(): void {
+    // console.log('what', this.dataRows)
   }
 
   @observer({ attribute: 'render-row-index' })
   renderRowIndex = false
 
-  @observer({ reflect: true })
-  sortable = false
+  @observer()
+  sortIndex = -1
+  sortIndexChanged() {
+    //
+  }
 
   @observer()
-  sort?: SortType
+  by?: SortType = 'asc'
+
+  onSort() {}
 
   handleKeydown(e: KeyboardEvent): void {
     const { activeElement, activeRow, activeCol } = this

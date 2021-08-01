@@ -1,11 +1,10 @@
 import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
-import { observer } from '../decorators'
+import { observer, assignedElements } from '../decorators'
 import FormAssociated from '../form-associated'
 import mergeStyles from '../merge-styles'
 import { FCListOption, isOption } from '../list-option'
 import style from './style.css'
-import assignedElements from '../decorators/assigned-elements'
 import { focusable } from '../helper'
 
 @customElement('fc-listbox')

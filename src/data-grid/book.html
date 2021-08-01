@@ -126,7 +126,7 @@
 <h4>显示序列号</h4>
 <div class="inline-grid">
   <p>不展开表头</p>
-  <fc-data-grid outline grid render-row-index style="display: inline-grid; width: fit-content">
+  <fc-data-grid outline grid render-row-index>
     <fc-data-grid-row>
       <fc-data-grid-cell>张三</fc-data-grid-cell>
       <fc-data-grid-cell>男</fc-data-grid-cell>
@@ -181,7 +181,40 @@
 
 <div class="inline-grid">
   <p>自定义序号内容</p>
-  <fc-data-grid outline grid render-row-index style="display: inline-grid; width: ">
+  <fc-data-grid outline grid render-row-index>
+    <fc-data-grid-row slot="row-header">
+      <fc-data-grid-cell slot="row-index">工号</fc-data-grid-cell>
+      <fc-data-grid-cell>姓名</fc-data-grid-cell>
+      <fc-data-grid-cell>性别</fc-data-grid-cell>
+      <fc-data-grid-cell>年龄</fc-data-grid-cell>
+      <fc-data-grid-cell>职业</fc-data-grid-cell>
+    </fc-data-grid-row>
+
+    <fc-data-grid-row>
+      <fc-data-grid-cell slot="row-index">A001</fc-data-grid-cell>
+      <fc-data-grid-cell>张三</fc-data-grid-cell>
+      <fc-data-grid-cell>男</fc-data-grid-cell>
+      <fc-data-grid-cell>50岁</fc-data-grid-cell>
+      <fc-data-grid-cell>老板</fc-data-grid-cell>
+    </fc-data-grid-row>
+    <fc-data-grid-row>
+      <fc-data-grid-cell>李四</fc-data-grid-cell>
+      <fc-data-grid-cell>男</fc-data-grid-cell>
+      <fc-data-grid-cell>23岁</fc-data-grid-cell>
+      <fc-data-grid-cell>设计师</fc-data-grid-cell>
+    </fc-data-grid-row>
+    <fc-data-grid-row>
+      <fc-data-grid-cell>王五</fc-data-grid-cell>
+      <fc-data-grid-cell>男</fc-data-grid-cell>
+      <fc-data-grid-cell>24岁</fc-data-grid-cell>
+      <fc-data-grid-cell>产品经理</fc-data-grid-cell>
+    </fc-data-grid-row>
+  </fc-data-grid>
+</div>
+
+<div class="inline-grid">
+  <p>排序</p>
+  <fc-data-grid outline grid render-row-index sortIndex="4">
     <fc-data-grid-row slot="row-header">
       <fc-data-grid-cell slot="row-index">工号</fc-data-grid-cell>
       <fc-data-grid-cell>姓名</fc-data-grid-cell>
@@ -213,7 +246,6 @@
 </div>
 
 <h4>固定表头</h4>
-
 <p>
   <span>可以试试按键盘 <kbd>Tab</kbd> 获得焦点，</span>
   <span>然后用<kbd>↓</kbd> <kbd>↑</kbd> <kbd>→</kbd> <kbd>←</kbd> 导航，</span>

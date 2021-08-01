@@ -1,8 +1,7 @@
 import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { FCDataGridCell } from '../data-grid-cell'
-import { observer } from '../decorators'
-import assignedElements from '../decorators/assigned-elements'
+import { observer, assignedElements } from '../decorators'
 import { FC } from '../fusion-component'
 import mergeStyles from '../merge-styles'
 import style from './style.css'
@@ -12,20 +11,18 @@ export class FCDataGridRow extends FC {
   static styles = mergeStyles(style)
 
   @observer({ attribute: false })
-  @assignedElements('slot')
+  @assignedElements()
   cells = [] as FCDataGridCell[]
   cellsChanged(old: FCDataGridCell[], next: FCDataGridCell[]): void {
     this.emit('cellsChanged')
 
     this.updateComplete.then(() => {
-      const offset = Number(!this.renderRowIndex) + 1
+      // const offset = Number(!this.renderRowIndex) + 1
       this.cells.forEach((c, i) => {
-        c.colIndex = i + offset
+        c.colIndex = i + 1
       })
     })
   }
-
-  maxCells = 0
 
   @observer<FCDataGridRow>({
     reflect: true,
@@ -45,36 +42,27 @@ export class FCDataGridRow extends FC {
 
   @observer({ attribute: 'render-row-index' })
   renderRowIndex = false
-  renderRowIndexChanged(old: boolean, next: boolean): void {
-    const {
-      slot,
-      dataset: { index = '' },
-    } = this
-    const isRowHeader = slot === 'row-header'
-    if (next) {
-      if (this.rowIndexElements?.length === 0) {
-        const indexCell = document.createElement('fc-data-grid-cell') as FCDataGridCell
-        indexCell.role = isRowHeader ? 'columnheader' : 'cell'
-        indexCell.innerText = isRowHeader ? '' : index
-        indexCell.slot = 'row-index'
-        indexCell.colIndex = 1
-        this.firstElementChild?.before(indexCell)
+
+  @observer()
+  @assignedElements('[name="row-index"]')
+  rowIndexElements = [] as FCDataGridCell[]
+  rowIndexElementsChanged(old: FCDataGridCell[], next: FCDataGridCell[]): void {
+    if (this.renderRowIndex) {
+      if (next.length) {
+        next.length > 1 && this.rowIndexElements.forEach((r, i) => i && r.remove())
+        this.firstChild?.before(next[0])
       }
     } else {
-      this.rowIndexElements?.forEach(c => (c.slot = ''))
+      this.rowIndexElements?.forEach(r => r.remove())
     }
   }
 
-  @observer()
-  @assignedElements('[name=row-index]')
-  rowIndexElements?: FCDataGridCell[]
-  rowIndexElementsChanged(): void {
-    this.rowIndexElements?.splice(1)
-  }
-
   render(): TemplateResult {
+    const dataIndex = this.role === 'row' ? this.dataset.index : ''
     return html`
-      <slot name="row-index"></slot>
+      <slot name="row-index">
+        <fc-data-grid-cell>${dataIndex}</fc-data-grid-cell>
+      </slot>
       <slot></slot>
     `
   }

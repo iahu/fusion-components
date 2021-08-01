@@ -1,6 +1,6 @@
 import { LitElement } from 'lit'
 
-const assignedElements = function <T extends Element>(
+export const assignedElements = function <T extends Element>(
   selector?: string,
   filterSelector?: string,
   options?: AssignedNodesOptions
@@ -27,5 +27,3 @@ const assignedElements = function <T extends Element>(
     }
   }
 }
-
-export default assignedElements
