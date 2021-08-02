@@ -4,7 +4,7 @@ import { FCDataGridCell } from '../data-grid-cell'
 import { FCDataGridRow } from '../data-grid-row'
 import { observer, assignedElements, queryAll } from '../decorators'
 import { FC } from '../fusion-component'
-import { focusCurrentOrNext, joinParams, parseParams } from '../helper'
+import { clamp, focusCurrentOrNext, joinParams, parseParams } from '../helper'
 import mergeStyles from '../merge-styles'
 import style from './style.css'
 
@@ -28,7 +28,7 @@ export class FCDataGrid extends FC {
   }
 
   @observer({ attribute: false })
-  activeElement?: FCDataGridCell
+  activeElement?: FCDataGridCell | null
   private activeElementChanged(old?: FCDataGridCell, next?: FCDataGridCell): void {
     if (old) old.tabIndex = -1
     if (!next) return
@@ -66,8 +66,11 @@ export class FCDataGrid extends FC {
   rowsChanged(old?: FCDataGridRow[], next = [] as FCDataGridRow[]): void {
     const { maxRows, renderRowIndex, rowHeader = [] } = this
 
-    if (!this.activeElement) {
-      this.activeElement = next?.[0]?.cells[0]
+    if (!this.activeElement && next.length) {
+      this.updateComplete.then(() => {
+        // next[0]?.querySelector<FCDataGridCell>('fc-data-grid-cell')
+        this.activeElement = next[0].firstElementChild as FCDataGridCell
+      })
     }
 
     const dataIndexOffset = Number(!rowHeader.length)
@@ -109,18 +112,46 @@ export class FCDataGrid extends FC {
 
   @observer()
   sortIndex = -1
-  sortIndexChanged() {
-    //
+  sortIndexChanged(old: number, next: number): void {
+    this.updateComplete.then(() => {
+      if (next > 0 && next < this.colCount && this.dataRows) {
+        const onSort = this.onSort.bind(this)
+        const srotedRows = Array.from(this.dataRows).sort(onSort)
+
+        this.innerHTML = ''
+        const { rowHeader = [] } = this
+        const dataIndexOffset = Number(!rowHeader.length)
+        const rows = rowHeader.concat(srotedRows)
+        rows.forEach((r, i) => {
+          this.appendChild(r)
+          r.rowIndex = i + 1
+          r.setAttribute('data-index', (i + dataIndexOffset).toString())
+        })
+
+        this.activeElement = rows[0].cells[0]
+      }
+    })
   }
 
   @observer()
-  by?: SortType = 'asc'
+  order?: SortType = 'asc'
 
-  onSort() {}
+  onSort(r1: FCDataGridRow, r2: FCDataGridRow): number {
+    const { sortIndex, order } = this
+    const ord = order === 'desc' ? -1 : 1
+    const c1 = r1.cells?.[sortIndex - 1]?.textContent?.trim() || ''
+    const c2 = r2.cells?.[sortIndex - 1]?.textContent?.trim() || ''
+    return c1 == c2 ? 0 : ord * c1?.localeCompare(c2, 'co', { numeric: true })
+  }
 
   handleKeydown(e: KeyboardEvent): void {
     const { activeElement, activeRow, activeCol } = this
     if (!(activeElement && activeRow && activeCol)) {
+      return
+    }
+
+    if (e.key === 'Escape' && e.target instanceof FCDataGridCell) {
+      activeElement.blur()
       return
     }
 
@@ -133,17 +164,20 @@ export class FCDataGrid extends FC {
 
     const action = actions[e.key]
     if (action) {
-      const loop = !e.altKey
       const [activeCells, delta] = action
       const activeIdx = activeCells.findIndex(c => c === activeElement)
-      const deltaAxis = delta / Math.abs(delta)
-      const boundary = delta < 0 ? 0 : activeCells.length - 1
-      const gap = e.ctrlKey ? deltaAxis * (boundary - activeIdx) : 1
-      const mergedDelta = delta * gap
-      const nextActiveElement = focusCurrentOrNext(activeCells, mergedDelta, loop)
+      const { length } = activeCells
+      const boundary = clamp(0, length - 1, delta * length)
+      const mergedDelta = e.ctrlKey ? boundary - activeIdx : delta
+      const nextActiveElement = focusCurrentOrNext(activeCells, mergedDelta, !e.altKey)
       if (nextActiveElement) {
-        if (loop) e.preventDefault()
+        e.preventDefault()
+        nextActiveElement.scrollIntoView({ block: 'nearest' })
         this.activeElement = nextActiveElement
+        const { offsetParent, offsetTop, offsetHeight } = nextActiveElement
+        if (offsetParent && offsetParent.scrollTop >= offsetTop) {
+          offsetParent.scrollTop -= offsetHeight
+        }
       }
     }
   }

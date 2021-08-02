@@ -7,6 +7,8 @@
     var(--font-size) * var(--line-height) + var(--padding-t) + var(--padding-b) + var(--border-width)
   );
   max-height: calc(var(--item-height) * 11);
+
+  scroll-snap-type: both proximity;
 }
 
 ::slotted(fc-grid-data-row) {

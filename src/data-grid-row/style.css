@@ -5,6 +5,8 @@
   grid-template-columns: var(--grid-template-columns, repeat(var(--max-cell-count), 1fr));
   border-bottom: var(--border-width) solid var(--border-color);
   --border-radius: 0;
+
+  scroll-snap-align: center;
 }
 
 :host([slot='row-header']) {

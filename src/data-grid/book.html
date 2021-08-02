@@ -212,9 +212,10 @@
   </fc-data-grid>
 </div>
 
+<h4>排序</h4>
 <div class="inline-grid">
-  <p>排序</p>
-  <fc-data-grid outline grid render-row-index sortIndex="4">
+  <p>排序前</p>
+  <fc-data-grid outline grid render-row-index>
     <fc-data-grid-row slot="row-header">
       <fc-data-grid-cell slot="row-index">工号</fc-data-grid-cell>
       <fc-data-grid-cell>姓名</fc-data-grid-cell>
@@ -232,7 +233,71 @@
     </fc-data-grid-row>
     <fc-data-grid-row>
       <fc-data-grid-cell>李四</fc-data-grid-cell>
+      <fc-data-grid-cell>女</fc-data-grid-cell>
+      <fc-data-grid-cell>23岁</fc-data-grid-cell>
+      <fc-data-grid-cell>设计师</fc-data-grid-cell>
+    </fc-data-grid-row>
+    <fc-data-grid-row>
+      <fc-data-grid-cell>王五</fc-data-grid-cell>
       <fc-data-grid-cell>男</fc-data-grid-cell>
+      <fc-data-grid-cell>24岁</fc-data-grid-cell>
+      <fc-data-grid-cell>产品经理</fc-data-grid-cell>
+    </fc-data-grid-row>
+  </fc-data-grid>
+</div>
+<div class="inline-grid">
+  <p>按第 “3” 列（年龄）升序排列</p>
+  <fc-data-grid outline grid render-row-index sortIndex="3">
+    <fc-data-grid-row slot="row-header">
+      <fc-data-grid-cell slot="row-index">工号</fc-data-grid-cell>
+      <fc-data-grid-cell>姓名</fc-data-grid-cell>
+      <fc-data-grid-cell>性别</fc-data-grid-cell>
+      <fc-data-grid-cell>年龄</fc-data-grid-cell>
+      <fc-data-grid-cell>职业</fc-data-grid-cell>
+    </fc-data-grid-row>
+
+    <fc-data-grid-row>
+      <fc-data-grid-cell slot="row-index">A001</fc-data-grid-cell>
+      <fc-data-grid-cell>张三</fc-data-grid-cell>
+      <fc-data-grid-cell>男</fc-data-grid-cell>
+      <fc-data-grid-cell>50岁</fc-data-grid-cell>
+      <fc-data-grid-cell>老板</fc-data-grid-cell>
+    </fc-data-grid-row>
+    <fc-data-grid-row>
+      <fc-data-grid-cell>李四</fc-data-grid-cell>
+      <fc-data-grid-cell>女</fc-data-grid-cell>
+      <fc-data-grid-cell>23岁</fc-data-grid-cell>
+      <fc-data-grid-cell>设计师</fc-data-grid-cell>
+    </fc-data-grid-row>
+    <fc-data-grid-row>
+      <fc-data-grid-cell>王五</fc-data-grid-cell>
+      <fc-data-grid-cell>男</fc-data-grid-cell>
+      <fc-data-grid-cell>24岁</fc-data-grid-cell>
+      <fc-data-grid-cell>产品经理</fc-data-grid-cell>
+    </fc-data-grid-row>
+  </fc-data-grid>
+</div>
+<div class="inline-grid">
+  <p>按第 “3” 列（年龄）降序排列</p>
+  <fc-data-grid outline grid render-row-index sortIndex="3" order="desc">
+    <fc-data-grid-row slot="row-header">
+      <fc-data-grid-cell slot="row-index">工号</fc-data-grid-cell>
+      <fc-data-grid-cell>姓名</fc-data-grid-cell>
+      <fc-data-grid-cell>性别</fc-data-grid-cell>
+      <fc-data-grid-cell>年龄</fc-data-grid-cell>
+      <fc-data-grid-cell>职业</fc-data-grid-cell>
+    </fc-data-grid-row>
+
+    <fc-data-grid-row>
+      <fc-data-grid-cell slot="row-index">A001</fc-data-grid-cell>
+      <fc-data-grid-cell>张三</fc-data-grid-cell>
+      <fc-data-grid-cell>男</fc-data-grid-cell>
+      <fc-data-grid-cell>50岁</fc-data-grid-cell>
+      <fc-data-grid-cell>老板</fc-data-grid-cell>
+    </fc-data-grid-row>
+    <fc-data-grid-row>
+      <fc-data-grid-cell>李四</fc-data-grid-cell>
+      <fc-data-grid-cell>女</fc-data-grid-cell>
       <fc-data-grid-cell>23岁</fc-data-grid-cell>
       <fc-data-grid-cell>设计师</fc-data-grid-cell>
     </fc-data-grid-row>

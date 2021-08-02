@@ -59,7 +59,7 @@ type Observer<T> = (proto: T, name: string) => void
 export const observer = function <T extends ReactiveElement, V = any>(options?: ObserverOptions<T, V>): Observer<T> {
   return function (proto: T, name: string): void {
     const { type, reflect = false, attribute = true, converter, sync, init = true } = options || {}
-    const mergedAttributeName = typeof attribute === 'string' ? attribute : name
+    const mergedAttributeName = typeof attribute === 'string' ? attribute : name.toLowerCase()
     const tempName = '__' + name
 
     // attrs => props

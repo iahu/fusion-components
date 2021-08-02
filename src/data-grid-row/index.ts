@@ -10,14 +10,20 @@ import style from './style.css'
 export class FCDataGridRow extends FC {
   static styles = mergeStyles(style)
 
-  @observer({ attribute: false })
-  @assignedElements()
+  @observer<FCDataGridRow, FCDataGridCell[]>({
+    attribute: false,
+    converter(elements, host) {
+      if (!host.renderRowIndex && Array.isArray(elements)) {
+        elements.shift()
+      }
+      return elements
+    },
+  })
+  @assignedElements('slot')
   cells = [] as FCDataGridCell[]
   cellsChanged(old: FCDataGridCell[], next: FCDataGridCell[]): void {
     this.emit('cellsChanged')
-
     this.updateComplete.then(() => {
-      // const offset = Number(!this.renderRowIndex) + 1
       this.cells.forEach((c, i) => {
         c.colIndex = i + 1
       })
