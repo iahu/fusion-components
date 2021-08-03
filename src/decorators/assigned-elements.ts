@@ -10,20 +10,30 @@ export const assignedElements = function <T extends Element>(
     proto.connectedCallback = function (this: LitElement) {
       userConnectedCallback.call(this)
 
-      const getElements = () => {
+      const getSlots = (selector?: string) => {
         const mergedSelector = typeof selector === 'string' ? selector : 'slot:not([name])'
-        const slots = Array.from(this.renderRoot.querySelectorAll<HTMLSlotElement>(mergedSelector) || [])
+        return Array.from(this.renderRoot.querySelectorAll<HTMLSlotElement>(mergedSelector) || [])
+      }
 
-        const allElements = slots.reduce((allElements, slot) => {
-          const elements = slot?.assignedElements(options ?? { flatten: true })
+      const getElements = () => {
+        return getSlots(selector).reduce((allElements, slot) => {
+          const elements = slot?.assignedElements(options)
           const matched = (filterSelector ? elements?.filter(e => e.matches(filterSelector)) : elements) as T[]
           return allElements.concat(matched)
         }, [] as T[])
-
-        Reflect.set(this, key, allElements)
       }
 
-      this.updateComplete.then(getElements)
+      const observer = () => {
+        Reflect.set(this, key, getElements())
+
+        // getSlots(selector).forEach(slot => {
+        //   slot.addEventListener('slotchange', e => {
+        //     Reflect.set(this, key, getElements())
+        //   })
+        // })
+      }
+
+      this.updateComplete.then(observer)
     }
   }
 }

@@ -6,7 +6,7 @@ export const queryAll = function <T extends Element>(selector?: string) {
     proto.connectedCallback = function (this: LitElement) {
       userConnectedCallback.call(this)
       if (selector) {
-        Reflect.set(this, key, this.querySelectorAll<T>(selector))
+        Reflect.set(this, key, Array.from(this.querySelectorAll<T>(selector)))
       }
     }
   }

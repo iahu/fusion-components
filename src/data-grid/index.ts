@@ -1,15 +1,14 @@
 import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
+import '../data-grid-cell'
 import { FCDataGridCell } from '../data-grid-cell'
+import '../data-grid-row'
 import { FCDataGridRow } from '../data-grid-row'
-import { observer, assignedElements, queryAll } from '../decorators'
+import { observer, queryAll } from '../decorators'
 import { FC } from '../fusion-component'
 import { clamp, focusCurrentOrNext, joinParams, parseParams } from '../helper'
 import mergeStyles from '../merge-styles'
 import style from './style.css'
-
-import '../data-grid-cell'
-import '../data-grid-row'
 
 type SortType = 'desc' | 'asc'
 
@@ -24,7 +23,14 @@ export class FCDataGrid extends FC {
     super.connectedCallback()
 
     this.addEventListener('keydown', this.handleKeydown)
-    this.addEventListener('click', this.handleClick)
+    this.addEventListener('click', this.handleActive)
+  }
+
+  disconnectedCallback(): void {
+    super.disconnectedCallback()
+
+    this.removeEventListener('keydown', this.handleKeydown)
+    this.removeEventListener('click', this.handleActive)
   }
 
   @observer({ attribute: false })
@@ -57,28 +63,30 @@ export class FCDataGrid extends FC {
   maxRows = 10
 
   @observer({ attribute: false })
-  @assignedElements('[name=row-header]')
+  @queryAll('[slot=row-header]')
   rowHeader?: FCDataGridRow[]
 
   @observer({ attribute: false })
-  @assignedElements('slot, slot[name="row-header"]')
+  @queryAll('fc-data-grid-row')
   rows?: FCDataGridRow[]
   rowsChanged(old?: FCDataGridRow[], next = [] as FCDataGridRow[]): void {
-    const { maxRows, renderRowIndex, rowHeader = [] } = this
+    const { maxRows, rowHeader = [] } = this
 
     if (!this.activeElement && next.length) {
       this.updateComplete.then(() => {
-        // next[0]?.querySelector<FCDataGridCell>('fc-data-grid-cell')
-        this.activeElement = next[0].firstElementChild as FCDataGridCell
+        this.activeElement = next[0].querySelector<FCDataGridCell>('fc-data-grid-cell')
       })
     }
 
+    const ps = [] as Promise<unknown>[]
     const dataIndexOffset = Number(!rowHeader.length)
     next.forEach((r, i) => {
       r.rowIndex = i + 1
       r.dataset.index = (i + dataIndexOffset).toString()
-      r.renderRowIndex = renderRowIndex
+      ps.push(r.updateComplete)
     })
+    // Lit update is async
+    Promise.all(ps).then(() => this.handleSort())
 
     const cellsList = next.map(r => r.childElementCount)
     const maxColCount = Math.max(...cellsList)
@@ -102,45 +110,53 @@ export class FCDataGrid extends FC {
   private colCount = -1
 
   @queryAll('fc-data-grid-row:not([slot])')
-  dataRows?: NodeListOf<FCDataGridRow>
-  dataRowsChanged(): void {
-    // console.log('what', this.dataRows)
-  }
+  dataRows?: FCDataGridRow[]
 
-  @observer({ attribute: 'render-row-index' })
-  renderRowIndex = false
-
-  @observer()
+  @observer({ reflect: true })
   sortIndex = -1
   sortIndexChanged(old: number, next: number): void {
-    this.updateComplete.then(() => {
-      if (next > 0 && next < this.colCount && this.dataRows) {
-        const onSort = this.onSort.bind(this)
-        const srotedRows = Array.from(this.dataRows).sort(onSort)
-
-        this.innerHTML = ''
-        const { rowHeader = [] } = this
-        const dataIndexOffset = Number(!rowHeader.length)
-        const rows = rowHeader.concat(srotedRows)
-        rows.forEach((r, i) => {
-          this.appendChild(r)
-          r.rowIndex = i + 1
-          r.setAttribute('data-index', (i + dataIndexOffset).toString())
-        })
-
-        this.activeElement = rows[0].cells[0]
-      }
-    })
+    this.handleSort()
   }
 
-  @observer()
+  private handleSort = () => {
+    const { sortIndex, colCount, dataRows, ownerDocument } = this
+    if (sortIndex > 0 && sortIndex <= colCount && dataRows) {
+      const onSort = this.onSort.bind(this)
+      const srotedRows = dataRows.sort(onSort)
+      const docActiveElement = ownerDocument.activeElement
+      this.innerHTML = ''
+      const { rowHeader = [] } = this
+      const dataIndexOffset = Number(!rowHeader.length)
+      const rows = rowHeader.concat(srotedRows)
+
+      rows.forEach((r, i) => {
+        this.appendChild(r)
+        r.rowIndex = i + 1
+        r.setAttribute('data-index', (i + dataIndexOffset).toString())
+      })
+
+      if (!this.activeElement?.parentElement) {
+        this.activeElement = rows[0].cells[0]
+      }
+      if (docActiveElement === this.activeElement) {
+        this.activeElement.focus()
+      }
+
+      this.emit('sorted')
+    }
+  }
+
+  @observer({ reflect: true })
   order?: SortType = 'asc'
+  orderChanged(old: SortType, next: SortType): void {
+    this.handleSort()
+  }
 
   onSort(r1: FCDataGridRow, r2: FCDataGridRow): number {
     const { sortIndex, order } = this
     const ord = order === 'desc' ? -1 : 1
-    const c1 = r1.cells?.[sortIndex - 1]?.textContent?.trim() || ''
-    const c2 = r2.cells?.[sortIndex - 1]?.textContent?.trim() || ''
+    const c1 = r1.cells?.find(c => c.colIndex === sortIndex)?.textContent?.trim() || ''
+    const c2 = r2.cells?.find(c => c.colIndex === sortIndex)?.textContent?.trim() || ''
     return c1 == c2 ? 0 : ord * c1?.localeCompare(c2, 'co', { numeric: true })
   }
 
@@ -150,11 +166,27 @@ export class FCDataGrid extends FC {
       return
     }
 
-    if (e.key === 'Escape' && e.target instanceof FCDataGridCell) {
-      activeElement.blur()
+    if (!(e.target instanceof FCDataGridCell)) {
       return
     }
 
+    switch (e.key) {
+      case 'Escape':
+        activeElement.blur()
+        break
+      case 'ArrowUp':
+      case 'ArrowDown':
+      case 'ArrowLeft':
+      case 'ArrowRight':
+        this.focusNext(e)
+        break
+      case 'Enter':
+        this.handleActive(e)
+    }
+  }
+
+  private focusNext(e: KeyboardEvent) {
+    const { activeElement, activeRow, activeCol } = this
     const actions = {
       ArrowLeft: [activeRow, -1],
       ArrowRight: [activeRow, 1],
@@ -182,10 +214,18 @@ export class FCDataGrid extends FC {
     }
   }
 
-  handleClick(e: MouseEvent): void {
+  private handleActive(e: MouseEvent | KeyboardEvent): void {
     const { target } = e
     if (target instanceof FCDataGridCell) {
       this.activeElement = target
+      if (target instanceof FCDataGridCell && target.sortable) {
+        const nextIndex = target.colIndex
+        if (nextIndex !== this.sortIndex) {
+          this.sortIndex = nextIndex
+        } else {
+          this.order = this.order === 'desc' ? 'asc' : 'desc'
+        }
+      }
     }
   }
 

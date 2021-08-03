@@ -68,17 +68,20 @@ export const observer = function <T extends ReactiveElement, V = any>(options?: 
       userCallback.call(this)
 
       // init props from attributes
-      if (init && attribute && this.hasAttribute(mergedAttributeName)) {
-        if (typeof init === 'function') {
-          Reflect.set(this, name, init(this))
-        }
-        const typeofValue = type ?? typeof Reflect.get(this, name)
-        const isBol = typeofValue === 'boolean'
-        const nextValue = getValueFromAttribute(this, mergedAttributeName, isBol)
-        const mergedConverter = converter ?? getConverter<T, V>(this, name, type)
-        const mergedNextValue = mergedConverter?.(nextValue, this) ?? nextValue
+      if (init && attribute) {
+        if (options?.init || this.hasAttribute(mergedAttributeName)) {
+          const typeofValue = type ?? typeof Reflect.get(this, name)
+          const isBol = typeofValue === 'boolean'
+          if (typeof init === 'function') {
+            Reflect.set(this, name, init(this))
+          } else {
+            const nextValue = getValueFromAttribute(this, mergedAttributeName, isBol)
+            const mergedConverter = converter ?? getConverter<T, V>(this, name, type)
+            const mergedNextValue = mergedConverter?.(nextValue, this) ?? nextValue
 
-        Reflect.set(this, name, mergedNextValue)
+            Reflect.set(this, name, mergedNextValue)
+          }
+        }
       }
 
       if (!this.__observer) {

@@ -7,6 +7,7 @@ import mergeStyles from '../merge-styles'
 import '../data-grid-cell'
 import style from './style.css'
 import { FCDataGridRow } from '../data-grid-row'
+import { after, before } from '../pattern/before-after'
 
 @customElement('fc-data-grid-cell')
 export class FCDataGridCell extends FC {
@@ -49,6 +50,9 @@ export class FCDataGridCell extends FC {
   })
   role = 'cell'
 
+  @observer()
+  sortable = this.hasAttribute('sortable')
+
   /**
    * @todo 实现 'span' 功能
    */
@@ -77,6 +81,6 @@ export class FCDataGridCell extends FC {
   }
 
   render(): TemplateResult {
-    return html`<slot></slot>`
+    return html`${before()}<slot></slot>${after()}`
   }
 }
