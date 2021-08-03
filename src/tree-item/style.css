@@ -56,7 +56,7 @@
 
 :host([selected]) .control {
   color: var(--foreground-selected);
-  background: var(--accent-color);
+  background: var(--background-color-selected);
 }
 
 :host([disabled]) {
