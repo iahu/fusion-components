@@ -60,8 +60,10 @@ export class FCDialog extends FC {
   }
 
   handleClick = (e: MouseEvent): void => {
-    e.preventDefault()
-    this.hidden = false
+    if (e.target instanceof HTMLElement && this.anchorElements?.includes(e.target)) {
+      e.preventDefault()
+      this.hidden = false
+    }
   }
 
   handleKeydown = (e: KeyboardEvent): void => {
