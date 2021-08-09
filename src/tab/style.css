@@ -4,6 +4,7 @@
   align-items: center;
   padding: var(--padding-t) var(--padding-r) var(--padding-b) var(--padding-l);
   cursor: pointer;
+  box-sizing: border-box;
 }
 
 :host(:not([disabled]):hover) {

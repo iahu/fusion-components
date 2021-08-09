@@ -89,5 +89,5 @@
 }
 
 :host([indent]) {
-  padding-left: calc(var(--font-size) + var(--padding-l) + var(--padding-r));
+  padding-left: calc(var(--font-size) * var(--line-height));
 }

@@ -43,9 +43,11 @@
 
 :host([disabled]) {
   background: var(--background-disabled);
-  border-color: var(--border-color-disabled);
   color: var(--foreground-disabled);
   cursor: not-allowed;
+}
+:host([outline][disabled]) {
+  border-color: var(--border-color-disabled);
 }
 
 /*outline*/

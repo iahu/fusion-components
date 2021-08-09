@@ -14,14 +14,14 @@ export class FCButton extends FusionComponent {
     super.connectedCallback()
 
     this.addEventListener('click', this.handleClick)
-    this.addEventListener('keydown', this.handleKeydown)
+    this.addEventListener('keypress', this.handleKeypress)
   }
 
   disconnectedCallback(): void {
     super.disconnectedCallback()
 
     this.removeEventListener('click', this.handleClick)
-    this.removeEventListener('keydown', this.handleKeydown)
+    this.removeEventListener('keypress', this.handleKeypress)
   }
 
   @observer({ type: 'boolean' })
@@ -62,11 +62,12 @@ export class FCButton extends FusionComponent {
     type: 'boolean',
   })
   selected = false
-  protected selectedChanged(): void {
+  protected selectedChanged(old: boolean, next: boolean): void {
     if (!this.selectable) {
       Reflect.set(this, 'selected', false)
       return
     }
+    this.setAttribute('aria-pressed', next.toString())
     this.emit('select')
   }
 
@@ -93,10 +94,10 @@ export class FCButton extends FusionComponent {
     if (this.selectable) this.selected = !this.selected
   }
 
-  handleKeydown(e: KeyboardEvent): void {
-    if (this.selectable && [' ', 'Enter'].includes(e.key)) {
+  handleKeypress(e: KeyboardEvent): void {
+    if (e.target === this && [' ', 'Enter'].includes(e.key)) {
       e.preventDefault()
-      this.selected = !this.selected
+      this.emit('click')
     }
   }
 
