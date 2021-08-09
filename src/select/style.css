@@ -4,6 +4,7 @@
   display: inline-flex;
   flex-direction: column;
   min-width: var(--control-min-width);
+  min-height: fit-content;
   word-break: keep-all;
   --client-height: calc(var(--border-width) + var(--padding-b) + var(--padding-t) + var(--font-size));
 }
@@ -21,13 +22,21 @@
   height: 100%;
   box-sizing: border-box;
   display: inline-flex;
-  border: var(--border-width) solid var(--border-color);
   padding: var(--padding-t) var(--padding-l) var(--padding-b) var(--padding-l);
   cursor: pointer;
 }
 
+:host([outline]) .control {
+  border: var(--border-width) solid var(--border-color);
+}
+
 :host(:focus) .control {
   border-color: var(--border-color-active);
+}
+
+:host(:hover) .control {
+  background: var(--background-hover);
+  border-color: var(--border-color);
 }
 
 :host(:disabled) .control {

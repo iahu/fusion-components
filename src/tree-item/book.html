@@ -1,5 +1,5 @@
 <h4>简单使用</h4>
-<fc-tree-item>苹果</fc-tree-item>
+<fc-tree-item tabindex="1">苹果</fc-tree-item>
 
 <h4>选中</h4>
 <fc-tree-item selected>橘子</fc-tree-item>
@@ -8,31 +8,33 @@
 <fc-tree-item disabled>香蕉</fc-tree-item>
 <fc-tree-item selected disabled>香蕉</fc-tree-item>
 
-<h4>自定义图标</h4>
-<fc-tree-item><span slot="expand-collapse-button">🍅</span>西红柿</fc-tree-item>
-
-<h4>无图标/缩进</h4>
-<fc-tree-item flatten>西红柿</fc-tree-item>
-
 <h4>嵌套</h4>
 <fc-tree-item>
   水果
-  <fc-tree-item flatten>西红柿</fc-tree-item>
+  <fc-tree-item slot="item">西红柿</fc-tree-item>
 </fc-tree-item>
 
+<h4>无缩进</h4>
+<fc-tree-item>
+  <span>水果</span>
+  <fc-tree-item indent="false">苹果</fc-tree-item>
+</fc-tree-item>
+<fc-tree-item>西红柿</fc-tree-item>
+
 <h4>不可选</h4>
-<fc-tree-item readonly>
-  水果
-  <fc-tree-item flatten>西红柿</fc-tree-item>
+<fc-tree-item selectable="false">
+  水果(我不可选)
+  <fc-tree-item>西红柿</fc-tree-item>
 </fc-tree-item>
 
 <h4>标题可展开</h4>
 <fc-tree-item expandable>
-  水果
-  <fc-tree-item flatten>西红柿</fc-tree-item>
+  水果(点我)
+  <fc-tree-item slot="item">西红柿</fc-tree-item>
 </fc-tree-item>
 
-<fc-tree-item expandable readonly>
-  蔬菜
-  <fc-tree-item flatten>西红柿</fc-tree-item>
-</fc-tree-item>
+<h4>before</h4>
+<fc-tree-item><span slot="before">🍅</span>西红柿</fc-tree-item>
+
+<h4>after</h4>
+<fc-tree-item hasChild="false"><span slot="after">🍅</span>西红柿</fc-tree-item>

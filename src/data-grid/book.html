@@ -308,7 +308,7 @@
   <span>配合<kbd>Alt</kbd>可以正常滚动页面</span>
 </p>
 
-<fc-data-grid sticky>
+<fc-data-grid sticky max-rows="10">
   <fc-data-grid-row slot="row-header" sortable>
     <fc-data-grid-cell>姓名</fc-data-grid-cell>
     <fc-data-grid-cell>性别</fc-data-grid-cell>
@@ -452,5 +452,66 @@
     <fc-data-grid-cell>女</fc-data-grid-cell>
     <fc-data-grid-cell>29</fc-data-grid-cell>
     <fc-data-grid-cell>职工</fc-data-grid-cell>
+  </fc-data-grid-row>
+</fc-data-grid>
+
+<h4>与表单一起使用</h4>
+<fc-data-grid grid>
+  <fc-data-grid-row>
+    <fc-data-grid-cell>视图比例</fc-data-grid-cell>
+    <fc-data-grid-cell>
+      <fc-input value="1:100"></fc-input>
+    </fc-data-grid-cell>
+  </fc-data-grid-row>
+
+  <fc-data-grid-row>
+    <fc-data-grid-cell>比例值 1:</fc-data-grid-cell>
+    <fc-data-grid-cell>
+      <fc-input readonly value="100"></fc-input>
+    </fc-data-grid-cell>
+  </fc-data-grid-row>
+
+  <fc-data-grid-row>
+    <fc-data-grid-cell>显示模型</fc-data-grid-cell>
+    <fc-data-grid-cell>
+      <fc-select value="1">
+        <fc-list-option value="1">标准</fc-list-option>
+        <fc-list-option value="2">简单</fc-list-option>
+      </fc-select>
+    </fc-data-grid-cell>
+  </fc-data-grid-row>
+
+  <fc-data-grid-row>
+    <fc-data-grid-cell>详细程度</fc-data-grid-cell>
+    <fc-data-grid-cell>
+      <fc-select value="1">
+        <fc-list-option value="1">粗略</fc-list-option>
+        <fc-list-option value="2">精细</fc-list-option>
+      </fc-select>
+    </fc-data-grid-cell>
+  </fc-data-grid-row>
+
+  <fc-data-grid-row>
+    <fc-data-grid-cell>零件可见性</fc-data-grid-cell>
+    <fc-data-grid-cell>
+      <fc-button>编辑...</fc-button>
+    </fc-data-grid-cell>
+  </fc-data-grid-row>
+
+  <fc-data-grid-row>
+    <fc-data-grid-cell>图形显示选项</fc-data-grid-cell>
+    <fc-data-grid-cell>
+      <fc-button>编辑...</fc-button>
+    </fc-data-grid-cell>
+  </fc-data-grid-row>
+
+  <fc-data-grid-row>
+    <fc-data-grid-cell>方向</fc-data-grid-cell>
+    <fc-data-grid-cell>
+      <fc-select value="1">
+        <fc-list-option value="1">项目北</fc-list-option>
+        <fc-list-option value="2">正北</fc-list-option>
+      </fc-select>
+    </fc-data-grid-cell>
   </fc-data-grid-row>
 </fc-data-grid>

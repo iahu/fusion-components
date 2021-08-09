@@ -1,4 +1,4 @@
-import { html, PropertyValues, TemplateResult } from 'lit'
+import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { observer } from '../decorators'
 import FormAssociated from '../form-associated'
@@ -11,13 +11,16 @@ export class FCCheckbox extends FormAssociated {
 
   connectedCallback(): void {
     super.connectedCallback()
-    this.addEventListener('click', this.handleClick)
     this.checked = this.hasAttribute('checked')
     this.defaultChecked = this.checked
+
+    this.addEventListener('click', this.handleClick)
+    this.addEventListener('keydown', this.handleKeydown)
   }
 
   disconnectedCallback(): void {
     this.removeEventListener('click', this.handleClick)
+    this.removeEventListener('keydown', this.handleKeydown)
     this.updateForm()
   }
 
@@ -50,25 +53,35 @@ export class FCCheckbox extends FormAssociated {
     this.elementInternals.setFormValue(value, value)
   }
 
-  handleClick(e: MouseEvent): void {
-    this.updateForm()
+  private toggleSelect() {
     if (!this.disabled && !this.readOnly) {
-      this.checked = !this.checked
+      this.updateForm()
+      if (this.indeterminate) this.indeterminate = false
+      this.checked = !(this.checked || this.indeterminate)
       this.emit('change')
+
+      return true
     }
   }
 
-  render(): TemplateResult<1> {
+  private handleClick(e: MouseEvent): void {
+    if (this.toggleSelect()) e.preventDefault()
+  }
+
+  private handleKeydown(e: KeyboardEvent) {
+    if (' ' === e.key && this.toggleSelect()) {
+      e.preventDefault()
+    }
+  }
+
+  render(): TemplateResult {
     return html`
       <div class="control" part="control">
+        <slot name="default-indicator">
+          <div class="default-indicator"></div>
+        </slot>
         <slot name="checked-indicator">
-          <svg
-            class="checked-indicator"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 12 12"
-            style="enable-background:new 0 0 12 12"
-            xml:space="preserve"
-          >
+          <svg class="checked-indicator" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" xml:space="preserve">
             <path
               d="M4.4 10c-.3 0-.5-.1-.7-.3l-3-3.1c-.4-.4-.4-1 0-1.4.4-.4 1-.4 1.4 0l2.3 2.4 5.5-5.3c.4-.4 1-.4 1.4 0 .4.4.4 1 0 1.4l-6.2 6c-.2.2-.4.3-.7.3z"
             />

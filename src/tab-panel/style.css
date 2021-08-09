@@ -1,6 +1,7 @@
 :host {
   position: relative;
   display: inline-block;
+  box-sizing: border-box;
 }
 
 :host(:focus-visible) {

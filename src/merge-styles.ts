@@ -1,7 +1,11 @@
-import { css, CSSResultGroup, unsafeCSS } from 'lit'
+import { CSSResultGroup, unsafeCSS } from 'lit'
 import globalCSSText from './styles/global.css'
 
-// prettier-ignore
-const mergeStyles = (...cssTexts: string[]): CSSResultGroup => [globalCSSText, ...cssTexts].map(unsafeCSS).map(t => css`${t}`)
+const mergeStyles = (...cssTexts: string[]): CSSResultGroup => {
+  const cssText = [globalCSSText, ...cssTexts].join('')
+  const styleSheet = new CSSStyleSheet()
+  ;(styleSheet as any).replaceSync(cssText)
+  return styleSheet
+}
 
 export default mergeStyles

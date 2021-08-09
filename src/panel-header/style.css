@@ -4,7 +4,7 @@
   align-items: center;
   width: 100%;
   color: var(--foreground);
-  background: var(--background-active);
+  background: var(--box-background);
   padding: var(--padding);
   box-sizing: border-box;
 }
@@ -20,13 +20,8 @@
   cursor: pointer;
 }
 
-.close-button:active {
-  background: var(--background-active);
-}
-
 .close-button:hover {
   color: var(--foreground-hover);
-  background: var(--background-hover);
 }
 
 .close-button:focus-visible::after {

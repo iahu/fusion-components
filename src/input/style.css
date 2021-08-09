@@ -8,6 +8,7 @@
   will-change: background-color;
   background-color: var(--background);
   transition: all 0.14s;
+  box-sizing: border-box;
 }
 
 :host([sharp]) {
@@ -36,7 +37,7 @@
   background-color: var(--background-hover);
 }
 
-:host(:not([disabled]):focus-within) {
+:host(:not([disabled]):focus-visible) {
   background-color: var(--background-active);
 }
 
@@ -52,7 +53,8 @@
   border-color: var(--border-color);
 }
 
-:host([outline]:focus-within) {
+:host([outline]:focus-within),
+:host([outline]:focus-visible) {
   border-color: var(--border-color-active);
 }
 :host([outline]:hover) {

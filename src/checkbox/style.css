@@ -1,6 +1,7 @@
 :host {
   display: inline-flex;
   align-items: center;
+  vertical-align: top;
 }
 
 :host(:not(:disabled)) {
@@ -15,6 +16,41 @@
   content: unset;
 }
 
+.control {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: var(--font-size);
+  height: var(--font-size);
+  margin-left: var(--stroke-width);
+  overflow: visible;
+  background: var(--background);
+}
+
+.default-indicator {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  border: var(--stroke-width) solid var(--stroke-color);
+  box-sizing: border-box;
+}
+
+:host([checked]) .control {
+  background: var(--accent-color);
+}
+
+:host([checked]) .default-indicator,
+:host([indeterminate]) .default-indicator {
+  display: none;
+}
+
+:host(.readonly) .control,
+:host([disabled]) .control {
+  --background: var(--background-disabled);
+  cursor: not-allowed;
+}
+
 :host(:focus-visible) .control::after {
   content: '';
   position: absolute;
@@ -25,66 +61,42 @@
   height: calc(100% + var(--outline-offset) * 2 - var(--outline-width) * 2);
   box-sizing: content-box;
   border-radius: var(--border-radius);
+  /*--outline-offset: 1px;*/
   border: var(--outline-width) solid var(--outline-color);
 }
 
-.control {
-  position: relative;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  width: var(--font-size);
-  height: var(--font-size);
-  background: var(--background);
-  overflow: hidden;
-  box-shadow: var(--stroke);
+:host([disabled][checked]),
+:host(.readonly[checked]) {
+  --background: --accent-color-disabled;
 }
-
-:host([checked]) .control {
-  background: var(--accent-color);
-}
-
-:host([checked]) .checked-indicator {
-  display: block;
-}
-
-:host(.readonly) .control,
-:host([disabled]) .control {
-  background: var(--background-disabled);
-  cursor: not-allowed;
-}
-:host(.readonly[checked]) .control,
-:host([disabled][checked]) .control {
-  background: var(--accent-color-disabled);
-}
-:host(.readonly) .label,
-:host([disabled]) .label {
+:is(:host(.readonly), :host([disabled])) .label {
   color: var(--foreground-disabled);
   cursor: auto;
 }
 
-.checked-indicator {
-  position: absolute;
+.checked-indicator,
+::slotted([slot='checked-indicator']) {
   display: none;
-  width: 60%;
-  height: 60%;
 }
 
-.indeterminate-indicator {
-  position: absolute;
+.checked-indicator,
+::slotted([slot='indeterminate-indicator']) {
   display: none;
+}
+
+:host([checked]) .checked-indicator,
+:host([checked]) ::slotted([slot='checked-indicator']) {
+  display: inline-flex;
+}
+
+:host([indeterminate]) .indeterminate-indicator,
+:host([checked]) ::slotted([slot='indeterminate-indicator']) {
+  display: inline-flex;
+
   width: 60%;
   height: calc(var(--fc-unit-size) * 2);
   background: var(--foreground);
   border-radius: var(--border-radius);
-}
-
-:host([indeterminate][checked]) .indeterminate-indicator {
-  display: inline-flex;
-}
-
-:host([indeterminate][checked]) .checked-indicator {
-  display: none;
 }
 
 .label {

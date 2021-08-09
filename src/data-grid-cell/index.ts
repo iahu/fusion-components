@@ -4,9 +4,7 @@ import { observer } from '../decorators'
 import { FC } from '../fusion-component'
 import mergeStyles from '../merge-styles'
 
-import '../data-grid-cell'
 import style from './style.css'
-import { FCDataGridRow } from '../data-grid-row'
 import { after, before } from '../pattern/before-after'
 
 @customElement('fc-data-grid-cell')
@@ -42,7 +40,7 @@ export class FCDataGridCell extends FC {
     reflect: true,
     init(host) {
       const { parentElement } = host
-      if (parentElement instanceof FCDataGridRow && parentElement.role == 'rowheader') {
+      if (parentElement && parentElement.getAttribute('role') == 'rowheader') {
         return 'columnheader'
       }
       return 'cell'
@@ -67,15 +65,23 @@ export class FCDataGridCell extends FC {
   }
 
   handleFocus = (e: FocusEvent): void => {
-    this.focusItem(true)
+    if (e.target === this) {
+      this.focusItem(true)
+    }
   }
 
   handleBlur = (e: FocusEvent): void => {
-    this.focusItem(false)
-    // this.tabIndex = -1
+    if (e.target === this) {
+      this.focusItem(false)
+      // this.tabIndex = -1
+    }
   }
 
   handleClick = (e: MouseEvent) => {
+    if (e.target !== this) {
+      return
+    }
+
     this.focus()
     this.tabIndex = 0
   }

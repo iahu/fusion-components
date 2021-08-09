@@ -30,7 +30,7 @@ export class FCSelect extends FCListBox {
 
   @observer()
   displayValue = ''
-  displayValueChanged(): void {
+  private displayValueChanged(): void {
     this.opened = false
   }
 
@@ -60,6 +60,9 @@ export class FCSelect extends FCListBox {
       super.handleKeydown(e)
     }
   }
+
+  @observer({ reflect: true })
+  outline = true
 
   @observer<FCSelect, string>({
     converter(pos, host) {
@@ -120,7 +123,7 @@ export class FCSelect extends FCListBox {
         tabindex="${this.opened ? '0' : ''}"
       >
         <slot></slot>
-        <slot name="empty">--空--</slot>
+        ${this.length === 0 ? html`<slot name="empty">--空--</slot>` : null}
       </div>
     `
   }

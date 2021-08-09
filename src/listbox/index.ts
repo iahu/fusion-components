@@ -85,15 +85,12 @@ export class FCListBox extends FormAssociated {
   @assignedElements()
   options = [] as FCListOption[]
 
-  @observer<FCListBox, number>({
-    attribute: false,
-    converter(v, host) {
-      return host.visibleOptions.length
-    },
-  })
-  length = this.visibleOptions.length
-  protected lengthChanged(): void {
-    this.options = this.options.slice(0, this.length)
+  public get length(): number {
+    return this.visibleOptions.length
+  }
+
+  public set length(v: number) {
+    this.options = this.options.slice(0, v)
   }
 
   getItem(index: number): FCListOption | undefined {

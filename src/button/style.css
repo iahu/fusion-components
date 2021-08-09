@@ -7,8 +7,12 @@
   border-radius: var(--border-radius);
   background: var(--background);
   padding: var(--padding-t, 0) var(--padding-r, 0) var(--padding-b, 0) var(--padding-l, 0);
-  border: 1px solid transparent;
   height: fit-content;
+  box-sizing: border-box;
+}
+
+:host([outline]) {
+  border: var(--border-width) solid var(--border-color);
 }
 
 .control {

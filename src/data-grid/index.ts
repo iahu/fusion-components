@@ -54,13 +54,26 @@ export class FCDataGrid extends FC {
   private activeCol?: FCDataGridCell[]
 
   @observer({ reflect: true })
+  grid = false
+
+  @observer({ reflect: true })
+  outline = false
+
+  @observer({ reflect: true })
   role = 'grid'
 
   @observer({ reflect: true })
   sticky = false
 
-  @observer()
-  maxRows = 10
+  @observer({ attribute: 'max-rows' })
+  maxRows = -1
+  maxRowsChanged(old: number, next: number): void {
+    if (next > 0) {
+      this.setAttribute('max-rows', next.toString())
+    } else {
+      this.removeAttribute('max-rows')
+    }
+  }
 
   @observer({ attribute: false })
   @queryAll('[slot=row-header]')

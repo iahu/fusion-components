@@ -1,15 +1,38 @@
 :host {
-  display: block;
+  display: flex;
+  /*padding: var(--padding);*/
 }
 :host(:focus) {
   outline: none;
 }
 
-:host(:not(:disabled)) {
+:host(:not(:disabled)) :is(.control, .expand-collapse-button) {
   cursor: pointer;
 }
+
 :host(:focus-visible) {
   outline: none;
+}
+:host(:focus-visible)::after {
+  content: none;
+}
+
+.expand-collapse-button {
+  display: flex;
+  justify-content: center;
+  align-self: flex-start;
+  align-items: center;
+  box-sizing: border-box;
+  min-width: calc(var(--font-size) * var(--line-height));
+  min-height: calc(var(--font-size) * var(--line-height));
+}
+
+.arrow-right {
+  font-size: var(--font-size);
+}
+
+.content {
+  flex: 1;
 }
 
 .control {
@@ -17,50 +40,26 @@
   color: inherit;
   display: flex;
   align-items: center;
+  box-sizing: border-box;
+  --padding-t: 0;
+  --padding-b: 0;
+  font-size: inherit;
   padding: var(--padding-t) var(--padding-r) var(--padding-b) var(--padding-l);
 }
 .control:hover {
   background: var(--background-hover);
 }
 
-.expand-collapse-button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-sizing: border-box;
-  width: var(--font-size);
-  height: var(--font-size);
-  padding: 0 calc(var(--fc-unit-size) * 2);
-}
-
-:host(:not([flatten])) slot[name='expand-collapse-button'] {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: calc(var(--font-size) * 1.334);
-}
-
-.arrow-right {
-  width: 90%;
-  height: 90%;
-}
-
 .group {
   display: block;
-  margin-left: calc(var(--font-size) * 1.2);
-}
-
-:host([expanded]) .arrow-right {
-  transform: rotateZ(90deg);
 }
 
 :host([selected]) .control {
   color: var(--foreground-selected);
-  background: var(--background-color-selected);
+  background: var(--background-selected);
 }
 
 :host([disabled]) {
-  /*background-color: var(--background-disabled);*/
   cursor: not-allowed;
 }
 :host([disabled]) .control,
@@ -77,7 +76,7 @@
   background-color: var(--accent-color-disabled);
 }
 
-:host(:focus-visible[focused]) .control:after {
+:host(:focus-visible) .control:after {
   content: '';
   position: absolute;
   left: 0;
@@ -87,4 +86,8 @@
   box-sizing: border-box;
   border-radius: var(--border-radius);
   border: var(--outline-width) solid var(--outline-color);
+}
+
+:host([indent]) {
+  padding-left: calc(var(--font-size) + var(--padding-l) + var(--padding-r));
 }

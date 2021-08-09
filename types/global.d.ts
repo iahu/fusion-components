@@ -13,3 +13,11 @@ declare interface CSSStyleDeclaration {
   '--max-cell-count': string
   '--client-height': string
 }
+
+declare const ShadyCSS = {
+  nativeShadow: true,
+}
+
+declare class CSSStyleSheet {
+  replaceSync(cssText: string): void
+}

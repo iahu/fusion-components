@@ -13,7 +13,7 @@ export class FCDataGridRow extends FC {
 
   @observer<FCDataGridRow, FCDataGridCell[]>({
     attribute: false,
-    converter(v, host) {
+    init(host) {
       return Array.from(host.querySelectorAll('fc-data-grid-cell'))
     },
   })
@@ -39,8 +39,11 @@ export class FCDataGridRow extends FC {
     }
   }
 
-  @observer()
-  @queryAll('fc-data-grid-cell[slot="row-index"]')
+  @observer<FCDataGridRow, FCDataGridCell[]>({
+    init(host) {
+      return Array.from(host.querySelectorAll<FCDataGridCell>('fc-data-grid-cell[slot="row-index"]'))
+    },
+  })
   rowIndexElements = [] as FCDataGridCell[]
   rowIndexElementsChanged(): void {
     this.cells = Array.from(this.querySelectorAll('fc-data-grid-cell'))

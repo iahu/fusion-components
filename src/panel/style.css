@@ -4,7 +4,7 @@
   min-width: calc(var(--fc-unit-size) * 100);
   min-height: calc(var(--fc-unit-size) * 40);
   border: var(--border-width) solid var(--border-color);
-  background: var(--box-background);
+  background: var(--background);
   color: var(--foreground);
 }
 

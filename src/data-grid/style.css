@@ -2,13 +2,17 @@
   position: relative;
   display: block;
   width: 100%;
-  overflow-y: auto;
+  /*overflow-y: auto;*/
   --item-height: calc(
     var(--font-size) * var(--line-height) + var(--padding-t) + var(--padding-b) + var(--border-width)
   );
-  max-height: calc(var(--item-height) * 11);
 
-  scroll-snap-type: both proximity;
+  /*max-height: calc(var(--item-height) * 11);*/
+  box-sizing: border-box;
+}
+
+:host([max-rows]) {
+  overflow-y: auto;
 }
 
 ::slotted(fc-grid-data-row) {

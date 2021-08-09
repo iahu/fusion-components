@@ -6,14 +6,15 @@ export interface ReactiveElementWithObserver<T, V = any> extends ReactiveElement
   [propName: string]: any
 }
 
+export type TypeCotr = { new (...args: any[]): any }
 export type ObserverType = 'string' | 'number' | 'boolean'
 export type Value = string | number | boolean | null
 export type Converter<V = any, T = any> = (
   v: V | number | string | boolean | null,
-  host: ReactiveElementWithObserver<T, V>
+  host: T | ReactiveElementWithObserver<T, V>
 ) => any
 
-export type InitFunction<T = any> = (host: T) => Value
+export type InitFunction<T = any, V = any> = (host: T | ReactiveElementWithObserver<T, V>) => V | null
 
 interface ObserverOptions<T, V = any> {
   type?: ObserverType
@@ -21,11 +22,16 @@ interface ObserverOptions<T, V = any> {
   attribute?: string | boolean
   converter?: Converter<V, T>
   sync?: boolean
-  init?: boolean | InitFunction<ReactiveElementWithObserver<T, V>>
+  init?: boolean | InitFunction<T, V>
 }
 
+const isNil = (v: any) => v === undefined || v === null
+
 const typeCotrMap: Record<string, Converter> = {
-  string: String,
+  string: (v: any) => {
+    if (isNil(v)) return ''
+    return String(v)
+  },
   number: Number,
   boolean: Boolean,
 }
@@ -38,10 +44,10 @@ const getConverter = <T = any, V = Value>(host: ReactiveElement, name: string, t
 const updateAttribute = (host: ReactiveElement, attributeName: string, value: Value, isBol: boolean) => {
   if (isBol || typeof value === 'boolean') {
     host.toggleAttribute(attributeName, Boolean(value))
-  } else if (String(value)) {
-    host.setAttribute(attributeName, String(value))
-  } else {
+  } else if (isNil(value) || !String(value)) {
     host.removeAttribute(attributeName)
+  } else {
+    host.setAttribute(attributeName, String(value))
   }
 }
 
@@ -59,8 +65,8 @@ type Observer<T> = (proto: T, name: string) => void
 export const observer = function <T extends ReactiveElement, V = any>(options?: ObserverOptions<T, V>): Observer<T> {
   return function (proto: T, name: string): void {
     const { type, reflect = false, attribute = true, converter, sync, init = true } = options || {}
-    const mergedAttributeName = typeof attribute === 'string' ? attribute : name.toLowerCase()
-    const tempName = '__' + name
+    const mergedAttributeName = typeof attribute === 'string' ? attribute.toLowerCase() : name.toLowerCase()
+    const tempName = '_.' + name
 
     // attrs => props
     const userCallback = proto.connectedCallback
@@ -69,6 +75,7 @@ export const observer = function <T extends ReactiveElement, V = any>(options?: 
 
       // init props from attributes
       if (init && attribute) {
+        Reflect.set(this, tempName, Reflect.get(this, name))
         if (options?.init || this.hasAttribute(mergedAttributeName)) {
           const typeofValue = type ?? typeof Reflect.get(this, name)
           const isBol = typeofValue === 'boolean'
@@ -94,7 +101,7 @@ export const observer = function <T extends ReactiveElement, V = any>(options?: 
             if (!attributeName) return
             const rawOptions = this.__observer?.get(attributeName)
             if (rawOptions?.name) {
-              const { name, converter } = rawOptions
+              const { type, name, converter } = rawOptions
               const typeofValue = type ?? typeof Reflect.get(this, name)
               const isBol = typeofValue === 'boolean'
               const nextValue = getValueFromAttribute(this, attributeName, isBol)
@@ -103,9 +110,9 @@ export const observer = function <T extends ReactiveElement, V = any>(options?: 
               this.attributeChangedCallback(attributeName, oldValue, this.getAttribute(attributeName))
 
               // 通过 attribute 变化，更新 property
-              Reflect.set(this, name, mergedNextValue)
-            }
-            if (attributeName) {
+              if (attributeName) {
+                Reflect.set(this, name, mergedNextValue)
+              }
               // lit 改写了 `attributeChangedCallback`，只有使用了 @property() 装饰器的属性才会触发前述回调
               // 这里加上一个通用的回调
               this.attributeChanged?.(attributeName, oldValue, this.getAttribute(attributeName))
@@ -130,6 +137,7 @@ export const observer = function <T extends ReactiveElement, V = any>(options?: 
     // props => attrs
     const ownPropertyDescriptor = Reflect.getOwnPropertyDescriptor(proto, name)
     Object.defineProperty(proto, name, {
+      configurable: true,
       ...ownPropertyDescriptor,
       get(this: ReactiveElementWithObserver<T>) {
         return Reflect.get(this, tempName)
@@ -143,6 +151,8 @@ export const observer = function <T extends ReactiveElement, V = any>(options?: 
 
         if (oldValue !== mergedNextValue) {
           Reflect.set(this, tempName, mergedNextValue)
+
+          // callback
           const callback = Reflect.get(this, name + 'Changed')
           const badCallback = Reflect.get(this, name + 'Change')
           if (typeof callback === 'function') {
@@ -156,13 +166,21 @@ export const observer = function <T extends ReactiveElement, V = any>(options?: 
             console.warn(`callback should be "${name}Changed", but not "${name}Change"!`)
           }
 
+          // reflect
           // 初始化前，html 标签自带的 attribute 不能被覆盖
           const shouldUpdate = !(this.hasAttribute(name) && oldValue === undefined)
           if (reflect && shouldUpdate) {
             const p = this.hasUpdated ? Promise.resolve(true) : this.updateComplete
             p.then(() => updateAttribute(this, mergedAttributeName, mergedNextValue, isBol))
           }
-          this.requestUpdate(name, oldValue)
+
+          // update
+          this.requestUpdate(name, oldValue, {
+            attribute,
+            reflect,
+            noAccessor: true,
+            type: typeCotrMap[typeofValue] ?? String,
+          })
         }
       },
     })

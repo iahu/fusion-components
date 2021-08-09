@@ -23,7 +23,7 @@ abstract class FusionComponent extends LitElement {
 
   connectedCallback(): void {
     super.connectedCallback()
-    boolAriaAttrNameList.forEach((name) => {
+    boolAriaAttrNameList.forEach(name => {
       if (Reflect.ownKeys(this).includes(`__${name}`)) {
         this.setAttribute(`aria-${name}`, this.hasAttribute(name).toString())
       }
@@ -55,7 +55,7 @@ abstract class FusionComponent extends LitElement {
   @observer()
   className = this.getAttribute('class') || ''
   protected classNameChanged(old: string, next: string): void {
-    this.className.split(/\s+/g).forEach((cls) => cls && this.classList.add(cls))
+    this.className.split(/\s+/g).forEach(cls => cls && this.classList.add(cls))
     this.removeAttribute('className')
   }
 
