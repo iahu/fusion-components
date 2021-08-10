@@ -2,7 +2,7 @@
   position: relative;
   display: flex;
   justify-content: var(--data-grid-align);
-  padding: var(--padding);
+  /*padding: var(--padding);*/
   --outline-offset: 0px;
   --border-radius: 0;
   border-right: var(--border-right-width) solid var(--border-color);

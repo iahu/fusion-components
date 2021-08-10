@@ -38,7 +38,7 @@ export class FCSelect extends FCListBox {
   role = 'listbox'
 
   @observer({ reflect: true })
-  tabIndex = 0
+  tabindex = '0'
 
   @observer({ reflect: true })
   opened = false
@@ -53,7 +53,7 @@ export class FCSelect extends FCListBox {
   }
 
   handleKeydown(e: KeyboardEvent): void {
-    if (!this.opened && Object.values(this._HANDLED_KEYS).includes(e.key)) {
+    if (!this.opened && ['ArrowDown', 'ArrowUp', 'Enter'].includes(e.key)) {
       e.preventDefault()
       this.opened = true
     } else {

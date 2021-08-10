@@ -42,34 +42,32 @@ export class FCListBox extends FormAssociated {
   role = 'listbox'
 
   @observer()
-  value = this.getAttribute('value') || ''
+  value = this.getAttribute('value') ?? ''
   protected valueChanged(old: string, next: string): void {
     if (!this.selectable) {
       return
     }
 
-    this.updateComplete.then(() => {
-      this.visibleOptions.find(op => op.select)?.select(false)
-      const nextOption = this.visibleOptions.find(op => op.value === next)
-      if (nextOption) {
-        nextOption.select(true)
-        this.selectedOption = nextOption
-      }
-    })
+    this.visibleOptions.find(op => op.select)?.select(false)
+    const nextOption = this.visibleOptions.find(op => op.value === next)
+    if (nextOption) {
+      nextOption.select(true)
+      this.selectedOption = nextOption
+    }
   }
 
   @observer()
   selectable = true
   selectableChanged(old: boolean, next: boolean): void {
     this.updateComplete.then(() => {
-      if (!this.selectable) {
+      if (!next) {
         this.options.forEach(op => (op.selectable = false))
       }
     })
   }
 
   @observer({ reflect: true })
-  tabIndex = -1
+  tabindex = '-1'
 
   public get visibleOptions(): FCListOption[] {
     return Array.from(this.children)
@@ -100,46 +98,40 @@ export class FCListBox extends FormAssociated {
   // 可以避免 value 相同时，设置 value 导致选择错乱的问题
   @observer({ attribute: false })
   selectedOption?: FCListOption
-  protected selectedOptionChanged(old: FCListOption | undefined, next: FCListOption | undefined): void {
+  protected selectedOptionChanged(old?: FCListOption, next?: FCListOption): void {
     if (old) {
       old.focusItem(false)
       old.select(false)
     }
+
     // 没有 next 就清空
-    const { selectedOption } = this
-    this.value = selectedOption?.value ?? ''
-    this.displayValue = selectedOption?.text || ''
-    this.indicatedIndex = selectedOption?.index ?? -1
-    selectedOption?.focusItem(true)
+    this.value = next?.value ?? ''
+    this.displayValue = next?.text || ''
+    this.indicatedIndex = next?.index ?? -1
+    next?.focusItem(true)
   }
 
   @observer({ attribute: false })
   indicatedIndex = -1
 
-  public get _HANDLED_KEYS(): Record<string, string> {
-    return { ArrowDown: 'ArrowDown', ArrowUp: 'ArrowUp', Enter: 'Enter' }
-  }
-
   handleKeydown(e: KeyboardEvent): void {
-    const { _HANDLED_KEYS } = this
-
-    if (!Object.values<string>(_HANDLED_KEYS).includes(e.key)) {
-      return
-    }
-
     const withCtrl = e.metaKey || e.ctrlKey || e.altKey ? this.length : 0
     switch (e.key) {
-      case _HANDLED_KEYS.ArrowDown:
+      case 'ArrowDown':
         e.preventDefault()
         this.focusNextOption(this.indicatedIndex, 1 + withCtrl)
         break
-      case _HANDLED_KEYS.ArrowUp:
+      case 'ArrowUp':
         e.preventDefault()
         this.focusNextOption(this.indicatedIndex, -1 - withCtrl)
         break
-      case _HANDLED_KEYS.Enter:
+      case 'Enter':
         e.preventDefault()
         this.select(this.indicatedIndex)
+        break
+      case 'Escape':
+        e.preventDefault()
+        this.blur()
         break
     }
   }

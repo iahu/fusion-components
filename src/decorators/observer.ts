@@ -160,7 +160,7 @@ export const observer = function <T extends ReactiveElement, V = any>(options?: 
               // 同步的回调
               callback.call(this, oldValue, mergedNextValue)
             } else {
-              this.updateComplete.then(() => callback.call(this, oldValue, mergedNextValue))
+              this.updateComplete.then(() => callback.call(this, oldValue, Reflect.get(this, name)))
             }
           } else if (typeof badCallback === 'function') {
             console.warn(`callback should be "${name}Changed", but not "${name}Change"!`)
