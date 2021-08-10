@@ -3,3 +3,11 @@
   display: contents;
   border-radius: 0;
 }
+
+:host([open]:last-child) ::slotted(:not([slot])) {
+  --grid-border-bottom-width: var(--border-width);
+}
+
+:host(:not([open])) ::slotted([slot='collapse']) {
+  display: none;
+}

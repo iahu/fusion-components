@@ -23,14 +23,14 @@ export class FCDataGrid extends FC {
     super.connectedCallback()
 
     this.addEventListener('keydown', this.handleKeydown)
-    this.addEventListener('click', this.handleActive)
+    this.addEventListener('focusin', this.handleActive)
   }
 
   disconnectedCallback(): void {
     super.disconnectedCallback()
 
     this.removeEventListener('keydown', this.handleKeydown)
-    this.removeEventListener('click', this.handleActive)
+    this.removeEventListener('focusin', this.handleActive)
   }
 
   @observer({ attribute: false })
@@ -232,7 +232,7 @@ export class FCDataGrid extends FC {
     }
   }
 
-  private handleActive(e: MouseEvent | KeyboardEvent): void {
+  private handleActive(e: Event): void {
     const { target } = e
     if (target instanceof FCDataGridCell) {
       this.activeElement = target

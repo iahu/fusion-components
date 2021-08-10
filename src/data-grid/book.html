@@ -163,6 +163,34 @@
   </fc-data-grid-row>
 </fc-data-grid>
 
+<h4>折叠 row</h4>
+<fc-data-grid outline grid>
+  <fc-data-grid-row role="rowheader">
+    <fc-data-grid-cell colspan="2" rowspan="2">可见性</fc-data-grid-cell>
+    <fc-data-grid-cell colspan="3">投影/表面</fc-data-grid-cell>
+    <fc-data-grid-cell colspan="2">截面</fc-data-grid-cell>
+  </fc-data-grid-row>
+  <fc-data-grid-row role="rowheader">
+    <fc-data-grid-cell>线</fc-data-grid-cell>
+    <fc-data-grid-cell>填充图案</fc-data-grid-cell>
+    <fc-data-grid-cell>透明度</fc-data-grid-cell>
+    <fc-data-grid-cell>线</fc-data-grid-cell>
+    <fc-data-grid-cell>填充图案</fc-data-grid-cell>
+  </fc-data-grid-row>
+  <fc-data-grid-row>
+    <fc-data-grid-cell>1</fc-data-grid-cell>
+    <fc-data-grid-cell>2</fc-data-grid-cell>
+    <fc-data-grid-cell>3</fc-data-grid-cell>
+    <fc-data-grid-cell>4</fc-data-grid-cell>
+    <fc-data-grid-cell>5</fc-data-grid-cell>
+    <fc-data-grid-cell>6</fc-data-grid-cell>
+    <fc-data-grid-cell>7</fc-data-grid-cell>
+
+    <fc-data-grid-cell slot="collapse" colspan="2">collapse 1</fc-data-grid-cell>
+    <fc-data-grid-cell slot="collapse" colspan="5">collapse 2</fc-data-grid-cell>
+  </fc-data-grid-row>
+</fc-data-grid>
+
 <h4>排序</h4>
 <div class="inline-grid">
   <p>按姓名</p>

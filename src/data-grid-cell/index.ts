@@ -38,6 +38,25 @@ export class FCDataGridCell extends FC {
     }
   }
 
+  @observer()
+  colSpan = 1
+  colSpanChanged(old: number, next: number): void {
+    if (next > 1) {
+      this.style.gridColumnEnd = `span ${next}`
+    } else {
+      this.style.gridColumnEnd = ''
+    }
+  }
+
+  @observer({ reflect: true })
+  collpase = false
+
+  @observer({ reflect: true })
+  open = false
+  openChanged(old: boolean, next: boolean): void {
+    this.emit('open')
+  }
+
   @observer<FCDataGridCell>({
     reflect: true,
     init(host) {
@@ -56,13 +75,11 @@ export class FCDataGridCell extends FC {
   @observer()
   rowSpan = 1
   rowSpanChanged(old: number, next: number): void {
-    this.style.gridRowEnd = `span ${next}`
-  }
-
-  @observer()
-  colSpan = 1
-  colSpanChanged(old: number, next: number): void {
-    this.style.gridColumnEnd = `span ${next}`
+    if (next > 1) {
+      this.style.gridRowEnd = `span ${next}`
+    } else {
+      this.style.gridRowEnd = ''
+    }
   }
 
   focusItem(focused = true): void {
@@ -90,7 +107,41 @@ export class FCDataGridCell extends FC {
     this.tabIndex = 0
   }
 
+  handleCollpase(e: MouseEvent): void {
+    e.preventDefault()
+    e.stopPropagation()
+    this.open = !this.open
+  }
+
   render(): TemplateResult {
-    return html`${before()}<slot></slot>${after()}`
+    const collapseBtn = html`
+      <svg class="arrow-right" viewBox="0 0 12 12" width="12" height="12" xmlns="http://www.w3.org/2000/svg">
+        <path d="m9 6-6 5.5V.5z" fill-rule="evenodd" />
+      </svg>
+    `
+    const expandBtn = html`<svg
+      viewBox="0 0 12 12"
+      xmlns="http://www.w3.org/2000/svg"
+      width="12"
+      height="12"
+      xmlns:v="https://vecta.io/nano"
+    >
+      <path d="M6 9L.5 3h11z" fill-rule="evenodd" />
+    </svg>`
+
+    return html`
+      ${before()}
+      ${this.collpase
+        ? html`
+            <button class="collpase-button" part="collpase-button" tabindex="-1" @click="${this.handleCollpase}">
+              ${this.open
+                ? html`<slot name="collapse-button">${expandBtn}</slot>`
+                : html`<slot name="expand-button">${collapseBtn}</slot>`}
+            </button>
+          `
+        : null}
+      <slot></slot>
+      ${after()}
+    `
   }
 }

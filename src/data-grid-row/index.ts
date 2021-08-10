@@ -1,7 +1,7 @@
 import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { FCDataGridCell } from '../data-grid-cell'
-import { observer } from '../decorators'
+import { assignedElements, observer } from '../decorators'
 import { FC } from '../fusion-component'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
@@ -11,12 +11,18 @@ import style from './style.css'
 export class FCDataGridRow extends FC {
   static styles = mergeStyles(style)
 
-  @observer<FCDataGridRow, FCDataGridCell[]>({
-    attribute: false,
-    init(host) {
-      return Array.from(host.querySelectorAll('fc-data-grid-cell'))
-    },
-  })
+  connectedCallback(): void {
+    super.connectedCallback()
+    this.addEventListener('open', this.handleOpen)
+  }
+
+  disconnectedCallback(): void {
+    super.disconnectedCallback()
+    this.removeEventListener('open', this.handleOpen)
+  }
+
+  @observer<FCDataGridRow, FCDataGridCell[]>({ attribute: false })
+  @assignedElements()
   cells = [] as FCDataGridCell[]
   cellsChanged(old: FCDataGridCell[], next: FCDataGridCell[]): void {
     next.forEach((c, i) => {
@@ -24,6 +30,18 @@ export class FCDataGridRow extends FC {
     })
     this.emit('cellsChanged')
   }
+
+  @observer({ attribute: false })
+  @assignedElements('slot[name="collapse"]')
+  collapseCells = [] as FCDataGridCell[]
+  collapseCellsChanged(old: FCDataGridCell[], next: FCDataGridCell[]): void {
+    if (next.length && this.cells.length) {
+      this.cells[0].collpase = true
+    }
+  }
+
+  @observer({ reflect: true })
+  open = false
 
   @observer<FCDataGridRow>({
     reflect: true,
@@ -46,7 +64,7 @@ export class FCDataGridRow extends FC {
   })
   rowIndexElements = [] as FCDataGridCell[]
   rowIndexElementsChanged(): void {
-    this.cells = Array.from(this.querySelectorAll('fc-data-grid-cell'))
+    this.cells = Array.from(this.querySelectorAll('fc-data-grid-cell:not([slot])'))
   }
 
   @observer<FCDataGridRow, boolean>({ reflect: true })
@@ -57,7 +75,18 @@ export class FCDataGridRow extends FC {
     })
   }
 
+  handleOpen(e: Event): void {
+    if (e.target instanceof FCDataGridCell) {
+      this.open = e.target.open
+    }
+  }
+
   render(): TemplateResult {
-    return html`${before()}<slot></slot>${after()}`
+    return html`
+      ${before()}
+      <slot></slot>
+      <slot name="collapse"></slot>
+      ${after()}
+    `
   }
 }

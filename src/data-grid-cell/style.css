@@ -30,3 +30,13 @@
   font-weight: bold;
   background: var(--background);
 }
+
+.collpase-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  background: none;
+  color: var(--foreground);
+  padding: var(--padding);
+}
