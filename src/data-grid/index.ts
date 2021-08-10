@@ -101,8 +101,13 @@ export class FCDataGrid extends FC {
     // Lit update is async
     Promise.all(ps).then(() => this.handleSort())
 
-    const cellsList = next.map(r => r.childElementCount)
-    const maxColCount = Math.max(...cellsList)
+    const cellsList = next.map(r =>
+      r.cells.reduce((acc, cell) => {
+        acc += cell.colSpan
+        return acc
+      }, 0)
+    )
+    const maxColCount = Math.max(...cellsList, 0)
     const maxRow = next?.[maxRows]
     let maxHeight = ''
     if (maxRow) {
@@ -110,9 +115,9 @@ export class FCDataGrid extends FC {
     }
     const oldCSS = parseParams(this.style.cssText)
     const nextCSS = {
+      ...oldCSS,
       'max-height': maxHeight,
       '--grid-template-columns': `repeat(${maxColCount}, 1fr)`,
-      ...oldCSS,
     }
     this.style.cssText = joinParams(nextCSS)
     this.setAttribute('aria-rowcount', next.length.toString())

@@ -1,7 +1,7 @@
 import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { FCDataGridCell } from '../data-grid-cell'
-import { observer, queryAll } from '../decorators'
+import { observer } from '../decorators'
 import { FC } from '../fusion-component'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'

@@ -33,6 +33,8 @@ export class FCDataGridCell extends FC {
   colIndexChanged(old: number, next: number): void {
     if (next >= 0) {
       this.setAttribute('aria-colindex', next.toString())
+    } else {
+      this.removeAttribute('aria-colindex')
     }
   }
 
@@ -51,14 +53,17 @@ export class FCDataGridCell extends FC {
   @observer()
   sortable = this.hasAttribute('sortable')
 
-  /**
-   * @todo 实现 'span' 功能
-   */
-  // @observer()
-  // span = 1
-  // spanChanged() {
-  //   this.style.gridColumnEnd =
-  // }
+  @observer()
+  rowSpan = 1
+  rowSpanChanged(old: number, next: number): void {
+    this.style.gridRowEnd = `span ${next}`
+  }
+
+  @observer()
+  colSpan = 1
+  colSpanChanged(old: number, next: number): void {
+    this.style.gridColumnEnd = `span ${next}`
+  }
 
   focusItem(focused = true): void {
     this.toggleAttribute('focused', Boolean(focused))
@@ -73,11 +78,10 @@ export class FCDataGridCell extends FC {
   handleBlur = (e: FocusEvent): void => {
     if (e.target === this) {
       this.focusItem(false)
-      // this.tabIndex = -1
     }
   }
 
-  handleClick = (e: MouseEvent) => {
+  handleClick = (e: MouseEvent): void => {
     if (e.target !== this) {
       return
     }
