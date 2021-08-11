@@ -70,7 +70,7 @@
     "yargs": "^17.0.1"
   },
   "dependencies": {
-    "exp-calc": "file:///Users/hu/Developer/exp-calc",
+    "exp-calc": "^1.0.3",
     "lit": "^2.0.0-rc.2",
     "lit-html": "^1.4.1",
     "tslib": "^2.3.0"
