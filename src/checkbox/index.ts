@@ -45,6 +45,11 @@ export class FCCheckbox extends FormAssociated {
 
   @observer({ type: 'boolean', reflect: true })
   checked = false
+  checkedChanged(old: boolean, next: boolean): void {
+    if (this.proxy instanceof HTMLInputElement) {
+      this.proxy.checked = next
+    }
+  }
 
   @observer({ type: 'boolean', attribute: 'checked' })
   defaultChecked = false
