@@ -5241,7 +5241,10 @@ execa@^1.0.0:
     strip-eof "^1.0.0"
 
 "exp-calc@file:../exp-calc":
-  version "1.0.1"
+  version "1.0.2"
+
+"exp-calc@file:///Users/hu/Developer/exp-calc":
+  version "1.0.2"
 
 expand-brackets@^2.1.4:
   version "2.1.4"

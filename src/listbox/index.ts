@@ -7,9 +7,15 @@ import { FCListOption, isOption } from '../list-option'
 import style from './style.css'
 import { focusable } from '../helper'
 
+const createProxy = () => document.createElement('select')
+
 @customElement('fc-listbox')
 export class FCListBox extends FormAssociated {
   static styles = mergeStyles(style)
+
+  constructor() {
+    super(createProxy())
+  }
 
   connectedCallback(): void {
     super.connectedCallback()

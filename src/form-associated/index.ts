@@ -1,3 +1,4 @@
+import { KeyExportOptions } from 'crypto'
 import { observer } from '../decorators'
 import { FC } from '../fusion-component'
 
@@ -24,6 +25,8 @@ interface ValidityStateFlags {
 }
 
 type FormValue = File | string | FormData | null
+
+type Maybe<T> = T | undefined | null
 
 /**
  * Source:
@@ -77,69 +80,178 @@ interface ElementInternals {
   setValidity(flags: ValidityStateFlags, message?: string, anchor?: HTMLElement): void
 }
 
-export default class FormAssociated extends FC {
-  static formAssociated = true
-  elementInternals: ElementInternals
+type ProxyElements = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
 
-  constructor() {
+declare global {
+  interface Window {
+    ElementInternals: ElementInternals & { prototype: Record<PropertyKey, unknown> }
+  }
+}
+
+export const proxySlotName = 'form-associated-proxy'
+export const supportsElementInternals =
+  'ElementInternals' in window && 'setFormValue' in window.ElementInternals.prototype
+
+export default class FormAssociated extends FC {
+  static get formAssociated(): boolean {
+    return supportsElementInternals
+  }
+
+  proxy: ProxyElements
+  elementInternals?: ElementInternals
+
+  public get InternalOrProxy(): ElementInternals | ProxyElements {
+    return this.elementInternals || this.proxy
+  }
+
+  constructor(proxy: ProxyElements) {
     super()
 
-    this.elementInternals = (this as any).attachInternals()
+    this.initialValue = this.value || ''
+    this.required = false
+
+    this.proxy = proxy || document.createElement('input')
+    if (Reflect.has(this, 'attachInternals')) {
+      this.elementInternals = (this as any).attachInternals()
+    }
   }
 
   connectedCallback(): void {
     super.connectedCallback()
 
+    this.addEventListener('keydown', this._handleKeydown)
+    this.form?.addEventListener('reset', this.handleFormReset)
     this.initialValue = this.value || this.getAttribute('value') || this.initialValue
+    if (!this.elementInternals && this.proxy) {
+      this.attachProxy()
+    }
+  }
+
+  disconnectedCallback(): void {
+    super.disconnectedCallback()
+    this.removeEventListener('keydown', this._handleKeydown)
+    this.form?.removeEventListener('reset', this.handleFormReset)
+    if (!supportsElementInternals) {
+      this.detachProxy()
+    }
   }
 
   initialValue = ''
 
   dirtyValue = false
 
-  public get form(): HTMLFormElement | null {
-    return this.elementInternals.form
+  proxySlot?: HTMLSlotElement | null
+
+  private proxyInitialized = false
+
+  proxyEventsToBlock = ['change', 'click']
+
+  stopPropagation = (e: Event) => {
+    e.stopPropagation()
+  }
+
+  /**
+   * Attach the proxy element to the DOM
+   */
+  public attachProxy(): void {
+    if (!this.proxyInitialized) {
+      this.proxyInitialized = true
+      this.proxy.style.display = 'none'
+      this.proxyEventsToBlock.forEach(name => this.proxy.addEventListener(name, this.stopPropagation))
+
+      // These are typically mapped to the proxy during
+      // property change callbacks, but during initialization
+      // on the initial call of the callback, the proxy is
+      // still undefined. We should find a better way to address this.
+      this.proxy.disabled = this.disabled
+      this.proxy.required = this.required
+      if (typeof this.name === 'string') {
+        this.proxy.name = this.name
+      }
+
+      if (typeof this.value === 'string') {
+        this.proxy.value = this.value
+      }
+
+      this.proxy.setAttribute('slot', proxySlotName)
+
+      this.proxySlot = document.createElement('slot')
+      this.proxySlot.setAttribute('name', proxySlotName)
+    }
+
+    this.shadowRoot?.appendChild(this.proxySlot as HTMLSlotElement)
+    this.appendChild(this.proxy)
+  }
+
+  /**
+   * Detach the proxy element from the DOM
+   */
+  public detachProxy(): void {
+    this.removeChild(this.proxy)
+    this.shadowRoot?.removeChild(this.proxySlot as HTMLSlotElement)
+  }
+
+  public get form(): Maybe<HTMLFormElement> {
+    return this.InternalOrProxy.form
   }
 
   public get labels(): ReadonlyArray<Node> {
-    return Object.freeze(Array.from(this.elementInternals.labels))
+    return Object.freeze(Array.from(this.InternalOrProxy.labels || []))
   }
 
-  public get validationMessage(): string {
-    return this.elementInternals.validationMessage
+  public get validationMessage(): Maybe<string> {
+    return this.InternalOrProxy.validationMessage
   }
 
   public get validated(): ValidityState {
-    return this.elementInternals.validity
+    return this.InternalOrProxy.validity
   }
 
   public get willValidate(): boolean {
-    return this.elementInternals.willValidate
+    return this.InternalOrProxy.willValidate
   }
 
   checkValidity(): boolean {
-    return this.elementInternals.checkValidity()
+    return this.InternalOrProxy.checkValidity()
   }
 
   reportValidity(): boolean {
-    return this.elementInternals.reportValidity()
+    return this.InternalOrProxy.reportValidity()
   }
 
   setFormValue(name: FormValue, value?: FormValue): void {
-    this.elementInternals.setFormValue(name, value)
+    if (this.elementInternals) {
+      this.elementInternals.setFormValue(name, value)
+    }
   }
 
   setValidity(flags: ValidityStateFlags, message?: string, anchor?: HTMLElement): void {
-    this.elementInternals.setValidity(flags, message, anchor)
+    if (this.elementInternals) {
+      this.elementInternals.setValidity(flags, message, anchor)
+    } else if (typeof message === 'string') {
+      this.proxy.setCustomValidity(message)
+    }
+  }
+
+  public get validity(): ValidityState {
+    return this.InternalOrProxy.validity
   }
 
   @observer({ reflect: true })
   name = ''
+  nameChanged(old: string, next: string): void {
+    if (this.proxy) {
+      this.proxy.name = next
+    }
+  }
 
   @observer({ init: false })
   value = ''
   protected valueChanged(old: string, next: string): void {
     this.dirtyValue = true
+    if (this.proxy) {
+      this.proxy.value = next
+    }
   }
 
   @observer({ type: 'boolean', reflect: true })
@@ -147,4 +259,15 @@ export default class FormAssociated extends FC {
 
   @observer({ type: 'boolean' })
   required = false
+
+  private _handleKeydown(e: KeyboardEvent): void {
+    if (e.key === 'Enter' && e.target instanceof HTMLEmbedElement) {
+      this.form?.submit()
+    }
+  }
+
+  handleFormReset(): void {
+    this.value = this.initialValue
+    this.dirtyValue = false
+  }
 }

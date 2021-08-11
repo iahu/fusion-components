@@ -5,9 +5,19 @@ import FormAssociated from '../form-associated'
 import mergeStyles from '../merge-styles'
 import style from './style.css'
 
+const createProxy = () => {
+  const checkbox = document.createElement('input')
+  checkbox.type = 'checkbox'
+  return checkbox
+}
+
 @customElement('fc-checkbox')
 export class FCCheckbox extends FormAssociated {
   static styles = mergeStyles(style)
+
+  constructor() {
+    super(createProxy())
+  }
 
   connectedCallback(): void {
     super.connectedCallback()
@@ -50,7 +60,7 @@ export class FCCheckbox extends FormAssociated {
 
   updateForm(): void {
     const value = this.checked ? this.value : null
-    this.elementInternals.setFormValue(value, value)
+    this.setFormValue(value, value)
   }
 
   private toggleSelect() {

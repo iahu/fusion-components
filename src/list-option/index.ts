@@ -1,6 +1,7 @@
 import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { observer } from '../decorators'
+import { proxySlotName, supportsElementInternals } from '../form-associated'
 import { FC } from '../fusion-component'
 import { FCListBox } from '../listbox'
 import mergeStyles from '../merge-styles'
@@ -14,6 +15,16 @@ export const isOption = (el: Element): el is FCListOption =>
 export class FCListOption extends FC {
   static styles = mergeStyles(style)
 
+  proxy?: HTMLInputElement
+
+  constructor() {
+    super()
+    if (!supportsElementInternals) {
+      this.proxy = document.createElement('input')
+      this.proxy.type = 'radio'
+    }
+  }
+
   static get formAssociated(): boolean {
     return true
   }
@@ -24,6 +35,10 @@ export class FCListOption extends FC {
   connectedCallback(): void {
     super.connectedCallback()
     this.addEventListener('click', this.handleClick)
+
+    if (!supportsElementInternals) {
+      this.attachProxy()
+    }
   }
   disconnectedCallback(): void {
     super.disconnectedCallback()
@@ -43,8 +58,11 @@ export class FCListOption extends FC {
     },
   })
   selected = false
-  protected selectedChanged(): void {
+  protected selectedChanged(old: boolean, next: boolean): void {
     this.emit('select')
+    if (this.proxy) {
+      this.proxy.checked = next
+    }
   }
 
   select(selected = true): void {
@@ -60,7 +78,23 @@ export class FCListOption extends FC {
   disabled = false
 
   @observer()
+  name = ''
+  nameChanged(old: string, next: string): void {
+    if (this.proxy) {
+      this.proxy.name = next
+    }
+  }
+
+  @observer()
   value = ''
+  valueChanged(old: string, next: string): void {
+    if (this.proxy) {
+      this.proxy.value = next
+    }
+  }
+
+  @observer()
+  required = false
 
   // 不能真的获取焦点，因为在 comobox 下，焦点应该在输入框上
   focusItem(focused = true): void {
@@ -88,6 +122,25 @@ export class FCListOption extends FC {
   handleClick(e: MouseEvent): void {
     e.preventDefault()
     this.selected = !this.disabled && this.selectable
+  }
+
+  proxySlot?: HTMLSlotElement
+
+  attachProxy(): void {
+    if (!this.proxy) return
+    const proxy = this.proxy
+    proxy.style.display = 'none'
+    proxy.name = this.name
+    proxy.checked = this.selected
+    proxy.value = this.value
+    proxy.required = this.required
+    proxy.disabled = this.disabled
+
+    this.setAttribute('slot', proxySlotName)
+    this.proxySlot = document.createElement('slot')
+    this.proxySlot.name = proxySlotName
+    this.shadowRoot?.appendChild(this.proxySlot)
+    this.appendChild(this.proxy)
   }
 
   render(): TemplateResult {

@@ -5,9 +5,19 @@ import FormAssociated from '../form-associated'
 import mergeStyles from '../merge-styles'
 import style from './style.css'
 
+const createProxyElement = () => {
+  const proxy = document.createElement('input')
+  proxy.type = 'radio'
+  return proxy
+}
+
 @customElement('fc-radio')
 export class FCRadio extends FormAssociated {
   static styles = mergeStyles(style)
+
+  constructor() {
+    super(createProxyElement())
+  }
 
   connectedCallback(): void {
     super.connectedCallback()
@@ -71,7 +81,7 @@ export class FCRadio extends FormAssociated {
 
   updateForm(): void {
     const value = this.checked ? this.value : null
-    this.elementInternals.setFormValue(value)
+    this.setFormValue(value)
   }
 
   handleClick(e: MouseEvent): void {
