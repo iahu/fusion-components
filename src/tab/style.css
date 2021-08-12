@@ -13,16 +13,16 @@
 
 :host([aria-selected='true']) {
   color: var(--foreground-selected);
-  background: var(--accent-color);
+  background: var(--background-active);
 }
 :host([aria-selected='true']:hover) {
   /*color: var(--foreground-hover);*/
-  background: var(--accent-color-hover);
+  background: var(--background-hover);
 }
 
 :host([aria-selected='true'][disabled]) {
   color: var(--foreground-disabled);
-  background: var(--accent-color-disabled);
+  background: var(--background-disabled);
 }
 
 :host([disabled]) {

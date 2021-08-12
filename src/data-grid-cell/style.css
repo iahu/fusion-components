@@ -15,7 +15,7 @@
 
 :host([role='columnheader']) {
   font-weight: bold;
-  background: var(--background);
+  background: var(--background-active);
 }
 
 .collpase-button {

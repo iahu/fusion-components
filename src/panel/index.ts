@@ -16,6 +16,9 @@ export class FCPanel extends FC {
   @observer({ reflect: true })
   closable = true
 
+  @observer()
+  closeTarget = ''
+
   @observer({ reflect: true })
   role = 'widget'
 
@@ -36,7 +39,9 @@ export class FCPanel extends FC {
     return html`
       <div class="panel-header" part="panel-header">
         <slot name="panel-header">
-          <fc-panel-header slot="panel-header" closable="${this.closable}">${this.header}</fc-panel-header>
+          <fc-panel-header slot="panel-header" closable="${this.closable}" closeTarget="${this.closeTarget}"
+            >${this.header}</fc-panel-header
+          >
         </slot>
       </div>
       <div class="panel-body" part="panel-body">

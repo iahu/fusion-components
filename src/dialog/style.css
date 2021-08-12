@@ -26,7 +26,6 @@
 .control {
   position: relative;
   background: var(--box-background);
-  padding: var(--padding-t) var(--padding-r) var(--padding-b) var(--padding-l);
   box-shadow: var(--box-shadow);
   width: fit-content;
   height: fit-content;

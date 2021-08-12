@@ -13,9 +13,12 @@ export class FCPanelHeader extends FC {
   @observer({ reflect: true })
   closable = true
 
+  @observer()
+  closeTarget = ''
+
   handleClick(e: MouseEvent): void {
     e.preventDefault()
-    this.emit('close')
+    this.emit('close', this.closeTarget)
   }
 
   render(): TemplateResult {

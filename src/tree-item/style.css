@@ -45,6 +45,7 @@
   --padding-b: 0;
   font-size: inherit;
   padding: var(--padding-t) var(--padding-r) var(--padding-b) var(--padding-l);
+  --outline-offset: 0px;
 }
 .control:hover {
   background: var(--background-hover);
