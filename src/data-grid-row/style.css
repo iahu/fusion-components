@@ -6,8 +6,13 @@
 
 :host([open]:last-child) ::slotted(:not([slot])) {
   --grid-border-bottom-width: var(--border-width);
+  --grid-border-right-width: var(--border-width);
 }
 
 :host(:not([open])) ::slotted([slot='collapse']) {
   display: none;
+}
+
+:host(:last-child) ::slotted(:not([slot]):last-child) {
+  --grid-border-right-width: 0;
 }

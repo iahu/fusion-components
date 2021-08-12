@@ -6,7 +6,7 @@ import '../data-grid-row'
 import { FCDataGridRow } from '../data-grid-row'
 import { observer, queryAll } from '../decorators'
 import { FC } from '../fusion-component'
-import { clamp, focusCurrentOrNext, joinParams, parseParams } from '../helper'
+import { clamp, focusCurrentOrNext, setCSSText } from '../helper'
 import mergeStyles from '../merge-styles'
 import style from './style.css'
 
@@ -113,13 +113,10 @@ export class FCDataGrid extends FC {
     if (maxRow) {
       maxHeight = maxRow.offsetTop + maxRow.offsetHeight + 'px'
     }
-    const oldCSS = parseParams(this.style.cssText)
-    const nextCSS = {
-      ...oldCSS,
+    setCSSText(this, {
       'max-height': maxHeight,
       '--grid-template-columns': `repeat(${maxColCount}, 1fr)`,
-    }
-    this.style.cssText = joinParams(nextCSS)
+    })
     this.setAttribute('aria-rowcount', next.length.toString())
     this.setAttribute('aria-colcount', maxColCount.toString())
     this.colCount = maxColCount

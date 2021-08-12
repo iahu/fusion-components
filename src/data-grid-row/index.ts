@@ -3,6 +3,7 @@ import { customElement } from 'lit/decorators.js'
 import { FCDataGridCell } from '../data-grid-cell'
 import { assignedElements, observer } from '../decorators'
 import { FC } from '../fusion-component'
+import { setCSSText } from '../helper'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
 import style from './style.css'
@@ -37,6 +38,7 @@ export class FCDataGridRow extends FC {
   collapseCellsChanged(old: FCDataGridCell[], next: FCDataGridCell[]): void {
     if (next.length && this.cells.length) {
       this.cells[0].collpase = true
+      setCSSText(this.cells[this.cells.length - 1], { '--grid-border-right-width': '0' })
     }
   }
 

@@ -33,7 +33,7 @@ export const focusCurrentOrNext = <T extends HTMLElement>(
 }
 
 const trim = (s: string) => s.trim()
-export const parseParams = (paramsString: string, split = ';', equal = ':') => {
+export const parseParams = (paramsString: string, split = ';', equal = ':'): Record<string, string> => {
   return paramsString.split(split).reduce((params, item) => {
     const [key, value] = item.split(equal).map(trim)
     if (key !== '') {
@@ -43,8 +43,18 @@ export const parseParams = (paramsString: string, split = ';', equal = ':') => {
   }, {} as Record<string, string>)
 }
 
-export const joinParams = (params: Record<string, string | number>, split = ';', equal = ':') => {
+export const joinParams = (params: Record<string, string | number>, split = ';', equal = ':'): string => {
   return Object.entries(params)
     .map(([key, value]) => [key, value].join(equal))
     .join(split)
+}
+
+export const setCSSText = (element: HTMLElement, overwrite: Record<string, string | number>): void => {
+  element.style.cssText = joinParams({ ...parseParams(element.style.cssText), ...overwrite })
+}
+
+export const removeCSSText = (element: HTMLElement, key: string): void => {
+  const style = parseParams(element.style.cssText)
+  delete style[key]
+  element.style.cssText = joinParams(style)
 }

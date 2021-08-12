@@ -1,7 +1,7 @@
 import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { observer } from '../decorators'
-import { joinParams, parseParams } from '../helper'
+import { removeCSSText, setCSSText } from '../helper'
 import { FCListBox } from '../listbox'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
@@ -44,11 +44,12 @@ export class FCSelect extends FCListBox {
   opened = false
   protected openedChanged(): void {
     if (this.opened) {
-      const cssText = parseParams(this.style.cssText)
-      this.style.cssText = joinParams({ '--client-height': `${this.clientHeight}px`, ...cssText })
+      setCSSText(this, { '--client-height': `${this.clientHeight}px` })
       this.updateComplete.then(() => {
         this.selectedOption?.scrollIntoView({ block: 'nearest' })
       })
+    } else {
+      removeCSSText(this, '--client-height')
     }
   }
 

@@ -28,8 +28,6 @@
   border: var(--border-width) solid var(--border-color);
 }
 
-:host([grid]) ::slotted([role^='row']:last-child),
-:host([outline]) ::slotted([role^='row']:last-child) {
+::slotted([role^='row']:last-child) {
   --grid-border-bottom-width: 0;
-  --grid-border-right-width: 0;
 }

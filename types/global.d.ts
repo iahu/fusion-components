@@ -12,6 +12,7 @@ declare interface CSSStyleDeclaration {
   '--grid-template-columns': string
   '--max-cell-count': string
   '--client-height': string
+  '--grid-border-right-width': string
 }
 
 declare const ShadyCSS = {
