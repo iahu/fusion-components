@@ -148,7 +148,7 @@ export class FCTreeItem extends FC {
           `
         : null}
       <div class="content" part="content">
-        <div class="control" part="control" @click="${this.handleTitleClick}">
+        <div class="control fc-inner-outline" part="control" @click="${this.handleTitleClick}">
           <slot></slot>
         </div>
         ${this.expanded

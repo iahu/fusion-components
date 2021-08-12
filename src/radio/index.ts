@@ -94,7 +94,7 @@ export class FCRadio extends FormAssociated {
   render(): TemplateResult<1> {
     return html`
       <slot name="checked-indicator">
-        <div class="control" part="control">
+        <div class="control fc-inner-outline" part="control">
           <div class="checked-indicator"></div>
         </div>
       </slot>

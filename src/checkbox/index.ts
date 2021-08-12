@@ -91,7 +91,7 @@ export class FCCheckbox extends FormAssociated {
 
   render(): TemplateResult {
     return html`
-      <div class="control" part="control">
+      <div class="control fc-inner-outline" part="control">
         <slot name="default-indicator">
           <div class="default-indicator"></div>
         </slot>

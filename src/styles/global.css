@@ -191,14 +191,25 @@
   transition: border-color 0.2s, background-color;
 }
 
+.fc-focus-overlay,
+.fc-focus-visible-overlay,
+.fc-outline:focus-visible,
+.fc-focus-outline,
+.fc-inner-outline,
 :host(:focus-visible) {
   position: relative;
   outline: none;
 }
 
+:host(:focus) .fc-focus-overlay,
+:host(:focus-visible) .fc-focus-visible-overlay,
+.fc-outline:focus-visible::after,
+.fc-focus-outline:focus::after,
+:host(:focus-visible) .fc-inner-outline::after,
 :host(:focus-visible)::after {
   content: '';
   position: absolute;
+  display: block;
   left: calc(var(--outline-offset) * -1);
   top: calc(var(--outline-offset) * -1);
   display: block;
@@ -208,4 +219,8 @@
   border-radius: var(--border-radius);
   border: var(--outline-width) solid var(--outline-color);
   pointer-events: none;
+}
+
+.no-fc-outline::after {
+  content: unset;
 }

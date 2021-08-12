@@ -141,6 +141,7 @@ export class FCDataGridCell extends FC {
         : null}
       <slot></slot>
       ${after()}
+      <span class="fc-focus-overlay"></span>
     `
   }
 }

@@ -14,6 +14,7 @@ export class FCPanelHeader extends FC {
   closable = true
 
   handleClick(e: MouseEvent): void {
+    e.preventDefault()
     this.emit('close')
   }
 
@@ -21,7 +22,12 @@ export class FCPanelHeader extends FC {
     return html`
       <slot class="control" part="control"></slot>
       ${this.closable
-        ? html` <button class="close-button" part="close-button" @click="${this.handleClick}">
+        ? html` <button
+            class="close-button fc-outline"
+            part="close-button"
+            aria-labelledby="close"
+            @click="${this.handleClick}"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="12"
