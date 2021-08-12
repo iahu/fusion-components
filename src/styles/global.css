@@ -207,4 +207,5 @@
   box-sizing: content-box;
   border-radius: var(--border-radius);
   border: var(--outline-width) solid var(--outline-color);
+  pointer-events: none;
 }

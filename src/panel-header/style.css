@@ -36,4 +36,5 @@
   border-radius: var(--border-radius);
   padding: var(--outline-offset);
   border: var(--outline-width) solid var(--outline-color);
+  pointer-events: none;
 }

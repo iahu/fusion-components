@@ -63,6 +63,7 @@
   border-radius: var(--border-radius);
   /*--outline-offset: 1px;*/
   border: var(--outline-width) solid var(--outline-color);
+  pointer-events: none;
 }
 
 :host([disabled][checked]),

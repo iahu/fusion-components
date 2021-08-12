@@ -9,6 +9,7 @@
   padding: var(--padding-t, 0) var(--padding-r, 0) var(--padding-b, 0) var(--padding-l, 0);
   height: fit-content;
   box-sizing: border-box;
+  border: var(--border-width) solid transparent;
 }
 
 :host([outline]) {

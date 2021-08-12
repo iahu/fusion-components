@@ -36,6 +36,7 @@
   border-radius: 50%;
   padding: var(--outline-offset);
   border: var(--outline-width) solid var(--outline-color);
+  pointer-events: none;
 }
 
 .checked-indicator {

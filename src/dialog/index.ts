@@ -88,11 +88,12 @@ export class FCDialog extends FC {
             class="overlay"
             part="overlay"
             role="presentation"
-            tabindex="-1"
+            tabindex="0"
             @click="${this.handleClickOverlay}"
           ></div>`
         : ''}
       <div class="control" part="control" role="dialog">
+        <slot name="dialog-header"></slot>
         <slot></slot>
       </div>
     `
