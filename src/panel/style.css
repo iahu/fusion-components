@@ -4,7 +4,7 @@
   min-width: calc(var(--fc-unit-size) * 100);
   min-height: calc(var(--fc-unit-size) * 40);
   border: var(--border-width) solid var(--border-color);
-  background: var(--box-background);
+  background: var(--body-background);
   color: var(--foreground);
 }
 
@@ -12,13 +12,14 @@
   flex: 1;
   position: relative;
   overflow-y: auto;
+  background: var(--box-background);
 }
 
-.panel-header {
+slot[name='panel-header'] {
   color: var(--foreground);
   background: var(--box-background);
-  padding: var(--padding);
 }
+
 fc-panel-header:defined {
   color: inherit;
   background: inherit;

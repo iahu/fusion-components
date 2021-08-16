@@ -80,7 +80,9 @@ export class FCSelect extends FCListBox {
 
   handleClickControl(e: MouseEvent): void {
     e.preventDefault()
-    this.opened = !this.opened
+    if (!this.disabled) {
+      this.opened = !this.opened
+    }
   }
 
   handleFocusout(): void {

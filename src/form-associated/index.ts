@@ -1,4 +1,3 @@
-import { KeyExportOptions } from 'crypto'
 import { observer } from '../decorators'
 import { FC } from '../fusion-component'
 
@@ -122,7 +121,8 @@ export default class FormAssociated extends FC {
     this.addEventListener('keydown', this._handleKeydown)
     this.form?.addEventListener('reset', this.handleFormReset)
     this.initialValue = this.value || this.getAttribute('value') || this.initialValue
-    if (!this.elementInternals && this.proxy) {
+
+    if (!supportsElementInternals && this.proxy) {
       this.attachProxy()
     }
   }

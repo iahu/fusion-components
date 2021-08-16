@@ -8,6 +8,9 @@ import '../panel-header'
 
 import style from './style.css'
 import { observer } from '../decorators'
+import { FCPanelHeader } from '../panel-header'
+import { nextTick } from 'process'
+import { version } from 'os'
 
 @customElement('fc-panel')
 export class FCPanel extends FC {
@@ -28,8 +31,24 @@ export class FCPanel extends FC {
     this.emit('visibleChange')
   }
 
+  private defaultHeader?: FCPanelHeader
+
   @observer()
   header?: string
+  headerChanged(old: string, next: string): void {
+    if (next) {
+      const header = document.createElement('fc-panel-header') as FCPanelHeader
+      header.slot = 'panel-header'
+      header.closable = this.closable
+      header.closeTarget = this.closeTarget
+      header.innerText = next
+
+      this.defaultHeader = header
+      this.appendChild(header)
+    } else if (this.defaultHeader) {
+      this.defaultHeader.remove()
+    }
+  }
 
   render(): TemplateResult {
     if (this.hidden) {
@@ -37,13 +56,7 @@ export class FCPanel extends FC {
     }
 
     return html`
-      <div class="panel-header" part="panel-header">
-        <slot name="panel-header">
-          <fc-panel-header slot="panel-header" closable="${this.closable}" closeTarget="${this.closeTarget}"
-            >${this.header}</fc-panel-header
-          >
-        </slot>
-      </div>
+      <slot name="panel-header" part="panel-header"></slot>
       <div class="panel-body" part="panel-body">
         <slot></slot>
       </div>

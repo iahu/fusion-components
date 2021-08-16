@@ -32,12 +32,12 @@
   display: inline-block;
   width: 100%;
   height: 100%;
-  border: var(--stroke-width) solid var(--stroke-color);
+  /*border: var(--stroke-width) solid var(--stroke-color);*/
   box-sizing: border-box;
 }
 
 :host([checked]) .control {
-  background: var(--accent-color);
+  --background: var(--accent-color);
 }
 
 :host([checked]) .default-indicator,
@@ -45,15 +45,24 @@
   display: none;
 }
 
+:host(:not([disabled])) .control:hover,
+:host(:not([readonly])) .control:hover {
+  --background: var(--background-hover);
+}
+
+:host(:not([disabled]):not([readonly])[checked]) .control:hover {
+  --background: var(--accent-color-hover);
+}
+
 :host(.readonly) .control,
 :host([disabled]) .control {
-  --background: var(--background-disabled);
+  --background: var(--background-disabled) !important;
   cursor: not-allowed;
 }
 
-:host([disabled][checked]),
-:host(.readonly[checked]) {
-  --background: --accent-color-disabled;
+:host([disabled][checked]) .control,
+:host(.readonly[checked]) .control {
+  --background: var(--accent-color-disabled) !important;
 }
 :is(:host(.readonly), :host([disabled])) .label {
   color: var(--foreground-disabled);
@@ -82,7 +91,7 @@
   width: 60%;
   height: calc(var(--fc-unit-size) * 2);
   background: var(--foreground);
-  border-radius: var(--border-radius);
+  /*border-radius: var(--border-radius);*/
 }
 
 .label {

@@ -57,6 +57,7 @@
   --white2: hsl(0, 0%, 97%);
   --white3: hsl(219, 28%, 88%);
 
+  --body-background: #333;
   --box-background: hsla(203, 7%, 7%, 1);
 
   /* foreground colors*/
@@ -123,6 +124,15 @@
   color: var(--foreground);
   fill: currentColor;
   border-radius: var(--border-radius);
+}
+
+::-webkit-scrollbar {
+  width: calc(var(--fc-unit-size) * 6);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--background);
+  opacity: 0.3;
 }
 
 :host([sharp]) {

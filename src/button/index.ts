@@ -1,27 +1,33 @@
 import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { observer } from '../decorators'
-import FusionComponent from '../fusion-component'
+import FormAssociated from '../form-associated'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
 import style from './style.css'
 
+const createProxy = () => document.createElement('input')
+
 @customElement('fc-button')
-export class FCButton extends FusionComponent {
+export class FCButton extends FormAssociated {
   static styles = mergeStyles(style)
+
+  constructor() {
+    super(createProxy())
+  }
 
   connectedCallback(): void {
     super.connectedCallback()
-
     this.addEventListener('click', this.handleClick)
-    this.addEventListener('keypress', this.handleKeypress)
+    this.addEventListener('keydown', this.handleKeydown)
   }
 
   disconnectedCallback(): void {
     super.disconnectedCallback()
-
-    this.removeEventListener('click', this.handleClick)
-    this.removeEventListener('keypress', this.handleKeypress)
+    this.removeEventListener('keydown', this.handleKeydown)
+    this.proxy.removeEventListener('click', this.handleSubmission)
+    this.proxy.removeEventListener('click', this.handleClick)
+    this.proxy.removeEventListener('click', this.handleReset)
   }
 
   @observer({ type: 'boolean' })
@@ -29,38 +35,80 @@ export class FCButton extends FusionComponent {
 
   @observer({ type: 'boolean', reflect: true })
   disabled = false
+  disabledChanged(old: boolean, next: boolean): void {
+    this.proxy.toggleAttribute('disabled', next)
+  }
 
   @observer()
-  type: '' | 'button' | 'submit' | 'reset' | 'menu' = ''
+  type: 'button' | 'submit' | 'reset' | 'menu' = 'button'
+  typeChanged(old: string, next: string): void {
+    switch (old) {
+      case 'submit':
+        this.removeEventListener('click', this.handleSubmission)
+        break
+      case 'reset':
+        this.removeEventListener('click', this.handleReset)
+        break
+      default:
+        this.removeEventListener('click', this.handleClick)
+        break
+    }
+
+    switch (next) {
+      case 'submit':
+        this.addEventListener('click', this.handleSubmission)
+        break
+      case 'reset':
+        this.addEventListener('click', this.handleReset)
+        break
+      default:
+        this.addEventListener('click', this.handleClick)
+        break
+    }
+  }
 
   @observer()
-  form = ''
+  formid = ''
+  formidChanged(old: string, next: string): void {
+    this.proxy.setAttribute('form', next)
+  }
 
   @observer()
   formaction = ''
+  formactionChanged(old: string, next: string): void {
+    this.proxy.setAttribute('formaction', next)
+  }
 
   @observer()
   formenctype = ''
+  formenctypeChanged(old: string, next: string): void {
+    this.proxy.setAttribute('formenctype', next)
+  }
 
   @observer()
   formnovalidate = ''
+  formnovalidateChanged(old: string, next: string): void {
+    this.proxy.setAttribute('formnovalidate', next)
+  }
 
   @observer()
-  formtarget = ''
+  formtarget: '_self' | '_blank' | '_parent' | '_top' = '_self'
+  formtargetChanged(old: string, next: string): void {
+    this.proxy.setAttribute('formtarget', next)
+  }
 
-  @observer()
-  name = ''
-
-  @observer()
-  value = ''
+  // name
+  // value
 
   @observer({ reflect: true })
   selectable = false
+  selectableChanged(old: boolean, next: boolean): void {
+    if (next) {
+      this.selected = this.hasAttribute('selected')
+    }
+  }
 
-  @observer({
-    reflect: true,
-    type: 'boolean',
-  })
+  @observer({ reflect: true })
   selected = false
   protected selectedChanged(old: boolean, next: boolean): void {
     if (!this.selectable) {
@@ -76,6 +124,9 @@ export class FCButton extends FusionComponent {
 
   @observer()
   readonly = false
+  readonlyChanged(old: boolean, next: boolean): void {
+    this.toggleAttribute('readonly', next)
+  }
 
   @observer({ type: 'boolean', reflect: true })
   sharp = false
@@ -89,40 +140,47 @@ export class FCButton extends FusionComponent {
   @observer({ reflect: true })
   tabIndex = 0
 
-  handleClick(e: MouseEvent): void {
-    e.preventDefault()
-    if (this.selectable) this.selected = !this.selected
+  handleClick(e: Event): void {
+    setTimeout(() => {
+      if (!e.defaultPrevented && this.selectable) {
+        e.preventDefault()
+        this.selected = !this.selected
+      }
+    })
   }
 
-  handleKeypress(e: KeyboardEvent): void {
+  handleSubmission(e: Event): void {
+    setTimeout(() => {
+      if (e.defaultPrevented) return
+
+      if (typeof this.form?.requestSubmit === 'function' && this.proxy) {
+        this.form.requestSubmit()
+      } else if (this.form) {
+        this.form.submit()
+      } else {
+        this.proxy?.click()
+      }
+    })
+  }
+
+  handleReset(e: Event): void {
+    if (!e.defaultPrevented) {
+      this.form?.reset()
+    }
+  }
+
+  handleKeydown(e: KeyboardEvent): void {
     if (e.target === this && [' ', 'Enter'].includes(e.key)) {
       e.preventDefault()
-      this.emit('click')
+      this.emit('click', { originalEvent: e })
     }
   }
 
   render(): TemplateResult<1> {
-    const { autofocus, disabled, name, value, type, size, form, formaction, formnovalidate, formtarget, accent } = this
-
-    return html`<button
-      class="control"
-      part="control"
-      ?disabled="${disabled}"
-      ?autofocus="${autofocus}"
-      data-size="${size}"
-      name="${name}"
-      value="${value}"
-      type="${type}"
-      form="${form}"
-      formaction="${formaction}"
-      formnovalidate="${formnovalidate}"
-      formtarget="${formtarget}"
-      data-accent="${accent}"
-      tabindex="-1"
-    >
+    return html`
       ${before()}
-      <span part="content" class="content"><slot></slot></span>
+      <slot></slot>
       ${after()}
-    </button>`
+    `
   }
 }
