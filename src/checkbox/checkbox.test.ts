@@ -1,12 +1,21 @@
 import { assert, elementUpdated, expect, fixture, html, nextFrame } from '@open-wc/testing'
-
-import { FCCheckbox } from './index'
-import './index'
 import Sinon from 'sinon'
+import './index'
+import { FCCheckbox } from './index'
 
 describe('fc-checkbox', function () {
   it('should not throw when createElement', function () {
     expect(() => document.createElement('fc-checkbox')).not.throw()
+  })
+
+  it('should has role attribute named checkbox', async () => {
+    const checkbox: FCCheckbox = await fixture(html`<fc-checkbox></fc-checkbox>`)
+    expect(checkbox.role).to.eq('checkbox')
+  })
+
+  it('should set default value to "on"', async () => {
+    const checkbox: FCCheckbox = await fixture(html`<fc-checkbox checked></fc-checkbox>`)
+    expect(checkbox.value).to.eq('on')
   })
 
   it('should be checked', async () => {
@@ -111,4 +120,6 @@ describe('fc-checkbox', function () {
     form.querySelector('button')!.click()
     expect(fn2.called).to.be.true
   })
+
+  // @TODO keydown
 })

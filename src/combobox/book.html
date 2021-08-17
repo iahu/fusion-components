@@ -1,6 +1,11 @@
+<fc-combobox value="foo">
+  <fc-list-option value="foo">foo</fc-list-option>
+  <fc-list-option value="bar">bar</fc-list-option>
+</fc-combobox>
+
 <h4>简单使用</h4>
 <p>输入内容会有自动补全提示，利用上下键可进行选择操作</p>
-<fc-combobox>
+<fc-combobox placeholder="请选择或输入">
   <fc-list-option value="1">Ada</fc-list-option>
   <fc-list-option value="2">Alex</fc-list-option>
   <fc-list-option value="3">Alice</fc-list-option>
@@ -26,7 +31,7 @@
 </fc-combobox>
 
 <h4>大小写敏感</h4>
-<fc-combobox autocomplete="inline" casesensitive>
+<fc-combobox autocomplete="inline" casesensitive placeholder="请输入">
   <fc-list-option value="1">Ada</fc-list-option>
   <fc-list-option value="2">Alex</fc-list-option>
   <fc-list-option value="3">Alice</fc-list-option>

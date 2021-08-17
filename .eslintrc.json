@@ -20,7 +20,7 @@
       }
     ],
     "linebreak-style": ["error", "unix"],
-    "quotes": ["error", "single"],
+    "quotes": ["warn", "single"],
     "semi": ["error", "never"],
     "prefer-const": ["warn"],
     "no-control-regex": "off"

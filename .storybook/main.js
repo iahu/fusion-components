@@ -9,7 +9,7 @@ module.exports = {
    * webpackFinal
    * @param  {import('webpack').Configuration} config webpack config
    */
-  webpackFinal: async (config) => {
+  webpackFinal: async config => {
     config.module.rules.push(
       {
         test: /\.ts$/,
@@ -21,21 +21,21 @@ module.exports = {
       }
     )
 
-    const originalCssRuleIndex = config.module.rules.findIndex((rule) => rule.test.source === '\\.css$')
+    const originalCssRuleIndex = config.module.rules.findIndex(rule => rule.test.source === '\\.css$')
     config.module.rules.splice(originalCssRuleIndex, 1, {
       test: /\.css$/,
       use: [{ loader: 'css-loader', options: { esModule: false } }],
     })
 
     const webComponentsRule = config.module.rules.find(
-      (rule) => rule.use && rule.use.options && rule.use.options.babelrc === false
+      rule => rule.use && rule.use.options && rule.use.options.babelrc === false
     )
 
     webComponentsRule.test.push(new RegExp(`node_modules(\\/|\\\\)lit/src(.*)\\.js$`))
 
     config.watchOptions = {
       aggregateTimeout: 10,
-      // ignored: /node_modules/,
+      ignored: /\.test\.ts$/,
     }
     config.resolve.symlinks = true
     return config

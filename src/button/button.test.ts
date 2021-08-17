@@ -1,7 +1,7 @@
 import { elementUpdated, expect, fixture, html } from '@open-wc/testing'
 import Sinon from 'sinon'
-import './'
 import { FCButton } from './'
+import './index'
 
 describe('FCButton', function () {
   it('should be created by document.createElement', async () => {
