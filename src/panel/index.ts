@@ -9,8 +9,6 @@ import '../panel-header'
 import style from './style.css'
 import { observer } from '../decorators'
 import { FCPanelHeader } from '../panel-header'
-import { nextTick } from 'process'
-import { version } from 'os'
 
 @customElement('fc-panel')
 export class FCPanel extends FC {

@@ -19,11 +19,12 @@
 <h4>状态</h4>
 <fc-button>default</fc-button>
 <fc-button disabled>disabled</fc-button>
-<fc-button selected>not selected</fc-button>
+<fc-button selectable>selectable</fc-button>
 <fc-button selectable selected>selected</fc-button>
 <fc-button selectable selected disabled>selected disabled</fc-button>
+<p><em>*</em> selectable 的 fc-button，在选中后会有一个 `select` 事件，已在 `selected` 状态更新后获取最新状态</p>
 
-<h5>autofocus</h5>
+<h4>autofocus</h4>
 <fc-button autofocus>autofocus</fc-button>
 
 <h4>边框</h4>
@@ -41,11 +42,6 @@
 <fc-button outline size="xxl">超超大(xxl)</fc-button>
 <fc-button outline size="xxxl">超超超大(xxxl)</fc-button>
 
-<h4>type 属性</h4>
-<fc-button outline type="button">button</fc-button>
-<fc-button outline type="submit">submit</fc-button>
-<fc-button outline type="menu">menu</fc-button>
-
 <h4>value 属性</h4>
 <fc-button outline value="a">a</fc-button>
 <fc-button outline value="b">b</fc-button>
@@ -56,8 +52,8 @@
 <fc-button outline style="width: 100px"><span>after</span><span slot="after">🚜</span></fc-button>
 
 <h4>和 form 一起使用</h4>
-<form action="/?path=/story/button--button" id="form">
-  <input type="text" name="text" />
-  <fc-button type="submit" id="submit" form="form">submit</fc-button>
+<form action="/?path=/story/button--button" id="form-1">
+  <input type="text" name="text" value="foo" />
+  <fc-button type="submit" id="submit">submit</fc-button>
 </form>
-<fc-button type="submit" id="submit-2" form="form">submit out of form</fc-button>
+<fc-button type="reset" id="reset-btn" form="form-1">reset</fc-button>

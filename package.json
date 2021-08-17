@@ -20,7 +20,10 @@
     "build:bundle": "rollup --config rollup.config.bundle.js",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook -o ./docs",
-    "prettier": "prettier --fix --write ./src/**/*.ts"
+    "prettier": "prettier --fix --write ./src/**/*.ts",
+    "pretest": "yarn build:esm",
+    "test": "web-test-runner 'dist/**/*.test.js' --node-resolve",
+    "test:watch": "web-test-runner 'dist/**/*.test.js' --node-resolve --watch"
   },
   "keywords": [
     "web components",
@@ -33,6 +36,7 @@
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.14.6",
+    "@open-wc/testing": "^2.5.33",
     "@rollup/plugin-multi-entry": "^4.0.0",
     "@rollup/plugin-node-resolve": "^13.0.4",
     "@storybook/addon-actions": "^6.2.9",
@@ -41,10 +45,12 @@
     "@storybook/html": "^6.2.9",
     "@storybook/theming": "^6.2.9",
     "@storybook/web-components": "^6.2.9",
+    "@types/mocha": "^9.0.0",
     "@types/node": "^15.12.4",
     "@types/webpack": "^5.28.0",
     "@typescript-eslint/eslint-plugin": "^4.28.0",
     "@typescript-eslint/parser": "^4.28.0",
+    "@web/test-runner": "^0.13.16",
     "babel-loader": "^8.2.2",
     "copyfiles": "^2.4.1",
     "cross-env": "^7.0.3",
@@ -63,6 +69,7 @@
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-typescript2": "^0.30.0",
     "sb": "^6.3.0",
+    "sinon": "^11.1.2",
     "style-loader": "^2.0.0",
     "ts-loader": "7.0.2",
     "ts-node": "^10.0.0",

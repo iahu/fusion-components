@@ -20,6 +20,13 @@ export class FCButton extends FormAssociated {
     super.connectedCallback()
     this.addEventListener('click', this.handleClick)
     this.addEventListener('keydown', this.handleKeydown)
+
+    if (this.hasAttribute('autofocus')) {
+      if (!this.hasAttribute('tabindex')) {
+        this.setAttribute('tabindex', '0')
+      }
+      this.focus()
+    }
   }
 
   disconnectedCallback(): void {
@@ -165,7 +172,7 @@ export class FCButton extends FormAssociated {
 
   handleReset(e: Event): void {
     if (!e.defaultPrevented) {
-      this.form?.reset()
+      if (typeof this.form?.reset === 'function') this.form.reset()
     }
   }
 
