@@ -1,7 +1,7 @@
 :host {
   display: inline-flex;
   align-items: center;
-  vertical-align: top;
+  /*vertical-align: top;*/
 }
 
 :host(:not(:disabled)) {

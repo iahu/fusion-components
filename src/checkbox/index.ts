@@ -36,6 +36,13 @@ export class FCCheckbox extends FormAssociated {
 
   @observer()
   value = 'on'
+  protected valueChanged(old: string, next: string): void {
+    this.dirtyValue = true
+    if (this.proxy) {
+      this.proxy.value = next
+    }
+    this.updateForm()
+  }
 
   @observer({ reflect: true })
   role = 'checkbox'
@@ -49,6 +56,7 @@ export class FCCheckbox extends FormAssociated {
     if (this.proxy instanceof HTMLInputElement) {
       this.proxy.checked = next
     }
+    this.updateForm()
   }
 
   @observer({ type: 'boolean', attribute: 'checked' })
@@ -64,8 +72,10 @@ export class FCCheckbox extends FormAssociated {
   }
 
   updateForm(): void {
-    const value = this.checked ? this.value : null
-    this.setFormValue(value, value)
+    const { value, checked } = this
+    const mergedValue = checked ? value : null
+    this.setFormValue(mergedValue, mergedValue)
+    this.validate()
   }
 
   private toggleSelect() {

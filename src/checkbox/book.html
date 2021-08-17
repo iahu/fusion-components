@@ -23,3 +23,18 @@
   <span slot="checked-indicator">✅</span>
   苹果
 </fc-checkbox>
+
+<h4>跟 Form 一起使用</h4>
+<form action="#" id="form-1">
+  <label>
+    <input type="checkbox" value="apple" name="fruit" checked />
+    apple
+  </label>
+  <fc-checkbox value="banana" name="fruit" required>banana</fc-checkbox>
+  <label>
+    <input type="checkbox" value="orange" name="fruit" checked />
+    orange
+  </label>
+  <br />
+  <input type="submit" />
+</form>

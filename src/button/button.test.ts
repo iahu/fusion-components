@@ -30,6 +30,13 @@ describe('FCButton', function () {
     const button: FCButton = await fixture(html`<fc-button disabled></fc-button>`)
 
     expect(button.disabled).to.equal(true)
+    const spy = Sinon.spy()
+    button.addEventListener('click', spy)
+    button.click()
+
+    elementUpdated(button)
+
+    expect(spy.called).to.be.false
   })
 
   it('should be selectable', async () => {

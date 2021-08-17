@@ -219,9 +219,9 @@ export default class FormAssociated extends FC {
     return this.InternalOrProxy.reportValidity()
   }
 
-  setFormValue(name: FormValue, value?: FormValue): void {
+  setFormValue(value: FormValue, state?: FormValue): void {
     if (this.elementInternals) {
-      this.elementInternals.setFormValue(name, value)
+      this.elementInternals.setFormValue(value, state)
     }
   }
 
@@ -252,6 +252,14 @@ export default class FormAssociated extends FC {
     if (this.proxy) {
       this.proxy.value = next
     }
+    this.setFormValue(next)
+    this.validate()
+  }
+
+  validate(): void {
+    if (this.proxy instanceof HTMLElement) {
+      this.setValidity(this.proxy.validity, this.proxy.validationMessage)
+    }
   }
 
   @observer({ type: 'boolean', reflect: true })
@@ -259,6 +267,12 @@ export default class FormAssociated extends FC {
 
   @observer({ type: 'boolean' })
   required = false
+  requiredChanged(old: boolean, next: boolean): void {
+    if (this.proxy instanceof HTMLElement) {
+      this.proxy.required = next
+    }
+    this.validate()
+  }
 
   private _handleKeydown(e: KeyboardEvent): void {
     if (e.key === 'Enter' && e.target instanceof HTMLEmbedElement) {
