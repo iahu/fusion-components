@@ -4,6 +4,7 @@
   padding: var(--padding);
   background: var(--background);
   min-width: var(--control-min-width);
+  box-shadow: var(--box-shadow);
 }
 
 :host([slot='submenu']) {
