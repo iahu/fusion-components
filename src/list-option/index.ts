@@ -1,8 +1,7 @@
 import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { observer } from '../decorators'
-import { proxySlotName, supportsElementInternals } from '../form-associated'
-import { FC } from '../fusion-component'
+import FormAssociated from '../form-associated'
 import type { FCListBox } from '../listbox'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
@@ -11,22 +10,18 @@ import style from './style.css'
 export const isOption = (el: Element): el is FCListOption =>
   el.tagName.toLowerCase() === 'fc-list-option' || el instanceof FCListOption
 
+const createProxy = () => {
+  const proxy = document.createElement('input')
+  proxy.type = 'radio'
+  return proxy
+}
+
 @customElement('fc-list-option')
-export class FCListOption extends FC {
+export class FCListOption extends FormAssociated {
   static styles = mergeStyles(style)
 
-  proxy?: HTMLInputElement
-
   constructor() {
-    super()
-    if (!supportsElementInternals) {
-      this.proxy = document.createElement('input')
-      this.proxy.type = 'radio'
-    }
-  }
-
-  static get formAssociated(): boolean {
-    return true
+    super(createProxy())
   }
 
   @observer({ type: 'boolean', reflect: true })
@@ -35,11 +30,8 @@ export class FCListOption extends FC {
   connectedCallback(): void {
     super.connectedCallback()
     this.addEventListener('click', this.handleClick)
-
-    if (!supportsElementInternals) {
-      this.attachProxy()
-    }
   }
+
   disconnectedCallback(): void {
     super.disconnectedCallback()
     this.removeEventListener('click', this.handleClick)
@@ -59,8 +51,10 @@ export class FCListOption extends FC {
   })
   selected = false
   protected selectedChanged(old: boolean, next: boolean): void {
-    this.emit('select')
-    if (this.proxy) {
+    if (typeof old === 'boolean') {
+      this.emit('select')
+    }
+    if (this.proxy instanceof HTMLInputElement) {
       this.proxy.checked = next
     }
   }
@@ -99,7 +93,7 @@ export class FCListOption extends FC {
   // 不能真的获取焦点，因为在 comobox 下，焦点应该在输入框上
   focusItem(focused = true): void {
     this.toggleAttribute('focused', focused)
-    this.scrollIntoView({ block: 'nearest' })
+    // this.scrollIntoView({ block: 'nearest' })
   }
 
   public get form(): HTMLFormElement | null {
@@ -109,7 +103,7 @@ export class FCListOption extends FC {
   public get index(): number {
     const { parentElement } = this
     // index 只与 ListBox 绑定
-    if (parentElement?.nodeName.toLowerCase() === 'fc-list-box') {
+    if (parentElement?.nodeName.toLowerCase() === 'fc-listbox') {
       return (parentElement as FCListBox).visibleOptions.findIndex(e => e === this)
     }
     return -1
@@ -122,25 +116,6 @@ export class FCListOption extends FC {
   handleClick(e: MouseEvent): void {
     e.preventDefault()
     this.selected = !this.disabled && this.selectable
-  }
-
-  proxySlot?: HTMLSlotElement
-
-  attachProxy(): void {
-    if (!this.proxy) return
-    const proxy = this.proxy
-    proxy.style.display = 'none'
-    proxy.name = this.name
-    proxy.checked = this.selected
-    proxy.value = this.value
-    proxy.required = this.required
-    proxy.disabled = this.disabled
-
-    this.setAttribute('slot', proxySlotName)
-    this.proxySlot = document.createElement('slot')
-    this.proxySlot.name = proxySlotName
-    this.shadowRoot?.appendChild(this.proxySlot)
-    this.appendChild(this.proxy)
   }
 
   render(): TemplateResult {

@@ -1,4 +1,4 @@
-import { elementUpdated, expect, fixture, html, nextFrame } from '@open-wc/testing'
+import { aTimeout, elementUpdated, expect, fixture, html, nextFrame } from '@open-wc/testing'
 import { FCSelect } from '.'
 import { FCListOption } from '../list-option'
 import './index'
@@ -30,6 +30,7 @@ describe('fc-select', function () {
 
     const bar = select.querySelector<FCListOption>('[value="bar"]')!
     bar.click()
+    await elementUpdated(bar)
     await elementUpdated(select)
     expect(bar.selected).to.be.true
     expect(select.value).to.eq('bar')

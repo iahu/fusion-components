@@ -1,11 +1,10 @@
 import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
-import { observer, assignedElements } from '../decorators'
+import { assignedElements, observer } from '../decorators'
 import FormAssociated from '../form-associated'
-import mergeStyles from '../merge-styles'
 import { FCListOption, isOption } from '../list-option'
+import mergeStyles from '../merge-styles'
 import style from './style.css'
-import { focusable } from '../helper'
 
 const createProxy = () => document.createElement('select')
 
@@ -20,16 +19,16 @@ export class FCListBox extends FormAssociated {
   connectedCallback(): void {
     super.connectedCallback()
     this.addEventListener('keydown', this.handleKeydown)
-    this.addEventListener('click', this.handleClick)
     this.addEventListener('blur', this.handleBlur)
+    this.addEventListener('select', this.handleSelect)
     this.setAttribute('aria-orientation', 'vertical')
   }
 
   disconnectedCallback(): void {
     super.disconnectedCallback()
     this.removeEventListener('keydown', this.handleKeydown)
-    this.removeEventListener('click', this.handleClick)
     this.removeEventListener('blur', this.handleBlur)
+    this.removeEventListener('select', this.handleSelect)
   }
 
   @observer({ attribute: false })
@@ -59,22 +58,14 @@ export class FCListBox extends FormAssociated {
     const nextOption = this.visibleOptions.find(op => op.value === next)
     if (nextOption) {
       nextOption.select(true)
-      this.selectedOption = nextOption
     }
   }
 
   @observer()
   selectable = true
-  selectableChanged(old: boolean, next: boolean): void {
-    this.updateComplete.then(() => {
-      if (!next) {
-        this.options.forEach(op => (op.selectable = false))
-      }
-    })
-  }
 
   @observer({ reflect: true })
-  tabindex = '-1'
+  tabindex = '0'
 
   public get visibleOptions(): FCListOption[] {
     return Array.from(this.children)
@@ -111,11 +102,18 @@ export class FCListBox extends FormAssociated {
       old.select(false)
     }
 
-    // 没有 next 就清空
-    this.value = next?.value ?? ''
-    this.displayValue = next?.text || ''
-    this.indicatedIndex = next?.index ?? -1
-    next?.focusItem(true)
+    if (next) {
+      this.value = next.value
+      this.displayValue = next.text
+      this.indicatedIndex = next.index
+      next.focusItem(true)
+    } else {
+      this.value = ''
+      this.displayValue = ''
+      this.indicatedIndex = -1
+    }
+
+    this.emit('change')
   }
 
   @observer({ attribute: false })
@@ -140,15 +138,6 @@ export class FCListBox extends FormAssociated {
         e.preventDefault()
         this.blur()
         break
-    }
-  }
-
-  handleClick(e: MouseEvent): void {
-    const { target } = e
-    if (target instanceof FCListOption) {
-      if (focusable(target) && target.selected) {
-        this.selectedOption = target
-      }
     }
   }
 
@@ -178,6 +167,24 @@ export class FCListBox extends FormAssociated {
 
   handleBlur(): void {
     this.indicatedIndex = -1
+  }
+
+  handleSelect(event: Event): void {
+    event.stopImmediatePropagation()
+    const { target } = event
+    if (!this.selectable) {
+      return
+    }
+
+    if (target instanceof FCListOption && target.selected) {
+      if (target !== this.selectedOption) {
+        if (this.selectedOption) this.selectedOption.selected = false
+        this.selectedOption = target
+      }
+      //  else {
+      //   this.selectedOption = undefined
+      // }
+    }
   }
 
   render(): TemplateResult {
