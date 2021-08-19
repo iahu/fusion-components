@@ -10,7 +10,7 @@
   cursor: auto;
 }
 
-.control {
+.radio.control {
   position: relative;
   display: inline-flex;
   justify-content: center;
@@ -19,17 +19,18 @@
   height: var(--font-size);
   background: var(--background);
   border-radius: 50%;
-  box-shadow: var(--stroke);
+  box-shadow: inset var(--stroke);
+  user-select: none;
 }
 :host(:focus-visible)::after {
   content: none;
 }
 
-:host(:focus-visible) .control:after {
+:host(:focus-visible) .radio.control:after {
   border-radius: 50%;
 }
 
-.checked-indicator {
+.radio .checked-indicator {
   visibility: hidden;
   width: 50%;
   height: 50%;
@@ -44,6 +45,7 @@
 
 :host([checked]) .control {
   background: var(--accent-color);
+  box-shadow: none;
 }
 
 :host([checked]) .checked-indicator {

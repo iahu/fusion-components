@@ -22,6 +22,7 @@ export class FCListBox extends FormAssociated {
     this.addEventListener('keydown', this.handleKeydown)
     this.addEventListener('click', this.handleClick)
     this.addEventListener('blur', this.handleBlur)
+    this.setAttribute('aria-orientation', 'vertical')
   }
 
   disconnectedCallback(): void {

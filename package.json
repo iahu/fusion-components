@@ -21,8 +21,8 @@
     "build-storybook": "build-storybook -o ./docs",
     "prettier": "prettier --fix --write ./src/**/*.ts",
     "pretest": "yarn build:esm",
-    "test": "web-test-runner 'dist/**/*.test.js' --node-resolve",
-    "test:watch": "web-test-runner 'dist/**/*.test.js' --node-resolve --watch"
+    "test": "web-test-runner dist/**/*.test.js --node-resolve",
+    "test:watch": "web-test-runner dist/**/*.test.js --node-resolve --watch"
   },
   "keywords": [
     "web components",

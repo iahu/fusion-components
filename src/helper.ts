@@ -1,5 +1,8 @@
-export const focusable = (e: Element): boolean =>
-  e instanceof HTMLElement && !e.hasAttribute('disabled') && !e.hasAttribute('hidden')
+const defaultFocuseable = (e: Element) => ['input', 'textarea', 'button', 'select'].includes(e.nodeName.toLowerCase())
+const customFocuseable = (e: Element) =>
+  e instanceof HTMLElement && !e.hasAttribute('disabled') && !e.hasAttribute('hidden') && e.hasAttribute('tabindex')
+
+export const focusable = (e: Element): boolean => defaultFocuseable(e) || customFocuseable(e)
 
 export const add = (a: number, b: number): number => a + b
 

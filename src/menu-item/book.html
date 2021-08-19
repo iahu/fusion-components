@@ -1,0 +1,47 @@
+<h4>简单使用</h4>
+<fc-menu-item>烧饼</fc-menu-item>
+
+<h4>不可用（disabled）</h4>
+<fc-menu-item disabled>烧饼</fc-menu-item>
+
+<h4>before/after</h4>
+<fc-menu-item>
+  <span slot="before">🥮</span>
+  月饼
+</fc-menu-item>
+
+<br />
+
+<fc-menu-item>
+  <span slot="after">￥10</span>
+  月饼
+</fc-menu-item>
+
+<br />
+
+<fc-menu-item>
+  <span slot="before">广式</span>
+  月饼
+  <span slot="after">￥10</span>
+</fc-menu-item>
+
+<h4>checkbox</h4>
+<fc-menu-item role="menuitemcheckbox">同意</fc-menu-item>
+
+<h4>radio</h4>
+<fc-menu-item role="menuitemradio">同意</fc-menu-item>
+
+<h4>链接</h4>
+<fc-menu-item href="#menu-item">链接 <span slot="after">点击跳转</span></fc-menu-item>
+
+<h4>子菜单</h4>
+<fc-menu-item>
+  <span>水果</span>
+  <fc-menu slot="submenu">
+    <fc-menu-item>苹果</fc-menu-item>
+    <fc-menu-item>香蕉</fc-menu-item>
+  </fc-menu>
+</fc-menu-item>
+
+<br />
+<br />

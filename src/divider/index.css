@@ -1,0 +1,6 @@
+:host {
+  display: block;
+  height: 0;
+  margin: calc(var(--fc-unit-size) * 4) 0;
+  border-top: var(--stroke-width) solid var(--stroke-color);
+}

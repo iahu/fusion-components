@@ -3,7 +3,7 @@ import { customElement } from 'lit/decorators.js'
 import { observer } from '../decorators'
 import { proxySlotName, supportsElementInternals } from '../form-associated'
 import { FC } from '../fusion-component'
-import { FCListBox } from '../listbox'
+import type { FCListBox } from '../listbox'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
 import style from './style.css'
@@ -109,14 +109,14 @@ export class FCListOption extends FC {
   public get index(): number {
     const { parentElement } = this
     // index 只与 ListBox 绑定
-    if (parentElement instanceof FCListBox) {
-      return parentElement.visibleOptions.findIndex(e => e === this)
+    if (parentElement?.nodeName.toLowerCase() === 'fc-list-box') {
+      return (parentElement as FCListBox).visibleOptions.findIndex(e => e === this)
     }
     return -1
   }
 
   public get text(): string {
-    return this.getAttribute('label') || this.textContent || ''
+    return this.getAttribute('label') || this.textContent || this.value || ''
   }
 
   handleClick(e: MouseEvent): void {
@@ -162,7 +162,7 @@ export class FCListOption extends FC {
         </slot>
       </span>
       <span class="content">
-        <slot></slot>
+        <slot>${this.text}</slot>
       </span>
       ${after()}
     </div>`

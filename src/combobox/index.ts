@@ -1,7 +1,8 @@
 import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
+import { createRef, Ref, ref } from 'lit/directives/ref.js'
 import { observer } from '../decorators'
-import { isOption } from '../list-option'
+import { FCListOption, isOption } from '../list-option'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
 import { FCSelect } from '../select/index'
@@ -12,14 +13,19 @@ import style from './style.css'
 export class FCComboBox extends FCSelect {
   static styles = mergeStyles(selectStyle, style)
 
+  inputRef: Ref<HTMLInputElement> = createRef()
+
   @observer({ reflect: true })
-  role = 'comobox'
+  role = 'combobox'
 
   @observer()
   autocomplete = ''
 
   @observer({ type: 'boolean' })
   casesensitive = false
+
+  @observer()
+  placeholder = ''
 
   connectedCallback(): void {
     super.connectedCallback()
@@ -54,12 +60,43 @@ export class FCComboBox extends FCSelect {
     }
   }
 
-  protected get input(): HTMLInputElement | null | undefined {
+  get input(): HTMLInputElement | null | undefined {
     return this.shadowRoot?.querySelector('.selected-value')
   }
 
+  selectedOptionChanged(old: FCListOption, next: FCListOption): void {
+    super.selectedOptionChanged(old, next)
+
+    if (next) {
+      this.inputValue = next.text
+    }
+  }
+
+  valueChanged(old: string, next: string): void {
+    if (!this.selectable) {
+      return
+    }
+
+    this.updateComplete.then(() => {
+      this.visibleOptions.find(op => op.select)?.select(false)
+      const nextOption = this.options.find(op => op.value === next)
+
+      if (nextOption) {
+        nextOption.select(true)
+        this.selectedOption = nextOption
+      }
+    })
+  }
+
   @observer({ attribute: false })
-  inputValue = ''
+  inputValue = this.getAttribute('value') ?? ''
+  inputValueChanged(old: string, next: string): void {
+    if (old) {
+      this.filterOptions(next)
+    } else {
+      this.updateComplete.then(() => this.filterOptions(next))
+    }
+  }
 
   handleLabelClick(e: MouseEvent): void {
     e.stopPropagation()
@@ -115,6 +152,8 @@ export class FCComboBox extends FCSelect {
             @input="${this.handleInput}"
             @change="${this.handleInputChange}"
             @focus="${this.handleFocus}"
+            placeholder="${this.placeholder}"
+            ${ref(this.inputRef)}
           ></input>
           <div class="indicator" part="indicator">
             <slot name="indicator">

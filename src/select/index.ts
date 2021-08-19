@@ -40,6 +40,12 @@ export class FCSelect extends FCListBox {
   @observer({ reflect: true })
   tabindex = '0'
 
+  valueChanged(old: string, next: string): void {
+    super.valueChanged(old, next)
+    this.emit('input')
+    this.emit('change')
+  }
+
   @observer({ reflect: true })
   opened = false
   protected openedChanged(): void {

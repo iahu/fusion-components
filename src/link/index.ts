@@ -35,6 +35,9 @@ export class FCLink extends FC {
   @observer()
   target = ''
 
+  @observer({ reflect: true })
+  tabindex = '0'
+
   @observer()
   type = ''
 
@@ -42,6 +45,7 @@ export class FCLink extends FC {
     return html`<a
       class="control"
       part="control"
+      tabindex="-1"
       .download="${this.download || undefined}"
       .href="${ifDefined(this.href || undefined)}"
       .hreflang="${this.hreflang}"

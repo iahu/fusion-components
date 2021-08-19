@@ -1,0 +1,106 @@
+<h4>简单使用</h4>
+<fc-menu>
+  <fc-menu-item>苹果</fc-menu-item>
+  <fc-menu-item>香蕉</fc-menu-item>
+  <fc-menu-item>橘子</fc-menu-item>
+  <fc-menu-item>梨</fc-menu-item>
+</fc-menu>
+
+<h4>禁用选项</h4>
+<fc-menu>
+  <fc-menu-item>苹果</fc-menu-item>
+  <fc-menu-item>香蕉</fc-menu-item>
+  <fc-menu-item disabled>橘子</fc-menu-item>
+  <fc-menu-item>梨</fc-menu-item>
+</fc-menu>
+
+<h4>分割线</h4>
+<fc-menu>
+  <fc-menu-item>西红柿</fc-menu-item>
+  <fc-menu-item>黄瓜</fc-menu-item>
+  <fc-divider></fc-divider>
+  <fc-menu-item>苹果</fc-menu-item>
+  <fc-menu-item>香蕉</fc-menu-item>
+</fc-menu>
+
+<h4>使用不同的 role/元素</h4>
+<fc-menu>
+  <fc-menu-item role="menuitemcheckbox">苹果</fc-menu-item>
+  <fc-menu-item role="menuitemcheckbox">香蕉</fc-menu-item>
+  <fc-menu-item role="menuitemcheckbox" disabled>橘子</fc-menu-item>
+  <fc-menu-item role="menuitemcheckbox">梨</fc-menu-item>
+</fc-menu>
+
+<fc-menu>
+  <fc-menu-item role="menuitemradio">苹果</fc-menu-item>
+  <fc-menu-item role="menuitemradio">香蕉</fc-menu-item>
+  <fc-menu-item role="menuitemradio" disabled>橘子</fc-menu-item>
+  <fc-menu-item role="menuitemradio">梨</fc-menu-item>
+</fc-menu>
+
+<fc-menu>
+  <fc-menu-item role="menuitem" disabled>减肥宣言</fc-menu-item>
+  <fc-menu-item role="menuitemradio">少吃</fc-menu-item>
+  <fc-menu-item role="menuitemradio">多运动</fc-menu-item>
+  <fc-menu-item role="menuitemcheckbox">同意</fc-menu-item>
+</fc-menu>
+
+<fc-menu>
+  <div>我是 div</div>
+  <fc-divider></fc-divider>
+  <fc-link href="http://www.google.com/">我的 link</fc-link>
+  <fc-divider></fc-divider>
+  <fc-button>我是按钮</fc-button>
+</fc-menu>
+
+<h4>默认选中</h4>
+<fc-menu>
+  <fc-menu-item role="menuitem" disabled>使用条款</fc-menu-item>
+  <fc-divider></fc-divider>
+  <fc-menu-item checked role="menuitemcheckbox">你的就是我的</fc-menu-item>
+  <fc-menu-item checked role="menuitemcheckbox">我的还是我的</fc-menu-item>
+  <fc-menu-item role="menuitemcheckbox">同意</fc-menu-item>
+</fc-menu>
+
+<h4>before/after</h4>
+<fc-menu>
+  <fc-menu-item role="menuitemcheckbox"><span slot="before">🍎</span>苹果<span slot="after">￥5.00</span></fc-menu-item>
+  <fc-menu-item role="menuitemcheckbox"><span slot="before">🍌</span>香蕉<span slot="after">￥6.00</span></fc-menu-item>
+  <fc-menu-item role="menuitemcheckbox" disabled
+    ><span slot="before">🍊</span>橘子<span slot="after">无货</span></fc-menu-item
+  >
+  <fc-menu-item role="menuitemcheckbox"><span slot="before">🍐</span>梨<span slot="after">￥4.00</span></fc-menu-item>
+</fc-menu>
+
+<h4>子菜单</h4>
+<fc-menu>
+  <fc-menu-item>
+    <span>水果</span>
+    <fc-menu slot="submenu">
+      <fc-menu-item role="menuitemcheckbox">苹果</fc-menu-item>
+      <fc-menu-item>
+        <span>香蕉</span>
+        <fc-menu slot="submenu">
+          <fc-menu-item role="menuitemradio">国产</fc-menu-item>
+          <fc-menu-item role="menuitemradio">进口</fc-menu-item>
+        </fc-menu>
+      </fc-menu-item>
+    </fc-menu>
+  </fc-menu-item>
+  <fc-menu-item>
+    <span>蔬菜</span>
+    <fc-menu slot="submenu">
+      <fc-menu-item>茄子</fc-menu-item>
+      <fc-menu-item>豆角</fc-menu-item>
+    </fc-menu>
+  </fc-menu-item>
+  <fc-menu-item>
+    <span>干果</span>
+    <fc-menu slot="submenu">
+      <fc-menu-item>花生</fc-menu-item>
+      <fc-menu-item>瓜子</fc-menu-item>
+    </fc-menu>
+  </fc-menu-item>
+</fc-menu>
+<br />
+<br />

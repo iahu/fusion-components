@@ -9,5 +9,13 @@ export default {
   input: ['./src/**/*.ts', '!./src/**/*.stories.ts'],
   output: { dir: './dist/esm', format: 'esm' },
   plugins: [multiInput(), typescript(), importCss()],
-  external: ['lit', 'lit/decorators.js', 'lit/directives/ref.js', 'lit/directives/if-defined.js', 'exp-calc'],
+  external: [
+    'lit',
+    'lit/decorators.js',
+    'lit/directives/ref.js',
+    'lit/directives/if-defined.js',
+    'exp-calc',
+    '@open-wc/testing',
+    'sinon',
+  ],
 }

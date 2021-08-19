@@ -34,7 +34,7 @@
   border-color: var(--border-color-active);
 }
 
-:host(:hover) .control {
+.control:hover {
   background: var(--background-hover);
   border-color: var(--border-color);
 }

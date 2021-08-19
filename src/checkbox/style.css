@@ -1,7 +1,7 @@
 :host {
   display: inline-flex;
   align-items: center;
-  /*vertical-align: top;*/
+  vertical-align: bottom;
 }
 
 :host(:not(:disabled)) {
@@ -16,7 +16,7 @@
   content: unset;
 }
 
-.control {
+.checkbox.control {
   position: relative;
   display: inline-flex;
   justify-content: center;
@@ -26,9 +26,12 @@
   margin-left: var(--stroke-width);
   overflow: visible;
   background: var(--background);
+  box-shadow: inset var(--stroke);
+  border-radius: var(--border-radius);
+  user-select: none;
 }
 
-.default-indicator {
+.checkbox .default-indicator {
   display: inline-block;
   width: 100%;
   height: 100%;
@@ -36,8 +39,9 @@
   box-sizing: border-box;
 }
 
-:host([checked]) .control {
+:host(:is([checked], [indeterminate])) .control {
   --background: var(--accent-color);
+  box-shadow: none;
 }
 
 :host([checked]) .default-indicator,
@@ -96,5 +100,6 @@
 
 .label {
   margin-left: calc(var(--font-size) / 2);
-  cursor: pointer;
+  cursor: inherit;
+  user-select: var(--user-select);
 }
