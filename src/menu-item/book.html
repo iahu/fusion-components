@@ -35,7 +35,16 @@
 <fc-menu-item href="#menu-item">链接 <span slot="after">点击跳转</span></fc-menu-item>
 
 <h4>子菜单</h4>
-<fc-menu-item>
+<fc-menu-item style="display: inline-block">
+  <span>水果</span>
+  <fc-menu slot="submenu">
+    <fc-menu-item>苹果</fc-menu-item>
+    <fc-menu-item>香蕉</fc-menu-item>
+  </fc-menu>
+</fc-menu-item>
+
+<p>默认展开</p>
+<fc-menu-item expanded style="display: inline-block">
   <span>水果</span>
   <fc-menu slot="submenu">
     <fc-menu-item>苹果</fc-menu-item>

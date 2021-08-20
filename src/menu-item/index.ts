@@ -42,7 +42,7 @@ export class FCMenuItem extends FC {
     return InputRoles.includes(this.role)
   }
 
-  @observer()
+  @observer({ type: 'boolean' })
   checked = false
   checkedChanged(oldValue: boolean | undefined, nextValue: boolean): void {
     if (this.isInputRole) {
@@ -64,16 +64,16 @@ export class FCMenuItem extends FC {
   @observer({ type: 'string', reflect: true })
   href?: string
 
-  @observer()
-  expanded = false
+  @observer({ reflect: true })
+  expanded = this.hasAttribute('expanded')
   expandedChanged(old: boolean, next: boolean): void {
     this.setAttribute('aria-expanded', next.toString())
     if (typeof old === 'boolean') {
       this.emit('expanded', { old, next })
 
-      if (this === document.activeElement && this.submenu?.length) {
+      if (next && this === document.activeElement && this.submenu?.length) {
         const submenu = this.submenu[0]
-        const topindex = submenu?.setTopIndex()
+        const topindex = submenu?.setTopIndex?.()
         submenu.updateComplete.then(() => topindex?.focus())
       }
     }
@@ -113,14 +113,14 @@ export class FCMenuItem extends FC {
     if (isMenuItem(e.target)) {
       const parentItem = e.target.parentElement?.closest<FCMenuItem>('fc-menu-item')
       if (parentItem) {
-        this.updateComplete.then(() => {
-          if (!parentItem.contains(this.ownerDocument.activeElement)) {
-            parentItem.focus()
-            parentItem.expanded = false
-            parentItem.tabIndex = 0
-            parentItem.blur()
-          }
-        })
+        // this.updateComplete.then(() => {
+        //   if (!parentItem.contains(document.activeElement)) {
+        //     parentItem.focus()
+        //     parentItem.expanded = false
+        //     parentItem.tabIndex = 0
+        //     parentItem.blur()
+        //   }
+        // })
       }
     }
   }

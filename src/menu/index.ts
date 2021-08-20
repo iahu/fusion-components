@@ -69,8 +69,6 @@ export class FCMenu extends FC {
       if (target !== this.checkedRadio) {
         if (this.checkedRadio) this.checkedRadio.checked = false
         this.checkedRadio = target
-      } else {
-        this.checkedRadio = undefined
       }
     }
   }
@@ -151,6 +149,7 @@ export class FCMenu extends FC {
     if (isHTMLElement(e.target) && this.items.includes(e.target)) {
       this.resetTabIndex()
       e.target.tabIndex = 0
+      e.target.focus()
     }
   }
 
