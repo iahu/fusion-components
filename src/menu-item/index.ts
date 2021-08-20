@@ -11,6 +11,9 @@ import style from './style.css'
 
 const InputRoles = ['menuitemradio', 'menuitemcheckbox']
 
+export const isMenuItem = (e: unknown): e is FCMenuItem =>
+  e instanceof FCMenuItem || (e instanceof Element && e.nodeName.toLowerCase() === 'fc-menu-item')
+
 @customElement('fc-menu-item')
 export class FCMenuItem extends FC {
   static styles = mergeStyles(style)
@@ -22,6 +25,7 @@ export class FCMenuItem extends FC {
     this.addEventListener('keydown', this.handleKeydown)
     this.addEventListener('mouseenter', this.handleMouseenter)
     this.addEventListener('mouseleave', this.handleMouseleave)
+    this.addEventListener('blur', this.handleBlur)
   }
 
   disconnectedCallback(): void {
@@ -31,6 +35,7 @@ export class FCMenuItem extends FC {
     this.removeEventListener('keydown', this.handleKeydown)
     this.removeEventListener('mouseenter', this.handleMouseenter)
     this.removeEventListener('mouseleave', this.handleMouseleave)
+    this.removeEventListener('blur', this.handleBlur)
   }
 
   get isInputRole(): boolean {
@@ -63,6 +68,15 @@ export class FCMenuItem extends FC {
   expanded = false
   expandedChanged(old: boolean, next: boolean): void {
     this.setAttribute('aria-expanded', next.toString())
+    if (typeof old === 'boolean') {
+      this.emit('expanded', { old, next })
+
+      if (this === document.activeElement && this.submenu?.length) {
+        const submenu = this.submenu[0]
+        const topindex = submenu?.setTopIndex()
+        submenu.updateComplete.then(() => topindex?.focus())
+      }
+    }
   }
 
   @observer({ reflect: true })
@@ -86,11 +100,29 @@ export class FCMenuItem extends FC {
   }
 
   handleMouseenter(e: MouseEvent): void {
-    this.expanded = !this.disabled && true
+    if (this.submenu?.length) {
+      this.expanded = !this.disabled && true
+    }
   }
 
   handleMouseleave(e: MouseEvent): void {
     this.expanded = false
+  }
+
+  handleBlur(e: FocusEvent): void {
+    if (isMenuItem(e.target)) {
+      const parentItem = e.target.parentElement?.closest<FCMenuItem>('fc-menu-item')
+      if (parentItem) {
+        this.updateComplete.then(() => {
+          if (!parentItem.contains(this.ownerDocument.activeElement)) {
+            parentItem.focus()
+            parentItem.expanded = false
+            parentItem.tabIndex = 0
+            parentItem.blur()
+          }
+        })
+      }
+    }
   }
 
   render(): TemplateResult {

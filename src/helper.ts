@@ -1,8 +1,23 @@
-const defaultFocuseable = (e: Element) => ['input', 'textarea', 'button', 'select'].includes(e.nodeName.toLowerCase())
-const customFocuseable = (e: Element) =>
-  e instanceof HTMLElement && !e.hasAttribute('disabled') && !e.hasAttribute('hidden') && e.hasAttribute('tabindex')
+export const isHTMLElement = (e: unknown): e is HTMLElement => e instanceof HTMLElement
+// prettier-ignore
+const emptyNodeNames = ['fc-divider', 'area', 'base', 'br', 'col', 'embed', 'hr', 'keygen', 'link', 'meta', 'param', 'source', 'track', 'wbr' ]
 
-export const focusable = (e: Element): boolean => defaultFocuseable(e) || customFocuseable(e)
+export const isEmptyElement = (e: unknown): boolean =>
+  isHTMLElement(e) && emptyNodeNames.includes(e.nodeName.toLowerCase())
+
+// can set tabIndex
+export const indexableElement = (e: unknown): e is HTMLElement =>
+  isHTMLElement(e) && !e.hasAttribute('disabled') && !e.hasAttribute('hidden')
+
+// native focusable
+export const nativeFocuseable = (e: Element): boolean =>
+  ['input', 'textarea', 'button', 'select'].includes(e.nodeName.toLowerCase()) && indexableElement(e)
+// custom focusable
+export const customFocuseable = (e: Element): e is HTMLElement =>
+  indexableElement(e) && !isEmptyElement(e) && e.hasAttribute('tabindex')
+
+// can capture focus
+export const focusable = (e: Element): e is HTMLElement => nativeFocuseable(e) || customFocuseable(e)
 
 export const add = (a: number, b: number): number => a + b
 
@@ -14,15 +29,18 @@ export const focusCurrentOrNext = <T extends HTMLElement>(
   targets: T[],
   delta: number,
   loop = true,
-  preventScroll = false
+  preventScroll = false,
+  focusableFn = focusable
 ): T | undefined => {
   const { length } = targets
-  const current = targets.find(t => t.tabIndex === 0)
-  let idx = targets.findIndex(btn => btn === current)
+  let idx = Math.max(
+    0,
+    targets.findIndex(e => e.tabIndex === 0)
+  )
 
   while (targets[idx]) {
     const target = targets[idx]
-    if (focusable(target) && document.activeElement !== target) {
+    if (focusableFn(target) && document.activeElement !== target) {
       targets.forEach(b => (b.tabIndex = -1))
       target.focus({ preventScroll })
       target.tabIndex = 0
@@ -60,4 +78,24 @@ export const removeCSSText = (element: HTMLElement, key: string): void => {
   const style = parseParams(element.style.cssText)
   delete style[key]
   element.style.cssText = joinParams(style)
+}
+
+export const setTopIndex = <T extends HTMLElement>(items: T[], force = true): HTMLElement | undefined => {
+  let idx = items.findIndex(t => t.tabIndex === 0)
+  const current = items[idx]
+  if (!force && current) {
+    return current
+  }
+
+  items.forEach(b => b.setAttribute('tabindex', '-1'))
+  idx = 0
+  while (items[idx]) {
+    const target = items[idx]
+    if (indexableElement(target) && !isEmptyElement(target)) {
+      target.tabIndex = 0
+      return target
+    }
+
+    idx += 1
+  }
 }

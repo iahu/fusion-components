@@ -3,7 +3,7 @@ import { customElement } from 'lit/decorators.js'
 import { assignedElements, observer } from '../decorators'
 import '../divider'
 import { FC } from '../fusion-component'
-import { focusable, focusCurrentOrNext } from '../helper'
+import { focusCurrentOrNext, indexableElement, isHTMLElement, setTopIndex } from '../helper'
 import '../menu-item'
 import { FCMenuItem } from '../menu-item'
 import mergeStyles from '../merge-styles'
@@ -19,6 +19,7 @@ export class FCMenu extends FC {
 
     this.addEventListener('change', this.handleChange)
     this.addEventListener('keydown', this.handleKeydown)
+    this.addEventListener('click', this.handleClick)
     this.setAttribute('aria-orientation', 'vertical')
   }
 
@@ -27,6 +28,11 @@ export class FCMenu extends FC {
 
     this.removeEventListener('change', this.handleChange)
     this.removeEventListener('keydown', this.handleKeydown)
+    this.removeEventListener('click', this.handleClick)
+  }
+
+  setTopIndex(): HTMLElement | undefined {
+    return setTopIndex(this.items.filter(indexableElement))
   }
 
   @observer({ reflect: true })
@@ -34,17 +40,24 @@ export class FCMenu extends FC {
 
   @observer({ attribute: false })
   @assignedElements()
-  items: FCMenuItem[] | [] = []
+  items: Element[] = []
   itemsChanged(old: FCMenuItem[], next: FCMenuItem[]): void {
     if (!next) {
       return
     }
-    const avaliableItems = next.filter(focusable)
+    if (old && this.slot !== 'submenu') {
+      this.setTopIndex()
+    }
+  }
+
+  resetTabIndex(): void {
+    const avaliableItems = this.items
     if (avaliableItems.length) {
-      const hasFocus = avaliableItems.find(item => item.getAttribute('tabindex') === '0')
-      if (!hasFocus) {
-        avaliableItems[0].setAttribute('tabindex', '0')
-      }
+      avaliableItems.forEach(item => {
+        if (item.hasAttribute('tabindex')) {
+          item.setAttribute('tabindex', '-1')
+        }
+      })
     }
   }
 
@@ -63,24 +76,46 @@ export class FCMenu extends FC {
   }
 
   handleKeydown(e: KeyboardEvent): void {
-    const avaliableItems = Array.from(this.items).filter(focusable)
-
     switch (e.key) {
       case 'ArrowUp':
-        focusCurrentOrNext(avaliableItems, -1) && e.preventDefault()
+        this.focusCurrentOrNext(e, -1)
         break
       case 'ArrowDown':
-        focusCurrentOrNext(avaliableItems, 1) && e.preventDefault()
+        this.focusCurrentOrNext(e, 1)
         break
       case 'ArrowLeft':
         this.unexpand(e)
         break
+      case ' ':
+        this.toggleExpand(e)
+        break
       case 'ArrowRight':
         this.expand(e)
+        break
+    }
+  }
+
+  focusCurrentOrNext(e: KeyboardEvent, delta: number): HTMLElement | undefined {
+    const { activeElement } = this.ownerDocument
+    const avaliableItems = this.items.filter(indexableElement)
+    if (isHTMLElement(activeElement) && !avaliableItems.includes(activeElement)) {
+      return
+    }
+
+    const target = focusCurrentOrNext(avaliableItems, delta)
+    if (target) e.preventDefault()
+    return target
+  }
+
+  private toggleExpand(e: KeyboardEvent) {
+    if (e.target instanceof FCMenuItem) {
+      if (e.target.expanded) e.target.expanded = false
+      else this.expand(e)
     }
   }
 
   private expand(e: KeyboardEvent) {
+    e.preventDefault()
     const { target } = e
     if (target instanceof FCMenuItem) {
       if (!target.submenu?.length) {
@@ -88,22 +123,34 @@ export class FCMenu extends FC {
       }
       target.expanded = true
       const submenu = target.submenu?.[0]
-      target.updateComplete.then(() => {
+      if (submenu) {
         target.tabIndex = -1
-        submenu?.items?.[0].focus()
-      })
+        const topIndex = submenu.setTopIndex()
+        topIndex?.focus()
+        return topIndex
+      }
+      return target
     }
   }
 
   private unexpand(e: KeyboardEvent) {
+    e.preventDefault()
     const { target } = e
     if (target instanceof FCMenuItem) {
-      const parentElement = target.parentElement?.closest<FCMenuItem>('fc-menu-item')
-      if (parentElement instanceof FCMenuItem) {
-        parentElement.expanded = false
-        parentElement.tabIndex = 0
-        parentElement.focus()
+      const parentItem = target.parentElement?.closest<FCMenuItem>('fc-menu-item')
+      if (parentItem instanceof FCMenuItem) {
+        parentItem.expanded = false
+        parentItem.tabIndex = 0
+        parentItem.focus()
+        return parentItem
       }
+    }
+  }
+
+  handleClick(e: MouseEvent): void {
+    if (isHTMLElement(e.target) && this.items.includes(e.target)) {
+      this.resetTabIndex()
+      e.target.tabIndex = 0
     }
   }
 
