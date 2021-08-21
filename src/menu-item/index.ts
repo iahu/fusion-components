@@ -3,6 +3,7 @@ import { customElement } from 'lit/decorators.js'
 import '../checkbox'
 import { observer, queryAll } from '../decorators'
 import { FC } from '../fusion-component'
+import { isHTMLElement } from '../helper'
 import type { FCMenu } from '../menu'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
@@ -25,7 +26,7 @@ export class FCMenuItem extends FC {
     this.addEventListener('keydown', this.handleKeydown)
     this.addEventListener('mouseenter', this.handleMouseenter)
     this.addEventListener('mouseleave', this.handleMouseleave)
-    this.addEventListener('blur', this.handleBlur)
+    this.addEventListener('focusout', this.handleFocusout)
   }
 
   disconnectedCallback(): void {
@@ -35,7 +36,7 @@ export class FCMenuItem extends FC {
     this.removeEventListener('keydown', this.handleKeydown)
     this.removeEventListener('mouseenter', this.handleMouseenter)
     this.removeEventListener('mouseleave', this.handleMouseleave)
-    this.removeEventListener('blur', this.handleBlur)
+    this.removeEventListener('focusout', this.handleFocusout)
   }
 
   get isInputRole(): boolean {
@@ -101,7 +102,7 @@ export class FCMenuItem extends FC {
 
   handleMouseenter(e: MouseEvent): void {
     if (this.submenu?.length) {
-      this.expanded = !this.disabled && true
+      this.expanded = !this.disabled
     }
   }
 
@@ -109,19 +110,9 @@ export class FCMenuItem extends FC {
     this.expanded = false
   }
 
-  handleBlur(e: FocusEvent): void {
-    if (isMenuItem(e.target)) {
-      const parentItem = e.target.parentElement?.closest<FCMenuItem>('fc-menu-item')
-      if (parentItem) {
-        // this.updateComplete.then(() => {
-        //   if (!parentItem.contains(document.activeElement)) {
-        //     parentItem.focus()
-        //     parentItem.expanded = false
-        //     parentItem.tabIndex = 0
-        //     parentItem.blur()
-        //   }
-        // })
-      }
+  handleFocusout(e: FocusEvent): void {
+    if (this.submenu?.length && !(isHTMLElement(e.relatedTarget) && this.contains(e.relatedTarget))) {
+      this.expanded = false
     }
   }
 

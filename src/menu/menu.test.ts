@@ -196,18 +196,29 @@ describe('fc-menu', function () {
     expect(items[3].checked).be.false
   })
 
-  // it('should ignore change event from other than fc-menu-item ', async () => {
-  //   const menu: FCMenu = await fixture(html`
-  //     <fc-menu>
-  //       <fc-menu-item role="menuitemradio" checked>苹果</fc-menu-item>
-  //       <div role="menuitem">梨</div>
-  //     </fc-menu>
-  //   `)
+  it('should close all submenu after focusout', async () => {
+    const menu: FCMenu = await fixture(html`
+      <fc-menu>
+        <fc-menu-item expanded id="mi-1">
+          <fc-menu slot="submenu">
+            <fc-menu-item expanded id="mi-2">
+              <fc-menu slot="submenu">
+                <fc-menu-item id="bottom"></fc-menu-item>
+              </fc-menu>
+            </fc-menu-item>
+          </fc-menu>
+        </fc-menu-item>
+      </fc-menu>
+    `)
 
-  //   const items = Array.from(menu.children)
-  //   menu.dispatchEvent(new CustomEvent('change'))
-  //   await elementUpdated(menu)
+    const bottom = menu.querySelector<FCMenuItem>('#bottom')!
+    bottom.focus()
+    await nextFrame()
+    document.body.focus()
 
-  //   expect((items[0] as FCMenuItem).checked).be.true
-  // })
+    await elementUpdated(menu)
+
+    expect(menu.querySelector<FCMenuItem>('#mi-1')!.expanded).be.true
+    expect(menu.querySelector<FCMenuItem>('#mi-2')!.expanded).be.true
+  })
 })
