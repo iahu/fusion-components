@@ -68,6 +68,7 @@
     "sb": "^6.3.0",
     "sinon": "^11.1.2",
     "style-loader": "^2.0.0",
+    "to-string-loader": "^1.1.6",
     "ts-loader": "7.0.2",
     "typescript": "^4.3.4",
     "yargs": "^17.0.1"
