@@ -96,13 +96,15 @@ export class FCMenuItem extends FC {
 
   handleKeydown(e: KeyboardEvent): void {
     if (e.key === 'Enter') {
-      this.emit('click')
+      this.dispatchEvent(new MouseEvent('click', { bubbles: false }))
     } else if (e.key === 'Escape') {
       this.blur()
     }
   }
 
-  mouseenterTid?: NodeJS.Timeout
+  private mouseenterTid?: NodeJS.Timeout
+
+  @observer()
   mouseenterDelay = 200
 
   handleMouseenter(e: MouseEvent): void {

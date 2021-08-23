@@ -74,6 +74,8 @@ describe('fc-menu', function () {
 
     const 苹果 = menu.querySelector<FCMenuItem>('#苹果')!
     const 香蕉 = menu.querySelector<FCMenuItem>('#香蕉')!
+
+    await nextFrame()
     香蕉.click()
 
     await elementUpdated(menu)

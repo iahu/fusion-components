@@ -1,0 +1,23 @@
+:host {
+  display: inline-block;
+}
+
+:host(:not([open])) .overlay {
+  display: none;
+}
+
+.overlay {
+  display: contents;
+}
+
+::slotted(:not([slot])) {
+  position: absolute;
+}
+
+.button {
+  background: var(--background);
+  padding: var(--padding);
+  border: none;
+  color: var(--foreground);
+  cursor: pointer;
+}

@@ -150,6 +150,8 @@ export class FCMenu extends FC {
     if (isHTMLElement(target) && this.items.includes(target)) {
       this.resetTabIndex()
       target.tabIndex = 0
+
+      target.focus()
     }
   }
 

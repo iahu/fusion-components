@@ -1,4 +1,4 @@
-import { elementUpdated, expect, fixture, html } from '@open-wc/testing'
+import { elementUpdated, expect, fixture, html, nextFrame } from '@open-wc/testing'
 import Sinon from 'sinon'
 import { FCButton } from './'
 import './index'
@@ -19,11 +19,15 @@ describe('FCButton', function () {
   })
 
   it('should auto-focus', async () => {
-    const button: FCButton = await fixture(html`<fc-button tabindex="0" autofocus></fc-button>`)
+    const button: FCButton = await fixture(html`<fc-button autofocus>foo</fc-button>`)
+    await nextFrame()
     expect(button).dom.to.eq(document.activeElement)
 
-    const buttonWithoutTabindex: FCButton = await fixture(html`<fc-button autofocus></fc-button>`)
-    expect(buttonWithoutTabindex).dom.to.eq(document.activeElement)
+    const button2: FCButton = await fixture(html`<fc-button autofocus>bar</fc-button>`)
+    await nextFrame()
+    // only first
+    expect(button).dom.to.eq(document.activeElement)
+    expect(button2).dom.not.to.eq(document.activeElement)
   })
 
   it('should be disabled', async () => {

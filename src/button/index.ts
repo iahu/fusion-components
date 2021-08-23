@@ -21,11 +21,11 @@ export class FCButton extends FormAssociated {
     this.addEventListener('click', this.handleClick)
     this.addEventListener('keydown', this.handleKeydown)
 
-    if (this.hasAttribute('autofocus')) {
+    if (this.hasAttribute('autofocus') && !document.activeElement) {
       if (!this.hasAttribute('tabindex')) {
         this.setAttribute('tabindex', '0')
       }
-      this.focus()
+      this.focus({ preventScroll: true })
     }
   }
 

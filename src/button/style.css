@@ -9,8 +9,6 @@
   background: var(--background);
   padding: var(--padding);
   box-sizing: border-box;
-  /*border: var(--border-width) solid transparent;*/
-  overflow: hidden;
   user-select: var(--user-select);
 }
 

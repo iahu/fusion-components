@@ -44,6 +44,14 @@ abstract class FusionComponent extends LitElement {
     })
   }
 
+  get slotElements(): Record<string, HTMLSlotElement> {
+    const map = {} as Record<string, HTMLSlotElement>
+    this.renderRoot.querySelectorAll('slot').forEach(item => {
+      map[item.name || 'default'] = item
+    })
+    return map
+  }
+
   get slottedElements(): Element[] {
     const slot = this.shadowRoot?.querySelector('slot:not([name])')
     if (slot instanceof HTMLSlotElement) {

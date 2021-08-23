@@ -94,7 +94,7 @@ describe('fc-menu-item', function () {
   })
 
   it('should change expanded to `true` when mouseenter', async () => {
-    const menuitem: FCMenuItem = await fixture(html`<fc-menu-item>
+    const menuitem: FCMenuItem = await fixture(html`<fc-menu-item mouseenterDelay="0">
       <span>foo</span>
       <fc-menu slot="submenu">
         <fc-menu-item>bar</fc-menu-item>

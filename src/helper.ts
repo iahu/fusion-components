@@ -1,3 +1,14 @@
+const toString = (s: unknown) => Object.prototype.toString.call(s).slice(8, -1)
+
+export const isString = (s: unknown): s is string => toString(s) === 'String'
+export const isArray = (s: unknown): s is Array<unknown> => Array.isArray(s) || toString(s) === 'Array'
+export const isNumber = (s: unknown): s is number => toString(s) === 'Number'
+export const isObject = (s: unknown): s is Record<PropertyKey, any> => toString(s) === 'Object'
+export const isUndefined = (s: unknown): s is undefined => toString(s) === 'Undefined'
+export const isNull = (s: unknown): s is null => toString(s) === 'Null'
+export const isSymbol = (s: unknown): s is symbol => typeof s === 'symbol'
+export const isFunction = (s: unknown): s is Function => typeof s === 'function'
+
 export const isHTMLElement = (e: unknown): e is HTMLElement => e instanceof HTMLElement
 // prettier-ignore
 const emptyNodeNames = ['fc-divider', 'area', 'base', 'br', 'col', 'embed', 'hr', 'keygen', 'link', 'meta', 'param', 'source', 'track', 'wbr' ]
@@ -17,7 +28,8 @@ export const customFocuseable = (e: Element): e is HTMLElement =>
   indexableElement(e) && !isEmptyElement(e) && e.hasAttribute('tabindex')
 
 // can capture focus
-export const focusable = (e: Element): e is HTMLElement => nativeFocuseable(e) || customFocuseable(e)
+export const focusable = (e: Element): e is HTMLElement =>
+  isHTMLElement(e) && (nativeFocuseable(e) || customFocuseable(e))
 
 export const add = (a: number, b: number): number => a + b
 
@@ -97,5 +109,35 @@ export const setTopIndex = <T extends HTMLElement>(items: T[], force = true): HT
     }
 
     idx += 1
+  }
+}
+
+export const shallowDiff = <T = unknown>(a: T, b: T): boolean => {
+  if (isArray(a) && isArray(b)) {
+    return a.length !== b.length || a.some(ae => b.indexOf(ae) === -1)
+  }
+
+  // if (isObject(a) && isObject(b)) {
+  //   const aKeys = Object.keys(a)
+  //   const bKeys = Object.keys(b)
+  //   const diff = (key: string) =>
+  //     !shallowEqual((a as Record<PropertyKey, any>)[key], (b as Record<PropertyKey, any>)[key])
+  //   return shallowEqual(aKeys, bKeys) && !aKeys.some(diff)
+  // }
+
+  return a !== b
+}
+
+export const getCallback = (o: any, key: PropertyKey) => {
+  let callbackName: PropertyKey
+  if (isSymbol(key)) {
+    callbackName = Symbol(key.toString().slice(7, -1) + 'Changed')
+  } else {
+    callbackName = `${key.toString()}Changed`
+  }
+
+  const callback = Reflect.get(o, callbackName)
+  if (isFunction(callback)) {
+    return callback
   }
 }
