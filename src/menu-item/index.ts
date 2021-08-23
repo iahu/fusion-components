@@ -97,22 +97,37 @@ export class FCMenuItem extends FC {
   handleKeydown(e: KeyboardEvent): void {
     if (e.key === 'Enter') {
       this.emit('click')
+    } else if (e.key === 'Escape') {
+      this.blur()
     }
   }
 
+  mouseenterTid?: NodeJS.Timeout
+  mouseenterDelay = 200
+
   handleMouseenter(e: MouseEvent): void {
-    if (this.submenu?.length) {
+    if (this.mouseenterDelay > 0) {
+      this.mouseenterTid = setTimeout(() => {
+        if (this.submenu?.length) {
+          this.expanded = !this.disabled
+        }
+      }, this.mouseenterDelay)
+    } else {
       this.expanded = !this.disabled
     }
   }
 
   handleMouseleave(e: MouseEvent): void {
+    if (this.mouseenterTid) {
+      clearTimeout(this.mouseenterTid)
+    }
     this.expanded = false
   }
 
   handleFocusout(e: FocusEvent): void {
     if (this.submenu?.length && !(isHTMLElement(e.relatedTarget) && this.contains(e.relatedTarget))) {
       this.expanded = false
+      this.tabIndex = 0
     }
   }
 

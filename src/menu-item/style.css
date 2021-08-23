@@ -18,7 +18,8 @@
 }
 
 :host(:not([disabled]):hover),
-:host(:not([disabled]):focus-visible) {
+:host(:not([disabled]):focus-visible),
+:host([expanded]) {
   background: var(--background-hover);
 }
 

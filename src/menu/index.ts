@@ -5,7 +5,7 @@ import '../divider'
 import { FC } from '../fusion-component'
 import { focusCurrentOrNext, indexableElement, isHTMLElement, setTopIndex } from '../helper'
 import '../menu-item'
-import { FCMenuItem, isMenuItem } from '../menu-item'
+import { FCMenuItem } from '../menu-item'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
 import style from './style.css'
@@ -146,11 +146,10 @@ export class FCMenu extends FC {
   }
 
   handleClick(e: MouseEvent): void {
-    if (isHTMLElement(e.target) && this.items.includes(e.target)) {
+    const { target } = e
+    if (isHTMLElement(target) && this.items.includes(target)) {
       this.resetTabIndex()
-      const { target } = e
       target.tabIndex = 0
-      target.focus()
     }
   }
 
