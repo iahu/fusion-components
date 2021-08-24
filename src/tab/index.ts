@@ -22,6 +22,12 @@ export class FCTab extends FC {
     this.removeEventListener('click', this.handleClick)
   }
 
+  @observer()
+  disabled = false
+
+  @observer({ reflect: true })
+  readonly = this.hasAttribute('readonly')
+
   @observer({ reflect: true })
   role = 'tab'
 
@@ -33,11 +39,8 @@ export class FCTab extends FC {
     }
   }
 
-  @observer()
-  disabled = false
-
   @observer({ reflect: true })
-  readonly = this.hasAttribute('readonly')
+  tabindex = '-1'
 
   handleClick(e: MouseEvent): void {
     e.preventDefault()

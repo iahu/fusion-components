@@ -84,8 +84,8 @@ export class FCTabs extends FC {
     this.tabs.forEach(t => {
       if (focusable(t)) {
         t.setAttribute('tabindex', '-1')
-        t.toggleAttribute('selected', false)
       }
+      t.toggleAttribute('selected', false)
     })
     this.panels.forEach(p => {
       p.setAttribute('hidden', 'true')

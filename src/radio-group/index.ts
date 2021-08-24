@@ -49,11 +49,11 @@ export class FCRadioGroup extends FC {
 
   @observer({ type: 'boolean', reflect: true })
   disabled = false
-  protected disabledChanged(): void {
-    const { disabled } = this
-    this.items.forEach(radio => {
-      radio.disabled = disabled
-      radio.tabIndex = -1
+  protected disabledChanged(old: boolean, next: boolean): void {
+    this.updateComplete.then(() => {
+      this.items.forEach(radio => {
+        radio.disabled = next
+      })
     })
   }
 
