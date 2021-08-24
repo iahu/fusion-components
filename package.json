@@ -1,6 +1,6 @@
 {
   "name": "@egret/fusion-components",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "一套面向类桌面应用的沉浸式风格 Web Components UI 库",
   "module": "dist/esm/index.js",
   "main": "dist/fusion-components.js",
@@ -15,12 +15,11 @@
     "prebuild": "yarn clean:dist",
     "build": "yarn build:esm && yarn build:bundle",
     "build:esm": "rollup --config rollup.config.esm.js",
-    "build:dts": "tsc -p tsconfig.json --emitDeclarationOnly",
     "build:bundle": "rollup --config rollup.config.bundle.js",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook -o ./docs",
     "prettier": "prettier --fix --write ./src/**/*.ts",
-    "pretest": "yarn build:esm",
+    "pretest": "cross-env NODE_ENV=test yarn build:esm",
     "test": "web-test-runner dist/**/*.test.js --node-resolve",
     "test:watch": "web-test-runner dist/**/*.test.js --node-resolve --watch"
   },
