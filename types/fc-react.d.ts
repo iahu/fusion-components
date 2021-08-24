@@ -7,6 +7,7 @@ import type {
   FCDataGridCell,
   FCDataGridRow,
   FCDialog,
+  FCDivider,
   FCDropdown,
   FCIcon,
   FCInput,
@@ -42,6 +43,7 @@ declare global {
       'fc-data-grid-row': FCMap<FCDataGridRow>
       'fc-data-grid-cell': FCMap<FCDataGridCell>
       'fc-dialog': FCMap<FCDialog>
+      'fc-divier': FCMap<FCDivider>
       'fc-dropdown': FCMap<FCDropdown>
       'fc-input': FCMap<FCInput>
       'fc-link': FCMap<FCLink>
