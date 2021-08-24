@@ -8,11 +8,7 @@
 
 .listbox {
   position: absolute;
-  display: contents;
-}
-
-::slotted(:not([slot])) {
-  position: absolute;
+  z-index: 9;
 }
 
 .button {
