@@ -127,7 +127,9 @@ export class FCMenuItem extends FC {
   }
 
   handleFocusout(e: FocusEvent): void {
-    if (this.submenu?.length && !(isHTMLElement(e.relatedTarget) && this.contains(e.relatedTarget))) {
+    const { relatedTarget } = e
+    const outerTarget = !relatedTarget || (isHTMLElement(relatedTarget) && relatedTarget.contains(this))
+    if (this.submenu?.length && outerTarget) {
       this.expanded = false
       this.tabIndex = 0
     }

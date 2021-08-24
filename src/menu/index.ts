@@ -3,7 +3,7 @@ import { customElement } from 'lit/decorators.js'
 import { assignedElements, observer } from '../decorators'
 import '../divider'
 import { FC } from '../fusion-component'
-import { focusCurrentOrNext, indexableElement, isHTMLElement, setTopIndex } from '../helper'
+import { focusCurrentOrNext, tabbableElement, isHTMLElement, setTopIndex } from '../helper'
 import '../menu-item'
 import { FCMenuItem } from '../menu-item'
 import mergeStyles from '../merge-styles'
@@ -21,6 +21,7 @@ export class FCMenu extends FC {
     this.addEventListener('keydown', this.handleKeydown)
     this.addEventListener('click', this.handleClick)
     this.setAttribute('aria-orientation', 'vertical')
+    this.setAttribute('aria-expanded', 'true')
   }
 
   disconnectedCallback(): void {
@@ -32,11 +33,14 @@ export class FCMenu extends FC {
   }
 
   setTopIndex(): HTMLElement | undefined {
-    return setTopIndex(this.items.filter(indexableElement))
+    return setTopIndex(this.items.filter(tabbableElement))
   }
 
   @observer({ reflect: true })
   role = 'menu'
+
+  @observer({ reflect: true })
+  tabindex = '0'
 
   @observer({ attribute: false })
   @assignedElements()
@@ -95,7 +99,7 @@ export class FCMenu extends FC {
 
   focusCurrentOrNext(e: KeyboardEvent, delta: number): HTMLElement | undefined {
     const { activeElement } = this.ownerDocument
-    const avaliableItems = this.items.filter(indexableElement)
+    const avaliableItems = this.items.filter(tabbableElement)
     if (isHTMLElement(activeElement) && !avaliableItems.includes(activeElement)) {
       return
     }

@@ -7,7 +7,7 @@ export const isObject = (s: unknown): s is Record<PropertyKey, any> => toString(
 export const isUndefined = (s: unknown): s is undefined => toString(s) === 'Undefined'
 export const isNull = (s: unknown): s is null => toString(s) === 'Null'
 export const isSymbol = (s: unknown): s is symbol => typeof s === 'symbol'
-export const isFunction = (s: unknown): s is Function => typeof s === 'function'
+export const isFunction = (s: unknown): boolean => typeof s === 'function'
 
 export const isHTMLElement = (e: unknown): e is HTMLElement => e instanceof HTMLElement
 // prettier-ignore
@@ -16,16 +16,24 @@ const emptyNodeNames = ['fc-divider', 'area', 'base', 'br', 'col', 'embed', 'hr'
 export const isEmptyElement = (e: unknown): boolean =>
   isHTMLElement(e) && emptyNodeNames.includes(e.nodeName.toLowerCase())
 
+export const isHiddenElement = (e: unknown): boolean => {
+  if (isHTMLElement(e)) {
+    const styles = getComputedStyle(e)
+    return styles.display === 'none' || styles.visibility === 'hidden' || !document.contains(e)
+  }
+  return false
+}
+
 // can set tabIndex
-export const indexableElement = (e: unknown): e is HTMLElement =>
-  isHTMLElement(e) && !e.hasAttribute('disabled') && !e.hasAttribute('hidden')
+export const tabbableElement = (e: unknown): e is HTMLElement =>
+  isHTMLElement(e) && !e.hasAttribute('disabled') && !isHiddenElement(e)
 
 // native focusable
 export const nativeFocuseable = (e: Element): boolean =>
-  ['input', 'textarea', 'button', 'select'].includes(e.nodeName.toLowerCase()) && indexableElement(e)
+  ['input', 'textarea', 'button', 'select'].includes(e.nodeName.toLowerCase()) && tabbableElement(e)
 // custom focusable
 export const customFocuseable = (e: Element): e is HTMLElement =>
-  indexableElement(e) && !isEmptyElement(e) && e.hasAttribute('tabindex')
+  tabbableElement(e) && !isEmptyElement(e) && e.hasAttribute('tabindex')
 
 // can capture focus
 export const focusable = (e: Element): e is HTMLElement =>
@@ -37,6 +45,7 @@ export const id = <T = unknown>(v: T): T => v
 export const mod = (n: number, length: number): number => (n + length) % length
 export const clamp = (min: number, max: number, num: number): number => Math.min(max, Math.max(min, num))
 
+const isFocused = (e: Element) => e === document.activeElement || e.getAttribute('tabindex') === '0'
 export const focusCurrentOrNext = <T extends HTMLElement>(
   targets: T[],
   delta: number,
@@ -45,15 +54,13 @@ export const focusCurrentOrNext = <T extends HTMLElement>(
   focusableFn = focusable
 ): T | undefined => {
   const { length } = targets
-  let idx = Math.max(
-    0,
-    targets.findIndex(e => e.tabIndex === 0)
-  )
+  const { activeElement } = document
+  let idx = Math.max(0, targets.findIndex(isFocused))
 
+  targets.forEach(b => (b.tabIndex = -1))
   while (targets[idx]) {
     const target = targets[idx]
-    if (focusableFn(target) && document.activeElement !== target) {
-      targets.forEach(b => (b.tabIndex = -1))
+    if (focusableFn(target) && activeElement !== target) {
       target.focus({ preventScroll })
       target.tabIndex = 0
       return target
@@ -103,7 +110,7 @@ export const setTopIndex = <T extends HTMLElement>(items: T[], force = true): HT
   idx = 0
   while (items[idx]) {
     const target = items[idx]
-    if (indexableElement(target) && !isEmptyElement(target)) {
+    if (tabbableElement(target) && !isEmptyElement(target)) {
       target.tabIndex = 0
       return target
     }

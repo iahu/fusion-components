@@ -1,11 +1,10 @@
 import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
-import { before, after } from '../pattern/before-after'
 import { observer, query } from '../decorators'
 import { FC } from '../fusion-component'
-import { focusable, isHTMLElement } from '../helper'
+import { focusable, isHTMLElement, tabbableElement } from '../helper'
 import mergeStyles from '../merge-styles'
-
+import { after, before } from '../pattern/before-after'
 import style from './style.css'
 
 @customElement('fc-dropdown')
@@ -18,13 +17,42 @@ export class FCDropdown extends FC {
     this.addEventListener('click', this.handleClick)
     this.addEventListener('keydown', this.handleKeydown)
     this.addEventListener('focusout', this.handleFocusout)
+
+    this.updateComplete.then(() => {
+      const firstAssigned = this.firstAssigned
+      if (firstAssigned) {
+        if (!focusable(firstAssigned) && tabbableElement(firstAssigned)) {
+          firstAssigned.tabIndex = -1
+        }
+      }
+    })
   }
 
   @observer({ reflect: true })
   disabled = false
 
+  get firstAssigned(): Element | undefined {
+    const assigned = this.slotElements.default?.assignedElements()
+    return assigned?.[0]
+  }
+
+  @query('.listbox')
+  listboxNode?: HTMLDivElement
+
   @observer({ reflect: true })
   open = false
+  openChanged(old: boolean, next: boolean): void {
+    if (next) {
+      this.updateComplete.then(() => {
+        const { firstAssigned } = this
+        if (firstAssigned && focusable(firstAssigned)) {
+          firstAssigned.focus()
+        } else {
+          this.focus()
+        }
+      })
+    }
+  }
 
   @observer()
   placeholder = '请选择'
@@ -32,17 +60,14 @@ export class FCDropdown extends FC {
   @observer<FCDropdown, string>({
     reflect: true,
     converter(v, host) {
-      if (host.trigger) {
-        host.removeAttribute('tabindex')
-        return ''
-      }
+      if (host.listButton) return null
       return v
     },
   })
   tabindex = '0'
 
-  @query('[slot="trigger"]')
-  trigger?: HTMLSlotElement
+  @query('[slot="button"]')
+  listButton?: HTMLSlotElement
 
   handleClick(event: MouseEvent): void {
     event.preventDefault()
@@ -50,10 +75,26 @@ export class FCDropdown extends FC {
   }
 
   handleKeydown(e: KeyboardEvent): void {
-    if (e.key === 'Enter') {
-      this.click()
-    } else if (e.key === 'Escape') {
-      this.blur()
+    switch (e.key) {
+      case 'Enter':
+        this.click()
+        break
+      case 'Escape': {
+        const { firstAssigned } = this
+        if (isHTMLElement(firstAssigned)) {
+          firstAssigned.blur()
+        } else {
+          this.blur()
+        }
+        break
+      }
+      case ' ':
+      case 'ArrowDown':
+        if (!this.open && !this.disabled) {
+          e.preventDefault()
+          this.open = true
+        }
+        break
     }
   }
 
@@ -67,11 +108,18 @@ export class FCDropdown extends FC {
   render(): TemplateResult {
     return html`
       ${before()}
-      <slot name="trigger">
-        <div class="button" part="button" role="button">${this.placeholder}</div>
+      <slot name="button" aria-haspopup="listbox" aria-expanded="${this.open}">
+        <button class="button" part="button" role="button">${this.placeholder}</button>
       </slot>
 
-      <div class="overlay" part="overlay" tabindex="${Number(!!this.open) - 1}">
+      <div
+        class="listbox fc-inner-outline"
+        part="listbox"
+        tabindex="0"
+        role="listbox"
+        aria-label="${this.placeholder}"
+        aria-hidden="${!this.open}"
+      >
         <slot></slot>
       </div>
       ${after()}

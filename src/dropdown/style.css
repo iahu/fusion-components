@@ -2,11 +2,12 @@
   display: inline-block;
 }
 
-:host(:not([open])) .overlay {
+:host(:not([open])) .listbox {
   display: none;
 }
 
-.overlay {
+.listbox {
+  position: absolute;
   display: contents;
 }
 
@@ -15,6 +16,8 @@
 }
 
 .button {
+  font: inherit;
+  display: block;
   background: var(--background);
   padding: var(--padding);
   border: none;
