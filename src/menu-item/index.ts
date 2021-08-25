@@ -9,6 +9,8 @@ import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
 import '../radio'
 import style from './style.css'
+import radioStyle from '../radio/style.css'
+import checkboxStyle from '../checkbox/style.css'
 
 const InputRoles = ['menuitemradio', 'menuitemcheckbox']
 
@@ -17,7 +19,7 @@ export const isMenuItem = (e: unknown): e is FCMenuItem =>
 
 @customElement('fc-menu-item')
 export class FCMenuItem extends FC {
-  static styles = mergeStyles(style)
+  static styles = mergeStyles(style, radioStyle, checkboxStyle)
 
   connectedCallback(): void {
     super.connectedCallback()

@@ -1,6 +1,3 @@
-@import '../radio/style.css';
-@import '../checkbox/style.css';
-
 :host {
   position: relative;
   display: flex;
