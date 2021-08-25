@@ -2,6 +2,7 @@
   --fc-unit-size: 1px;
   --user-select: none;
   --control-min-width: calc(var(--fc-unit-size) * 140);
+  --list-max-height: calc(var(--fc-unit-size) * 164);
 
   /*size*/
   --host-line-height: 1;
@@ -130,11 +131,15 @@
 
 ::-webkit-scrollbar {
   width: calc(var(--fc-unit-size) * 6);
+  background: var(--box-background);
 }
 
 ::-webkit-scrollbar-thumb {
   background: var(--background);
-  opacity: 0.3;
+  cursor: pointer;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--background-hover);
 }
 
 :host([sharp]) {

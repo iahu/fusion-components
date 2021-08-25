@@ -23,6 +23,7 @@
     "quotes": ["warn", "single"],
     "semi": ["error", "never"],
     "prefer-const": ["warn"],
+    "no-empty": ["warn"],
     "no-control-regex": "off"
   },
   "overrides": [

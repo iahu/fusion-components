@@ -148,6 +148,7 @@ export class FCListBox extends FormAssociated {
     const nextOption = visibleOptions[nextIdx]
     if (nextOption) {
       nextOption.focusItem(true)
+      nextOption.scrollIntoView({ block: 'nearest' })
       this.indicatedIndex = nextOption.index
       if (nextOption !== this.selectedOption) {
         this.emit('selection-change')

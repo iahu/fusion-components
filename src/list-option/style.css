@@ -2,8 +2,9 @@
   display: inline-flex;
   width: 100%;
   box-sizing: border-box;
-  /*background: var(--background);*/
   cursor: pointer;
+  white-space: nowrap;
+  /*background: var(--background);*/
   /*overflow: hidden;*/
 }
 

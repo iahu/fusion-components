@@ -8,7 +8,7 @@
 <h4>指定 button</h4>
 <fc-dropdown>
   <fc-button slot="button">dropdown</fc-button>
-  <ul style="background: black; color: white; list-style: none; margin: 0; padding: 12px">
+  <ul style="color: white; list-style: none; margin: 0; padding: 12px;width: 100px">
     <li>menu-1</li>
     <li>menu-2</li>
     <li>menu-3</li>
@@ -26,6 +26,51 @@
 
 <h4>和 fc-listbox 一起使用</h4>
 <fc-dropdown>
+  <fc-listbox>
+    <fc-list-option>option-1</fc-list-option>
+    <fc-list-option>option-2</fc-list-option>
+    <fc-list-option>option-3</fc-list-option>
+  </fc-listbox>
+</fc-dropdown>
+
+<h4>超长列表</h4>
+<fc-dropdown>
+  <fc-listbox>
+    <fc-list-option>option-1</fc-list-option>
+    <fc-list-option>option-2</fc-list-option>
+    <fc-list-option>option-3</fc-list-option>
+    <fc-list-option>option-4</fc-list-option>
+    <fc-list-option>option-5</fc-list-option>
+    <fc-list-option>option-6</fc-list-option>
+    <fc-list-option>option-7</fc-list-option>
+    <fc-list-option>option-8</fc-list-option>
+    <fc-list-option>option-9</fc-list-option>
+    <fc-list-option>option-10</fc-list-option>
+    <fc-list-option>option-11</fc-list-option>
+    <fc-list-option>option-12</fc-list-option>
+    <fc-list-option>option-13</fc-list-option>
+    <fc-list-option>option-14</fc-list-option>
+    <fc-list-option>option-15</fc-list-option>
+    <fc-list-option>option-16</fc-list-option>
+    <fc-list-option>option-17</fc-list-option>
+    <fc-list-option>option-18</fc-list-option>
+    <fc-list-option>option-19</fc-list-option>
+    <fc-list-option>option-20</fc-list-option>
+  </fc-listbox>
+</fc-dropdown>
+
+<h4>定位</h4>
+<fc-dropdown placement="bottom">
+  <fc-button slot="button">bottom</fc-button>
+  <fc-listbox>
+    <fc-list-option>option-1</fc-list-option>
+    <fc-list-option>option-2</fc-list-option>
+    <fc-list-option>option-3</fc-list-option>
+  </fc-listbox>
+</fc-dropdown>
+
+<fc-dropdown placement="top">
+  <fc-button slot="button">top</fc-button>
   <fc-listbox>
     <fc-list-option>option-1</fc-list-option>
     <fc-list-option>option-2</fc-list-option>

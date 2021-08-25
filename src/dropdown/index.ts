@@ -36,23 +36,47 @@ export class FCDropdown extends FC {
     return assigned?.[0]
   }
 
-  @query('.listbox')
+  @query('.listbox', true)
   listboxNode?: HTMLDivElement
 
   @observer({ reflect: true })
   open = false
   openChanged(old: boolean, next: boolean): void {
     if (next) {
+      const { height, bottom } = this.getBoundingClientRect()
+
       this.updateComplete.then(() => {
         const { firstAssigned } = this
-        if (firstAssigned && focusable(firstAssigned)) {
+        if (!firstAssigned) return
+
+        if (focusable(firstAssigned)) {
           firstAssigned.focus()
+        } else if (isHTMLElement(firstAssigned)) {
+          firstAssigned.setAttribute('tabindex', '-1')
+          firstAssigned.focus()
+        }
+
+        if (!this.listboxNode) return
+        let { placement } = this
+        const { height: listHeight } = this.slotElements.default.getBoundingClientRect()
+
+        if (placement === 'auto') {
+          placement = bottom + listHeight > window.innerHeight ? 'top' : 'bottom'
+        }
+        if (placement == 'top') {
+          this.listboxNode.style.marginTop = `${-1 * (height + listHeight)}px`
         } else {
-          this.focus()
+          this.listboxNode.style.marginTop = ''
         }
       })
     }
   }
+
+  /**
+   * 默认根据 listbox 展开后的定位自动调整的定位
+   */
+  @observer({ reflect: true })
+  placement = 'auto'
 
   @observer()
   placeholder = '请选择'

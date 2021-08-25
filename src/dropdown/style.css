@@ -1,4 +1,5 @@
 :host {
+  position: relative;
   display: inline-block;
 }
 
@@ -6,9 +7,8 @@
   display: none;
 }
 
-.listbox {
-  position: absolute;
-  z-index: 9;
+slot {
+  display: block;
 }
 
 .button {
@@ -19,4 +19,15 @@
   border: none;
   color: var(--foreground);
   cursor: pointer;
+}
+
+.listbox {
+  position: absolute;
+  z-index: 9;
+  overflow-y: auto;
+  background: var(--background);
+}
+
+.listbox slot {
+  max-height: var(--list-max-height);
 }
