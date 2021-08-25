@@ -40,7 +40,7 @@
 }
 
 :host(:is([checked], [indeterminate])) .control {
-  --background: var(--accent-color);
+  background: var(--accent-color);
   box-shadow: none;
 }
 

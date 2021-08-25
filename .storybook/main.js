@@ -1,7 +1,7 @@
 const path = require('path')
 
 module.exports = {
-  stories: ['../src/**/(*.)?stories.ts'],
+  stories: ['../src/**/*.stories.ts'],
   addons: ['@storybook/addon-links' /*, '@storybook/addon-essentials'*/],
   features: { postcss: false },
 
@@ -13,7 +13,7 @@ module.exports = {
     config.module.rules.push(
       {
         test: /\.ts$/,
-        use: [{ loader: 'ts-loader', options: { configFile: require.resolve('../tsconfig.json') } }],
+        use: [{ loader: 'ts-loader', options: { configFile: require.resolve('./tsconfig.json') } }],
       },
       {
         test: /\.html$/,

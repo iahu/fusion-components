@@ -1,7 +1,7 @@
 import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { observer } from '../decorators'
-import { removeCSSText, setCSSText } from '../helper'
+import { isHTMLElement, removeCSSText, setCSSText } from '../helper'
 import { FCListBox } from '../listbox'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
@@ -42,8 +42,6 @@ export class FCSelect extends FCListBox {
 
   valueChanged(old: string, next: string): void {
     super.valueChanged(old, next)
-    this.emit('input')
-    this.emit('change')
   }
 
   @observer({ reflect: true })

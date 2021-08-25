@@ -1,4 +1,4 @@
-import { aTimeout, elementUpdated, expect, fixture, html, nextFrame } from '@open-wc/testing'
+import { elementUpdated, expect, fixture, html, nextFrame } from '@open-wc/testing'
 import { FCSelect } from '.'
 import { FCListOption } from '../list-option'
 import './index'

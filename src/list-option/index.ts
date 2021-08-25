@@ -102,9 +102,8 @@ export class FCListOption extends FormAssociated {
 
   public get index(): number {
     const { parentElement } = this
-    // index 只与 ListBox 绑定
-    if (parentElement?.nodeName.toLowerCase() === 'fc-listbox') {
-      return (parentElement as FCListBox).visibleOptions.findIndex(e => e === this)
+    if (parentElement) {
+      return Array.from(parentElement.querySelectorAll('fc-list-option')).findIndex(e => e === this)
     }
     return -1
   }

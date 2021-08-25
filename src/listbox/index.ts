@@ -141,10 +141,10 @@ export class FCListBox extends FormAssociated {
     }
   }
 
-  focusNextOption(start = this.indicatedIndex, step = 1): void {
+  focusNextOption(start = this.indicatedIndex, delta = 1): void {
     const { visibleOptions, length } = this
     this.visibleOptions.forEach(op => op.focusItem(false))
-    const nextIdx = (start + step + length) % length
+    const nextIdx = (start + delta + length) % length
     const nextOption = visibleOptions[nextIdx]
     if (nextOption) {
       nextOption.focusItem(true)

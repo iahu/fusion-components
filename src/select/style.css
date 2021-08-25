@@ -39,6 +39,13 @@
   border-color: var(--border-color);
 }
 
+:host(:is(:disabled, [disabled], [readonly])) {
+  background: var(--background-disabled);
+  --foreground: var(--foreground-disabled);
+  --background-hover: var(--background-disabled);
+  --stroke-color: rgba(128, 128, 128, 0.4);
+}
+
 :host(:disabled) .control {
   cursor: not-allowed;
   border-color: var(--border-color-disabled);

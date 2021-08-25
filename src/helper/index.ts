@@ -48,13 +48,13 @@ export const id = <T = unknown>(v: T): T => v
 export const mod = (n: number, length: number): number => (n + length) % length
 export const clamp = (min: number, max: number, num: number): number => Math.min(max, Math.max(min, num))
 
-const isFocused = (e: Element) => e === document.activeElement || e.getAttribute('tabindex') === '0'
+const _isFocused = (e: Element) => e === document.activeElement || e.getAttribute('tabindex') === '0'
 export const focusCurrentOrNext = <T extends HTMLElement>(
   targets: T[],
   delta: number,
   loop = true,
   preventScroll = false,
-  focusableFn = focusable
+  isFocused = _isFocused
 ): T | undefined => {
   const { length } = targets
   const { activeElement } = document
@@ -63,7 +63,7 @@ export const focusCurrentOrNext = <T extends HTMLElement>(
   targets.forEach(b => (b.tabIndex = -1))
   while (targets[idx]) {
     const target = targets[idx]
-    if (focusableFn(target) && activeElement !== target) {
+    if (focusable(target) && activeElement !== target) {
       target.focus({ preventScroll })
       target.tabIndex = 0
       return target
