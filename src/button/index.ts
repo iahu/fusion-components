@@ -139,7 +139,7 @@ export class FCButton extends FormAssociated {
   sharp = false
 
   @observer()
-  accent: 'primary' | 'scondary' | '' = 'primary'
+  accent: 'primary' | 'scondary' | 'ghost' = 'primary'
 
   @observer()
   hotkey?: string

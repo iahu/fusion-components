@@ -19,7 +19,7 @@ export const isMenuItem = (e: unknown): e is FCMenuItem =>
 
 @customElement('fc-menu-item')
 export class FCMenuItem extends FC {
-  static styles = mergeStyles(style, radioStyle, checkboxStyle)
+  static styles = mergeStyles(radioStyle, checkboxStyle, style)
 
   connectedCallback(): void {
     super.connectedCallback()

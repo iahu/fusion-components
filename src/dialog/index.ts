@@ -41,6 +41,9 @@ export class FCDialog extends FC {
   @observer({ attribute: 'overlay-closable' })
   overlayClosable = true
 
+  @observer({ reflect: true })
+  tabindex = '-1'
+
   @observer({ attribute: 'esc-closable' })
   escClosable = true
 
@@ -49,6 +52,13 @@ export class FCDialog extends FC {
 
   @observer({ reflect: true })
   hidden = true
+  hiddenChanged(old: boolean, next: boolean): void {
+    if (!next) {
+      this.updateComplete.then(() => {
+        this.focus()
+      })
+    }
+  }
 
   @observer({ reflect: true })
   protected role = 'dialog'

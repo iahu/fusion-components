@@ -41,6 +41,7 @@
 
 :host(:is([checked], [indeterminate])) .control {
   background: var(--accent-color);
+  color: var(--box-background);
   box-shadow: none;
 }
 
@@ -94,7 +95,7 @@
 
   width: 60%;
   height: calc(var(--fc-unit-size) * 2);
-  background: var(--foreground);
+  background: var(--box-background);
   /*border-radius: var(--border-radius);*/
 }
 

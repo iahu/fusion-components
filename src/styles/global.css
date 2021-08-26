@@ -62,8 +62,9 @@
   --box-background: hsla(203, 7%, 7%, 1);
 
   /* foreground colors*/
-  --foreground: hsla(255, 0%, 90%, 1);
-  --foreground-hover: hsla(255, 0%, 62%, 1);
+  --foreground: hsla(255, 0%, 88%, 1);
+  --foreground-hover: hsla(255, 0%, 94%, 1);
+  --foreground-active: hsla(255, 0%, 100%, 1);
   --foreground-disabled: hsla(255, 0%, 62%, 1);
   --foreground-selected: hsla(255, 0%, 100%, 1);
 
@@ -81,9 +82,9 @@
 
   /*border-colors*/
   --border-color: hsla(203, 5%, 36%, 1);
-  --border-color-hover: hsla(203, 9%, 37%, 1);
   --border-color-selected: hsla(203, 9%, 37%, 1);
-  --border-color-active: hsla(203, 9%, 43%, 1);
+  --border-color-hover: hsla(203, 9%, 37%, 1);
+  --border-color-active: hsla(203, 9%, 46%, 1);
   --border-color-disabled: hsla(203, 0%, 34%, 1);
 
   --outline-offset: calc(var(--fc-unit-size) * 1);

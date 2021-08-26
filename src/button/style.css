@@ -46,41 +46,6 @@
   border-color: var(--border-color-selected);
 }
 
-:host(:not(:disabled):focus-visible) {
-  background: var(--background-hover);
-  border-color: var(--border-color-active);
-}
-
-:host(:not([disabled]):hover) {
-  background: var(--background-hover);
-}
-
-:host([selected]:not([disabled]):hover) {
-  background: var(--background-selected-hover);
-}
-
-:host([selected][disabled]) {
-  background: var(--background-disabled);
-}
-
-:host(:not([disabled]):active) {
-  background: var(--background-active);
-}
-
-:host(:not([disabled])[selectable]:active) {
-  background: var(--background-selected-active);
-}
-
-:host(:disabled) {
-  opacity: 0.3;
-  color: var(--foreground-disabled);
-  background: var(--background-disabled);
-  cursor: not-allowed;
-}
-:host([outline]:disabled) {
-  border-color: var(--border-color-disabled);
-}
-
 /*secondary*/
 :host([accent='secondary']) {
   background: var(--accent-color);
@@ -104,7 +69,53 @@
   background: var(--accent-color-disabled);
 }
 
+:host([accent='ghost']),
+:host([accent='ghost']:hover) {
+  background: none;
+  border: var(--border-width) solid var(--border-color);
+}
+
 ::slotted(:not([slot])) {
   margin-left: auto;
   margin-right: auto;
+}
+
+:host(:not(:disabled):focus-visible) {
+  background: var(--background-hover);
+  color: var(--foreground-hover);
+  border-color: var(--border-color-hover);
+}
+
+:host(:not([disabled]):hover) {
+  background: var(--background-hover);
+  color: var(--foreground-hover);
+  border-color: var(--border-color-hover);
+}
+
+:host([selected]:not([disabled]):hover) {
+  background: var(--background-selected-hover);
+}
+
+:host([selected][disabled]) {
+  background: var(--background-disabled);
+}
+
+:host(:not([disabled]):active) {
+  background: var(--background-active);
+  color: var(--foreground-active);
+  border-color: var(--border-color-active);
+}
+
+:host(:not([disabled])[selectable]:active) {
+  background: var(--background-selected-active);
+}
+
+:host(:disabled) {
+  opacity: 0.3;
+  color: var(--foreground-disabled);
+  --background: var(--background-disabled);
+  cursor: not-allowed;
+}
+:host([outline]:disabled) {
+  border-color: var(--border-color-disabled);
 }

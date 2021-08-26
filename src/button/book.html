@@ -7,10 +7,20 @@
 <fc-button outline>outline</fc-button>
 <fc-button sharp outline>sharp outline</fc-button>
 
-<h4>强调</h4>
-<fc-button accent="secondary">secondary</fc-button>
-<fc-button accent="secondary" outline>secondary</fc-button>
-<fc-button accent="secondary" disabled>secondary</fc-button>
+<h4>强调级别</h4>
+<div>
+  <span style="display: inline-block; width: 60px">正常</span>
+  <fc-button accent="primary">primary</fc-button>
+  <fc-button accent="secondary">secondary</fc-button>
+  <fc-button accent="ghost">ghost</fc-button>
+</div>
+
+<div>
+  <span style="display: inline-block; width: 60px">disabled</span>
+  <fc-button accent="primary" disabled>dissabled</fc-button>
+  <fc-button accent="secondary" disabled>dissabled</fc-button>
+  <fc-button accent="ghost" disabled>disabled</fc-button>
+</div>
 
 <h4>是否可选</h4>
 <fc-button selectable>可选</fc-button>

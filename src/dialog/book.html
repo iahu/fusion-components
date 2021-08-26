@@ -73,3 +73,24 @@
     <fc-checkbox>同意</fc-checkbox>
   </div>
 </fc-dialog>
+
+<h4>与 fc-panel 一起使用</h4>
+
+<fc-button id="btn-5">click me</fc-button>
+<fc-dialog anchor="#btn-5" id="dialog-5">
+  <fc-panel>
+    <fc-panel-header slot="panel-header" closeTarget="#dialog-5">奖学金申请</fc-panel-header>
+    <div>
+      <label for="money"> 金额：</label>
+      <fc-input id="money" value="10000"></fc-input>
+    </div>
+
+    <div>
+      <fc-radio>同意</fc-radio>
+    </div>
+
+    <div>
+      <fc-checkbox>同意</fc-checkbox>
+    </div>
+  </fc-panel>
+</fc-dialog>

@@ -22,7 +22,6 @@
 }
 
 .control {
-  display: flex;
   margin: auto;
   position: relative;
   background: var(--box-background);
