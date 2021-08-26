@@ -5,7 +5,7 @@ import './index'
 import type { FCMenuItem } from './index'
 
 describe('fc-menu-item', function () {
-  it('should not throw error when createElement', async () => {
+  it('should not throw error when createElement', () => {
     expect(() => document.createElement('fc-menu-item')).not.throw()
   })
 

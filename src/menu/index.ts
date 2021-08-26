@@ -127,9 +127,7 @@ export class FCMenu extends FC {
       const submenu = target.submenu?.[0]
       if (submenu) {
         target.tabIndex = -1
-        const topIndex = submenu.setTopIndex()
-        topIndex?.focus()
-        return topIndex
+        return submenu.setTopIndex()
       }
       return target
     }

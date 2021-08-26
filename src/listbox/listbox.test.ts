@@ -9,75 +9,94 @@ describe('fc-listbox', function () {
   })
 
   it('should has a "listbox" role attribute', async () => {
-    const el: FCListBox = await fixture(html`<fc-listbox></fc-listbox>`)
+    const listbox: FCListBox = await fixture(html`<fc-listbox></fc-listbox>`)
     await nextFrame()
-    expect(el.role).to.eq('listbox')
+    expect(listbox.role).to.eq('listbox')
   })
 
   it('should select a list-option by value', async () => {
-    const el: FCListBox = await fixture(html`<fc-listbox value="bar">
+    const listbox: FCListBox = await fixture(html`<fc-listbox value="bar">
       <fc-list-option value="foo"></fc-list-option>
       <fc-list-option value="bar"></fc-list-option>
     </fc-listbox>`)
 
-    expect(el.selectedOption).to.eq(el.querySelector('[value="bar"]'))
+    expect(listbox.selectedOption).to.eq(listbox.querySelector('[value="bar"]'))
   })
 
   it('should select a list-option by value', async () => {
-    const el: FCListBox = await fixture(html`<fc-listbox value="bar">
+    const listbox: FCListBox = await fixture(html`<fc-listbox value="bar">
       <fc-list-option value="foo"></fc-list-option>
       <fc-list-option value="bar"></fc-list-option>
     </fc-listbox>`)
 
-    expect(el.selectedOption).to.eq(el.querySelector('[value="bar"]'))
+    expect(listbox.selectedOption).to.eq(listbox.querySelector('[value="bar"]'))
 
-    const foo = el.querySelector<FCListOption>('[value="foo"]')
+    const foo = listbox.querySelector<FCListOption>('[value="foo"]')
     foo!.click()
 
-    await elementUpdated(el)
+    await elementUpdated(listbox)
 
-    expect(el.selectedOption).to.eq(foo)
+    expect(listbox.selectedOption).to.eq(foo)
   })
 
   it('should disabled', async () => {
-    const el: FCListBox = await fixture(html`<fc-listbox disabled value="bar">
+    const listbox: FCListBox = await fixture(html`<fc-listbox disabled value="bar">
       <fc-list-option value="foo"></fc-list-option>
       <fc-list-option value="bar"></fc-list-option>
     </fc-listbox>`)
 
     await nextFrame()
 
-    const foo = el.querySelector<FCListOption>('[value="foo"]')
-    const bar = el.querySelector<FCListOption>('[value="bar"]')
+    const foo = listbox.querySelector<FCListOption>('[value="foo"]')
+    const bar = listbox.querySelector<FCListOption>('[value="bar"]')
     foo!.click()
 
-    await elementUpdated(el)
+    await elementUpdated(listbox)
 
-    expect(el.selectedOption).to.eq(bar)
-    expect(el.selectedOption).not.to.eq(foo)
+    expect(listbox.selectedOption).to.eq(bar)
+    expect(listbox.selectedOption).not.to.eq(foo)
   })
 
   it('should not selectable', async () => {
-    const el: FCListBox = await fixture(html`<fc-listbox selectable="false">
+    const listbox: FCListBox = await fixture(html`<fc-listbox selectable="false">
       <fc-list-option value="foo"></fc-list-option>
       <fc-list-option value="bar"></fc-list-option>
     </fc-listbox>`)
 
-    const foo = el.querySelector<FCListOption>('[value="foo"]')
+    const foo = listbox.querySelector<FCListOption>('[value="foo"]')
     foo!.click()
 
-    await elementUpdated(el)
+    await elementUpdated(listbox)
 
-    expect(el.selectedOption).to.be.undefined
+    expect(listbox.selectedOption).to.be.undefined
   })
 
   it('should hidden a option', async () => {
-    const el: FCListBox = await fixture(html`<fc-listbox disabled value="bar">
+    const listbox: FCListBox = await fixture(html`<fc-listbox disabled value="bar">
       <fc-list-option value="foo" hidden></fc-list-option>
       <fc-list-option value="bar"></fc-list-option>
     </fc-listbox>`)
 
-    const bar = el.querySelector<FCListOption>('[value="bar"]')
-    expect(el.visibleOptions).to.members([bar])
+    const bar = listbox.querySelector<FCListOption>('[value="bar"]')
+    expect(listbox.visibleOptions).to.members([bar])
+  })
+
+  it('should focus next option when press ArrowDown key', async () => {
+    const listbox: FCListBox = await fixture(html`<fc-listbox>
+      <fc-list-option>foo</fc-list-option>
+      <fc-list-option>bar</fc-list-option>
+      <fc-list-option>baz</fc-list-option>
+    </fc-listbox>`)
+
+    const arrowDownEvent = new KeyboardEvent('keydown', { key: 'ArrowDown' })
+    await nextFrame()
+    listbox.dispatchEvent(arrowDownEvent)
+    await elementUpdated(listbox)
+    expect(listbox.options[0].hasAttribute('focused')).to.true
+
+    await nextFrame()
+    listbox.dispatchEvent(arrowDownEvent)
+    await elementUpdated(listbox)
+    expect(listbox.options[1].hasAttribute('focused')).to.true
   })
 })

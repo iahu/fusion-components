@@ -2,11 +2,14 @@ import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { assignedElements, observer } from '../decorators'
 import FormAssociated from '../form-associated'
+import { focusCurrentOrNext } from '../helper'
 import { FCListOption, isOption } from '../list-option'
 import mergeStyles from '../merge-styles'
 import style from './style.css'
 
 const createProxy = () => document.createElement('select')
+
+const isFocused = (e: Element) => e.hasAttribute('focused')
 
 @customElement('fc-listbox')
 export class FCListBox extends FormAssociated {
@@ -19,7 +22,6 @@ export class FCListBox extends FormAssociated {
   connectedCallback(): void {
     super.connectedCallback()
     this.addEventListener('keydown', this.handleKeydown)
-    this.addEventListener('blur', this.handleBlur)
     this.addEventListener('select', this.handleSelect)
     this.setAttribute('aria-orientation', 'vertical')
   }
@@ -27,7 +29,6 @@ export class FCListBox extends FormAssociated {
   disconnectedCallback(): void {
     super.disconnectedCallback()
     this.removeEventListener('keydown', this.handleKeydown)
-    this.removeEventListener('blur', this.handleBlur)
     this.removeEventListener('select', this.handleSelect)
   }
 
@@ -105,34 +106,32 @@ export class FCListBox extends FormAssociated {
     if (next) {
       this.value = next.value
       this.displayValue = next.text
-      this.indicatedIndex = next.index
       next.focusItem(true)
     } else {
       this.value = ''
       this.displayValue = ''
-      this.indicatedIndex = -1
     }
 
     this.emit('change')
   }
-
-  @observer({ attribute: false })
-  indicatedIndex = -1
 
   handleKeydown(e: KeyboardEvent): void {
     const withCtrl = e.metaKey || e.ctrlKey || e.altKey ? this.length : 0
     switch (e.key) {
       case 'ArrowDown':
         e.preventDefault()
-        this.focusNextOption(this.indicatedIndex, 1 + withCtrl)
+        this.focusNextOption(1 + withCtrl)
         break
       case 'ArrowUp':
         e.preventDefault()
-        this.focusNextOption(this.indicatedIndex, -1 - withCtrl)
+        this.focusNextOption(-1 - withCtrl)
         break
       case 'Enter':
         e.preventDefault()
-        this.select(this.indicatedIndex)
+        if (e.target instanceof FCListOption) {
+          e.preventDefault()
+          this.select(e.target)
+        }
         break
       case 'Escape':
         e.preventDefault()
@@ -141,33 +140,21 @@ export class FCListBox extends FormAssociated {
     }
   }
 
-  focusNextOption(start = this.indicatedIndex, delta = 1): void {
-    const { visibleOptions, length } = this
-    this.visibleOptions.forEach(op => op.focusItem(false))
-    const nextIdx = (start + delta + length) % length
-    const nextOption = visibleOptions[nextIdx]
-    if (nextOption) {
-      nextOption.focusItem(true)
-      nextOption.scrollIntoView({ block: 'nearest' })
-      this.indicatedIndex = nextOption.index
-      if (nextOption !== this.selectedOption) {
-        this.emit('selection-change')
-      }
+  focusNextOption(delta = 1): void {
+    const focusedTarget = focusCurrentOrNext(this.visibleOptions, delta, true, false, isFocused)
+    if (focusedTarget) {
+      this.visibleOptions.forEach(e => e.removeAttribute('focused'))
+      focusedTarget.toggleAttribute('focused', true)
     }
   }
 
-  select(index: number): void {
+  select(target: FCListOption): void {
     const { selectedOption } = this
-    const changed = index !== selectedOption?.index
+    const changed = target !== selectedOption
     if (changed) {
-      const selectedOption = this.getItem(index)
-      this.selectedOption = selectedOption
-      selectedOption?.select(true)
+      this.selectedOption = target
+      target.select(true)
     }
-  }
-
-  handleBlur(): void {
-    this.indicatedIndex = -1
   }
 
   handleSelect(event: Event): void {

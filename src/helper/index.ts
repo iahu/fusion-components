@@ -21,8 +21,8 @@ export const isHiddenElement = (e: unknown): boolean => {
     if (!document.contains(e)) return true
     const styles = getComputedStyle(e)
     if (styles.display === 'none' || styles.visibility === 'hidden') return true
-    const { width, height } = e.getBoundingClientRect()
-    if (width === 0 && height === 0) return true
+    // const { width, height } = e.getBoundingClientRect()
+    // if (width === 0 && height === 0) return true
   }
   return false
 }

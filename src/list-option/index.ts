@@ -103,7 +103,7 @@ export class FCListOption extends FormAssociated {
   public get index(): number {
     const { parentElement } = this
     if (parentElement) {
-      return Array.from(parentElement.querySelectorAll('fc-list-option')).findIndex(e => e === this)
+      return Array.from(parentElement.querySelectorAll('fc-list-option:not([hidden])')).findIndex(e => e === this)
     }
     return -1
   }

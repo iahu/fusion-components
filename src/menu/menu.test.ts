@@ -5,7 +5,7 @@ import '../menu-item'
 import { FCMenuItem } from '../menu-item'
 
 describe('fc-menu', function () {
-  it('should not throw error when createElement', async () => {
+  it('should not throw error when createElement', () => {
     expect(() => document.createElement('fc-menu')).not.throw()
   })
 
@@ -108,9 +108,11 @@ describe('fc-menu', function () {
     // 从`水果`冒泡到 menu 不是直接 menu.dispatchEvent(arrowRight)
     水果.dispatchEvent(arrowRight)
     await elementUpdated(menu)
-    expect(水果.expanded).be.true
+    expect(水果.expanded).to.be.true
+
+    await elementUpdated(menu)
     const 苹果 = menu.querySelector('#苹果')
-    expect(苹果).eq(document.activeElement)
+    expect(document.activeElement).to.eq(苹果)
   })
 
   it('should un-expand submenu while pressed ArrowLeft', async () => {
