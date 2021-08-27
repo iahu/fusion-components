@@ -52,7 +52,6 @@ export class FCMenuItem extends FC {
       this.toggleAttribute('checked', nextValue)
       if (typeof oldValue === 'boolean') {
         this.emit('change')
-        this.emit('input')
       }
     } else {
       this.removeAttribute('aria-checked')
