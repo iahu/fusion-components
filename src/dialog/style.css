@@ -8,6 +8,8 @@
   display: flex;
   overflow: auto;
   z-index: 999;
+
+  padding: calc(var(--fc-unit-size) * 6);
 }
 
 .overlay {

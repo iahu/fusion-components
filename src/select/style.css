@@ -78,6 +78,7 @@
   overflow: auto;
   border: var(--border-width) solid var(--border-color);
   border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
 }
 
 .listbox:focus-visible {

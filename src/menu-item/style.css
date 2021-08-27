@@ -3,7 +3,7 @@
   display: flex;
   padding: var(--padding);
   color: var(--foreground);
-  background: var(--background);
+  background: var(--box-background);
   --outline-offset: 0px;
 }
 

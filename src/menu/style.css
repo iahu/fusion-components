@@ -2,7 +2,7 @@
   display: inline-grid;
   --padding-t: var(--padding-l);
   padding: var(--padding);
-  background: var(--background);
+  background: var(--box-background);
   min-width: var(--control-min-width);
   box-shadow: var(--box-shadow);
 }
