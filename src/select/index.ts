@@ -1,7 +1,7 @@
 import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { observer } from '../decorators'
-import { isHTMLElement, removeCSSText, setCSSText } from '../helper'
+import { removeCSSText, setCSSText } from '../helper'
 import { FCListBox } from '../listbox'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
@@ -28,8 +28,6 @@ export class FCSelect extends FCListBox {
     this.removeEventListener('focusout', this.handleFocusout)
   }
 
-  @observer()
-  displayValue = ''
   private displayValueChanged(): void {
     this.opened = false
   }
@@ -41,12 +39,20 @@ export class FCSelect extends FCListBox {
   tabindex = '0'
 
   valueChanged(old: string, next: string): void {
-    super.valueChanged(old, next)
+    if (!this.selectable) {
+      return
+    }
+
+    this.visibleOptions.find(op => op.select)?.select(false)
+    const nextOption = this.visibleOptions.find(op => op.value === next)
+    if (nextOption) {
+      nextOption.select(true)
+    }
   }
 
   @observer({ reflect: true })
   opened = false
-  protected openedChanged(): void {
+  openedChanged(): void {
     if (this.opened) {
       setCSSText(this, { '--client-height': `${this.clientHeight}px` })
       this.updateComplete.then(() => {
@@ -56,6 +62,9 @@ export class FCSelect extends FCListBox {
       removeCSSText(this, '--client-height')
     }
   }
+
+  @observer()
+  placeholder = '请选择'
 
   handleKeydown(e: KeyboardEvent): void {
     if (!this.opened && ['ArrowDown', 'ArrowUp', 'Enter'].includes(e.key)) {
@@ -89,8 +98,11 @@ export class FCSelect extends FCListBox {
     }
   }
 
-  handleFocusout(): void {
-    this.opened = false
+  handleFocusout(e: FocusEvent): void {
+    const { relatedTarget } = e
+    if (!(relatedTarget instanceof Node && this.contains(relatedTarget))) {
+      this.opened = false
+    }
   }
 
   render(): TemplateResult {
@@ -106,7 +118,9 @@ export class FCSelect extends FCListBox {
       >
         ${before()}
         <slot name="button-container">
-          <div class="selected-value" part="selected-value">${this.displayValue}</div>
+          <div class="selected-value" part="selected-value">
+            ${this.displayValue ?? html`<slot name="placeholder" part="placeholder">${this.placeholder}</slot>`}
+          </div>
           <div class="indicator" part="indicator">
             <slot name="indicator">
               <svg class="icon-indicator" part="icon-indicator" viewBox="0 0 12 7" xmlns="http://www.w3.org/2000/svg">

@@ -88,15 +88,58 @@ describe('fc-listbox', function () {
       <fc-list-option>baz</fc-list-option>
     </fc-listbox>`)
 
-    const arrowDownEvent = new KeyboardEvent('keydown', { key: 'ArrowDown' })
     await nextFrame()
-    listbox.dispatchEvent(arrowDownEvent)
+    const arrowEvent = new KeyboardEvent('keydown', { key: 'ArrowDown' })
+    listbox.dispatchEvent(arrowEvent)
     await elementUpdated(listbox)
-    expect(listbox.options[0].hasAttribute('focused')).to.true
+    expect(listbox.options[0].hasAttribute('focused'), '0').to.true
 
     await nextFrame()
-    listbox.dispatchEvent(arrowDownEvent)
+    listbox.dispatchEvent(arrowEvent)
     await elementUpdated(listbox)
-    expect(listbox.options[1].hasAttribute('focused')).to.true
+    expect(listbox.options[1].hasAttribute('focused'), '1').to.true
+  })
+
+  it('should focus previous option when press ArrowUp key', async () => {
+    const listbox: FCListBox = await fixture(html`<fc-listbox>
+      <fc-list-option>foo</fc-list-option>
+      <fc-list-option>bar</fc-list-option>
+      <fc-list-option focused>baz</fc-list-option>
+    </fc-listbox>`)
+
+    const arrowEvent = new KeyboardEvent('keydown', { key: 'ArrowUp' })
+    await nextFrame()
+    listbox.dispatchEvent(arrowEvent)
+    await elementUpdated(listbox)
+    expect(listbox.options[1].hasAttribute('focused'), '1').to.true
+
+    await nextFrame()
+    listbox.dispatchEvent(arrowEvent)
+    await elementUpdated(listbox)
+    expect(listbox.options[0].hasAttribute('focused'), '0').to.true
+  })
+
+  it('should select a option when pressed enter key', async () => {
+    const listbox: FCListBox = await fixture(html`<fc-listbox>
+      <fc-list-option value="foo">foo</fc-list-option>
+      <fc-list-option value="bar">bar</fc-list-option>
+      <fc-list-option value="baz">baz</fc-list-option>
+    </fc-listbox>`)
+
+    await nextFrame()
+
+    const arrowEvent = new KeyboardEvent('keydown', { key: 'ArrowDown' })
+    await nextFrame()
+    listbox.dispatchEvent(arrowEvent)
+    listbox.dispatchEvent(arrowEvent)
+
+    const bar = listbox.querySelector<FCListOption>('[value="bar"]')!
+
+    listbox.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }))
+    await elementUpdated(listbox)
+
+    expect(bar.selected, 'selected').be.true
+
+    expect(listbox.value, 'value').to.eq('bar')
   })
 })

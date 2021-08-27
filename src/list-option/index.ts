@@ -51,6 +51,7 @@ export class FCListOption extends FormAssociated {
   })
   selected = false
   protected selectedChanged(old: boolean, next: boolean): void {
+    this.setAttribute('tabindex', String(Number(next) - 1))
     if (typeof old === 'boolean') {
       this.emit('select')
     }

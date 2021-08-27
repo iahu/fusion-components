@@ -1,3 +1,5 @@
+import { isFormula } from 'exp-calc'
+
 const toString = (s: unknown) => Object.prototype.toString.call(s).slice(8, -1)
 
 export const isString = (s: unknown): s is string => toString(s) === 'String'
@@ -49,22 +51,22 @@ export const mod = (n: number, length: number): number => (n + length) % length
 export const clamp = (min: number, max: number, num: number): number => Math.min(max, Math.max(min, num))
 
 const _isFocused = (e: Element) => e === document.activeElement || e.getAttribute('tabindex') === '0'
-export const focusCurrentOrNext = <T extends HTMLElement>(
-  targets: T[],
+export const toggleTabIndex = <T extends HTMLElement = HTMLElement>(
+  elements: T[],
   delta: number,
-  loop = true,
-  preventScroll = false,
+  loop: boolean,
   isFocused = _isFocused
 ): T | undefined => {
-  const { length } = targets
+  const { length } = elements
   const { activeElement } = document
-  let idx = Math.max(0, targets.findIndex(isFocused))
+  let idx = elements.findIndex(isFocused)
+  const nextIdx = idx + delta
+  idx = loop ? mod(nextIdx, length) : nextIdx
 
-  targets.forEach(b => (b.tabIndex = -1))
-  while (targets[idx]) {
-    const target = targets[idx]
+  elements.forEach(e => (e.tabIndex = -1))
+  while (elements[idx]) {
+    const target = elements[idx]
     if (focusable(target) && activeElement !== target) {
-      target.focus({ preventScroll })
       target.tabIndex = 0
       return target
     }
@@ -73,6 +75,18 @@ export const focusCurrentOrNext = <T extends HTMLElement>(
     if (nextIdx === idx) return target
     idx = loop ? mod(nextIdx, length) : nextIdx
   }
+}
+
+export const focusCurrentOrNext = <T extends HTMLElement = HTMLElement>(
+  elements: T[],
+  delta: number,
+  loop = true,
+  preventScroll = false,
+  isFocused = _isFocused
+): T | undefined => {
+  const target = toggleTabIndex(elements, delta, loop, isFocused)
+  target?.focus({ preventScroll })
+  return target
 }
 
 const trim = (s: string) => s.trim()

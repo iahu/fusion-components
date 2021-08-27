@@ -2,14 +2,12 @@ import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { assignedElements, observer } from '../decorators'
 import FormAssociated from '../form-associated'
-import { focusCurrentOrNext } from '../helper'
+import { toggleTabIndex } from '../helper'
 import { FCListOption, isOption } from '../list-option'
 import mergeStyles from '../merge-styles'
 import style from './style.css'
 
 const createProxy = () => document.createElement('select')
-
-const isFocused = (e: Element) => e.hasAttribute('focused')
 
 @customElement('fc-listbox')
 export class FCListBox extends FormAssociated {
@@ -32,8 +30,8 @@ export class FCListBox extends FormAssociated {
     this.removeEventListener('select', this.handleSelect)
   }
 
-  @observer({ attribute: false })
-  protected displayValue = ''
+  @observer({ attribute: false, init: false, type: 'string' })
+  protected displayValue?: string
 
   @observer()
   disabled = false
@@ -51,7 +49,7 @@ export class FCListBox extends FormAssociated {
   @observer()
   value = this.getAttribute('value') ?? ''
   protected valueChanged(old: string, next: string): void {
-    if (!this.selectable) {
+    if (!this.selectable || (!this.hasAttribute('value') && !next)) {
       return
     }
 
@@ -109,10 +107,10 @@ export class FCListBox extends FormAssociated {
       next.focusItem(true)
     } else {
       this.value = ''
-      this.displayValue = ''
+      this.displayValue = undefined
     }
 
-    this.emit('change')
+    this.emit('change', { old, next })
   }
 
   handleKeydown(e: KeyboardEvent): void {
@@ -128,23 +126,26 @@ export class FCListBox extends FormAssociated {
         break
       case 'Enter':
         e.preventDefault()
-        if (e.target instanceof FCListOption) {
+        if (this.focusedItem instanceof FCListOption) {
           e.preventDefault()
-          this.select(e.target)
+          this.select(this.focusedItem)
         }
         break
       case 'Escape':
         e.preventDefault()
         this.blur()
         break
+      default:
+        this.gotoMatch(e)
     }
   }
 
   focusNextOption(delta = 1): void {
-    const focusedTarget = focusCurrentOrNext(this.visibleOptions, delta, true, false, isFocused)
+    const focusedTarget = toggleTabIndex(this.visibleOptions, delta, true)
     if (focusedTarget) {
       this.visibleOptions.forEach(e => e.removeAttribute('focused'))
       focusedTarget.toggleAttribute('focused', true)
+      focusedTarget.scrollIntoView({ block: 'nearest' })
     }
   }
 
@@ -172,6 +173,27 @@ export class FCListBox extends FormAssociated {
       //  else {
       //   this.selectedOption = undefined
       // }
+    }
+  }
+
+  private matchedText = ''
+
+  private get focusedItem() {
+    return this.visibleOptions.find(op => op.hasAttribute('focused'))
+  }
+
+  gotoMatch(e: KeyboardEvent): void {
+    const key = e.key.toLocaleLowerCase()
+    const deepMatch = this.focusedItem?.text.toLowerCase().startsWith(this.matchedText + key)
+    if (!deepMatch) {
+      const matched = this.visibleOptions.find(op => op.text.toLocaleLowerCase().startsWith(key))
+      if (matched) {
+        e.preventDefault()
+        this.selectedOption = matched
+        this.matchedText = key
+      }
+    } else {
+      this.matchedText += key
     }
   }
 
