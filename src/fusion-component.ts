@@ -74,24 +74,37 @@ abstract class FusionComponent extends LitElement {
   sharp = false
 
   emit<T = unknown>(type: string, detail?: T): void {
-    type CustomEventWithSimulate = CustomEvent<T> & { simulate: boolean; value: any; _valueTracker?: any }
+    type CustomEventWithSimulate = CustomEvent<T> & { simulated: boolean; value: any; _valueTracker?: any }
     const event = new CustomEvent<T>(type, {
       bubbles: true,
       composed: true,
       detail,
       cancelable: false,
     }) as CustomEventWithSimulate
-    this.dispatchEvent(event)
     // simulate React onChange
     if (type === 'change') {
-      event.simulate = true
+      event.simulated = true
       const tracker = Reflect.get(this, '_valueTracker')
       const lastValue = Reflect.get(this, 'value')
       event.value = Symbol('nextValue')
       if (tracker) {
         tracker.setValue(lastValue)
+      } else {
+        this.emit('input', detail)
       }
-      this.emit('input', detail)
+
+      const { nodeName } = this
+      let bypassNodeName: string | undefined = 'select'
+      Object.defineProperty(this, 'nodeName', {
+        configurable: true,
+        get() {
+          return bypassNodeName ?? nodeName
+        },
+      })
+      this.dispatchEvent(event)
+      bypassNodeName = undefined
+    } else {
+      this.dispatchEvent(event)
     }
   }
 
