@@ -28,7 +28,7 @@ import type {
   FCTooltip,
   FCTreeItem,
   FCTreeView,
-} from '../src/index'
+} from '@egret/fusion-components'
 
 type FCMap<T> = Partial<T> | React.DetailedHTMLProps<React.HTMLAttributes<T>, T>
 
