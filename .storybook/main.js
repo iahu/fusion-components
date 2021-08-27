@@ -35,7 +35,7 @@ module.exports = {
 
     config.watchOptions = {
       aggregateTimeout: 10,
-      ignored: /\.test\.ts$/,
+      ignored: /\.(test|d)\.ts$/,
     }
     config.resolve.symlinks = true
     return config
