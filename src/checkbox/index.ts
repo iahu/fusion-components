@@ -71,6 +71,8 @@ export class FCCheckbox extends FormAssociated {
     this.classList.toggle('readonly', this.readOnly)
   }
 
+  private type = 'checkbox'
+
   updateForm(): void {
     const { value, checked } = this
     const mergedValue = checked ? value : null

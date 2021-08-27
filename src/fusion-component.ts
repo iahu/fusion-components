@@ -94,7 +94,8 @@ abstract class FusionComponent extends LitElement {
       }
 
       const { nodeName } = this
-      let bypassNodeName: string | undefined = 'select'
+      const type = Reflect.get(this, 'type')
+      let bypassNodeName: string | undefined = ['radio', 'checkbox'].includes(type) ? 'input' : 'select'
       Object.defineProperty(this, 'nodeName', {
         configurable: true,
         get() {

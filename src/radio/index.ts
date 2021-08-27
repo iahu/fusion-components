@@ -67,6 +67,8 @@ export class FCRadio extends FormAssociated {
     this.classList.toggle('readonly', this.readOnly)
   }
 
+  private type = 'radio'
+
   uniqueChecked(): void {
     const scope = this.form || this.closest('fc-radio-group') || this.ownerDocument.body
     const { name } = this
