@@ -53,6 +53,10 @@ fusion-components 内部尝试模拟了 React 的 `onChange` 事件，所以有 
 
 ### CSS 主题
 
+fusion-components 充分利用了 CSS 自定义变量，所有组件都尽量使用统一的全局配色方案，所以通过修改全局变量来快速修改主题配色方案
+
+比如这套亮色方案：
+
 ```css
 :root,
 :defined,
