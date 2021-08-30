@@ -8,6 +8,7 @@ import mergeStyles from '../merge-styles'
 import style from './style.css'
 
 const createProxy = () => document.createElement('select')
+const match = (op: FCListOption, text: string) => op.text.toLowerCase().startsWith(text)
 
 @customElement('fc-listbox')
 export class FCListBox extends FormAssociated {
@@ -184,13 +185,34 @@ export class FCListBox extends FormAssociated {
 
   gotoMatch(e: KeyboardEvent): void {
     const key = e.key.toLocaleLowerCase()
-    const deepMatch = this.focusedItem?.text.toLowerCase().startsWith(this.matchedText + key)
+    if (!(key.length === 1 && key >= 'a' && key <= 'z')) return
+    const accText = this.matchedText + key
+    let deepMatch = false
+    const { visibleOptions, selectedOption } = this
+    if (selectedOption) {
+      deepMatch = match(selectedOption, accText)
+
+      if (!deepMatch) {
+        // deep first
+        const otherDeepMatch = visibleOptions.find(op => match(op, accText))
+        const otherMatch = otherDeepMatch || visibleOptions.filter(x => x !== selectedOption).find(op => match(op, key))
+        if (otherMatch) {
+          this.selectedOption = otherMatch
+          this.matchedText = key
+          return
+        }
+      }
+    }
+
     if (!deepMatch) {
-      const matched = this.visibleOptions.find(op => op.text.toLocaleLowerCase().startsWith(key))
+      const matched = this.visibleOptions.find(op => match(op, key))
       if (matched) {
         e.preventDefault()
         this.selectedOption = matched
         this.matchedText = key
+      } else {
+        this.matchedText = ''
+        this.selectedOption = undefined
       }
     } else {
       this.matchedText += key

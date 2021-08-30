@@ -2,6 +2,7 @@ import { elementUpdated, expect, fixture, html, nextFrame } from '@open-wc/testi
 import './index'
 import { FCListBox } from './index'
 import { FCListOption } from '../list-option'
+import Sinon from 'sinon'
 
 describe('fc-listbox', function () {
   it('should not throw error when use createElement to crate it', async () => {
@@ -141,5 +142,117 @@ describe('fc-listbox', function () {
     expect(bar.selected, 'selected').be.true
 
     expect(listbox.value, 'value').to.eq('bar')
+  })
+
+  it('should navigate to matched text option when press key', async () => {
+    const listbox: FCListBox = await fixture(html`<fc-listbox>
+      <fc-list-option value="foo">foo</fc-list-option>
+      <fc-list-option value="bar">bar</fc-list-option>
+      <fc-list-option value="baz">baz</fc-list-option>
+    </fc-listbox>`)
+
+    listbox.dispatchEvent(new KeyboardEvent('keydown', { key: 'f' }))
+    await elementUpdated(listbox)
+    expect(listbox.visibleOptions[0].hasAttribute('focused')).be.true
+
+    await elementUpdated(listbox)
+    listbox.dispatchEvent(new KeyboardEvent('keydown', { key: 'b' }))
+    await elementUpdated(listbox)
+    expect(listbox.visibleOptions[1].hasAttribute('focused')).be.true
+  })
+
+  it('should deep match current option', async () => {
+    const listbox: FCListBox = await fixture(html`<fc-listbox>
+      <fc-list-option value="foo">foo</fc-list-option>
+      <fc-list-option value="bar">bar</fc-list-option>
+      <fc-list-option value="baz">baz</fc-list-option>
+    </fc-listbox>`)
+
+    listbox.dispatchEvent(new KeyboardEvent('keydown', { key: 'f' }))
+    await elementUpdated(listbox)
+    expect(listbox.visibleOptions[0].hasAttribute('focused')).be.true
+
+    await elementUpdated(listbox)
+    listbox.dispatchEvent(new KeyboardEvent('keydown', { key: 'o' }))
+    await elementUpdated(listbox)
+    expect(listbox.visibleOptions[0].hasAttribute('focused')).be.true
+  })
+
+  it('should jump to match other options, if cant deep match current option', async () => {
+    const listbox: FCListBox = await fixture(html`<fc-listbox>
+      <fc-list-option value="foo">foo</fc-list-option>
+      <fc-list-option value="bar">bar</fc-list-option>
+      <fc-list-option value="baz">baz</fc-list-option>
+    </fc-listbox>`)
+
+    listbox.dispatchEvent(new KeyboardEvent('keydown', { key: 'b' }))
+    await elementUpdated(listbox)
+    expect(listbox.visibleOptions[1].hasAttribute('focused')).be.true
+
+    await elementUpdated(listbox)
+    listbox.dispatchEvent(new KeyboardEvent('keydown', { key: 'a' }))
+    await elementUpdated(listbox)
+    expect(listbox.visibleOptions[1].hasAttribute('focused')).be.true
+
+    await elementUpdated(listbox)
+    listbox.dispatchEvent(new KeyboardEvent('keydown', { key: 'z' }))
+    await elementUpdated(listbox)
+    expect(listbox.visibleOptions[2].hasAttribute('focused')).be.true
+  })
+
+  it('should un-match any option', async () => {
+    const listbox: FCListBox = await fixture(html`<fc-listbox>
+      <fc-list-option value="foo">foo</fc-list-option>
+      <fc-list-option value="bar">bar</fc-list-option>
+      <fc-list-option value="baz">baz</fc-list-option>
+    </fc-listbox>`)
+
+    listbox.dispatchEvent(new KeyboardEvent('keydown', { key: 'b' }))
+    await elementUpdated(listbox)
+    expect(listbox.visibleOptions[1].hasAttribute('focused')).be.true
+
+    await elementUpdated(listbox)
+    listbox.dispatchEvent(new KeyboardEvent('keydown', { key: 'x' }))
+    await elementUpdated(listbox)
+    expect(listbox.querySelector('[focused]')).be.null
+  })
+
+  it('should emit blur event when perss Escape key', async () => {
+    const listbox: FCListBox = await fixture(html`<fc-listbox tabindex="-1">
+      <fc-list-option value="foo">foo</fc-list-option>
+      <fc-list-option value="bar">bar</fc-list-option>
+      <fc-list-option value="baz">baz</fc-list-option>
+    </fc-listbox>`)
+
+    await nextFrame()
+    listbox.focus()
+    const fn = Sinon.spy()
+    listbox.addEventListener('blur', fn)
+    listbox.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))
+
+    await elementUpdated(listbox)
+    expect(fn.called).be.true
+  })
+
+  it("'s length should be 3", async () => {
+    const listbox: FCListBox = await fixture(html`<fc-listbox>
+      <fc-list-option value="foo">foo</fc-list-option>
+      <fc-list-option value="bar">bar</fc-list-option>
+      <fc-list-option value="baz">baz</fc-list-option>
+    </fc-listbox>`)
+
+    await nextFrame()
+    expect(listbox.length).eq(3)
+  })
+
+  it('should getItem by index', async () => {
+    const listbox: FCListBox = await fixture(html`<fc-listbox>
+      <fc-list-option value="foo">foo</fc-list-option>
+      <fc-list-option value="bar">bar</fc-list-option>
+      <fc-list-option value="baz">baz</fc-list-option>
+    </fc-listbox>`)
+
+    await nextFrame()
+    expect(listbox.getItem(1)).eq(listbox.visibleOptions[1])
   })
 })

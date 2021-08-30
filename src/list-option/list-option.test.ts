@@ -37,4 +37,15 @@ describe('fc-list-option', function () {
 
     expect(el.selected, 'click is disabled').to.be.false
   })
+
+  it("should has an index property, which equals to it's index", async () => {
+    const el: HTMLDivElement = await fixture(html`<div>
+      <fc-list-option value="1">1</fc-list-option>
+      <fc-list-option value="2">2</fc-list-option>
+    </div>`)
+
+    const options = Array.from(el.querySelectorAll<FCListOption>('fc-list-option'))
+    expect(options[0].index).eq(0)
+    expect(options[1].index).eq(1)
+  })
 })

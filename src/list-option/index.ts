@@ -2,7 +2,6 @@ import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { observer } from '../decorators'
 import FormAssociated from '../form-associated'
-import type { FCListBox } from '../listbox'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
 import style from './style.css'
@@ -30,11 +29,13 @@ export class FCListOption extends FormAssociated {
   connectedCallback(): void {
     super.connectedCallback()
     this.addEventListener('click', this.handleClick)
+    this.addEventListener('blur', this.handleBlur)
   }
 
   disconnectedCallback(): void {
     super.disconnectedCallback()
     this.removeEventListener('click', this.handleClick)
+    this.removeEventListener('blur', this.handleBlur)
   }
 
   @observer({ reflect: true })
@@ -116,6 +117,10 @@ export class FCListOption extends FormAssociated {
   handleClick(e: MouseEvent): void {
     e.preventDefault()
     this.selected = !this.disabled && this.selectable
+  }
+
+  handleBlur(e: FocusEvent): void {
+    this.toggleAttribute('focused', false)
   }
 
   render(): TemplateResult {

@@ -155,4 +155,25 @@ describe('FCButton', function () {
 
     expect(spy.called, 'click event not fired').to.equal(false)
   })
+
+  it('should simulate click event', async () => {
+    const el = await fixture(html`<fc-button>foo</fc-button>`)
+    const fn = Sinon.spy()
+    el.addEventListener('click', fn)
+    el.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }))
+    el.dispatchEvent(new KeyboardEvent('keydown', { key: ' ' }))
+
+    expect(fn.called).to.be.true
+    expect(fn.callCount).to.eq(2)
+  })
+
+  it("'s simulate click event should bubbles up", async () => {
+    const el = await fixture(html`<div><fc-button>foo</fc-button></div>`)
+    const fn = Sinon.spy()
+    el.addEventListener('click', fn)
+    el.querySelector('fc-button')!.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }))
+
+    expect(fn.called).to.be.true
+    expect(fn.callCount).to.eq(1)
+  })
 })

@@ -68,6 +68,11 @@ export class FCMenuItem extends FC {
   expanded = this.hasAttribute('expanded')
   expandedChanged(old: boolean, next: boolean): void {
     this.setAttribute('aria-expanded', next.toString())
+
+    if (next && !(document.activeElement instanceof FCMenuItem)) {
+      this.focus()
+    }
+
     if (typeof old === 'boolean') {
       this.emit('expanded', { old, next })
 

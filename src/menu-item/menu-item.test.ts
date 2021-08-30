@@ -1,4 +1,4 @@
-import { elementUpdated, expect, fixture, html, nextFrame } from '@open-wc/testing'
+import { aTimeout, elementUpdated, expect, fixture, html, nextFrame } from '@open-wc/testing'
 
 import '../menu'
 import './index'
@@ -108,6 +108,25 @@ describe('fc-menu-item', function () {
     expect(menuitem.expanded, 'after mouseenter').be.true
   })
 
+  it('should delay 1s to open submenu', async () => {
+    const menuitem: FCMenuItem = await fixture(html`<fc-menu-item mouseenterDelay="1000">
+      <span>foo</span>
+      <fc-menu slot="submenu">
+        <fc-menu-item>bar</fc-menu-item>
+      </fc-menu>
+    </fc-menu-item>`)
+
+    expect(menuitem.expanded, 'before mouseenter').be.false
+    const mouseenter = new MouseEvent('mouseenter')
+    menuitem.dispatchEvent(mouseenter)
+
+    await aTimeout(900)
+    expect(menuitem.expanded, 'before delay').be.false
+
+    await aTimeout(1000)
+    expect(menuitem.expanded, 'after delay').be.true
+  })
+
   it('should change expanded to `false` when mouseleave', async () => {
     const menuitem: FCMenuItem = await fixture(html`<fc-menu-item expanded>
       <span>foo</span>
@@ -153,5 +172,20 @@ describe('fc-menu-item', function () {
     const foo = menuitem.querySelector<FCMenuItem>('#foo')!
     await elementUpdated(menuitem)
     expect(document.activeElement).to.eq(foo)
+  })
+
+  it('should close submenu when it lost focus', async () => {
+    const menuitem: FCMenuItem = await fixture(html`<fc-menu-item expanded>
+      <span>foo</span>
+      <fc-menu slot="submenu">
+        <fc-menu-item>bar</fc-menu-item>
+      </fc-menu>
+    </fc-menu-item>`)
+
+    await nextFrame()
+
+    menuitem.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))
+    await elementUpdated(menuitem)
+    expect(menuitem.expanded).to.be.false
   })
 })
