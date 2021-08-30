@@ -23,7 +23,6 @@
   align-items: center;
   width: var(--font-size);
   height: var(--font-size);
-  margin-left: var(--stroke-width);
   overflow: visible;
   background: var(--background);
   box-shadow: inset var(--stroke);
