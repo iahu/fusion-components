@@ -4,7 +4,7 @@
 
 [Storybook👨🏻‍💻](https://iahu.github.io/fusion-components)
 
-## how to use
+## How to use
 
 **暂未发布到 npm**
 
@@ -12,15 +12,27 @@
 
 ### 在 html 中使用
 
+引入依赖，注意必须使用 esModule 的方式，且应该放在 `<body>` 前面
+
 ```html
-<fc-select id="fc-select">
-  <fc-list-option value="1">1</fc-list-option>
-  <fc-list-option value="2">2</fc-list-option>
-  <fc-list-option value="3">3</fc-list-option>
-</fc-select>
+<head>
+  <script src="/path/to/dist/fusion-components-min.js" type="module"></script>
+</head>
 ```
 
-绑定事件
+在 html 中使用
+
+```html
+<body>
+  <fc-select id="fc-select">
+    <fc-list-option value="1">1</fc-list-option>
+    <fc-list-option value="2">2</fc-list-option>
+    <fc-list-option value="3">3</fc-list-option>
+  </fc-select>
+</body>
+```
+
+监听事件
 
 ```js
 document.querySelector('#fc-select').addEventListener('change', console.log)
