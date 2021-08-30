@@ -50,3 +50,57 @@ export const MyComponent = props => {
 
 fusion-components 内部尝试模拟了 React 的 `onChange` 事件，所以有 `change` 事件的组件应该可以正常使用 `onChange` 事件回调。
 同时有 `change` 事件的组件也会发送 `input` 事件，所以也可以使用 React 的 `onInput` 事件回调。
+
+### CSS 主题
+
+```css
+:root,
+:defined,
+slot :defined {
+  --body-background: #fff;
+  --box-background: #f6f6f6;
+  --background: #d4d4d4;
+  --background-hover: #e2e2e2;
+  --background-active: #f2f2f2;
+  --background-selected: rgb(20 150 255 / 30%); /*#f2f2f2*/
+  --background-disabled: #f6f6f6;
+  --background-selected-hover: var(--background-selected);
+  --foreground: #424242;
+  --foreground-selected: #333;
+  --foreground-hover: #333;
+  --accent-color: rgb(20, 150, 255);
+  --accent-color-hover: var(--accent-color);
+  --outline-color: #dc9120;
+
+  --border-width: var(--fc-unit-size);
+  --border-color: #ddd; /*#2260bf;*/
+  --border-color-active: #aaa; /*#2260bf;*/
+  --border-color-hover: #aaa; /*#2260bf;*/
+  --border-color-disabled: #ccc; /*#2260bf;*/
+
+  --outline-color: #2260bf;
+
+  --fc-unit-size: 1px;
+  --border-radius: 0;
+  --font-size: 12px;
+
+  --padding-t: calc(var(--fc-unit-size) * 1);
+  --padding-b: calc(var(--fc-unit-size) * 1);
+  --padding-l: calc(var(--fc-unit-size) * 4);
+  --padding-r: calc(var(--fc-unit-size) * 4);
+  --padding: var(--padding-t) var(--padding-r) var(--padding-b) var(--padding-l);
+
+  --stroke-width: calc(var(--fc-unit-size) * 1);
+  --stroke-color: #ddd;
+  --stroke: 0 0 0 var(--stroke-width) var(--stroke-color);*/
+
+  --box-shadow-color: rgba(0, 0, 0, 0.15);
+  --box-shadow-offset-blur: calc(var(--fc-unit-size) * 8);
+  --box-shadow-offset-x: 0;
+  --box-shadow-offset-y: 0;
+  --box-shadow-offset-blur: calc(var(--fc-unit-size) * 5);
+  --box-shadow-offset-spread: 0;
+  --box-shadow: var(--box-shadow-offset-x) var(--box-shadow-offset-y) var(--box-shadow-offset-blur) var(--box-shadow-offset-spread)
+    var(--box-shadow-color);
+}
+```
