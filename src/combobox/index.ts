@@ -109,6 +109,7 @@ export class FCComboBox extends FCSelect {
   }
 
   handleSelect(e: Event): void {
+    if (!this.selectable || this.disabled) return
     const { target } = e
     if (target instanceof HTMLElement && isOption(target) && target.selected) {
       this.opened = false
@@ -119,7 +120,8 @@ export class FCComboBox extends FCSelect {
 
   handleInputChange(): void {
     this.opened = false
-    const { inputValue } = this
+    const inputValue = (this.input as HTMLInputElement).value
+    this.filterOptions(inputValue)
     this.selectedOption = this.visibleOptions.find(o => this.caseCompaire(o.text, inputValue.trim()))
   }
 

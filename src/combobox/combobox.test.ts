@@ -70,6 +70,19 @@ describe('fc-combobox', function () {
     expect(el.value).to.eq('foo')
   })
 
+  it('should not be selectable', async () => {
+    const el: FCComboBox = await fixture(html`<fc-combobox value="bar" selectable="false">
+      <fc-list-option value="foo"></fc-list-option>
+      <fc-list-option value="bar"></fc-list-option>
+    </fc-combobox>`)
+
+    expect(el.value).to.eq('bar')
+    el.querySelector<FCListOption>('fc-list-option')!.click()
+    await elementUpdated(el)
+
+    expect(el.value).to.eq('bar')
+  })
+
   it('should filter list by input value', async () => {
     const el: FCComboBox = await fixture(html`<fc-combobox value="bar">
       <fc-list-option value="foo"></fc-list-option>
@@ -79,8 +92,10 @@ describe('fc-combobox', function () {
 
     el.value = 'foo'
     await elementUpdated(el)
-
     expect(el.visibleOptions.length).to.eq(1)
+
+    await nextFrame()
+    expect(el.visibleOptions[0]).to.eq(el.querySelector('[value="foo"]'))
   })
 
   it('should update value while dispatch input event on input element', async () => {
@@ -95,5 +110,65 @@ describe('fc-combobox', function () {
     await elementUpdated(element)
 
     expect(element.value).to.eq('bar')
+  })
+
+  it('should filter list by input value case sensitivity', async () => {
+    const el: FCComboBox = await fixture(html`
+      <fc-combobox value="bar" casesensitive>
+        <fc-list-option value="Apple"></fc-list-option>
+        <fc-list-option value="await"></fc-list-option>
+        <fc-list-option value="async"></fc-list-option>
+      </fc-combobox>
+    `)
+
+    el.input!.value = 'A'
+    el.input!.dispatchEvent(new Event('input'))
+    await elementUpdated(el)
+    expect(el.visibleOptions.length).to.eq(1)
+  })
+
+  it('should select a option with input changed value', async () => {
+    const el: FCComboBox = await fixture(html`
+      <fc-combobox value="foo">
+        <fc-list-option value="foo"></fc-list-option>
+        <fc-list-option value="bar"></fc-list-option>
+      </fc-combobox>
+    `)
+
+    el.input!.value = 'bar'
+    el.input!.dispatchEvent(new Event('change'))
+    await elementUpdated(el)
+
+    expect(el.selectedOption).to.eq(el.querySelector('[value="bar"]'))
+  })
+
+  it('should open listbox when focus input', async () => {
+    const el: FCComboBox = await fixture(html`
+      <fc-combobox>
+        <fc-list-option value="foo"></fc-list-option>
+        <fc-list-option value="bar"></fc-list-option>
+      </fc-combobox>
+    `)
+    await nextFrame()
+
+    el.input!.focus()
+
+    expect(el.opened).to.be.true
+  })
+
+  it("should open listbox when click it's label", async () => {
+    const el: FCComboBox = await fixture(html`
+      <fc-combobox>
+        <fc-list-option value="foo"></fc-list-option>
+        <fc-list-option value="bar"></fc-list-option>
+      </fc-combobox>
+    `)
+    await nextFrame()
+
+    el.renderRoot.querySelector('label')!.click()
+
+    await elementUpdated(el)
+
+    expect(el.opened).to.be.true
   })
 })

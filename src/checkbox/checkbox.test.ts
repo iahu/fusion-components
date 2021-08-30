@@ -121,5 +121,23 @@ describe('fc-checkbox', function () {
     expect(fn2.called).to.be.true
   })
 
-  // @TODO keydown
+  it('should be selected when clicking', async () => {
+    const checkbox: FCCheckbox = await fixture(html`<fc-checkbox>foo</fc-checkbox>`)
+    checkbox.click()
+
+    expect(checkbox.checked).to.be.true
+    checkbox.click()
+    expect(checkbox.checked).to.be.false
+
+    const indeterminate: FCCheckbox = await fixture(html`<fc-checkbox indeterminate></fc-checkbox>`)
+    indeterminate.click()
+    expect(indeterminate.checked).to.be.true
+  })
+
+  it('should be selected when pressed Space key', async () => {
+    const checkbox: FCCheckbox = await fixture(html`<fc-checkbox></fc-checkbox>`)
+    checkbox.dispatchEvent(new KeyboardEvent('keydown', { key: ' ' }))
+
+    expect(checkbox.checked).to.be.true
+  })
 })
