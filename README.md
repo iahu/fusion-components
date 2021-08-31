@@ -1,6 +1,7 @@
 # Fusion Components <sup>Beta</sup>
 
 [![Build Status](https://app.travis-ci.com/iahu/fusion-components.svg?branch=master)](https://app.travis-ci.com/iahu/fusion-components)
+[![codecov](https://codecov.io/gh/iahu/fusion-components/branch/master/graph/badge.svg?token=HS4SFMZVJR)](https://codecov.io/gh/iahu/fusion-components)
 
 一套面向类桌面应用的沉浸式风格 Web Components UI 库
 

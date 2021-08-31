@@ -8,7 +8,7 @@ const dirs = fs.readdirSync(path.join(__dirname, 'src'))
 const importMap = dirs
   .filter(fd => fs.statSync(path.join(__dirname, 'src', fd)).isDirectory)
   .reduce((map, dir) => {
-    map[`/dist/esm/${dir}/style.css`] = '/mock/style.css.js'
+    map[`/dist/esm/${dir}/style.css`] = '/dist/esm/mock/style.css.js'
     return map
   }, {})
 
@@ -21,7 +21,7 @@ export default {
         importMap: {
           imports: {
             ...importMap,
-            '/dist/esm/styles/global.css': '/mock/style.css.js',
+            '/dist/esm/styles/global.css': '/dist/esm/mock/style.css.js',
           },
         },
       },
