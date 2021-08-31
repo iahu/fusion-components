@@ -1,5 +1,7 @@
 # Fusion Components <sup>Beta</sup>
 
+[![Build Status](https://app.travis-ci.com/iahu/fusion-components.svg?branch=master)](https://app.travis-ci.com/iahu/fusion-components)
+
 一套面向类桌面应用的沉浸式风格 Web Components UI 库
 
 [Storybook👨🏻‍💻](https://iahu.github.io/fusion-components)
