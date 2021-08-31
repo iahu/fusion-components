@@ -1,5 +1,3 @@
-import { isFormula } from 'exp-calc'
-
 const toString = (s: unknown) => Object.prototype.toString.call(s).slice(8, -1)
 
 export const isString = (s: unknown): s is string => toString(s) === 'String'

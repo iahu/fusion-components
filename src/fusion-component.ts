@@ -1,6 +1,8 @@
 import { html, LitElement, PropertyValues, TemplateResult } from 'lit'
 import { observer } from './decorators'
 
+import './custom-elements'
+
 const boolAriaAttrNameList = [
   'selected',
   'hidden',

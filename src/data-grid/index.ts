@@ -23,14 +23,14 @@ export class FCDataGrid extends FC {
     super.connectedCallback()
 
     this.addEventListener('keydown', this.handleKeydown)
-    this.addEventListener('focusin', this.handleActive)
+    this.addEventListener('click', this.handleClick)
   }
 
   disconnectedCallback(): void {
     super.disconnectedCallback()
 
     this.removeEventListener('keydown', this.handleKeydown)
-    this.removeEventListener('focusin', this.handleActive)
+    this.removeEventListener('click', this.handleClick)
   }
 
   @observer({ attribute: false })
@@ -49,9 +49,9 @@ export class FCDataGrid extends FC {
     this.activeCol = rows.map(r => r.cells?.[colIdx]).filter(v => !!v) as FCDataGridCell[]
   }
 
-  private activeRow?: FCDataGridCell[]
+  activeRow?: FCDataGridCell[]
 
-  private activeCol?: FCDataGridCell[]
+  activeCol?: FCDataGridCell[]
 
   @observer({ reflect: true })
   grid = false
@@ -196,7 +196,7 @@ export class FCDataGrid extends FC {
         this.focusNext(e)
         break
       case 'Enter':
-        this.handleActive(e)
+        this.handleClick(e)
     }
   }
 
@@ -229,12 +229,16 @@ export class FCDataGrid extends FC {
     }
   }
 
-  private handleActive(e: Event): void {
+  private handleClick(e: Event): void {
     const { target } = e
-    if (target instanceof FCDataGridCell) {
-      this.activeElement = target
-      if (target instanceof FCDataGridCell && target.sortable) {
-        const nextIndex = target.colIndex
+    if (!(target instanceof HTMLElement)) return
+
+    const closestCell = target.closest<FCDataGridCell>('fc-data-grid-cell')
+    if (closestCell) {
+      this.activeElement = closestCell
+
+      if (closestCell.sortable) {
+        const nextIndex = closestCell.colIndex
         if (nextIndex !== this.sortIndex) {
           this.sortIndex = nextIndex
         } else {

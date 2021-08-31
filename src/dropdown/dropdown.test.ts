@@ -1,7 +1,6 @@
-import { aTimeout, elementUpdated, expect, fixture, html, nextFrame } from '@open-wc/testing'
-
-import { FCDropdown } from './index'
+import { elementUpdated, expect, fixture, html, nextFrame } from '@open-wc/testing'
 import './index'
+import { FCDropdown } from './index'
 
 describe('fc-dropdown', function () {
   it('should not throw error when createElement', async () => {

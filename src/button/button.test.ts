@@ -81,6 +81,7 @@ describe('FCButton', function () {
     el!.addEventListener('submit', spy)
     el.querySelector<FCButton>('fc-button')!.click()
     await elementUpdated(el)
+    await nextFrame()
     expect(spy.calledOnce, 'event fired').to.equal(true)
   })
 
