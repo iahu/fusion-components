@@ -58,6 +58,7 @@
     "@typescript-eslint/eslint-plugin": "^4.28.0",
     "@typescript-eslint/parser": "^4.28.0",
     "@web/test-runner": "^0.13.16",
+    "@web/test-runner-junit-reporter": "^0.4.6",
     "babel-loader": "^8.2.2",
     "cross-env": "^7.0.3",
     "css-loader": "^5.2.6",
