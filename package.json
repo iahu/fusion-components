@@ -20,10 +20,11 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook -o ./docs",
     "prettier": "prettier --fix --write ./src/**/*.ts",
-    "pretest": "yarn build:test",
+    "pretest": "yarn tsc",
     "test": "web-test-runner dist/**/*.test.js --node-resolve",
-    "test:watch": "web-test-runner dist/**/*.test.js --node-resolve --watch",
-    "prepare": "husky install"
+    "coverage": "nyc yarn test",
+    "prepare": "husky install",
+    "nyc": "nyc -r lcov -e .ts -x \"*.test.ts\" npm run test"
   },
   "lint-staged": {
     "src/**/*.ts": [
@@ -57,8 +58,8 @@
     "@types/webpack": "^5.28.0",
     "@typescript-eslint/eslint-plugin": "^4.28.0",
     "@typescript-eslint/parser": "^4.28.0",
+    "@web/dev-server-import-maps": "^0.0.6",
     "@web/test-runner": "^0.13.16",
-    "@web/test-runner-junit-reporter": "^0.4.6",
     "babel-loader": "^8.2.2",
     "cross-env": "^7.0.3",
     "css-loader": "^5.2.6",
