@@ -22,9 +22,7 @@
     "prettier": "prettier --fix --write ./src/**/*.ts",
     "pretest": "yarn tsc",
     "test": "web-test-runner dist/**/*.test.js --node-resolve",
-    "coverage": "nyc yarn test",
-    "prepare": "husky install",
-    "nyc": "nyc -r lcov -e .ts -x \"*.test.ts\" npm run test"
+    "prepare": "husky install"
   },
   "lint-staged": {
     "src/**/*.ts": [
@@ -68,6 +66,7 @@
     "husky": "^7.0.2",
     "less-loader": "6.1.2",
     "lint-staged": "^11.1.2",
+    "nyc": "^15.1.0",
     "prettier": "^2.3.1",
     "raw-loader": "^4.0.2",
     "rimraf": "^3.0.2",

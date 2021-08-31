@@ -15,12 +15,12 @@ const exclude = input.filter(s => s.startsWith('!')).map(s => s.slice(1))
  */
 export default {
   input,
-  output: { dir: './dist/esm', format: 'esm' },
+  output: { dir: './dist/esm', format: 'esm', sourcemap: true },
   plugins: [
     multiInput(),
     typescript({
       tsconfig: './tsconfig.json',
-      tsconfigOverride: { exclude, compilerOptions: { sourceMap: true } },
+      tsconfigOverride: { exclude },
     }),
     importCss(),
   ],
