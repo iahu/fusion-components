@@ -25,6 +25,12 @@
     "test:watch": "web-test-runner dist/**/*.test.js --node-resolve --watch",
     "prepare": "husky install"
   },
+  "lint-staged": {
+    "src/**/*.ts": [
+      "eslint",
+      "prettier --write"
+    ]
+  },
   "keywords": [
     "web components",
     "ui",
@@ -59,6 +65,7 @@
     "eslint-config-prettier": "^8.3.0",
     "husky": "^7.0.2",
     "less-loader": "6.1.2",
+    "lint-staged": "^11.1.2",
     "prettier": "^2.3.1",
     "raw-loader": "^4.0.2",
     "rimraf": "^3.0.2",
