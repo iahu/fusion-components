@@ -2,8 +2,3 @@
 . "$(dirname "$0")/_/husky.sh"
 
 yarn lint-staged
-
-files=$(git diff --cached --name-only --diff-filter=ACMR "*.ts" "*.js")
-if [ "$files" != "" ]; then
-  yarn test
-fi
