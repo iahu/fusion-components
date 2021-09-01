@@ -14,6 +14,10 @@ const safeToNumber = (v: any) => (isDigit(v) ? toNumber(v) : NaN)
 export class FCNumberFiled extends FCInput {
   static styles = mergeStyles(style)
 
+  get shadowInput() {
+    return this.inputRef.value
+  }
+
   inputRef: Ref<HTMLInputElement> = createRef<HTMLInputElement>()
   updateInputValue(value: string): void {
     if (this.inputRef.value) {
@@ -37,10 +41,10 @@ export class FCNumberFiled extends FCInput {
   }
 
   @observer()
-  max = ''
+  max = this.getAttribute('max') ?? ''
 
   @observer()
-  min = ''
+  min = this.getAttribute('min') ?? ''
 
   @observer({
     converter(v) {
@@ -62,6 +66,10 @@ export class FCNumberFiled extends FCInput {
       if (!v) {
         return v
       }
+      if (!isDigit(v)) {
+        return ''
+      }
+
       let n = toNumber(v)
       const max = safeToNumber(host.max)
       const min = safeToNumber(host.min)
@@ -85,7 +93,7 @@ export class FCNumberFiled extends FCInput {
   }
 
   public get number(): number {
-    return Number(this.value)
+    return isDigit(this.value) ? Number(this.value) : NaN
   }
 
   handleChange(e: Event): void {
@@ -107,7 +115,7 @@ export class FCNumberFiled extends FCInput {
     } catch (e) {
       console.warn('计算出错', e)
       this.classList.add('expression-error')
-      this.emit('error', e)
+      this.emit('expression-error', e)
     }
     this.updateInputValue(this.valueWithUnit)
   }
@@ -142,14 +150,14 @@ export class FCNumberFiled extends FCInput {
 
     if (max && n >= max) {
       this.classList.remove('is-max')
-      setImmediate(() => this.classList.add('is-max'), 0)
+      this.updateComplete.then(() => this.classList.add('is-max'))
       this.emit('is-max')
     } else {
       this.classList.remove('is-max')
     }
     if (min && n <= min) {
       this.classList.remove('is-min')
-      setImmediate(() => this.classList.add('is-min'), 0)
+      this.updateComplete.then(() => this.classList.add('is-min'))
       this.emit('is-min')
     } else {
       this.classList.remove('is-min')
