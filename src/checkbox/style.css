@@ -60,7 +60,7 @@
 
 :host(.readonly) .control,
 :host([disabled]) .control {
-  --background: var(--background-disabled) !important;
+  --accent-color: var(--accent-color-disabled);
   cursor: not-allowed;
 }
 

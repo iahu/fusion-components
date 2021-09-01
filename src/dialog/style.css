@@ -12,6 +12,14 @@
   padding: calc(var(--fc-unit-size) * 6);
 }
 
+:host([role='dialog']:focus-visible) {
+  position: fixed;
+}
+
+:host([role='dialog']:focus-visible)::after {
+  content: none;
+}
+
 .overlay {
   position: fixed;
   left: 0;

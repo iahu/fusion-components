@@ -13,26 +13,22 @@
 
 因为 web components 组件不需要额外的库就可以运行，所以在项目中可以直接使用
 
-### 在 html 中使用
-
-引入依赖，注意必须使用 esModule 的方式，且应该放在 `<body>` 前面
+### 在 HTML 中使用
 
 ```html
-<head>
-  <script src="/path/to/dist/fusion-components-min.js" type="module"></script>
-</head>
-```
-
-在 html 中使用
-
-```html
-<body>
-  <fc-select id="fc-select">
-    <fc-list-option value="1">1</fc-list-option>
-    <fc-list-option value="2">2</fc-list-option>
-    <fc-list-option value="3">3</fc-list-option>
-  </fc-select>
-</body>
+<html>
+  <head>
+    <!-- 引入依赖，注意必须使用 esModule 的方式，且应该放在 `<body>` 前面 -->
+    <script src="/path/to/dist/fusion-components-min.js" type="module"></script>
+  </head>
+  <body>
+    <fc-select id="fc-select">
+      <fc-list-option value="1">1</fc-list-option>
+      <fc-list-option value="2">2</fc-list-option>
+      <fc-list-option value="3">3</fc-list-option>
+    </fc-select>
+  </body>
+</html>
 ```
 
 监听事件

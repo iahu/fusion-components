@@ -13,12 +13,12 @@ export class FCDialog extends FC {
   connectedCallback(): void {
     super.connectedCallback()
 
-    this.renderRoot.ownerDocument.addEventListener('keydown', this.handleKeydown)
+    this.addEventListener('keydown', this.handleKeydown)
     this.addEventListener('close', this.handleClose)
   }
   disconnectedCallback(): void {
     super.disconnectedCallback()
-    this.renderRoot.ownerDocument.removeEventListener('keydown', this.handleKeydown)
+    this.removeEventListener('keydown', this.handleKeydown)
     this.removeEventListener('close', this.handleClose)
   }
 
@@ -79,7 +79,7 @@ export class FCDialog extends FC {
   }
 
   handleKeydown = (e: KeyboardEvent): void => {
-    if (this.escClosable && e.key === 'Escape') {
+    if (this.escClosable && e.key === 'Escape' && e.target === this) {
       e.preventDefault()
       this.hidden = true
     }
