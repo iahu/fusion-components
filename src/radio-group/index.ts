@@ -2,7 +2,7 @@ import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { observer } from '../decorators'
 import { FC } from '../fusion-component'
-import { focusCurrentOrNext } from '../helper'
+import { focusFirstOrNext } from '../helper'
 import mergeStyles from '../merge-styles'
 import { FCRadio } from '../radio'
 import style from './style.css'
@@ -73,9 +73,9 @@ export class FCRadioGroup extends FC {
     let target: HTMLElement | undefined
     const { key } = e
     if (['ArrowLeft', 'ArrowUp'].includes(key)) {
-      target = focusCurrentOrNext(this.items, -1)
+      target = focusFirstOrNext(this.items, -1)
     } else if (['ArrowRight', 'ArrowDown'].includes(key)) {
-      target = focusCurrentOrNext(this.items, 1)
+      target = focusFirstOrNext(this.items, 1)
     }
 
     if (target) {

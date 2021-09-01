@@ -3,7 +3,7 @@ import { customElement } from 'lit/decorators.js'
 import { assignedElements, observer } from '../decorators'
 import '../divider'
 import { FC } from '../fusion-component'
-import { focusCurrentOrNext, tabbableElement, isHTMLElement, setTopIndex } from '../helper'
+import { focusFirstOrNext, tabbableElement, isHTMLElement, setTopIndex } from '../helper'
 import '../menu-item'
 import { FCMenuItem } from '../menu-item'
 import mergeStyles from '../merge-styles'
@@ -104,7 +104,7 @@ export class FCMenu extends FC {
       return
     }
 
-    const target = focusCurrentOrNext(avaliableItems, delta)
+    const target = focusFirstOrNext(avaliableItems, delta)
     if (target) e.preventDefault()
     return target
   }

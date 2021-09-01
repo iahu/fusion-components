@@ -75,7 +75,7 @@ export const toggleTabIndex = <T extends HTMLElement = HTMLElement>(
   }
 }
 
-export const focusCurrentOrNext = <T extends HTMLElement = HTMLElement>(
+export const focusFirstOrNext = <T extends HTMLElement = HTMLElement>(
   elements: T[],
   delta: number,
   loop = true,

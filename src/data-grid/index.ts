@@ -6,7 +6,7 @@ import '../data-grid-row'
 import { FCDataGridRow } from '../data-grid-row'
 import { observer, queryAll } from '../decorators'
 import { FC } from '../fusion-component'
-import { clamp, focusCurrentOrNext, setCSSText } from '../helper'
+import { clamp, focusFirstOrNext, setCSSText } from '../helper'
 import mergeStyles from '../merge-styles'
 import style from './style.css'
 
@@ -216,7 +216,7 @@ export class FCDataGrid extends FC {
       const { length } = activeCells
       const boundary = clamp(0, length - 1, delta * length)
       const mergedDelta = e.ctrlKey ? boundary - activeIdx : delta
-      const nextActiveElement = focusCurrentOrNext(activeCells, mergedDelta, !e.altKey)
+      const nextActiveElement = focusFirstOrNext(activeCells, mergedDelta, !e.altKey)
       if (nextActiveElement) {
         e.preventDefault()
         nextActiveElement.scrollIntoView({ block: 'nearest' })
