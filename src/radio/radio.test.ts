@@ -26,6 +26,29 @@ describe('fc-radio', function () {
     expect(radio.checked).to.be.true
   })
 
+  it('should not turn off radio', async () => {
+    const radio: FCRadio = await fixture(html`<fc-radio checked></fc-radio>`)
+
+    await nextFrame()
+    radio.click()
+    await elementUpdated(radio)
+
+    expect(radio.checked).to.be.true
+  })
+
+  it('should emit a change event when checked', async () => {
+    const radio: FCRadio = await fixture(html`<fc-radio></fc-radio>`)
+
+    await nextFrame()
+    const fn = Sinon.spy()
+    radio.addEventListener('change', fn)
+
+    radio.click()
+    await elementUpdated(radio)
+    expect(radio.checked).to.be.true
+    expect(fn.called).to.be.true
+  })
+
   it('should be disabled', async () => {
     const radio: FCRadio = await fixture(html`<fc-radio disabled></fc-radio>`)
 

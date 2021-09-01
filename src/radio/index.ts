@@ -88,7 +88,7 @@ export class FCRadio extends FormAssociated {
 
   handleClick(e: MouseEvent): void {
     if (!this.disabled && !this.readOnly && !this.checked) {
-      this.checked = !this.checked
+      this.checked = true
       this.updateForm()
     }
   }

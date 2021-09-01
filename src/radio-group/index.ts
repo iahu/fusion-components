@@ -2,16 +2,10 @@ import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { observer } from '../decorators'
 import { FC } from '../fusion-component'
+import { focusCurrentOrNext } from '../helper'
 import mergeStyles from '../merge-styles'
 import { FCRadio } from '../radio'
 import style from './style.css'
-
-const KEY_MAP = {
-  ArrowDown: 1,
-  ArrowRight: 1,
-  ArrowUp: -1,
-  ArrowLeft: -1,
-}
 
 @customElement('fc-radio-group')
 export class FCRadioGroup extends FC {
@@ -39,7 +33,7 @@ export class FCRadioGroup extends FC {
     this.removeEventListener('keydown', this.handleKeydown)
   }
 
-  public get items(): FCRadio[] {
+  public get items(): FCRadio[] | [] {
     return this.slottedElements.filter(o => o instanceof FCRadio) as FCRadio[]
   }
 
@@ -76,21 +70,16 @@ export class FCRadioGroup extends FC {
   }
 
   handleKeydown(e: KeyboardEvent): void {
-    const step = (KEY_MAP as Record<string, number>)[e.key]
-    if (!step) {
-      return
+    let target: HTMLElement | undefined
+    const { key } = e
+    if (['ArrowLeft', 'ArrowUp'].includes(key)) {
+      target = focusCurrentOrNext(this.items, -1)
+    } else if (['ArrowRight', 'ArrowDown'].includes(key)) {
+      target = focusCurrentOrNext(this.items, 1)
     }
 
-    const { activeElement } = this.ownerDocument
-    let idx = this.items.findIndex(r => r === activeElement)
-    while (this.items.length && this.items[idx]) {
-      idx += step
-      const radio = this.items[idx % this.items.length]
-      if (radio && !radio.disabled) {
-        radio.checked = true
-        radio.focus()
-        break
-      }
+    if (target) {
+      e.preventDefault()
     }
   }
 
@@ -101,7 +90,7 @@ export class FCRadioGroup extends FC {
       r.tabIndex = checked ? 0 : -1
       if (checked) includeChecked = true
     })
-    if (!includeChecked) {
+    if (!includeChecked && this.items[0]) {
       this.items[0].tabIndex = 0
     }
   }
