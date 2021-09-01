@@ -2,10 +2,11 @@ import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { observer } from '../decorators'
 import { FC } from '../fusion-component'
-import { focusable } from '../helper'
+import { focusable, focusFirstOrNext, toggleTabIndex } from '../helper'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
-import { FCTab } from '../tab/index'
+import { isTabPanel } from '../tab-panel/index'
+import { FCTab, isTab } from '../tab/index'
 import style from './style.css'
 
 export * from '../tab-panel/index'
@@ -26,9 +27,16 @@ export class FCTabs extends FC {
   connectedCallback(): void {
     super.connectedCallback()
 
-    this.tabs = Array.from(this.children).filter(e => e.getAttribute('slot') === 'tab')
-    this.panels = Array.from(this.children).filter(e => e.getAttribute('slot') === 'tabpanel')
-    this.activeid = this.getAttribute('activeid') || this.nextFocusableTab(1)?.getAttribute('id') || null
+    this.tabs = Array.from(this.children).filter(isTab) as HTMLElement[]
+    this.panels = Array.from(this.children).filter(isTabPanel) as HTMLElement[]
+    this.activeid = this.getAttribute('activeid')
+
+    if (!this.activeid && this.tabs) {
+      const next = focusFirstOrNext(this.tabs, 1, false, true)
+      if (next) {
+        this.activeid = next.id
+      }
+    }
 
     this.addEventListener('select', this.handleSelect)
   }
@@ -40,7 +48,7 @@ export class FCTabs extends FC {
   }
 
   @observer({ attribute: false, init: false })
-  tabs = [] as Element[]
+  tabs = [] as HTMLElement[]
   protected tabsChanged(): void {
     this.tabs?.forEach((e, idx) => {
       if (!e.getAttribute('id')) {
@@ -50,7 +58,7 @@ export class FCTabs extends FC {
   }
 
   @observer({ attribute: false, init: false })
-  panels = [] as Element[]
+  panels = [] as HTMLElement[]
   protected panelsChanged(): void {
     const { index } = FCTabs
     const { activeTab } = this
@@ -111,7 +119,7 @@ export class FCTabs extends FC {
   }
 
   @observer({ init: false })
-  activeid: string | null = ''
+  activeid?: string | null = ''
   protected activeidChanged(): void {
     const { activeid } = this
     this.activeTab = this.tabs.find(t => t.getAttribute('id') === activeid)
@@ -126,7 +134,7 @@ export class FCTabs extends FC {
   }
 
   @observer({ reflect: true })
-  direction = 'column'
+  direction = 'row'
   protected directionChanged(): void {
     const { direction } = this
     this.tabs.forEach(t => t.setAttribute('direction', direction))
@@ -140,7 +148,7 @@ export class FCTabs extends FC {
     }
   }
 
-  handleKeydonw(e: KeyboardEvent): void {
+  handleKeydown(e: KeyboardEvent): void {
     if (!(e.target instanceof FCTab)) {
       return
     }
@@ -153,7 +161,7 @@ export class FCTabs extends FC {
       previous: 'ArrowLeft',
       next: 'ArrowRight',
     }
-    if (this.direction === 'row') {
+    if (this.direction === 'column') {
       NAV_KEYS.previous = 'ArrowUp'
       NAV_KEYS.next = 'ArrowDown'
     }
@@ -161,11 +169,11 @@ export class FCTabs extends FC {
     switch (e.key) {
       case NAV_KEYS.previous:
         e.preventDefault()
-        this.focusTab(this.nextFocusableTab(-1))
+        toggleTabIndex(this.tabs, -1, true)?.focus()
         break
       case NAV_KEYS.next:
         e.preventDefault()
-        this.focusTab(this.nextFocusableTab(1))
+        toggleTabIndex(this.tabs, 1, true)?.focus()
         break
       case 'Enter': {
         e.preventDefault()
@@ -177,38 +185,9 @@ export class FCTabs extends FC {
     }
   }
 
-  nextFocusableTab(delta: number): FCTab | undefined {
-    const { activeElement } = this.ownerDocument
-
-    let idx = this.tabs.findIndex(t => t === activeElement)
-    const { length } = this.tabs
-
-    while (idx < length) {
-      idx += delta
-      const next = this.tabs[(idx + length) % length]
-      if (next && focusable(next)) {
-        return next as FCTab
-      }
-    }
-  }
-
-  focusTab(tab?: FCTab): void {
-    if (!tab || !focusable(tab)) {
-      return
-    }
-    this.tabs.forEach(t => {
-      if (focusable(t)) {
-        t.setAttribute('tabindex', '-1')
-      }
-    })
-
-    tab.setAttribute('tabindex', '0')
-    tab.focus()
-  }
-
   render(): TemplateResult<1> {
     return html`
-      <div class="tablist" part="tablist" role="tablist" @keydown="${this.handleKeydonw}">
+      <div class="tablist" part="tablist" role="tablist" @keydown="${this.handleKeydown}">
         ${before()}
         <slot name="tab" class="tab" part="tab"></slot>
         ${after()}

@@ -5,5 +5,5 @@ files=$(git diff --cached --name-only --diff-filter=ACMR "*.ts" "*.js")
 if [ "$files" != "" ]; then
   yarn test
 else
-  echo "No matched files"
+  echo "Nothing needs to be tested!"
 fi
