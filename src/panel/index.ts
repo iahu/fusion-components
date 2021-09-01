@@ -25,11 +25,12 @@ export class FCPanel extends FC {
 
   @observer({ reflect: true })
   hidden = false
-  protected hiddenChanged(): void {
+  protected hiddenChanged(old: boolean, next: boolean): void {
+    this.setAttribute('aria-hidden', String(next))
     this.emit('visibleChange')
   }
 
-  private defaultHeader?: FCPanelHeader
+  #defaultHeader?: FCPanelHeader
 
   @observer()
   header?: string
@@ -41,10 +42,10 @@ export class FCPanel extends FC {
       header.closeTarget = this.closeTarget
       header.innerText = next
 
-      this.defaultHeader = header
+      this.#defaultHeader = header
       this.appendChild(header)
-    } else if (this.defaultHeader) {
-      this.defaultHeader.remove()
+    } else if (this.#defaultHeader) {
+      this.#defaultHeader.remove()
     }
   }
 
