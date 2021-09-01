@@ -10,13 +10,13 @@ import style from './style.css'
 export class FCInput extends FormAssociated {
   static styles = mergeStyles(style)
 
-  private get input(): HTMLInputElement | null | undefined {
+  get shadowInput(): HTMLInputElement | null | undefined {
     return this.shadowRoot?.querySelector('input')
   }
 
   connectedCallback(): void {
     super.connectedCallback()
-    this.value = this.input?.value || this.value
+    this.value = this.shadowInput?.value || this.value
   }
 
   @observer()
@@ -38,11 +38,11 @@ export class FCInput extends FormAssociated {
   autofocus = false
 
   focus(): void {
-    this.input?.focus()
+    this.shadowInput?.focus()
   }
 
   blur(): void {
-    this.input?.blur()
+    this.shadowInput?.blur()
   }
 
   @observer()
