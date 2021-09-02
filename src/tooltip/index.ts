@@ -46,17 +46,17 @@ export class FCTooltip extends FC {
   @observer({ reflect: true })
   role = 'tooltip'
 
-  protected anchorElements?: HTMLElement[] | null
+  anchorElements?: HTMLElement[] | null
 
-  protected currentAnchorElement?: HTMLElement | null
+  currentAnchorElement?: HTMLElement | null
 
-  private visibleTimeout?: NodeJS.Timeout
+  #visibleTimeout?: NodeJS.Timeout
 
   @observer()
   visible = false
-  protected visibleChanged(): void {
+  visibleChanged(old: boolean, next: boolean): void {
     if (this.visible) {
-      this.visibleTimeout = setTimeout(() => {
+      const setVisibility = () => {
         const { anchorPosition, tooltip } = this
         if (tooltip) {
           tooltip.style.cssText = Object.entries(anchorPosition)
@@ -64,9 +64,16 @@ export class FCTooltip extends FC {
             .join(';')
           tooltip.style.visibility = 'visible'
         }
-      }, this.delay)
-    } else if (this.visibleTimeout) {
-      clearTimeout(this.visibleTimeout)
+        this.emit('visibleChange', { old, next })
+      }
+
+      if (this.delay > 0) {
+        this.#visibleTimeout = setTimeout(setVisibility, this.delay)
+      } else {
+        setVisibility()
+      }
+    } else if (this.#visibleTimeout) {
+      clearTimeout(this.#visibleTimeout)
     }
   }
 
@@ -77,7 +84,7 @@ export class FCTooltip extends FC {
   @query('.tooltip')
   tooltip?: HTMLElement
 
-  private get anchorPosition() {
+  get anchorPosition(): { left?: number; top?: number } {
     const { currentAnchorElement } = this
     const tooltip = this.renderRoot.querySelector('.tooltip')
     if (!currentAnchorElement || !tooltip) {
