@@ -1,10 +1,11 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-files=$(git diff origin/$(git branch --show-current) --cached --name-only --diff-filter=ACMR "*.ts" "*.js")
-echo $files
-if [ "$files" != "" ]; then
-  yarn test
-else
-  echo "Nothing needs to be tested!"
-fi
+yarn test
+# files=$(git diff origin/$(git branch --show-current) --cached --name-only --diff-filter=ACMR "*.ts" "*.js")
+# echo $files
+# if [ "$files" != "" ]; then
+#   yarn test
+# else
+#   echo "Nothing needs to be tested!"
+# fi
