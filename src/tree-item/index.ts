@@ -16,18 +16,17 @@ export class FCTreeItem extends FC {
   connectedCallback(): void {
     super.connectedCallback()
 
-    this.addEventListener('blur', this.handleBlur)
+    this.addEventListener('keydown', this.handleKeydown)
   }
 
   disconnectedCallback(): void {
     super.disconnectedCallback()
 
-    this.removeEventListener('blur', this.handleBlur)
+    this.removeEventListener('keydown', this.handleKeydown)
   }
 
   focusItem(focused = true): void {
     this.toggleAttribute('focused', focused)
-    this.tabIndex = Number(focused) - 1
     if (focused) {
       this.focus()
     } else {
@@ -48,8 +47,8 @@ export class FCTreeItem extends FC {
   @observer({ reflect: true })
   role = 'treeitem'
 
-  @observer({ reflect: true })
-  tabIndex = -1
+  // @observer({ reflect: true })
+  // tabIndex = -1
 
   @observer()
   value = ''
@@ -63,10 +62,15 @@ export class FCTreeItem extends FC {
    */
   selectable = true
 
-  @observer<FCTreeItem, boolean>({ reflect: true })
+  @observer<FCTreeItem, boolean>({
+    reflect: true,
+    converter(v, host) {
+      return !host.disabled && v
+    },
+  })
   selected = false
-  protected selectedChanged(old: boolean, next: boolean): void {
-    this.emit('selectionChange')
+  protected selectedChanged(old: boolean | undefined, next: boolean): void {
+    this.emit('selectionChange', { old, next })
   }
 
   @observer({ attribute: false, reflect: true })
@@ -75,11 +79,19 @@ export class FCTreeItem extends FC {
   @observer({ reflect: true })
   indent = false
 
-  @observer({ reflect: true })
+  @observer<FCTreeItem, boolean>({
+    reflect: true,
+    converter(v, host) {
+      return !host.disabled && host.items && host.items.length > 0 && v
+    },
+  })
   expanded = false
   protected expandedChanged(old: boolean, next: boolean): void {
     this.emit('expand')
     this.setAttribute('aria-expanded', String(next))
+    this.updateComplete.then(() => {
+      this.items?.[0]?.focus()
+    })
   }
 
   @observer({ reflect: true })
@@ -107,14 +119,15 @@ export class FCTreeItem extends FC {
     }
   }
 
-  handleFocus(e: FocusEvent): void {
-    e.preventDefault()
-    this.focusItem(true)
-  }
-  handleBlur(e: FocusEvent): void {
-    e.preventDefault()
-    if (!this.selected) {
-      this.focusItem(false)
+  handleKeydown(e: KeyboardEvent): void {
+    if (this.disabled || e.target !== this) return
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      this.selected = !this.selected
+    }
+    if (e.key === ' ') {
+      e.preventDefault()
+      this.expanded = !this.expanded
     }
   }
 

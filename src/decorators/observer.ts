@@ -1,6 +1,6 @@
 import { ReactiveElement } from '@lit/reactive-element'
 
-export interface ReactiveElementWithObserver<T, V = any> extends ReactiveElement {
+export type ReactiveElementWithObserver<T, V = any> = T & {
   __observer?: Map<string, ObserverOptions<T, V> & { name: string }>
   attributeChanged?: (name: string, oldValue: string | null, nextValue: string | null) => void
   [propName: string]: any
@@ -11,10 +11,10 @@ export type ObserverType = 'string' | 'number' | 'boolean'
 export type Value = string | number | boolean | null
 export type Converter<V = any, T = any> = (
   v: V | number | string | boolean | null,
-  host: T | ReactiveElementWithObserver<T, V>
+  host: ReactiveElementWithObserver<T, V>
 ) => any
 
-export type InitFunction<T = any, V = any> = (host: T | ReactiveElementWithObserver<T, V>) => V | null
+export type InitFunction<T = any, V = any> = (host: ReactiveElementWithObserver<T, V>) => V | null
 
 interface ObserverOptions<T, V = any> {
   type?: ObserverType
@@ -36,7 +36,11 @@ const typeCotrMap: Record<string, Converter> = {
   boolean: Boolean,
 }
 
-const getConverter = <T = any, V = Value>(host: ReactiveElement, name: string, type?: ObserverType) => {
+const getConverter = <T = any, V = Value>(
+  host: ReactiveElementWithObserver<T, V>,
+  name: string,
+  type?: ObserverType
+) => {
   const typeofValue = type ?? typeof Reflect.get(host, name)
   return typeCotrMap[typeofValue] as Converter<V, T>
 }

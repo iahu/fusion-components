@@ -47,6 +47,11 @@
   padding: var(--padding-t) var(--padding-r) var(--padding-b) var(--padding-l);
   --outline-offset: 0px;
 }
+
+:host([selectable]) .control {
+  user-select: none;
+}
+
 .control:hover {
   background: var(--background-hover);
 }
