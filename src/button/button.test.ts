@@ -78,11 +78,13 @@ describe('FCButton', function () {
     )
 
     const spy = Sinon.spy(e => e.preventDefault())
-    el!.addEventListener('submit', spy)
+    el.addEventListener('submit', spy)
+
     el.querySelector<FCButton>('fc-button')!.click()
     await elementUpdated(el)
     await nextFrame()
-    expect(spy.calledOnce, 'event fired').to.equal(true)
+
+    expect(spy.called, 'event fired').to.equal(true)
   })
 
   it('should prevent a submit event', async () => {

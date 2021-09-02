@@ -124,6 +124,7 @@ export default class FormAssociated extends FC {
 
     if (!supportsElementInternals && this.proxy) {
       this.attachProxy()
+      this.proxy.addEventListener('invalid', this.handleInvalid)
     }
   }
 
@@ -133,6 +134,7 @@ export default class FormAssociated extends FC {
     this.form?.removeEventListener('reset', this.handleFormReset)
     if (!supportsElementInternals) {
       this.detachProxy()
+      this.proxy.removeEventListener('invalid', this.handleInvalid)
     }
   }
 
@@ -156,7 +158,8 @@ export default class FormAssociated extends FC {
   public attachProxy(): void {
     if (!this.proxyInitialized) {
       this.proxyInitialized = true
-      this.proxy.style.display = 'none'
+      // display: none; 不能获取焦点，也不能显示校验信息
+      this.proxy.style.cssText = 'position: absolute; margin: 0; z-index: -1; opacity: 0; pointer-events: none;'
       this.proxyEventsToBlock.forEach(name => this.proxy.addEventListener(name, this.stopPropagation))
 
       // These are typically mapped to the proxy during
@@ -192,7 +195,11 @@ export default class FormAssociated extends FC {
   }
 
   public get form(): Maybe<HTMLFormElement> {
-    return this.InternalOrProxy.form
+    if (supportsElementInternals && this.elementInternals) {
+      return this.elementInternals.form
+    }
+
+    return this.proxy.closest('form')
   }
 
   public get labels(): ReadonlyArray<Node> {
@@ -220,13 +227,13 @@ export default class FormAssociated extends FC {
   }
 
   setFormValue(value: FormValue, state?: FormValue): void {
-    if (this.elementInternals) {
+    if (supportsElementInternals && this.elementInternals) {
       this.elementInternals.setFormValue(value, state)
     }
   }
 
   setValidity(flags: ValidityStateFlags, message?: string, anchor?: HTMLElement): void {
-    if (this.elementInternals) {
+    if (supportsElementInternals && this.elementInternals) {
       this.elementInternals.setValidity(flags, message, anchor)
     } else if (typeof message === 'string') {
       this.proxy.setCustomValidity(message)
@@ -283,5 +290,11 @@ export default class FormAssociated extends FC {
   handleFormReset(): void {
     this.value = this.initialValue
     this.dirtyValue = false
+  }
+
+  handleInvalid(e: Event): void {
+    if (e.isTrusted) {
+      this.dispatchEvent(new CustomEvent('invalid', { detail: e, bubbles: true }))
+    }
   }
 }

@@ -47,7 +47,11 @@ export class FCRadio extends FormAssociated {
   // @observer({ type: Boolean, reflect: true })
   @observer({ reflect: true })
   checked = false
-  protected checkedChanged(): void {
+  protected checkedChanged(old: boolean, next: boolean): void {
+    if (this.proxy instanceof HTMLInputElement) {
+      this.proxy.checked = next
+    }
+
     if (this.checked) {
       this.uniqueChecked()
       this.updateForm()

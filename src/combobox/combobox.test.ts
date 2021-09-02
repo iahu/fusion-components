@@ -54,7 +54,9 @@ describe('fc-combobox', function () {
     await elementUpdated(el)
 
     expect(el.value).to.eq('bar')
-    expect(el.selectedOption).to.eq(el.querySelector('fc-list-option:last-child'))
+    const bar = el.querySelector<FCListOption>('[value="bar"]')!
+    expect(bar.selected).be.true
+    expect(el.selectedOption).to.eq(bar)
   })
 
   it('should update value while clicked', async () => {

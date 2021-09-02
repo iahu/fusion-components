@@ -49,6 +49,10 @@ export class FCButton extends FormAssociated {
   @observer()
   type: 'button' | 'submit' | 'reset' | 'menu' = 'button'
   typeChanged(old: string, next: string): void {
+    if (this.proxy instanceof HTMLInputElement) {
+      this.proxy.type = next
+    }
+
     switch (old) {
       case 'submit':
         this.removeEventListener('click', this.handleSubmission)
@@ -148,6 +152,11 @@ export class FCButton extends FormAssociated {
   tabIndex = 0
 
   handleClick(e: Event): void {
+    if (this.disabled) {
+      // should not fire click event.
+      e.stopImmediatePropagation()
+    }
+
     setTimeout(() => {
       if (!e.defaultPrevented && this.selectable) {
         e.preventDefault()
@@ -159,7 +168,6 @@ export class FCButton extends FormAssociated {
   handleSubmission(e: Event): void {
     setTimeout(() => {
       if (e.defaultPrevented) return
-
       if (typeof this.form?.requestSubmit === 'function' && this.proxy) {
         this.form.requestSubmit()
       } else if (this.form) {
