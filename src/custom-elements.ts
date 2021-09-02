@@ -11,6 +11,6 @@ Object.defineProperty(customElements, 'define', {
       return
     }
 
-    return Reflect.apply(define, this, [name, constructor, options])
+    Reflect.apply(define, this, [name, constructor, options])
   },
 })

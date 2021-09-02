@@ -21,7 +21,7 @@
     "build-storybook": "build-storybook -o ./docs",
     "prettier": "prettier --fix --write ./src/**/*.ts",
     "pretest": "yarn tsc",
-    "test": "web-test-runner dist/**/*.test.js --node-resolve",
+    "test": "web-test-runner dist/esm/*.test.js dist/esm/**/*.test.js --node-resolve",
     "prepare": "husky install"
   },
   "lint-staged": {
