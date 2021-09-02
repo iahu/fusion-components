@@ -153,7 +153,7 @@ describe('fc-combobox', function () {
 
     el.input!.focus()
 
-    expect(el.opened).to.be.true
+    expect(el.open).to.be.true
   })
 
   it("should open listbox when click it's label", async () => {
@@ -169,6 +169,6 @@ describe('fc-combobox', function () {
 
     await elementUpdated(el)
 
-    expect(el.opened).to.be.true
+    expect(el.open).to.be.true
   })
 })

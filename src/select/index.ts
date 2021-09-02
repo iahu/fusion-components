@@ -28,8 +28,10 @@ export class FCSelect extends FCListBox {
     this.removeEventListener('focusout', this.handleFocusout)
   }
 
-  private displayValueChanged(): void {
-    this.opened = false
+  private displayValueChanged(old: string | undefined, next: string): void {
+    if (typeof old === 'string') {
+      this.open = false
+    }
   }
 
   @observer({ reflect: true })
@@ -51,9 +53,11 @@ export class FCSelect extends FCListBox {
   }
 
   @observer({ reflect: true })
-  opened = false
-  openedChanged(): void {
-    if (this.opened) {
+  open = this.hasAttribute('open')
+  openChanged(old: boolean, next: boolean): void {
+    this.setAttribute('aria-expanded', String(next))
+    if (next) {
+      this.focus()
       setCSSText(this, { '--client-height': `${this.clientHeight}px` })
       this.updateComplete.then(() => {
         this.selectedOption?.scrollIntoView({ block: 'nearest' })
@@ -67,9 +71,9 @@ export class FCSelect extends FCListBox {
   placeholder = '请选择'
 
   handleKeydown(e: KeyboardEvent): void {
-    if (!this.opened && ['ArrowDown', 'ArrowUp', 'Enter'].includes(e.key)) {
+    if (!this.open && ['ArrowDown', 'ArrowUp', 'Enter'].includes(e.key)) {
       e.preventDefault()
-      this.opened = true
+      this.open = true
     } else {
       super.handleKeydown(e)
     }
@@ -94,14 +98,14 @@ export class FCSelect extends FCListBox {
   handleClickControl(e: MouseEvent): void {
     e.preventDefault()
     if (!this.disabled) {
-      this.opened = !this.opened
+      this.open = !this.open
     }
   }
 
   handleFocusout(e: FocusEvent): void {
     const { relatedTarget } = e
     if (!(relatedTarget instanceof Node && this.contains(relatedTarget))) {
-      this.opened = false
+      this.open = false
     }
   }
 
@@ -137,11 +141,11 @@ export class FCSelect extends FCListBox {
         class="listbox"
         ?has-options="${this.length > 0}"
         part="listbox"
-        ?hidden=${!this.opened}
+        ?hidden=${!this.open}
         role="listbox"
         ?disabled="${this.disabled}"
         position="${this.position}"
-        tabindex="${this.opened ? '0' : ''}"
+        tabindex="${this.open ? '0' : ''}"
       >
         <slot></slot>
         ${this.length === 0 ? html`<slot name="empty">--空--</slot>` : null}

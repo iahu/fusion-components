@@ -98,6 +98,10 @@ export class FCListOption extends FormAssociated {
     // this.scrollIntoView({ block: 'nearest' })
   }
 
+  get focused(): boolean {
+    return this.hasAttribute('focused')
+  }
+
   public get form(): HTMLFormElement | null {
     return this.closest('form')
   }

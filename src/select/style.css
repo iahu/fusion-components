@@ -95,7 +95,7 @@
   margin-bottom: calc(var(--client-height) - var(--border-width));
 }
 
-:host(:not([opened])) .listbox {
+:host(:not([open])) .listbox {
   display: none;
 }
 
