@@ -10,6 +10,7 @@
 - 原生组件，无需运行时依赖
 - 可用性高，较好地实现了 a11y 规范，支持 `form-associated`
 - 原生支持在 React 中使用，无需转换
+- 以 CSS 变量实现的配色方案，可方便快捷的定制主题配色方案
 
 [Visit Storybook 🤌](https://iahu.github.io/fusion-components)
 
