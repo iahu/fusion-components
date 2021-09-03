@@ -100,7 +100,7 @@ export default class FormAssociated extends FC {
   elementInternals?: ElementInternals
 
   public get InternalOrProxy(): ElementInternals | ProxyElements {
-    return this.elementInternals || this.proxy
+    return supportsElementInternals && this.elementInternals ? this.elementInternals : this.proxy
   }
 
   constructor(proxy: ProxyElements) {
@@ -294,7 +294,7 @@ export default class FormAssociated extends FC {
 
   handleInvalid(e: Event): void {
     if (e.isTrusted) {
-      this.dispatchEvent(new CustomEvent('invalid', { detail: e, bubbles: true }))
+      this.dispatchEvent(new CustomEvent('invalid', { detail: e, bubbles: true, composed: true }))
     }
   }
 }
