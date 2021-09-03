@@ -4,13 +4,14 @@ import { importMapsPlugin } from '@web/dev-server-import-maps'
 import { defaultReporter } from '@web/test-runner'
 
 const __dirname = path.resolve()
-const dirs = fs.readdirSync(path.join(__dirname, 'src'))
-const importMap = dirs
-  .filter(fd => fs.statSync(path.join(__dirname, 'src', fd)).isDirectory)
-  .reduce((map, dir) => {
-    map[`/dist/esm/${dir}/style.css`] = '/dist/esm/mock/style.css.js'
-    return map
-  }, {})
+const dist = '/test'
+const importMap = { [`${dist}/styles/global.css`]: `${dist}/mock/style.css.js` }
+
+fs.readdirSync(path.join(__dirname, 'src'))
+  .filter(dir => fs.existsSync(path.join(__dirname, 'src', dir, 'style.css')))
+  .forEach(dir => {
+    importMap[`${dist}/${dir}/style.css`] = `${dist}/mock/style.css.js`
+  })
 
 export default {
   nodeResolve: true,
@@ -19,10 +20,7 @@ export default {
     importMapsPlugin({
       inject: {
         importMap: {
-          imports: {
-            ...importMap,
-            '/dist/esm/styles/global.css': '/dist/esm/mock/style.css.js',
-          },
+          imports: importMap,
         },
       },
     }),

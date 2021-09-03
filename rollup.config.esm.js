@@ -2,12 +2,7 @@ import multiInput from 'rollup-plugin-multi-input'
 import importCss from 'rollup-plugin-lit-css'
 import typescript from 'rollup-plugin-typescript2'
 
-const input = ['./src/**/*.ts', '!./src/**/*.stories.ts']
-const isTest = process.env.NODE_ENV !== 'test'
-
-if (isTest) {
-  input.push('!./src/**/*.test.ts')
-}
+const input = ['./src/**/*.ts', '!./src/**/*.stories.ts', '!./src/**/*.test.ts']
 const exclude = input.filter(s => s.startsWith('!')).map(s => s.slice(1))
 
 /**
