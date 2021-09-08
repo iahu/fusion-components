@@ -21,3 +21,23 @@
 
 <h4>after</h4>
 <fc-input><span slot="after">🚜</span></fc-input>
+
+<h4>带 label</h4>
+<fc-input label="foo">bar</fc-input>
+<fc-input>
+  <span slot="label">foo</span>
+  <span>bar</span>
+</fc-input>
+
+<h4>label 与 input 垂直展示</h4>
+<fc-input label="foo" orientation="vertical">bar</fc-input>
+<fc-input orientation="vertical">
+  <span slot="label">foo</span>
+  <span>bar</span>
+</fc-input>
+
+<h4>与 form 一起使用</h4>
+<form action="#">
+  <fc-input required name="foo"></fc-input>
+  <input type="submit" />
+</form>

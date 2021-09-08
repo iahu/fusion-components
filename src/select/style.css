@@ -4,7 +4,7 @@
   display: inline-flex;
   flex-direction: column;
   min-width: var(--control-min-width);
-  min-height: fit-content;
+  height: fit-content;
   word-break: keep-all;
   --client-height: calc(var(--border-width) + var(--padding-b) + var(--padding-t) + var(--font-size));
 }

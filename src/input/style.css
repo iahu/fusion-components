@@ -4,8 +4,10 @@
   color: var(--foreground);
   transition: all 0.14s;
   box-sizing: border-box;
+  width: fit-content;
   height: fit-content;
   box-sizing: border-box;
+  min-width: var(--control-min-width);
 }
 
 :host(:focus-visible)::after {
@@ -20,7 +22,9 @@
   padding: var(--padding-t) var(--padding-r) var(--padding-b) var(--padding-l);
   background-color: var(--background);
   transition: all 0.05s;
-  min-width: var(--control-min-width);
+  /*width: 100%;*/
+  box-sizing: border-box;
+  /*min-width: inherit;*/
 }
 
 :host([type='file']) .control {
@@ -44,10 +48,9 @@
   font: inherit;
   border-radius: inherit;
   padding: 0;
-  /*padding: 0 var(--padding-r) 0 var(--padding-l);*/
   width: 100%;
+  min-width: auto;
   height: calc(var(--fc-unit-size) * 16);
-  /*line-height: var(--line-height);*/
   color: inherit;
   background-color: transparent;
   border: none;
