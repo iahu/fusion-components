@@ -10,6 +10,7 @@
   padding: var(--padding);
   box-sizing: border-box;
   user-select: var(--user-select);
+  height: fit-content;
 }
 
 :host([outline]) {
