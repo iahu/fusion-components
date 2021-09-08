@@ -22,7 +22,7 @@
   padding: var(--padding-t) var(--padding-r) var(--padding-b) var(--padding-l);
   background-color: var(--background);
   transition: all 0.05s;
-  /*width: 100%;*/
+  width: 100%;
   box-sizing: border-box;
   /*min-width: inherit;*/
 }

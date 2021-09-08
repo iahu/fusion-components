@@ -7,7 +7,7 @@ export type ReactiveElementWithObserver<T, V = any> = T & {
 }
 
 export type TypeCotr = { new (...args: any[]): any }
-export type ObserverType = 'string' | 'number' | 'boolean'
+export type ObserverType = 'string' | 'number' | 'boolean' | 'any'
 export type Value = string | number | boolean | null
 export type Converter<V = any, T = any> = (
   v: V | number | string | boolean | null,
@@ -34,6 +34,7 @@ const typeCotrMap: Record<string, Converter> = {
   },
   number: Number,
   boolean: Boolean,
+  any: t => t,
 }
 
 const getConverter = <T = any, V = Value>(
@@ -88,7 +89,7 @@ export const observer = function <T extends ReactiveElement, V = any>(options?: 
           } else {
             const nextValue = getValueFromAttribute(this, mergedAttributeName, isBol)
             const mergedConverter = converter ?? getConverter<T, V>(this, name, type)
-            const mergedNextValue = mergedConverter?.(nextValue, this) ?? nextValue
+            const mergedNextValue = mergedConverter ? mergedConverter(nextValue, this) : nextValue
 
             Reflect.set(this, name, mergedNextValue)
           }
@@ -151,7 +152,7 @@ export const observer = function <T extends ReactiveElement, V = any>(options?: 
         const isBol = typeofValue === 'boolean'
         const oldValue = Reflect.get(this, tempName)
         const mergedConverter = converter ?? getConverter(this, name, type)
-        const mergedNextValue = mergedConverter?.(nextValue, this) ?? nextValue
+        const mergedNextValue = mergedConverter ? mergedConverter(nextValue, this) : nextValue
 
         if (oldValue !== mergedNextValue) {
           Reflect.set(this, tempName, mergedNextValue)

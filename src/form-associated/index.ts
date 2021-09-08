@@ -124,8 +124,9 @@ export default class FormAssociated extends FC {
 
     if (!supportsElementInternals && this.proxy) {
       this.attachProxy()
-      this.proxy.addEventListener('invalid', this.handleInvalid)
     }
+    this.proxy.addEventListener('invalid', this.handleProxyInvalid)
+    this.proxy.addEventListener('change', this.handleProxyChange)
   }
 
   disconnectedCallback(): void {
@@ -134,11 +135,14 @@ export default class FormAssociated extends FC {
     this.form?.removeEventListener('reset', this.handleFormReset)
     if (!supportsElementInternals) {
       this.detachProxy()
-      this.proxy.removeEventListener('invalid', this.handleInvalid)
     }
+    this.proxy.removeEventListener('invalid', this.handleProxyInvalid)
+    this.proxy.removeEventListener('change', this.handleProxyChange)
+
+    this.value = undefined
   }
 
-  initialValue = ''
+  initialValue: FormValue = ''
 
   dirtyValue = false
 
@@ -259,15 +263,35 @@ export default class FormAssociated extends FC {
     }
   }
 
-  @observer()
-  value = ''
-  protected valueChanged(old: string, next: string): void {
+  @observer<FormAssociated, FormValue>({
+    type: 'any',
+    converter(v, host) {
+      const { proxy } = host
+      if (proxy instanceof HTMLInputElement && proxy.type === 'file') {
+        return undefined
+      }
+      return v
+    },
+  })
+  value?: FormValue
+  protected valueChanged(old: FormValue, next: FormValue): void {
     this.dirtyValue = true
-    if (this.proxy) {
-      this.proxy.value = next
+    const { proxy } = this
+
+    // can't set value for file input
+    if (proxy.type !== 'file') {
+      if (!supportsElementInternals) {
+        if (typeof next === 'string') {
+          proxy.value = next
+        } else if (next === null) {
+          proxy.value = ''
+        }
+      }
+      this.setFormValue(next)
+      this.validate()
+    } else {
+      throw Error('Failed to set value on File Input')
     }
-    this.setFormValue(next)
-    this.validate()
   }
 
   validate(): void {
@@ -299,9 +323,25 @@ export default class FormAssociated extends FC {
     this.dirtyValue = false
   }
 
-  handleInvalid(e: Event): void {
+  handleProxyInvalid(e: Event): void {
     if (e.isTrusted) {
       this.dispatchEvent(new CustomEvent('invalid', { detail: e, bubbles: true, composed: true }))
     }
+  }
+
+  handleProxyChange = (e: Event): void => {
+    const { proxy } = this
+    if (proxy instanceof HTMLInputElement && proxy.type === 'file') {
+      const { files } = proxy
+      if (!files) return
+      if (files.length === 1) {
+        this.value = proxy.value.split(/[/\\]/g).pop()
+      } else if (files.length > 1) {
+        this.value = `${files.length} 个文件`
+      }
+    } else {
+      this.value = proxy.value
+    }
+    this.checkValidity()
   }
 }

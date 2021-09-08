@@ -198,9 +198,6 @@ export class FCInput extends FormAssociated {
 
   handleFocusin(e: FocusEvent): void {
     this.shadowInput?.focus()
-    // if (!this.#focused) {
-    //   this.$emit('focus', { bubbles: false })
-    // }
     this.#focused = true
     this.requestUpdate()
   }
@@ -209,9 +206,6 @@ export class FCInput extends FormAssociated {
     this.shadowInput?.blur()
     this.#focused = false
     this.requestUpdate()
-    // if (this.#focused) {
-    //   this.$emit('blur', { bubbles: false })
-    // }
   }
 
   handleClick(e: MouseEvent): void {

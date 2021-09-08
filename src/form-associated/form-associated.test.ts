@@ -90,3 +90,37 @@ describe('FormAssociated use ElementInternals', function () {
     expect(new FormData(form).get('foo')).eq('bar')
   })
 })
+
+describe('form-associated type file', function () {
+  before(() => {
+    class FileInput extends FormAssociated {
+      connectedCallback(): void {
+        super.connectedCallback()
+        if (this.proxy instanceof HTMLInputElement) {
+          this.proxy.type = 'file'
+        }
+      }
+    }
+
+    customElements.define('fc-file', FileInput)
+  })
+
+  it('cant set value for file input', async () => {
+    const bit = new TextEncoder().encode('foo')
+    const file = new File([bit], 'foo.txt')
+
+    const form = await fixture<HTMLFormElement>(`
+        <form action="#">
+          <fc-file required></fc-file>
+          <input type="submit">
+        </form>
+    `)
+
+    const fileInput = form.querySelector<FormAssociated>('fc-file')!
+    fileInput.value = file
+
+    await nextFrame()
+    expect(fileInput.proxy.type).eq('file')
+    expect(fileInput.value).be.undefined
+  })
+})
