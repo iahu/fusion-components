@@ -173,17 +173,16 @@ export class FCNumberFiled extends FCInput {
 
   render(): TemplateResult<1> {
     return html`
-      ${before()}
       <slot name="label">${this.label ? html`<span class="label">${this.label}</span` : null}</slot>
       <div class="control fc-focusin-outline" part="controls">
+        ${before()}
         <slot name="form-associated-proxy"></slot>
-
         <div class="controls" part="controls">
           <div class="step-up" @click="${() => this.handleClickStep(1)}"></div>
           <div class="step-down" @click="${() => this.handleClickStep(-1)}"></div>
         </div>
+        ${after()}
       </div>
-      ${after()}
     `
   }
 }

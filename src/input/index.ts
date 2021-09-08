@@ -228,14 +228,14 @@ export class FCInput extends FormAssociated {
 
   render(): TemplateResult {
     return html`
-      ${before()}
       <slot name="label">${this.label ? html`<span class="label">${this.label}</span` : null}</slot>
       <div class="control fc-focusin-outline" part="control" focused="${this.#focused}">
+        ${before()}
         ${this.type === 'file'
           ? html`<slot has-value="${!!this.value}">${this.value || this.placeholder}</slot>`
           : html`<slot name="form-associated-proxy"></slot>`}
+        ${after()}
       </div>
-      ${after()}
     `
   }
 }
