@@ -1,21 +1,47 @@
 :host {
+  position: relative;
   display: inline-flex;
-  border-radius: var(--border-radius);
   color: var(--foreground);
-  border: var(--border-width) solid transparent;
-  display: inline-flex;
-  padding: var(--padding-t) var(--padding-r) var(--padding-b) var(--padding-l);
-  will-change: background-color;
-  background-color: var(--background);
   transition: all 0.14s;
+  box-sizing: border-box;
+  height: fit-content;
   box-sizing: border-box;
 }
 
-:host([sharp]) {
-  border-radius: 0;
+:host(:focus-visible)::after {
+  content: none;
 }
 
 .control {
+  position: relative;
+  display: inline-flex;
+  border-radius: var(--border-radius);
+  border: var(--border-width) solid transparent;
+  padding: var(--padding-t) var(--padding-r) var(--padding-b) var(--padding-l);
+  background-color: var(--background);
+  transition: all 0.05s;
+  min-width: var(--control-min-width);
+}
+
+:host([type='file']) .control {
+  cursor: pointer;
+}
+
+:host([sharp]) {
+  --border-radius: 0;
+}
+
+:host([orientation='horizontal']) ::slotted([slot='label']),
+:host([orientation='horizontal']) .label {
+  margin-right: calc(var(--font-size) / 2);
+}
+
+:host([orientation='vertical']) {
+  flex-direction: column;
+}
+
+::slotted([slot='form-associated-proxy']) {
+  font: inherit;
   border-radius: inherit;
   padding: 0;
   /*padding: 0 var(--padding-r) 0 var(--padding-l);*/
@@ -29,36 +55,46 @@
   caret-color: var(--caret);
 }
 
-.control::placeholder {
-  color: var(--light-grey);
-}
-
-:host(:not([disabled]):hover) {
+:host(:not([disabled]):hover) .control {
   background-color: var(--background-hover);
 }
 
-:host(:not([disabled]):focus-visible) {
+:host(:not([disabled]):focus-visible) .control {
   background-color: var(--background-active);
 }
 
-:host([disabled]) {
+:host([disabled]) .control {
   background: var(--background-disabled);
   color: var(--foreground-disabled);
   cursor: not-allowed;
 }
-:host([outline][disabled]) {
+:host([outline][disabled]) .control {
   border-color: var(--border-color-disabled);
 }
 
 /*outline*/
-:host([outline]) {
+:host([outline]) .control {
   border-color: var(--border-color);
 }
 
-:host([outline]:focus-within),
-:host([outline]:focus-visible) {
+:host([outline]:focus-within) .control,
+:host([outline]:focus-visible) .control {
   border-color: var(--border-color-active);
 }
-:host([outline]:hover) {
+:host([outline]:hover) .control {
   border-color: var(--border-color-hover);
+}
+
+slot[has-value='false'] {
+  color: var(--foreground-disabled);
+}
+
+:host([type='file']) ::slotted([slot='form-associated-proxy']) {
+  position: absolute;
+  opacity: 0;
+  z-index: -1;
+}
+
+.control:focus-within::after {
+  content: '';
 }

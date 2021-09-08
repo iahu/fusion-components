@@ -1,39 +1,38 @@
-import expCalc, { normalize, toNumber, isNumber, isDigit, Formula } from 'exp-calc'
+import expCalc, { Formula, isDigit, isNumber, normalize, toNumber } from 'exp-calc'
 import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
-import { createRef, Ref, ref } from 'lit/directives/ref.js'
+import { createRef, Ref } from 'lit/directives/ref.js'
 import { observer } from '../decorators'
 import { FCInput } from '../input'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
+import inputStyle from '../input/style.css'
 import style from './style.css'
 
 const safeToNumber = (v: any) => (isDigit(v) ? toNumber(v) : NaN)
 
 @customElement('fc-number-field')
 export class FCNumberFiled extends FCInput {
-  static styles = mergeStyles(style)
-
-  get shadowInput() {
-    return this.inputRef.value
-  }
+  static styles = mergeStyles(inputStyle, style)
 
   inputRef: Ref<HTMLInputElement> = createRef<HTMLInputElement>()
   updateInputValue(value: string): void {
     if (this.inputRef.value) {
       this.inputRef.value.value = value
     }
+    this.checkValidity()
   }
 
   connectedCallback(): void {
     super.connectedCallback()
     this.addEventListener('keydown', this.handleKeydown)
-    this.addEventListener('touchstart', () => console.log('touchstart'))
+    this.shadowInput?.addEventListener('change', this.handleChange)
   }
 
   disconnectedCallback(): void {
     super.disconnectedCallback()
     this.removeEventListener('keydown', this.handleKeydown)
+    this.shadowInput?.removeEventListener('change', this.handleChange)
   }
 
   normalize(): void {
@@ -84,9 +83,12 @@ export class FCNumberFiled extends FCInput {
     },
   })
   value = ''
-  protected valueChanged(old: string, next: string): void {
-    this.updateInputValue(this.valueWithUnit)
-  }
+  // protected valueChanged(old: string, next: string): void {
+  //   if (this.shadowInput instanceof HTMLInputElement) {
+  //     this.shadowInput.value = next
+  //   }
+  //   this.updateInputValue(this.valueWithUnit)
+  // }
 
   public get valueWithUnit(): string {
     return [this.value, this.unit].filter(v => v).join(' ')
@@ -96,7 +98,7 @@ export class FCNumberFiled extends FCInput {
     return isDigit(this.value) ? Number(this.value) : NaN
   }
 
-  handleChange(e: Event): void {
+  handleChange = (e: Event): void => {
     if (!(e.target instanceof HTMLInputElement)) {
       return
     }
@@ -143,7 +145,8 @@ export class FCNumberFiled extends FCInput {
   }
 
   nextStep(delta: number): void {
-    const nextFormula = [this.number, '+', delta].reduce((acc, op) => acc.op(op), new Formula(100))
+    const number = this.value ? this.number : 0
+    const nextFormula = [number, '+', delta].reduce((acc, op) => acc.op(op), new Formula(100))
     const max = safeToNumber(this.max)
     const min = safeToNumber(this.min)
     const n = nextFormula.value
@@ -171,42 +174,14 @@ export class FCNumberFiled extends FCInput {
   render(): TemplateResult<1> {
     return html`
       ${before()}
-      <input
-        class="control"
-        id="control"
-        part="control"
-        type="text"
-        class="control"
-        part="control"
-        name="${this.name}"
-        ${ref(this.inputRef)}
-        .value="${this.valueWithUnit}"
-        @change="${this.handleChange}"
-        placeholder="${this.placeholder}"
-        ?autofocus="${this.autofocus}"
-        ?checked="${this.checked}"
-        ?disabled="${this.disabled}"
-        form="${this.form}"
-        formaction="${this.formaction}"
-        formtarget="${this.formtarget}"
-        formnovalidate="${this.formnovalidate}"
-        height="${this.height}"
-        inputmode="${this.inputMode}"
-        list="${this.list}"
-        max="${this.max}"
-        maxlength="${this.maxlength}"
-        min="${this.min}"
-        minlength="${this.minlength}"
-        pattern="${this.pattern}"
-        ?readonly="${this.readonly}"
-        ?required="${this.required}"
-        src="${this.src}"
-        step="${this.step}"
-        width="${this.width}"
-      />
-      <div class="controls" part="controls">
-        <div class="step-up" @click="${() => this.handleClickStep(1)}"></div>
-        <div class="step-down" @click="${() => this.handleClickStep(-1)}"></div>
+      <slot name="label">${this.label ? html`<span class="label">${this.label}</span` : null}</slot>
+      <div class="control fc-focusin-outline" part="controls">
+        <slot name="form-associated-proxy"></slot>
+
+        <div class="controls" part="controls">
+          <div class="step-up" @click="${() => this.handleClickStep(1)}"></div>
+          <div class="step-down" @click="${() => this.handleClickStep(-1)}"></div>
+        </div>
       </div>
       ${after()}
     `

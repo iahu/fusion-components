@@ -177,13 +177,20 @@ export default class FormAssociated extends FC {
       }
 
       this.proxy.setAttribute('slot', proxySlotName)
+      this.appendChild(this.proxy)
 
-      this.proxySlot = document.createElement('slot')
-      this.proxySlot.setAttribute('name', proxySlotName)
+      this.updateComplete.then(() => {
+        const proxySlot = this.renderRoot.querySelector<HTMLSlotElement>(`slot[${proxySlotName}]`)
+        if (proxySlot) {
+          this.proxySlot = proxySlot
+        } else {
+          this.proxySlot = document.createElement('slot')
+          this.proxySlot.setAttribute('name', proxySlotName)
+
+          this.shadowRoot?.appendChild(this.proxySlot as HTMLSlotElement)
+        }
+      })
     }
-
-    this.shadowRoot?.appendChild(this.proxySlot as HTMLSlotElement)
-    this.appendChild(this.proxy)
   }
 
   /**

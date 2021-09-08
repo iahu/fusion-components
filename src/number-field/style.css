@@ -1,5 +1,3 @@
-@import '../input/style.css';
-
 .controls {
   display: flex;
   flex-direction: column;

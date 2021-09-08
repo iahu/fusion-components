@@ -226,6 +226,7 @@
 :host(:focus-visible) .fc-focus-visible-overlay,
 .fc-outline:focus-visible::after,
 .fc-focus-outline:focus::after,
+.fc-focusin-outline:focus-within::after,
 :host(:focus-visible) .fc-inner-outline::after,
 :host(:focus-visible)::after {
   content: '';

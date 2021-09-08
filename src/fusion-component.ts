@@ -75,14 +75,16 @@ abstract class FusionComponent extends LitElement {
   @observer({ type: 'boolean' })
   sharp = false
 
-  emit<T = unknown>(type: string, detail?: T): void {
+  $emit<T = unknown>(type: string, init?: CustomEventInit<T>): void {
     type CustomEventWithSimulate = CustomEvent<T> & { simulated: boolean; value: any; _valueTracker?: any }
-    const event = new CustomEvent<T>(type, {
+    const eventInit = {
       bubbles: true,
       composed: true,
-      detail,
       cancelable: false,
-    }) as CustomEventWithSimulate
+      ...init,
+    }
+
+    const event = new CustomEvent<T>(type, eventInit) as CustomEventWithSimulate
     // simulate React onChange
     if (type === 'change') {
       event.simulated = true
@@ -92,7 +94,7 @@ abstract class FusionComponent extends LitElement {
       if (tracker) {
         tracker.setValue(lastValue)
       } else {
-        this.emit('input', detail)
+        this.emit('input', eventInit)
       }
 
       const { nodeName } = this
@@ -109,6 +111,10 @@ abstract class FusionComponent extends LitElement {
     } else {
       this.dispatchEvent(event)
     }
+  }
+
+  emit<T = unknown>(type: string, detail?: T): void {
+    this.$emit(type, { detail })
   }
 
   render(): TemplateResult {
