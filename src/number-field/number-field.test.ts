@@ -154,4 +154,10 @@ describe('fc-number-field', function () {
     expect(fn.called).be.true
     expect(fn2.called).be.true
   })
+
+  it('should includes a unit', async () => {
+    const number = await fixture<FCNumberFiled>(html`<fc-number-field value="12" unit="px"></fc-number>`)
+    await nextFrame()
+    expect(number.shadowInput?.value).to.eq(number.valueWithUnit)
+  })
 })

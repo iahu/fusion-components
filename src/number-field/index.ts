@@ -1,12 +1,11 @@
 import expCalc, { Formula, isDigit, isNumber, normalize, toNumber } from 'exp-calc'
 import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
-import { createRef, Ref } from 'lit/directives/ref.js'
 import { observer } from '../decorators'
 import { FCInput } from '../input'
+import inputStyle from '../input/style.css'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
-import inputStyle from '../input/style.css'
 import style from './style.css'
 
 const safeToNumber = (v: any) => (isDigit(v) ? toNumber(v) : NaN)
@@ -15,10 +14,9 @@ const safeToNumber = (v: any) => (isDigit(v) ? toNumber(v) : NaN)
 export class FCNumberFiled extends FCInput {
   static styles = mergeStyles(inputStyle, style)
 
-  inputRef: Ref<HTMLInputElement> = createRef<HTMLInputElement>()
   updateInputValue(value: string): void {
-    if (this.inputRef.value) {
-      this.inputRef.value.value = value
+    if (this.shadowInput) {
+      this.shadowInput.value = value
     }
     this.checkValidity()
   }
@@ -83,12 +81,13 @@ export class FCNumberFiled extends FCInput {
     },
   })
   value = ''
-  // protected valueChanged(old: string, next: string): void {
-  //   if (this.shadowInput instanceof HTMLInputElement) {
-  //     this.shadowInput.value = next
-  //   }
-  //   this.updateInputValue(this.valueWithUnit)
-  // }
+  protected valueChanged(old: string, next: string): void {
+    super.valueChanged?.(old, next)
+    if (this.shadowInput instanceof HTMLInputElement) {
+      this.shadowInput.value = next
+    }
+    this.updateInputValue(this.valueWithUnit)
+  }
 
   public get valueWithUnit(): string {
     return [this.value, this.unit].filter(v => v).join(' ')
