@@ -55,7 +55,10 @@ export class FCTooltip extends FC {
   @observer()
   visible = false
   visibleChanged(old: boolean, next: boolean): void {
-    if (this.visible) {
+    if (next) {
+      if (!this.currentAnchorElement && this.anchorElements?.length) {
+        this.currentAnchorElement = this.anchorElements[0]
+      }
       const setVisibility = () => {
         const { anchorPosition, tooltip } = this
         if (tooltip) {
@@ -112,13 +115,13 @@ export class FCTooltip extends FC {
   }
 
   handleMouseenter = (e: MouseEvent): void => {
-    this.visible = true
     this.currentAnchorElement = e.target as HTMLElement
+    this.visible = true
   }
 
   handleMouseleave = (e: MouseEvent): void => {
-    this.visible = false
     this.currentAnchorElement = null
+    this.visible = false
   }
 
   render(): TemplateResult<1> {

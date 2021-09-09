@@ -62,7 +62,7 @@ describe('fc-tooltip', function () {
     const el = await fixture<HTMLElement>(html`
       <div>
         <button id="tooltip">x</button>
-        <fc-tooltip anchor="#tooltip" visible>foo</fc-tooltip>
+        <fc-tooltip anchor="#tooltip" visible delay="0">foo</fc-tooltip>
       </div>
     `)
     const button = el.querySelector('button')!
@@ -77,5 +77,47 @@ describe('fc-tooltip', function () {
     button.dispatchEvent(new MouseEvent('mouseleave'))
     await elementUpdated(tooltip)
     expect(tooltip.visible, 'after').to.be.false
+  })
+
+  it('should placement the tooltip on top of the element', async () => {
+    const el = await fixture<HTMLElement>(html`
+      <div>
+        <button id="tooltip">x</button>
+        <fc-tooltip anchor="#tooltip" visible delay="0" position="top">foo</fc-tooltip>
+      </div>
+    `)
+
+    const button = el.querySelector('button')!
+    const tooltip: FCTooltip = el.querySelector<FCTooltip>('fc-tooltip')!
+
+    expect(button.getBoundingClientRect().top).greaterThan(tooltip.anchorPosition.top!)
+  })
+
+  it('should placement the tooltip on left of the element', async () => {
+    const el = await fixture<HTMLElement>(html`
+      <div>
+        <button id="tooltip">x</button>
+        <fc-tooltip anchor="#tooltip" visible delay="0" position="left">foo</fc-tooltip>
+      </div>
+    `)
+
+    const button = el.querySelector('button')!
+    const tooltip: FCTooltip = el.querySelector<FCTooltip>('fc-tooltip')!
+
+    expect(button.getBoundingClientRect().left).greaterThan(tooltip.anchorPosition.left!)
+  })
+
+  it('should placement the tooltip on right of the element', async () => {
+    const el = await fixture<HTMLElement>(html`
+      <div>
+        <button id="tooltip">x</button>
+        <fc-tooltip anchor="#tooltip" visible delay="0" position="right">foo</fc-tooltip>
+      </div>
+    `)
+
+    const button = el.querySelector('button')!
+    const tooltip: FCTooltip = el.querySelector<FCTooltip>('fc-tooltip')!
+
+    expect(button.getBoundingClientRect().right).lessThan(tooltip.anchorPosition.left!)
   })
 })
