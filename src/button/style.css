@@ -50,16 +50,20 @@
 /*secondary*/
 :host([accent='secondary']) {
   background: var(--accent-color);
+  color: var(--background);
 }
 :host(:not([disabled])[accent='secondary']) {
   border-color: var(--accent-color-hover);
+  color: var(--background-hover);
 }
 :host(:not([disabled])[accent='secondary']:hover) {
   background: var(--accent-color-hover);
+  color: var(--background-hover);
 }
 
 :host(:not([disabled])[accent='secondary']:active) {
   background: var(--accent-color-hover);
+  color: var(--background-hover);
 }
 
 :host([accent='secondary']) {

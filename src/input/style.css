@@ -27,6 +27,10 @@
   /*min-width: inherit;*/
 }
 
+.control[focused]::after {
+  content: '';
+}
+
 :host([type='file']) .control {
   cursor: pointer;
 }

@@ -268,7 +268,8 @@ export default class FormAssociated extends FC {
     converter(v, host) {
       const { proxy } = host
       if (proxy instanceof HTMLInputElement && proxy.type === 'file') {
-        return undefined
+        console.error('Failed to set value on File Input')
+        return host.value
       }
       return v
     },
@@ -278,20 +279,15 @@ export default class FormAssociated extends FC {
     this.dirtyValue = true
     const { proxy } = this
 
-    // can't set value for file input
-    if (proxy.type !== 'file') {
-      if (!supportsElementInternals) {
-        if (typeof next === 'string') {
-          proxy.value = next
-        } else if (next === null) {
-          proxy.value = ''
-        }
+    if (!supportsElementInternals) {
+      if (typeof next === 'string') {
+        proxy.value = next
+      } else if (next === null) {
+        proxy.value = ''
       }
-      this.setFormValue(next)
-      this.validate()
-    } else {
-      throw Error('Failed to set value on File Input')
     }
+    this.setFormValue(next)
+    this.validate()
   }
 
   validate(): void {
@@ -334,11 +330,14 @@ export default class FormAssociated extends FC {
     if (proxy instanceof HTMLInputElement && proxy.type === 'file') {
       const { files } = proxy
       if (!files) return
+      let value = ''
       if (files.length === 1) {
-        this.value = proxy.value.split(/[/\\]/g).pop()
+        value = proxy.value.split(/[/\\]/g).pop() ?? ''
       } else if (files.length > 1) {
-        this.value = `${files.length} 个文件`
+        value = `${files.length} 个文件`
       }
+      Reflect.set(this, '_.value', value)
+      this.requestUpdate('value')
     } else {
       this.value = proxy.value
     }

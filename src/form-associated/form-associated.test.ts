@@ -105,7 +105,7 @@ describe('form-associated type file', function () {
     customElements.define('fc-file', FileInput)
   })
 
-  it('cant set value for file input', async () => {
+  it('should failed to set value on file input', async () => {
     const bit = new TextEncoder().encode('foo')
     const file = new File([bit], 'foo.txt')
 
