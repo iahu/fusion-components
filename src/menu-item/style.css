@@ -54,6 +54,7 @@
   color: var(--foreground);
   outline: none;
   margin-right: var(--font-size);
+  text-decoration: none;
 }
 
 .submenu {
