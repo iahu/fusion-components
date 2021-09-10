@@ -164,6 +164,7 @@
   --foreground: var(--foreground-disabled);
   --background: var(--background-disabled);
   --stroke-color: rgba(128, 128, 128, 0.4);
+  pointer-events: none;
 }
 
 :host([outline]:disabled) {

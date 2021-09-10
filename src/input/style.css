@@ -54,7 +54,7 @@
   padding: 0;
   width: 100%;
   min-width: auto;
-  height: calc(var(--fc-unit-size) * 16);
+  height: 100%;
   color: inherit;
   background-color: transparent;
   border: none;
@@ -99,7 +99,8 @@ slot[has-value='false'] {
 :host([type='file']) ::slotted([slot='form-associated-proxy']) {
   position: absolute;
   opacity: 0;
-  z-index: -1;
+  pointer-events: none;
+  /*z-index: -1;*/
 }
 
 .control:focus-within::after {
