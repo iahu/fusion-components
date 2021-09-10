@@ -54,7 +54,9 @@ export class FCDataGridCell extends FC {
   @observer({ reflect: true })
   open = false
   openChanged(old: boolean, next: boolean): void {
-    this.emit('open')
+    if (typeof old === 'boolean') {
+      this.emit('open')
+    }
   }
 
   @observer<FCDataGridCell>({

@@ -1,6 +1,7 @@
 const toString = (s: unknown) => Object.prototype.toString.call(s).slice(8, -1)
 
 export const isString = (s: unknown): s is string => toString(s) === 'String'
+export const isBoolean = (s: unknown): s is string => toString(s) === 'Boolean'
 export const isArray = (s: unknown): s is Array<unknown> => Array.isArray(s) || toString(s) === 'Array'
 export const isNumber = (s: unknown): s is number => toString(s) === 'Number'
 export const isObject = (s: unknown): s is Record<PropertyKey, any> => toString(s) === 'Object'
@@ -148,6 +149,14 @@ export const shallowDiff = <T = unknown>(a: T, b: T): boolean => {
   // }
 
   return a !== b
+}
+
+export const propKey2Str = (key: PropertyKey): string => {
+  if (isSymbol(key)) {
+    return key.toString().slice(7, -1)
+  } else {
+    return key.toString()
+  }
 }
 
 export const getCallback = (o: any, key: PropertyKey) => {

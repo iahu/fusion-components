@@ -152,7 +152,7 @@ export default class FormAssociated extends FC {
 
   proxyEventsToBlock = ['change', 'click']
 
-  stopPropagation = (e: Event) => {
+  #stopPropagation = (e: Event) => {
     e.stopPropagation()
   }
 
@@ -164,7 +164,7 @@ export default class FormAssociated extends FC {
       this.proxyInitialized = true
       // display: none; 不能获取焦点，也不能显示校验信息
       this.proxy.style.cssText = 'position: absolute; margin: 0; z-index: -1; opacity: 0; pointer-events: none;'
-      this.proxyEventsToBlock.forEach(name => this.proxy.addEventListener(name, this.stopPropagation))
+      this.proxyEventsToBlock.forEach(name => this.proxy.addEventListener(name, this.#stopPropagation))
 
       // These are typically mapped to the proxy during
       // property change callbacks, but during initialization

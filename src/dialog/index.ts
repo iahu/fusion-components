@@ -24,7 +24,7 @@ export class FCDialog extends FC {
 
   @observer()
   anchor: string | null = this.getAttribute('anchor')
-  protected anchorChanged(): void {
+  anchorChanged(): void {
     const { anchor } = this
     if (anchor) {
       // removeEventListener on old elements

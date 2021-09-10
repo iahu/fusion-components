@@ -24,7 +24,10 @@
     "semi": ["error", "never"],
     "prefer-const": ["warn"],
     "no-empty": ["warn"],
-    "no-control-regex": "off"
+    "no-control-regex": "off",
+    "no-implicit-globals": ["error", { "lexicalBindings": true }],
+    "no-restricted-globals": ["error", "name", "parent"],
+    "no-global-assign": "error"
   },
   "overrides": [
     {
@@ -39,6 +42,7 @@
         ],
         "semi": "off",
         "quotes": "off",
+        "no-undef": "error",
         "no-func-assign": "off",
         "@typescript-eslint/no-empty-function": "off",
         "no-global-assign": "off",
