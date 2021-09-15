@@ -273,6 +273,7 @@ export default class FormAssociated extends FC {
       }
       return v
     },
+    tempKey: '_.value',
   })
   value?: FormValue
   protected valueChanged(old: FormValue, next: FormValue): void {
@@ -336,6 +337,7 @@ export default class FormAssociated extends FC {
       } else if (files.length > 1) {
         value = `${files.length} 个文件`
       }
+
       Reflect.set(this, '_.value', value)
       this.requestUpdate('value')
     } else {

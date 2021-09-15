@@ -21,17 +21,43 @@ export type Converter<V = HTMLElement, T = any> = (v: V | number | string | bool
 export type InitFunction<T = any, V = any> = (host: T) => V | null
 
 export type RawObserverOptions<T, V> = {
+  /**
+   * 属性的类型，如果省略则从初始值获取，否则默认为 string
+   * type 关系到 converter
+   */
   type?: ObserverType
+  /**
+   * 装饰属性的值将反射回 attribute
+   */
   reflect?: boolean
+  /**
+   * 是否关联 attriubte
+   * 如果是的话，可以从 attribute 获取初始化值，也可以反射到 attribute
+   * @type {[type]}
+   */
   attribute?: string | boolean
+  /**
+   * 转换函数，在 xxxChanged 和反射之前可对值做处理
+   */
   converter?: Converter<V, T>
+  /**
+   * 是否同步调用 xxxChanged 和反射函数
+   */
   sync?: boolean
+  /**
+   * 初始化函数，返回值将做为初始值
+   */
   init?: boolean | InitFunction<T, V>
+  /**
+   * 在装饰对象上注入 `tempKey` 做为 setter/getter 的中介
+   */
+  tempKey?: string | boolean
 }
 
 export type ObserverOptions<T, V = unknown> = RawObserverOptions<T, V> & { propKey: string | number }
 
-export const getTempKey = (key: PropertyKey): string => `_.${key.toString()}`
+export const getTempKey = (key: PropertyKey, customKey?: boolean | string): string =>
+  typeof customKey === 'string' ? customKey : `_.${key.toString()}`
 
 const isNil = (v: unknown) => v === undefined || v === null
 
@@ -87,7 +113,7 @@ export type ObservedProperties<T extends HTMLElement, V = any> = Map<PropertyKey
 export const observedPropsKey = 'observedProperties'
 
 export const observer = function <T extends LitElement, V = any>(options?: RawObserverOptions<T, V>) {
-  const { type, reflect = false, attribute = true, converter, sync, init = true } = options || {}
+  const { type, reflect = false, attribute = true, converter, sync, init = true, tempKey } = options || {}
   return function (proto: T, key: string): void {
     const ctor = proto.constructor
 
@@ -106,6 +132,15 @@ export const observer = function <T extends LitElement, V = any>(options?: RawOb
       Reflect.set(ctor, observedPropsKey, observedProps)
     }
 
-    observedProps.set(key.toLowerCase(), { propKey: key, type, reflect, attribute, converter, sync, init })
+    observedProps.set(key.toLowerCase(), {
+      propKey: key,
+      type,
+      reflect,
+      attribute,
+      converter,
+      sync,
+      init,
+      tempKey,
+    })
   }
 }

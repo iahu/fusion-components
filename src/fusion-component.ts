@@ -38,11 +38,12 @@ abstract class FusionComponent extends LitElement {
     Array.from(observedProps.keys()).forEach(prop => {
       const option = observedProps.get(prop)
       if (!option) return
-      const { propKey, attribute, reflect, type, converter, sync } = option ?? {}
+      const { propKey, attribute, reflect, converter, sync, tempKey: userTempKey } = option ?? {}
       if (!propKey) return
       const attrName = propKey2Str(propKey)
       const mergedAttrName = typeof attribute === 'string' ? attribute : attrName
-      const tempKey = getTempKey(propKey)
+      const tempKey = userTempKey ? getTempKey(propKey, userTempKey) : ''
+      let tempValue: any
 
       /**
        * 劫持监听属性的 setter/getter，触发 `${key}Changed` 回调
@@ -50,17 +51,21 @@ abstract class FusionComponent extends LitElement {
       Object.defineProperty(this, propKey, {
         configurable: true,
         get(this: TheType) {
-          return Reflect.get(this, tempKey)
+          return userTempKey ? Reflect.get(this, tempKey) : tempValue
         },
         set(this: TheType, nextValue: ObserverValue) {
           const oldValue = Reflect.get(this, propKey)
-          const typeofValue = type ?? typeof oldValue
+          const typeofValue = option.type ?? typeof oldValue
           const isBol = typeofValue === 'boolean'
           const mergedConverter = converter ?? getConverter(this, propKey, typeofValue)
           const mergedNextValue = mergedConverter ? mergedConverter(nextValue, this) : nextValue
 
           if (oldValue !== mergedNextValue) {
-            Reflect.set(this, tempKey, mergedNextValue)
+            tempValue = mergedNextValue
+            if (userTempKey) {
+              Reflect.set(this, tempKey, mergedNextValue)
+            }
+
             if (oldValue) {
               option.type = typeofValue // 记住 type
             }
@@ -148,7 +153,6 @@ abstract class FusionComponent extends LitElement {
       if (!propKey) return
       const attrName = propKey2Str(propKey)
       const mergedAttrName = typeof attribute === 'string' ? attribute : attrName
-      const tempKey = getTempKey(propKey)
 
       /**
        * 初始赋值逻辑
@@ -156,7 +160,7 @@ abstract class FusionComponent extends LitElement {
       if (typeof init === 'function') {
         Reflect.set(this, propKey, init(this))
       } else if (attribute && this.hasAttribute(attrName)) {
-        const typeofValue = type ?? typeof Reflect.get(this, tempKey)
+        const typeofValue = type ?? typeof Reflect.get(this, propKey)
         const isBol = typeofValue === 'boolean'
         const nextValue = getValueFromAttribute(this, mergedAttrName, isBol)
         const mergedConverter = converter ?? getConverter<this, any>(this, propKey, type)
