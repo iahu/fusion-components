@@ -46,7 +46,7 @@ export class FCButton extends FormAssociated {
     this.proxy.toggleAttribute('disabled', next)
   }
 
-  @observer()
+  @observer({ reflect: true })
   type: 'button' | 'submit' | 'reset' | 'menu' = 'button'
   typeChanged(old: string, next: string): void {
     if (this.proxy instanceof HTMLInputElement) {

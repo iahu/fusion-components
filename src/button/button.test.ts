@@ -8,6 +8,13 @@ describe('FCButton', function () {
     expect(() => document.createElement('fc-button')).not.throw()
   })
 
+  it('should has a submit type', async () => {
+    const button: FCButton = await fixture(html`<fc-button type="submit"></fc-button>`)
+
+    await elementUpdated(button)
+    expect(button.type).eq('submit')
+  })
+
   it('should focusable', async () => {
     const button: FCButton = await fixture(html`<fc-button></fc-button>`)
 
@@ -15,7 +22,9 @@ describe('FCButton', function () {
 
     button.focus()
 
-    expect(button).dom.to.equal(document.activeElement)
+    await nextFrame()
+
+    expect(button).to.equal(document.activeElement)
   })
 
   it('should auto-focus', async () => {
@@ -74,7 +83,12 @@ describe('FCButton', function () {
 
   it('should submit a form', async () => {
     const el = await fixture(
-      html`<form action="#"><input type="text" name="test" value="foo" /><fc-button type="submit"></fc-button></form>`
+      html`
+        <form action="#">
+          <input type="text" name="text" value="foo" />
+          <fc-button type="submit" id="submit">submit</fc-button>
+        </form>
+      `
     )
 
     const spy = Sinon.spy(e => e.preventDefault())
@@ -89,7 +103,7 @@ describe('FCButton', function () {
 
   it('should prevent a submit event', async () => {
     const el = await fixture(
-      html`<form action="#"><input type="text" name="test" value="foo" /><fc-button type="submit"></fc-button></form>`
+      html`<form action="#"><input type="text" name="test" value="foo" /><fc-button type="submit">x</fc-button></form>`
     )
 
     const spy = Sinon.spy(e => e.preventDefault())
@@ -170,7 +184,7 @@ describe('FCButton', function () {
     expect(fn.callCount).to.eq(2)
   })
 
-  it("'s simulate click event should bubbles up", async () => {
+  it('should bubbles up the simulate click event', async () => {
     const el = await fixture(html`<div><fc-button>foo</fc-button></div>`)
     const fn = Sinon.spy()
     el.addEventListener('click', fn)

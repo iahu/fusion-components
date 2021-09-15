@@ -25,7 +25,7 @@ describe('fc-number-field', function () {
   it('should not have a value if value is not a numberic string', async () => {
     const number = await fixture<FCNumberFiled>(html`<fc-number-field value="abc"></fc-number-field>`)
 
-    await nextFrame()
+    await elementUpdated(number)
     expect(number.value).not.to.equal('abc')
     expect(number.value).to.eq('')
     expect(number.number).to.be.NaN

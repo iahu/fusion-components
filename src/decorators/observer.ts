@@ -38,13 +38,13 @@ export const typeCotrMap: Record<string, DefaultConverter<any>> = {
 export const getConverter = <T extends HTMLElement, V = ObserverValue>(
   host: T,
   name: PropertyKey,
-  type?: ObserverType
-): DefaultConverter<V> => {
+  type?: string
+): DefaultConverter<V> | undefined => {
   const typeofValue = type ?? typeof Reflect.get(host, name)
   return typeCotrMap[typeofValue] as DefaultConverter<V>
 }
 
-export const updateAttribute = (
+export const reflectAttribute = (
   host: HTMLElement,
   attributeName: string,
   value: ObserverValue,
@@ -52,7 +52,7 @@ export const updateAttribute = (
 ): void => {
   if (isBol || typeof value === 'boolean') {
     host.toggleAttribute(attributeName, typeCotrMap.boolean(value))
-  } else if (isNil(value) || !String(value)) {
+  } else if (isNil(value) || value === '') {
     host.removeAttribute(attributeName)
   } else {
     host.setAttribute(attributeName, String(value))

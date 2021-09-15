@@ -8,10 +8,20 @@ describe('fc-panel', function () {
   })
 
   it('should be hidden', async () => {
-    const panel: FCPanel = await fixture(html`<fc-panel></fc-panel`)
+    const panel: FCPanel = await fixture(html`<fc-panel hidden></fc-panel`)
 
     await nextFrame()
-    panel.hidden = true
+
+    expect(panel.hidden, 'hidden property').to.be.true
+    expect(panel.hasAttribute('hidden'), 'hidden attribute').to.be.true
+    expect(panel.getAttribute('aria-hidden'), 'aria-hidden').to.equal('true')
+  })
+
+  it('should be visible', async () => {
+    const panel: FCPanel = await fixture(html`<fc-panel hidden></fc-panel`)
+
+    panel.hidden = false
+    await nextFrame()
 
     expect(panel.getAttribute('aria-hidden')).to.equal('false')
   })

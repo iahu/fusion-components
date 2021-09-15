@@ -69,8 +69,14 @@ export class FCMenuItem extends FC {
   expandedChanged(old: boolean, next: boolean): void {
     this.setAttribute('aria-expanded', next.toString())
 
-    if (next && !(document.activeElement instanceof FCMenuItem)) {
-      this.focus()
+    if (next && !this.contains(document.activeElement)) {
+      this.updateComplete.then(() => {
+        if (this.submenu) {
+          this.submenu[0]?.setTopIndex()?.focus()
+        } else {
+          this.focus()
+        }
+      })
     }
 
     if (typeof old === 'boolean') {

@@ -50,6 +50,13 @@ export class FCDataGridRow extends FC {
     init: host => (host.slot === 'row-header' ? 'rowheader' : 'row'),
   })
   role = 'row'
+  roleChanged(old: string, next: string): void {
+    if (next === 'rowheader') {
+      this.cells.forEach(cell => {
+        cell.role = 'columnheader'
+      })
+    }
+  }
 
   @observer()
   rowIndex = -1

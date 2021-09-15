@@ -108,6 +108,8 @@ describe('form-associated type file', function () {
   it('should failed to set value on file input', async () => {
     const bit = new TextEncoder().encode('foo')
     const file = new File([bit], 'foo.txt')
+    const fn = Sinon.spy()
+    console.error = fn
 
     const form = await fixture<HTMLFormElement>(`
         <form action="#">
@@ -122,5 +124,6 @@ describe('form-associated type file', function () {
     await nextFrame()
     expect(fileInput.proxy.type).eq('file')
     expect(fileInput.value).be.undefined
+    expect(fn.called).be.true
   })
 })

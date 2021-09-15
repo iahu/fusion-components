@@ -42,7 +42,7 @@
         ],
         "semi": "off",
         "quotes": "off",
-        "no-undef": "error",
+        "no-undef": "warn",
         "no-func-assign": "off",
         "@typescript-eslint/no-empty-function": "off",
         "no-global-assign": "off",

@@ -178,13 +178,14 @@ describe('fc-menu-item', function () {
     const menuitem: FCMenuItem = await fixture(html`<fc-menu-item expanded>
       <span>foo</span>
       <fc-menu slot="submenu">
-        <fc-menu-item>bar</fc-menu-item>
+        <fc-menu-item id="bar">bar</fc-menu-item>
       </fc-menu>
     </fc-menu-item>`)
 
     await nextFrame()
-
-    menuitem.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))
+    // set expand will auto focus the first item
+    const bar = menuitem.querySelector<FCMenuItem>('#bar')!
+    bar.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))
     await elementUpdated(menuitem)
     expect(menuitem.expanded).to.be.false
   })

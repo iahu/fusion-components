@@ -1,17 +1,17 @@
-import { html, LitElement, PropertyValues, TemplateResult } from 'lit'
+import { html, LitElement, TemplateResult } from 'lit'
 import './custom-elements'
 import {
   getConverter,
-  ObservedProperties,
-  observedPropsKey,
-  ObserverValue,
-  observer,
-  ObserverOptions,
-  updateAttribute,
   getTempKey,
   getValueFromAttribute,
+  ObservedProperties,
+  observedPropsKey,
+  observer,
+  ObserverOptions,
+  ObserverValue,
+  reflectAttribute,
 } from './decorators'
-import { getCallback, propKey2Str } from './helper'
+import { getCallback, PromiseLike, propKey2Str } from './helper'
 
 const boolAriaAttrNameList = [
   'selected',
@@ -43,9 +43,6 @@ abstract class FusionComponent extends LitElement {
       const attrName = propKey2Str(propKey)
       const mergedAttrName = typeof attribute === 'string' ? attribute : attrName
       const tempKey = getTempKey(propKey)
-      const oldValue = Reflect.get(this, propKey)
-      const typeofValue = type ?? typeof oldValue
-      const isBol = typeofValue === 'boolean'
 
       /**
        * 劫持监听属性的 setter/getter，触发 `${key}Changed` 回调
@@ -56,34 +53,38 @@ abstract class FusionComponent extends LitElement {
           return Reflect.get(this, tempKey)
         },
         set(this: TheType, nextValue: ObserverValue) {
-          const oldValue = Reflect.get(this, tempKey)
-          const mergedConverter = converter ?? getConverter(this, propKey, type)
+          const oldValue = Reflect.get(this, propKey)
+          const typeofValue = type ?? typeof oldValue
+          const isBol = typeofValue === 'boolean'
+          const mergedConverter = converter ?? getConverter(this, propKey, typeofValue)
           const mergedNextValue = mergedConverter ? mergedConverter(nextValue, this) : nextValue
 
           if (oldValue !== mergedNextValue) {
             Reflect.set(this, tempKey, mergedNextValue)
 
-            // callback
-            const callback = getCallback(this, propKey)
-            if (typeof callback === 'function') {
-              if (sync) {
-                // 同步的回调
-                callback.call(this, oldValue, mergedNextValue)
-              } else {
-                this.updateComplete.then(() => callback.call(this, oldValue, Reflect.get(this, propKey)))
-              }
-            }
+            const promise = sync && this.isConnected ? PromiseLike() : this.updateComplete
 
-            // reflect
-            // 初始化前，html 标签自带的 attribute 不能被覆盖
-            const shouldReflect = !(this.hasAttribute(attrName) && oldValue === undefined)
-            if (reflect && shouldReflect) {
-              const p = this.isConnected ? Promise.resolve(true) : this.updateComplete
-              p.then(() => updateAttribute(this, mergedAttrName, mergedNextValue, isBol))
-            }
+            promise.then(() => {
+              // update 之前可能在其它地方更新过当前值，所以求最新的值
+              const currentValue = Reflect.get(this, propKey)
+              if (currentValue === oldValue) {
+                return
+              }
+
+              // 初始化前，html 标签自带的 attribute 不能被覆盖
+              const shouldReflect = !(oldValue === undefined && this.hasAttribute(mergedAttrName))
+              if (reflect && shouldReflect) {
+                reflectAttribute(this, mergedAttrName, currentValue, isBol)
+              }
+
+              const callback = getCallback(this, propKey)
+              if (typeof callback === 'function') {
+                callback.call(this, oldValue, currentValue)
+              }
+            })
 
             // update
-            this.requestUpdate(propKey, oldValue, { attribute, noAccessor: true })
+            this.requestUpdate(propKey, oldValue, { attribute: mergedAttrName, noAccessor: true })
           }
         },
       })
@@ -104,6 +105,35 @@ abstract class FusionComponent extends LitElement {
     return superAttrs
   }
 
+  attributeChangedCallback(name: string, old: string | null, next: string | null): void {
+    super.attributeChangedCallback(name, old, next)
+    if (!this.isConnected) return
+
+    const ctor = this.constructor
+    const observedProps = Reflect.get(ctor, observedPropsKey)
+    const rawOption = observedProps?.get(name) as ObserverOptions<this, any>
+
+    // 从 attribute 映射到 property
+    if (rawOption) {
+      const { propKey, type, converter } = rawOption
+      const typeofValue = type ?? typeof Reflect.get(this, propKey)
+      const isBol = typeofValue === 'boolean'
+      const nextValue = isBol ? next !== null : next
+      const mergedConverter = converter ?? getConverter(this, name, type)
+      // 这里不能用 `??` 运算符，因为 mergedConverter 可能返回 `undefined`
+      const mergedNextValue = mergedConverter ? mergedConverter(nextValue, this) : nextValue
+
+      const oldValue = Reflect.get(this, propKey)
+      if (oldValue !== mergedNextValue) {
+        Reflect.set(this, propKey, mergedNextValue)
+      }
+
+      if (boolAriaAttrNameList.includes(name)) {
+        this.setAttribute(`aria-${name}`, mergedNextValue.toString())
+      }
+    }
+  }
+
   connectedCallback(): void {
     super.connectedCallback()
 
@@ -111,7 +141,7 @@ abstract class FusionComponent extends LitElement {
     if (!observedProps) {
       return
     }
-    // 属性监听+反射逻辑
+
     Array.from(observedProps.keys()).forEach(prop => {
       const option = observedProps.get(prop)
       if (!option) return
@@ -124,64 +154,16 @@ abstract class FusionComponent extends LitElement {
       /**
        * 初始赋值逻辑
        */
-      if (init && attribute && !Reflect.get(this, tempKey)) {
-        const initValue = Reflect.get(this, propKey)
+      if (typeof init === 'function') {
+        Reflect.set(this, propKey, init(this))
+      } else if (attribute && this.hasAttribute(attrName)) {
+        const typeofValue = type ?? typeof Reflect.get(this, tempKey)
+        const isBol = typeofValue === 'boolean'
+        const nextValue = getValueFromAttribute(this, mergedAttrName, isBol)
+        const mergedConverter = converter ?? getConverter<this, any>(this, propKey, type)
+        const mergedNextValue = mergedConverter ? mergedConverter(nextValue, this) : nextValue
 
-        // 初始 property 值
-        Reflect.set(this, propKey, initValue)
-
-        // 从 attribute 获取初始值
-        // 如果获取的值与 initValue 不一致会触发 `${key}Changed`  回调
-        if (this.hasAttribute(mergedAttrName)) {
-          const typeofValue = type ?? typeof Reflect.get(this, tempKey)
-          const isBol = typeofValue === 'boolean'
-          if (typeof init === 'function') {
-            Reflect.set(this, propKey, init(this))
-          } else {
-            const nextValue = getValueFromAttribute(this, mergedAttrName, isBol)
-            const mergedConverter = converter ?? getConverter<this, any>(this, propKey, type)
-            const mergedNextValue = mergedConverter ? mergedConverter(nextValue, this) : nextValue
-
-            Reflect.set(this, propKey, mergedNextValue)
-          }
-        }
-      }
-    })
-  }
-
-  attributeChangedCallback(name: string, old: string | null, next: string | null): void {
-    super.attributeChangedCallback(name, old, next)
-    if (!this.isConnected) return
-
-    const ctor = this.constructor
-    const observedProps = Reflect.get(ctor, observedPropsKey)
-    const rawOption = observedProps?.get(name) as ObserverOptions<this, any>
-
-    // attribute 映射到 property
-    if (rawOption) {
-      const { propKey, type, converter } = rawOption
-      const typeofValue = type ?? typeof Reflect.get(this, propKey)
-      const isBol = typeofValue === 'boolean'
-      const nextValue = isBol ? next !== null : next
-      const mergedConverter = converter ?? getConverter(this, name, type)
-      const mergedNextValue = mergedConverter ? mergedConverter(nextValue, this) : nextValue
-
-      // 通过 attribute 变化，更新 property
-      const oldValue = Reflect.get(this, propKey)
-      if (oldValue !== mergedNextValue) {
         Reflect.set(this, propKey, mergedNextValue)
-      }
-
-      if (boolAriaAttrNameList.includes(name)) {
-        this.setAttribute(`aria-${name}`, mergedNextValue.toString())
-      }
-    }
-  }
-
-  updated(p: PropertyValues<this>): void {
-    p.forEach((v, k) => {
-      if (!this[k] && this.control?.hasAttribute(k.toString())) {
-        this.control?.removeAttribute(k.toString())
       }
     })
   }
