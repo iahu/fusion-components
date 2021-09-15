@@ -2,7 +2,17 @@ import { LitElement } from 'lit'
 import { isBoolean } from '../helper'
 
 export type TypeCotr = { new (...args: any[]): any }
-export type ObserverType = 'string' | 'number' | 'boolean' | 'any'
+export type ObserverType =
+  | 'bigint'
+  | 'symbol'
+  | 'function'
+  | 'string'
+  | 'number'
+  | 'boolean'
+  | 'object'
+  | 'array'
+  | 'undefined'
+  | 'any'
 export type ObserverValue = string | number | boolean | null
 export type DefaultConverter<V = any> = (v: V | number | string | boolean | null) => any
 

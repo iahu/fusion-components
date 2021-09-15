@@ -61,15 +61,15 @@ abstract class FusionComponent extends LitElement {
 
           if (oldValue !== mergedNextValue) {
             Reflect.set(this, tempKey, mergedNextValue)
+            if (oldValue) {
+              option.type = typeofValue // 记住 type
+            }
 
             const promise = sync && this.isConnected ? PromiseLike() : this.updateComplete
 
             promise.then(() => {
               // update 之前可能在其它地方更新过当前值，所以求最新的值
               const currentValue = Reflect.get(this, propKey)
-              if (currentValue === oldValue) {
-                return
-              }
 
               // 初始化前，html 标签自带的 attribute 不能被覆盖
               const shouldReflect = !(oldValue === undefined && this.hasAttribute(mergedAttrName))
@@ -107,7 +107,6 @@ abstract class FusionComponent extends LitElement {
 
   attributeChangedCallback(name: string, old: string | null, next: string | null): void {
     super.attributeChangedCallback(name, old, next)
-    if (!this.isConnected) return
 
     const ctor = this.constructor
     const observedProps = Reflect.get(ctor, observedPropsKey)
@@ -162,7 +161,6 @@ abstract class FusionComponent extends LitElement {
         const nextValue = getValueFromAttribute(this, mergedAttrName, isBol)
         const mergedConverter = converter ?? getConverter<this, any>(this, propKey, type)
         const mergedNextValue = mergedConverter ? mergedConverter(nextValue, this) : nextValue
-
         Reflect.set(this, propKey, mergedNextValue)
       }
     })
@@ -187,9 +185,11 @@ abstract class FusionComponent extends LitElement {
   @observer({ type: 'string' })
   classname?: string
   classnameChanged(old: string, next: string): void {
-    this.className.split(/\s+/g).forEach(cls => cls && this.classList.add(cls))
-    // react className property
-    this.removeAttribute('className')
+    if (next) {
+      this.setAttribute('class', next)
+      // react className property
+      this.removeAttribute('className')
+    }
   }
 
   @observer({ reflect: true })
