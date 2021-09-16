@@ -7,10 +7,16 @@
 
 **几个特点：**
 
-- 原生组件，无需运行时依赖
-- 可用性高，较好地实现了 a11y 规范，支持 `form-associated`
+- 原生组件，无需运行时依赖，可与原生 HTML 一样在其它类库中使用
+- 高可配置性
+  - 丰富的 slot 模块，方便插入自定义元素
+  - 全局的 CSS 变量，方便修改组件内部样式
 - 原生支持在 React 中使用，无需转换
-- 以 CSS 变量实现的配色方案，可方便快捷的定制主题配色方案
+  - 支持 React 的 `calssName` 写法，React 能原生捕获组件内部 `change`
+- 可用性高
+  - 很好地支持了键盘操作
+  - 较好地实现了 a11y 规范
+  - 支持 `form-associated`，与原生输入组件表现一致
 
 [Visit Storybook 🤌](https://iahu.github.io/fusion-components)
 
