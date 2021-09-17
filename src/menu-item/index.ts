@@ -64,7 +64,15 @@ export class FCMenuItem extends FC {
   @observer({ type: 'string', reflect: true })
   href?: string
 
-  @observer({ reflect: true })
+  @observer<FCMenuItem>({
+    reflect: true,
+    hasChanged(value, next, host) {
+      if (value === undefined || (!host.disabled && host.submenu?.length)) {
+        return true
+      }
+      return false
+    },
+  })
   expanded = this.hasAttribute('expanded')
   expandedChanged(old: boolean, next: boolean): void {
     this.setAttribute('aria-expanded', next.toString())

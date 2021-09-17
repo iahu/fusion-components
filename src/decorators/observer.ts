@@ -1,5 +1,4 @@
 import { LitElement } from 'lit'
-import { isBoolean } from '../helper'
 
 export type TypeCotr = { new (...args: any[]): any }
 export type ObserverType =
@@ -52,6 +51,8 @@ export type RawObserverOptions<T, V> = {
    * 在装饰对象上注入 `tempKey` 做为 setter/getter 的中介
    */
   tempKey?: string | boolean
+
+  hasChanged?: (oldValue: V, nextValue: V, host: T) => boolean
 }
 
 export type ObserverOptions<T, V = unknown> = RawObserverOptions<T, V> & { propKey: string | number }
@@ -61,13 +62,25 @@ export const getTempKey = (key: PropertyKey, customKey?: boolean | string): stri
 
 const isNil = (v: unknown) => v === undefined || v === null
 
+export const attr2Bol = (attribute: boolean | number | string | null) => {
+  if (attribute === false || attribute === null || attribute === undefined || attribute === 'false') {
+    return false
+  }
+  return true
+}
+
 export const typeCotrMap: Record<string, DefaultConverter<any>> = {
   string: (v: unknown) => {
     if (isNil(v)) return ''
     return String(v)
   },
   number: Number,
-  boolean: (v: boolean | null | string) => (isBoolean(v) ? v : v !== null),
+  boolean: (v: boolean | undefined | null | string) => {
+    if (v === false || v === null || v === undefined || v === 'false') {
+      return false
+    }
+    return true
+  },
   any: (t: unknown) => t,
 }
 
@@ -86,8 +99,8 @@ export const reflectAttribute = (
   value: ObserverValue,
   isBol: boolean
 ): void => {
-  if (isBol || typeof value === 'boolean') {
-    host.toggleAttribute(attributeName, typeCotrMap.boolean(value))
+  if (isBol) {
+    host.toggleAttribute(attributeName, attr2Bol(value))
   } else if (isNil(value) || value === '') {
     host.removeAttribute(attributeName)
   } else {
@@ -103,6 +116,7 @@ export const getValueFromAttribute = (
   if (!isBol) return host.getAttribute(attributeName)
 
   const value = host.getAttribute(attributeName)
+  if (value === null) return false
   if (value === 'true') return true
   if (value === 'false') return false
   return host.hasAttribute(attributeName)
@@ -113,7 +127,7 @@ export type ObservedProperties<T extends HTMLElement, V = any> = Map<PropertyKey
 export const observedPropsKey = 'observedProperties'
 
 export const observer = function <T extends LitElement, V = any>(options?: RawObserverOptions<T, V>) {
-  const { type, reflect = false, attribute = true, converter, sync, init = true, tempKey } = options || {}
+  const { reflect = false, attribute = true, init = true } = options || {}
   return function (proto: T, key: string): void {
     const ctor = proto.constructor
 
@@ -133,14 +147,11 @@ export const observer = function <T extends LitElement, V = any>(options?: RawOb
     }
 
     observedProps.set(key.toLowerCase(), {
+      ...options,
       propKey: key,
-      type,
       reflect,
       attribute,
-      converter,
-      sync,
       init,
-      tempKey,
     })
   }
 }

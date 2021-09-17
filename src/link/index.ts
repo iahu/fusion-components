@@ -1,7 +1,7 @@
 import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { ifDefined } from 'lit/directives/if-defined.js'
-import { observer, query } from '../decorators'
+import { observer, query, reflectAttribute } from '../decorators'
 import { FC } from '../fusion-component'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
@@ -28,9 +28,19 @@ export class FCLink extends FC {
 
   @observer({ reflect: true })
   download = ''
+  downloadChanged(old: string, next: string): void {
+    if (this.control) {
+      reflectAttribute(this.control, 'download', next, false)
+    }
+  }
 
   @observer({ reflect: true })
   href = ''
+  hrefChanged(old: string, next: string): void {
+    if (this.control) {
+      reflectAttribute(this.control, 'href', next, false)
+    }
+  }
 
   @observer()
   hreflang = ''
@@ -73,8 +83,8 @@ export class FCLink extends FC {
       class="control"
       part="control"
       tabindex="-1"
-      .download="${this.download || undefined}"
-      .href="${ifDefined(this.href || undefined)}"
+      .download="${this.download}"
+      .href="${ifDefined(this.href)}"
       .hreflang="${this.hreflang}"
       .ping="${this.ping}"
       .ref="${this.ref}"

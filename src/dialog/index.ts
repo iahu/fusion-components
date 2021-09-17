@@ -58,6 +58,8 @@ export class FCDialog extends FC {
         this.focus()
       })
     }
+    this.emit('change', { old, next })
+    this.emit('visibleChange', { old, next })
   }
 
   @observer({ reflect: true })

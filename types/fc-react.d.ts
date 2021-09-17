@@ -28,7 +28,7 @@ import type {
   FCTooltip,
   FCTreeItem,
   FCTreeView,
-} from '@egret/fusion-components'
+} from '../dist/esm'
 
 type FCMap<T> = Partial<T> | React.DetailedHTMLProps<React.HTMLAttributes<T>, T>
 
@@ -43,7 +43,7 @@ declare global {
       'fc-data-grid-row': FCMap<FCDataGridRow>
       'fc-data-grid-cell': FCMap<FCDataGridCell>
       'fc-dialog': FCMap<FCDialog>
-      'fc-divier': FCMap<FCDivider>
+      'fc-divider': FCMap<FCDivider>
       'fc-dropdown': FCMap<FCDropdown>
       'fc-input': FCMap<FCInput>
       'fc-link': FCMap<FCLink>

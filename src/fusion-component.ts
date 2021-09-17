@@ -1,6 +1,7 @@
 import { html, LitElement, TemplateResult } from 'lit'
 import './custom-elements'
 import {
+  attr2Bol,
   getConverter,
   getTempKey,
   getValueFromAttribute,
@@ -38,7 +39,7 @@ abstract class FusionComponent extends LitElement {
     Array.from(observedProps.keys()).forEach(prop => {
       const option = observedProps.get(prop)
       if (!option) return
-      const { propKey, attribute, reflect, converter, sync, tempKey: userTempKey } = option ?? {}
+      const { propKey, attribute, reflect, converter, tempKey: userTempKey, sync, hasChanged } = option ?? {}
       if (!propKey) return
       const attrName = propKey2Str(propKey)
       const mergedAttrName = typeof attribute === 'string' ? attribute : attrName
@@ -60,13 +61,17 @@ abstract class FusionComponent extends LitElement {
           const mergedConverter = converter ?? getConverter(this, propKey, typeofValue)
           const mergedNextValue = mergedConverter ? mergedConverter(nextValue, this) : nextValue
 
+          if (hasChanged?.(oldValue, mergedNextValue, this) === false) {
+            return
+          }
+
           if (oldValue !== mergedNextValue) {
             tempValue = mergedNextValue
             if (userTempKey) {
               Reflect.set(this, tempKey, mergedNextValue)
             }
 
-            if (oldValue) {
+            if (!option.type && oldValue) {
               option.type = typeofValue // 记住 type
             }
 
@@ -111,8 +116,7 @@ abstract class FusionComponent extends LitElement {
   }
 
   attributeChangedCallback(name: string, old: string | null, next: string | null): void {
-    super.attributeChangedCallback(name, old, next)
-
+    // super.attributeChangedCallback(name, old, next)
     const ctor = this.constructor
     const observedProps = Reflect.get(ctor, observedPropsKey)
     const rawOption = observedProps?.get(name) as ObserverOptions<this, any>
@@ -122,7 +126,7 @@ abstract class FusionComponent extends LitElement {
       const { propKey, type, converter } = rawOption
       const typeofValue = type ?? typeof Reflect.get(this, propKey)
       const isBol = typeofValue === 'boolean'
-      const nextValue = isBol ? next !== null : next
+      const nextValue = isBol ? attr2Bol(next) : next
       const mergedConverter = converter ?? getConverter(this, name, type)
       // 这里不能用 `??` 运算符，因为 mergedConverter 可能返回 `undefined`
       const mergedNextValue = mergedConverter ? mergedConverter(nextValue, this) : nextValue
@@ -130,6 +134,8 @@ abstract class FusionComponent extends LitElement {
       const oldValue = Reflect.get(this, propKey)
       if (oldValue !== mergedNextValue) {
         Reflect.set(this, propKey, mergedNextValue)
+      } else if (nextValue === false && next !== null) {
+        this.removeAttribute(name)
       }
 
       if (boolAriaAttrNameList.includes(name)) {
