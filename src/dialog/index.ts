@@ -74,7 +74,10 @@ export class FCDialog extends FC {
   }
 
   handleClick = (e: MouseEvent): void => {
-    if (e.target instanceof HTMLElement && this.anchorElements?.includes(e.target)) {
+    const { target } = e
+    const { anchor } = this
+
+    if (target instanceof HTMLElement && anchor && target.closest(anchor)) {
       e.preventDefault()
       this.hidden = false
     }

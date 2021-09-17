@@ -226,19 +226,19 @@ abstract class FusionComponent extends LitElement {
       event.value = Symbol('nextValue')
       if (tracker) {
         tracker.setValue(lastValue)
-      } else {
-        this.emit('input', eventInit)
       }
 
       const { nodeName } = this
       const type = Reflect.get(this, 'type')
       let bypassNodeName: string | undefined = ['radio', 'checkbox'].includes(type) ? 'input' : 'select'
-      Object.defineProperty(this, 'nodeName', {
-        configurable: true,
-        get() {
-          return bypassNodeName ?? nodeName
-        },
-      })
+      if (this.nodeName !== 'input' && this.nodeName !== 'select') {
+        Object.defineProperty(this, 'nodeName', {
+          configurable: true,
+          get() {
+            return bypassNodeName ?? nodeName
+          },
+        })
+      }
       this.dispatchEvent(event)
       bypassNodeName = undefined
     } else {

@@ -202,7 +202,9 @@ export default class FormAssociated extends FC {
    */
   public detachProxy(): void {
     this.removeChild(this.proxy)
-    this.shadowRoot?.removeChild(this.proxySlot as HTMLSlotElement)
+    if (this.proxySlot) {
+      this.shadowRoot?.removeChild(this.proxySlot as HTMLSlotElement)
+    }
   }
 
   public get form(): Maybe<HTMLFormElement> {

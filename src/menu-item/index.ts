@@ -125,7 +125,10 @@ export class FCMenuItem extends FC {
   @observer()
   mouseenterDelay = 200
 
-  handleMouseenter(e: MouseEvent): void {
+  handleMouseenter = (e: MouseEvent): void => {
+    if (this.disabled || !this.submenu?.length) {
+      return
+    }
     if (this.mouseenterDelay > 0) {
       this.mouseenterTid = setTimeout(() => {
         if (this.submenu?.length) {
@@ -137,7 +140,10 @@ export class FCMenuItem extends FC {
     }
   }
 
-  handleMouseleave(e: MouseEvent): void {
+  handleMouseleave = (e: MouseEvent): void => {
+    if (this.disabled || !this.submenu?.length) {
+      return
+    }
     if (this.mouseenterTid) {
       clearTimeout(this.mouseenterTid)
     }

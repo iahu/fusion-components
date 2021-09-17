@@ -50,6 +50,7 @@
     "@storybook/html": "^6.2.9",
     "@storybook/theming": "^6.2.9",
     "@storybook/web-components": "^6.2.9",
+    "@types/lodash-es": "^4.17.5",
     "@types/mocha": "^9.0.0",
     "@types/node": "^15.12.4",
     "@types/react": "^17.0.19",
@@ -88,6 +89,7 @@
     "exp-calc": "^1.0.3",
     "lit": "^2.0.0-rc.2",
     "lit-html": "^1.4.1",
+    "lodash-es": "^4.17.21",
     "tslib": "^2.3.0"
   }
 }
