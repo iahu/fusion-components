@@ -1,6 +1,6 @@
 import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
-import { observer } from '../decorators'
+import { ignoreInitChanged, observer } from '../decorators'
 import { FC } from '../fusion-component'
 import mergeStyles from '../merge-styles'
 
@@ -28,7 +28,7 @@ export class FCDataGridCell extends FC {
   @observer({ reflect: true })
   tabIndex = -1
 
-  @observer()
+  @observer({ hasChanged: ignoreInitChanged })
   colIndex = -1
   colIndexChanged(old: number, next: number): void {
     if (next >= 0) {

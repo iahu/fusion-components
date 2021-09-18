@@ -166,8 +166,8 @@ describe('fc-menu-item', function () {
       </fc-menu>
     </fc-menu-item>`)
 
-    menuitem.focus()
     await nextFrame()
+    menuitem.focus()
     menuitem.expanded = true
     const foo = menuitem.querySelector<FCMenuItem>('#foo')!
     await elementUpdated(menuitem)

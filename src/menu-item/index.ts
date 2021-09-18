@@ -6,6 +6,8 @@ import { isHTMLElement } from '../helper'
 import type { FCMenu } from '../menu'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
+import { debounce } from 'lodash-es'
+
 import style from './style.css'
 import radioStyle from '../radio/style.css'
 import checkboxStyle from '../checkbox/style.css'
@@ -31,7 +33,6 @@ export class FCMenuItem extends FC {
 
   disconnectedCallback(): void {
     super.disconnectedCallback()
-
     this.removeEventListener('click', this.handleClick)
     this.removeEventListener('keydown', this.handleKeydown)
     this.removeEventListener('mouseenter', this.handleMouseenter)
@@ -67,7 +68,7 @@ export class FCMenuItem extends FC {
   @observer<FCMenuItem>({
     reflect: true,
     hasChanged(value, next, host) {
-      if (value === undefined || (!host.disabled && host.submenu?.length)) {
+      if (value !== undefined && !host.disabled && host.submenu?.length) {
         return true
       }
       return false
@@ -120,32 +121,25 @@ export class FCMenuItem extends FC {
     }
   }
 
-  private mouseenterTid?: NodeJS.Timeout
-
   @observer()
-  mouseenterDelay = 200
+  mouseenterDelay = 340
 
-  handleMouseenter = (e: MouseEvent): void => {
-    if (this.disabled || !this.submenu?.length) {
-      return
-    }
-    if (this.mouseenterDelay > 0) {
-      this.mouseenterTid = setTimeout(() => {
-        if (this.submenu?.length) {
-          this.expanded = !this.disabled
-        }
-      }, this.mouseenterDelay)
-    } else {
+  handleMouseenter = debounce(
+    (e: MouseEvent): void => {
+      if (this.disabled || !this.submenu?.length) {
+        return
+      }
+
       this.expanded = !this.disabled
-    }
-  }
+      this.expanded = !this.disabled
+    },
+    this.mouseenterDelay,
+    { leading: true }
+  )
 
-  handleMouseleave = (e: MouseEvent): void => {
+  handleMouseleave(e: MouseEvent): void {
     if (this.disabled || !this.submenu?.length) {
       return
-    }
-    if (this.mouseenterTid) {
-      clearTimeout(this.mouseenterTid)
     }
     this.expanded = false
   }

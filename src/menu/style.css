@@ -1,4 +1,5 @@
 :host {
+  position: relative;
   display: inline-grid;
   --padding-t: var(--padding-l);
   padding: var(--padding);
@@ -8,6 +9,7 @@
 }
 
 :host([slot='submenu']) {
+  position: absolute;
   /*menu 的 pading-top: var(--padding-l)*/
   margin-top: var(--menu-margin-top, calc(-1 * var(--padding-t)));
   margin-left: var(--menu-margin-left, var(--padding-l));

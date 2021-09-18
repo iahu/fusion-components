@@ -70,6 +70,8 @@ export class FCDropdown extends FC {
         }
       })
     }
+
+    this.emit('change', { old, next })
   }
 
   /**

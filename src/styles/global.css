@@ -133,6 +133,7 @@
 
 ::-webkit-scrollbar {
   width: calc(var(--fc-unit-size) * 6);
+  height: calc(var(--fc-unit-size) * 6);
   background: var(--box-background);
 }
 
@@ -164,6 +165,8 @@
   --foreground: var(--foreground-disabled);
   --background: var(--background-disabled);
   --stroke-color: rgba(128, 128, 128, 0.4);
+}
+:host(:is(:disabled, [disabled])) {
   pointer-events: none;
 }
 

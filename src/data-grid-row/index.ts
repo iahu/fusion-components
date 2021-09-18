@@ -1,7 +1,7 @@
 import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { FCDataGridCell } from '../data-grid-cell'
-import { assignedElements, observer } from '../decorators'
+import { assignedElements, ignoreInitChanged, observer } from '../decorators'
 import { FC } from '../fusion-component'
 import { setCSSText } from '../helper'
 import mergeStyles from '../merge-styles'
@@ -47,6 +47,7 @@ export class FCDataGridRow extends FC {
 
   @observer<FCDataGridRow>({
     reflect: true,
+    hasChanged: ignoreInitChanged,
     init: host => (host.slot === 'row-header' ? 'rowheader' : 'row'),
   })
   role = 'row'

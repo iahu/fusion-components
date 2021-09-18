@@ -1,6 +1,6 @@
 import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
-import { observer } from '../decorators'
+import { ignoreInitChanged, observer } from '../decorators'
 import FormAssociated from '../form-associated'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
@@ -78,31 +78,31 @@ export class FCButton extends FormAssociated {
     }
   }
 
-  @observer()
+  @observer({ hasChanged: ignoreInitChanged })
   formid = ''
   formidChanged(old: string, next: string): void {
     this.proxy.setAttribute('form', next)
   }
 
-  @observer()
+  @observer({ hasChanged: ignoreInitChanged })
   formaction = ''
   formactionChanged(old: string, next: string): void {
     this.proxy.setAttribute('formaction', next)
   }
 
-  @observer()
+  @observer({ hasChanged: ignoreInitChanged })
   formenctype = ''
   formenctypeChanged(old: string, next: string): void {
     this.proxy.setAttribute('formenctype', next)
   }
 
-  @observer()
+  @observer({ hasChanged: ignoreInitChanged })
   formnovalidate = ''
   formnovalidateChanged(old: string, next: string): void {
     this.proxy.setAttribute('formnovalidate', next)
   }
 
-  @observer()
+  @observer({ hasChanged: ignoreInitChanged })
   formtarget: '_self' | '_blank' | '_parent' | '_top' = '_self'
   formtargetChanged(old: string, next: string): void {
     this.proxy.setAttribute('formtarget', next)
@@ -111,12 +111,10 @@ export class FCButton extends FormAssociated {
   // name
   // value
 
-  @observer({ reflect: true })
+  @observer({ reflect: true, hasChanged: ignoreInitChanged })
   selectable = false
   selectableChanged(old: boolean, next: boolean): void {
-    if (next) {
-      this.selected = this.hasAttribute('selected')
-    }
+    this.selected = this.hasAttribute('selected')
   }
 
   @observer({ reflect: true })

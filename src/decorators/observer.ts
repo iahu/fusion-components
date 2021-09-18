@@ -53,6 +53,11 @@ export type RawObserverOptions<T, V> = {
   tempKey?: string | boolean
 
   hasChanged?: (oldValue: V, nextValue: V, host: T) => boolean
+
+  /**
+   * 执行初始化的回调
+   */
+  initCallback?: boolean
 }
 
 export type ObserverOptions<T, V = unknown> = RawObserverOptions<T, V> & { propKey: string | number }
@@ -122,12 +127,20 @@ export const getValueFromAttribute = (
   return host.hasAttribute(attributeName)
 }
 
+const beChanged = (old: any, next: any, host: any) => {
+  return true
+}
+
+export const ignoreInitChanged = (old: any, next: any) => {
+  return old !== undefined
+}
+
 export type ObservedProperties<T extends HTMLElement, V = any> = Map<PropertyKey, ObserverOptions<T, V>>
 
 export const observedPropsKey = 'observedProperties'
 
 export const observer = function <T extends LitElement, V = any>(options?: RawObserverOptions<T, V>) {
-  const { reflect = false, attribute = true, init = true } = options || {}
+  const { reflect = false, attribute = true, init = true, initCallback = true, hasChanged = beChanged } = options || {}
   return function (proto: T, key: string): void {
     const ctor = proto.constructor
 
@@ -152,6 +165,7 @@ export const observer = function <T extends LitElement, V = any>(options?: RawOb
       reflect,
       attribute,
       init,
+      initCallback,
     })
   }
 }

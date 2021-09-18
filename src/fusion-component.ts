@@ -39,12 +39,23 @@ abstract class FusionComponent extends LitElement {
     Array.from(observedProps.keys()).forEach(prop => {
       const option = observedProps.get(prop)
       if (!option) return
-      const { propKey, attribute, reflect, converter, tempKey: userTempKey, sync, hasChanged } = option ?? {}
+      const {
+        propKey,
+        attribute,
+        reflect,
+        converter,
+        tempKey: userTempKey,
+        sync,
+        hasChanged,
+        initCallback,
+      } = option ?? {}
       if (!propKey) return
       const attrName = propKey2Str(propKey)
       const mergedAttrName = typeof attribute === 'string' ? attribute : attrName
       const tempKey = userTempKey ? getTempKey(propKey, userTempKey) : ''
       let tempValue: any
+      let inited = false
+      let callback: (old: any, next: any) => void
 
       /**
        * 劫持监听属性的 setter/getter，触发 `${key}Changed` 回调
@@ -61,10 +72,6 @@ abstract class FusionComponent extends LitElement {
           const mergedConverter = converter ?? getConverter(this, propKey, typeofValue)
           const mergedNextValue = mergedConverter ? mergedConverter(nextValue, this) : nextValue
 
-          if (hasChanged?.(oldValue, mergedNextValue, this) === false) {
-            return
-          }
-
           if (oldValue !== mergedNextValue) {
             tempValue = mergedNextValue
             if (userTempKey) {
@@ -75,11 +82,18 @@ abstract class FusionComponent extends LitElement {
               option.type = typeofValue // 记住 type
             }
 
+            if (hasChanged?.(oldValue, mergedNextValue, this) === false) {
+              return
+            }
+
             const promise = sync && this.isConnected ? PromiseLike() : this.updateComplete
 
             promise.then(() => {
               // update 之前可能在其它地方更新过当前值，所以求最新的值
               const currentValue = Reflect.get(this, propKey)
+              if (currentValue !== mergedNextValue) {
+                return
+              }
 
               // 初始化前，html 标签自带的 attribute 不能被覆盖
               const shouldReflect = !(oldValue === undefined && this.hasAttribute(mergedAttrName))
@@ -87,14 +101,21 @@ abstract class FusionComponent extends LitElement {
                 reflectAttribute(this, mergedAttrName, currentValue, isBol)
               }
 
-              const callback = getCallback(this, propKey)
-              if (typeof callback === 'function') {
+              const cb = getCallback(this, propKey)
+              if (!callback && typeof cb === 'function') {
+                callback = cb
+              }
+              const shouldCallback = initCallback || inited
+              if (shouldCallback && typeof callback === 'function') {
                 callback.call(this, oldValue, currentValue)
               }
             })
 
             // update
             this.requestUpdate(propKey, oldValue, { attribute: mergedAttrName, noAccessor: true })
+            if (!inited && oldValue !== undefined) {
+              inited = true
+            }
           }
         },
       })
@@ -193,7 +214,7 @@ abstract class FusionComponent extends LitElement {
   }
 
   @observer({ type: 'string' })
-  classname?: string
+  private classname?: string
   classnameChanged(old: string, next: string): void {
     if (next) {
       this.setAttribute('class', next)

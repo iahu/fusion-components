@@ -81,8 +81,8 @@ export class FCTreeItem extends FC {
 
   @observer<FCTreeItem, boolean>({
     reflect: true,
-    converter(v, host) {
-      return !host.disabled && v
+    hasChanged(old, next, host) {
+      return old !== undefined && !host.disabled
     },
   })
   expanded = false
