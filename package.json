@@ -1,6 +1,6 @@
 {
   "name": "@egret/fusion-components",
-  "version": "1.0.20",
+  "version": "1.0.20.beta",
   "description": "一套面向类桌面应用的沉浸式风格 Web Components UI 库",
   "main": "dist/esm/index.js",
   "module": "dist/esm/index.js",
