@@ -84,3 +84,5 @@ export const getCallback = (o: any, key: PropertyKey) => {
     return callback
   }
 }
+
+export const clamp = (min: number, max: number, num: number): number => Math.min(max, Math.max(min, num))

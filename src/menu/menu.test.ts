@@ -1,4 +1,4 @@
-import { elementUpdated, expect, fixture, html, nextFrame } from '@open-wc/testing'
+import { aTimeout, elementUpdated, expect, fixture, html, nextFrame } from '@open-wc/testing'
 import { FCMenu } from './index'
 import './index'
 import '../menu-item'
@@ -171,33 +171,33 @@ describe('fc-menu', function () {
         <fc-menu-item role="menuitemradio">苹果</fc-menu-item>
         <fc-menu-item role="menuitemradio">香蕉</fc-menu-item>
         <fc-menu-item role="menuitemradio">橘子</fc-menu-item>
-        <fc-menu-item role="menuitem">梨</fc-menu-item>
+        <fc-menu-item role="menuitemcheckbox">梨</fc-menu-item>
       </fc-menu>
     `)
 
     const items = Array.from(menu.querySelectorAll<FCMenuItem>('fc-menu-item'))
     items[0].click()
     await elementUpdated(menu)
-    expect(items[0].checked).be.true
+    expect(items[0].checked, 'click 0').be.true
 
     items[1].click()
     await elementUpdated(menu)
-    expect(items[0].checked).be.false
-    expect(items[1].checked).be.true
+    expect(items[0].checked, 'click on 1, 0').be.false
+    expect(items[1].checked, 'click on 1, 1').be.true
 
     items[2].click()
     await elementUpdated(menu)
-    expect(items[0].checked).be.false
-    expect(items[1].checked).be.false
-    expect(items[2].checked).be.true
+    expect(items[0].checked, 'click on 2, 0').be.false
+    expect(items[1].checked, 'click on 2, 1').be.false
+    expect(items[2].checked, 'click on 2, 2').be.true
 
     // click menuitem
     items[3].click()
     await elementUpdated(menu)
-    expect(items[0].checked).be.false
-    expect(items[1].checked).be.false
-    expect(items[2].checked).be.true
-    expect(items[3].checked).be.false
+    expect(items[0].checked, 'click on 3, 0').be.false
+    expect(items[1].checked, 'click on 3, 1').be.false
+    expect(items[2].checked, 'click on 3, 2').be.true
+    expect(items[3].checked, 'click on 3, 3rd checkbox').be.true
   })
 
   it('should close all submenu after focusout', async () => {
@@ -224,5 +224,139 @@ describe('fc-menu', function () {
 
     expect(menu.querySelector<FCMenuItem>('#mi-1')!.expanded).be.true
     expect(menu.querySelector<FCMenuItem>('#mi-2')!.expanded).be.true
+  })
+
+  it('should change menuitemcheckbox\'s "checked" to true, when click on item', async () => {
+    const menu: FCMenuItem = await fixture(
+      html`<fc-menu><fc-menu-item role="menuitemcheckbox"></fc-menu-item></fc-menu>`
+    )
+    const item = menu.querySelector<FCMenuItem>('fc-menu-item')!
+    item.click()
+    await elementUpdated(item)
+    expect(item.checked, 'menuitemcheckbox').to.be.true
+  })
+
+  it('should change menuitemradio\'s "checked" to true, when click on item', async () => {
+    const menu: FCMenuItem = await fixture(html`<fc-menu><fc-menu-item role="menuitemradio"></fc-menu-item></fc-menu>`)
+    const item = menu.querySelector<FCMenuItem>('fc-menu-item')!
+    item.click()
+    await elementUpdated(item)
+    expect(item.checked, 'menuitemradio').to.be.true
+  })
+
+  it('should be checked when pressed enter', async () => {
+    const menu: FCMenuItem = await fixture(
+      html`<fc-menu><fc-menu-item role="menuitemcheckbox"></fc-menu-item></fc-menu>`
+    )
+    const menuitemcheckbox = menu.querySelector<FCMenuItem>('fc-menu-item')!
+    const keydown = new KeyboardEvent('keydown', { key: 'Enter', bubbles: true })
+    menuitemcheckbox.dispatchEvent(keydown)
+
+    await elementUpdated(menuitemcheckbox)
+    expect(menuitemcheckbox.checked, 'when pressed enter').to.be.true
+  })
+
+  it('should change expanded to `true` when mouseenter', async () => {
+    const menu: FCMenu = await fixture(html`
+      <fc-menu mouseenterDelay="0">
+        <fc-menu-item id="first-item">
+          <span>foo</span>
+          <fc-menu slot="submenu">
+            <fc-menu-item>bar</fc-menu-item>
+          </fc-menu>
+        </fc-menu-item>
+      </fc-menu>
+    `)
+    const menuitem: FCMenuItem = menu.querySelector<FCMenuItem>('#first-item')!
+    expect(menuitem.expanded, 'before mouseenter').be.false
+    menuitem.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }))
+    await elementUpdated(menu)
+    expect(menuitem.expanded, 'after mouseenter').be.true
+  })
+
+  it('should delay about 1s to open submenu', async () => {
+    const menu: FCMenu = await fixture(html`
+      <fc-menu mouseenterDelay="1000">
+        <fc-menu-item id="first-item">
+          <span>foo</span>
+          <fc-menu slot="submenu">
+            <fc-menu-item>bar</fc-menu-item>
+          </fc-menu>
+        </fc-menu-item>
+      </fc-menu>
+    `)
+    const menuitem = menu.querySelector<FCMenuItem>('#first-item')!
+
+    expect(menuitem.expanded, 'before mouseenter').be.false
+    menuitem.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }))
+
+    await aTimeout(999)
+    expect(menuitem.expanded, 'before delay').be.false
+
+    await aTimeout(1)
+    expect(menuitem.expanded, 'after delay').be.true
+  })
+
+  it('should change expanded to `false` when mouseleave', async () => {
+    const menu: FCMenu = await fixture(html`
+      <fc-menu>
+        <fc-menu-item expanded>
+          <span>foo</span>
+          <fc-menu slot="submenu">
+            <fc-menu-item>bar</fc-menu-item>
+          </fc-menu>
+        </fc-menu-item>
+      </fc-menu>
+    `)
+
+    const menuitem = menu.querySelector<FCMenuItem>('[expanded]')!
+
+    expect(menuitem.expanded, 'before mouseleave').be.true
+    const mouseleave = new MouseEvent('mouseleave')
+    menuitem.dispatchEvent(mouseleave)
+    await elementUpdated(menuitem)
+    expect(menuitem.expanded, 'after mouseleave').be.false
+  })
+
+  it('should be collapse when children item focus out', async () => {
+    const menu: FCMenu = await fixture(html`
+      <fc-menu>
+        <fc-menu-item expanded>
+          <span>foo</span>
+          <fc-menu slot="submenu">
+            <fc-menu-item id="bar">bar</fc-menu-item>
+          </fc-menu>
+        </fc-menu-item>
+      </fc-menu>
+    `)
+
+    const menuitem = menu.querySelector<FCMenuItem>('[expanded]')!
+    const bar = menuitem.querySelector<FCMenuItem>('#bar')!
+    bar.focus()
+    bar.blur()
+    await elementUpdated(menuitem)
+    expect(menuitem.expanded).be.false
+  })
+
+  it('should collapse submenu when pressed Escape key', async () => {
+    const menu: FCMenu = await fixture(html`
+      <fc-menu>
+        <fc-menu-item expanded>
+          <span>foo</span>
+          <fc-menu slot="submenu">
+            <fc-menu-item id="bar">bar</fc-menu-item>
+          </fc-menu>
+        </fc-menu-item>
+      </fc-menu>
+    `)
+
+    const menuitem = menu.querySelector<FCMenuItem>('[expanded]')!
+    await nextFrame()
+    // set expand will auto focus the first item
+    const bar = menuitem.querySelector<FCMenuItem>('#bar')!
+    bar.focus()
+    bar.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))
+    await elementUpdated(menuitem)
+    expect(menuitem.expanded).to.be.false
   })
 })

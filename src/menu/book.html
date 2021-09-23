@@ -102,7 +102,42 @@
     </fc-menu>
   </fc-menu-item>
 
-  <fc-menu-item>药品</fc-menu-item>
+  <fc-menu-item><span slot="after">无货</span>药品</fc-menu-item>
+</fc-menu>
+<br />
+<br />
+
+<h4>设置鼠标控制子菜单展开的延迟</h4>
+<fc-menu mouseenterDelay="1000">
+  <fc-menu-item>
+    <span>水果</span>
+    <fc-menu slot="submenu">
+      <fc-menu-item role="menuitemcheckbox">苹果</fc-menu-item>
+      <fc-menu-item>
+        <span>香蕉</span>
+        <fc-menu slot="submenu">
+          <fc-menu-item role="menuitemradio">国产</fc-menu-item>
+          <fc-menu-item role="menuitemradio">进口</fc-menu-item>
+        </fc-menu>
+      </fc-menu-item>
+    </fc-menu>
+  </fc-menu-item>
+  <fc-menu-item>
+    <span>蔬菜</span>
+    <fc-menu slot="submenu">
+      <fc-menu-item>茄子</fc-menu-item>
+      <fc-menu-item>豆角</fc-menu-item>
+    </fc-menu>
+  </fc-menu-item>
+  <fc-menu-item>
+    <span>干果</span>
+    <fc-menu slot="submenu">
+      <fc-menu-item>花生</fc-menu-item>
+      <fc-menu-item>瓜子</fc-menu-item>
+    </fc-menu>
+  </fc-menu-item>
+
+  <fc-menu-item><span slot="after">无货</span>药品</fc-menu-item>
 </fc-menu>
 <br />
 <br />

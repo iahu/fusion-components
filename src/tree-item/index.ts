@@ -89,7 +89,7 @@ export class FCTreeItem extends FC {
   protected expandedChanged(old: boolean, next: boolean): void {
     this.emit('expand')
     this.setAttribute('aria-expanded', String(next))
-    this.items?.[0]?.focus()
+    this.updateComplete.then(() => this.items?.[0].focus())
   }
 
   @observer({ reflect: true })

@@ -1,4 +1,6 @@
 import { LitElement } from 'lit'
+import FusionComponent from '../fusion-component'
+import { getCallback, PromiseLike, propKey2Str } from '../helper'
 
 export type TypeCotr = { new (...args: any[]): any }
 export type ObserverType =
@@ -168,4 +170,80 @@ export const observer = function <T extends LitElement, V = any>(options?: RawOb
       initCallback,
     })
   }
+}
+
+export function observeProp(this: any, observedProps: Map<string, ObserverOptions<any, any>>, prop: string): void {
+  const option = observedProps.get(prop)
+  if (!option) return
+  const { propKey, attribute, reflect, converter, tempKey: userTempKey, sync, hasChanged, initCallback } = option ?? {}
+  if (!propKey) return
+  const attrName = propKey2Str(propKey)
+  const mergedAttrName = typeof attribute === 'string' ? attribute : attrName
+  const tempKey = userTempKey ? getTempKey(propKey, userTempKey) : ''
+  let tempValue: any
+  let inited = false
+  let callback: (old: any, next: any) => void
+
+  /**
+   * 劫持监听属性的 setter/getter，触发 `${key}Changed` 回调
+   */
+  Object.defineProperty(this, propKey, {
+    configurable: true,
+    get(this: any) {
+      return userTempKey ? Reflect.get(this, tempKey) : tempValue
+    },
+    set(this: any, nextValue: ObserverValue) {
+      const oldValue = Reflect.get(this, propKey)
+      const typeofValue = option.type ?? typeof oldValue
+      const isBol = typeofValue === 'boolean'
+      const mergedConverter = converter ?? getConverter(this, propKey, typeofValue)
+      const mergedNextValue = mergedConverter ? mergedConverter(nextValue, this) : nextValue
+
+      if (oldValue !== mergedNextValue) {
+        tempValue = mergedNextValue
+        if (userTempKey) {
+          Reflect.set(this, tempKey, mergedNextValue)
+        }
+
+        if (!option.type && oldValue) {
+          option.type = typeofValue // 记住 type
+        }
+
+        if (hasChanged?.(oldValue, mergedNextValue, this) === false) {
+          return
+        }
+
+        const promise = sync && this.isConnected ? PromiseLike() : this.updateComplete
+
+        promise.then(() => {
+          // update 之前可能在其它地方更新过当前值，所以求最新的值
+          const currentValue = Reflect.get(this, propKey)
+          if (currentValue !== mergedNextValue) {
+            return
+          }
+
+          // 初始化前，html 标签自带的 attribute 不能被覆盖
+          const shouldReflect = !(oldValue === undefined && this.hasAttribute(mergedAttrName))
+          if (reflect && shouldReflect) {
+            reflectAttribute(this, mergedAttrName, currentValue, isBol)
+          }
+
+          const cb = getCallback(this, propKey)
+          if (!callback && typeof cb === 'function') {
+            callback = cb
+          }
+          const shouldCallback = initCallback || inited
+          if (shouldCallback && typeof callback === 'function') {
+            callback.call(this, oldValue, currentValue)
+          }
+        })
+
+        // update
+        this.requestUpdate(propKey, oldValue, { attribute: mergedAttrName, noAccessor: true })
+        if (!inited && oldValue !== undefined) {
+          inited = true
+        }
+      }
+    },
+  })
 }

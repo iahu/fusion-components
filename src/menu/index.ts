@@ -1,11 +1,12 @@
 import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
-import { assignedElements, observer } from '../decorators'
+import { debounce, DebouncedFunc, noop } from 'lodash-es'
+import { assignedElements, ignoreInitChanged, observer } from '../decorators'
 import '../divider'
 import { FC } from '../fusion-component'
-import { focusFirstOrNext, tabbableElement, isHTMLElement, setTopIndex } from '../helper'
+import { focusFirstOrNext, getNextFocusableElement, isHTMLElement, setTopIndex, tabbableElement } from '../helper'
 import '../menu-item'
-import { FCMenuItem } from '../menu-item'
+import { FCMenuItem, isMenuItem } from '../menu-item'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
 import style from './style.css'
@@ -17,19 +18,25 @@ export class FCMenu extends FC {
   connectedCallback(): void {
     super.connectedCallback()
 
-    this.addEventListener('change', this.handleChange)
-    this.addEventListener('keydown', this.handleKeydown)
-    this.addEventListener('click', this.handleClick)
     this.setAttribute('aria-orientation', 'vertical')
     this.setAttribute('aria-expanded', 'true')
+
+    this.addEventListener('change', this.handleChange)
+    this.addEventListener('click', this.handleClick)
+    this.addEventListener('keydown', this.handleKeydown)
+    this.addEventListener('mouseenter', this.handleMouseenter, true)
+    this.addEventListener('mouseleave', this.handleMouseleave, true)
+    this.addEventListener('focusout', this.handleFocusout)
   }
 
   disconnectedCallback(): void {
     super.disconnectedCallback()
 
     this.removeEventListener('change', this.handleChange)
-    this.removeEventListener('keydown', this.handleKeydown)
     this.removeEventListener('click', this.handleClick)
+    this.removeEventListener('keydown', this.handleKeydown)
+    this.removeEventListener('mouseenter', this.handleMouseenter, true)
+    this.removeEventListener('mouseleave', this.handleMouseleave)
   }
 
   setTopIndex(): HTMLElement | undefined {
@@ -78,6 +85,11 @@ export class FCMenu extends FC {
   }
 
   handleKeydown(e: KeyboardEvent): void {
+    const { target } = e
+    if (!(isHTMLElement(target) && target.closest<FCMenu>('fc-menu') === this)) {
+      return
+    }
+
     switch (e.key) {
       case 'ArrowUp':
         this.focusCurrentOrNext(e, -1)
@@ -94,6 +106,18 @@ export class FCMenu extends FC {
       case 'ArrowRight':
         this.expand(e)
         break
+      case 'Enter': {
+        if (isMenuItem(e.target)) {
+          e.target.dispatchEvent(new MouseEvent('click', { bubbles: false, composed: true }))
+        }
+        break
+      }
+      case 'Escape': {
+        if (isMenuItem(e.target)) {
+          e.target.blur()
+        }
+        break
+      }
     }
   }
 
@@ -104,8 +128,11 @@ export class FCMenu extends FC {
       return
     }
 
-    const target = focusFirstOrNext(avaliableItems, delta)
-    if (target) e.preventDefault()
+    const target = getNextFocusableElement(avaliableItems, delta)
+    if (target) {
+      e.preventDefault()
+      target.focus()
+    }
     return target
   }
 
@@ -126,7 +153,7 @@ export class FCMenu extends FC {
       target.expanded = true
       const submenu = target.submenu?.[0]
       if (submenu) {
-        target.tabIndex = -1
+        // target.tabIndex = -1
         return submenu.setTopIndex()
       }
       return target
@@ -140,7 +167,7 @@ export class FCMenu extends FC {
       const parentItem = target.parentElement?.closest<FCMenuItem>('fc-menu-item')
       if (parentItem instanceof FCMenuItem) {
         parentItem.expanded = false
-        parentItem.tabIndex = 0
+        // parentItem.tabIndex = 0
         parentItem.focus()
         return parentItem
       }
@@ -149,11 +176,80 @@ export class FCMenu extends FC {
 
   handleClick(e: MouseEvent): void {
     const { target } = e
-    if (isHTMLElement(target) && this.items.includes(target)) {
+    if (isMenuItem(target) && target.closest<FCMenu>('fc-menu') === this) {
       this.resetTabIndex()
-      target.tabIndex = 0
+      // target.tabIndex = 0
 
       target.focus()
+    }
+  }
+
+  @observer<FCMenu, number>({
+    attribute: false,
+    hasChanged: ignoreInitChanged,
+    converter(v) {
+      return Number(v) >= 0 ? v : 240
+    },
+  })
+  mouseenterDelay = 240
+  mouseenterDelayChanged(old: number, next: number): void {
+    this.removeEventListener('mouseenter', this.handleMouseenter, true)
+    if (next > 0) {
+      this.handleMouseenter = debounce(this.#handleMouseenter, next, { trailing: true })
+    } else {
+      const fn = this.#handleMouseenter as DebouncedFunc<(e: MouseEvent) => void>
+      fn.cancel = noop
+      fn.flush = noop
+      this.handleMouseenter = fn
+    }
+    this.addEventListener('mouseenter', this.handleMouseenter, true)
+  }
+
+  #handleMouseenter(e: MouseEvent): void {
+    const { target } = e
+    if (!(isHTMLElement(target) && target.closest('fc-menu') === this)) {
+      return
+    }
+
+    this.items.find(item => {
+      if (isMenuItem(item) && item.expanded) {
+        item.expanded = false
+      }
+    })
+
+    const menuItem = target.closest<FCMenuItem>('fc-menu-item')
+    if (isMenuItem(menuItem) && !menuItem.disabled && menuItem.submenu?.length) {
+      menuItem.expanded = true
+    }
+  }
+
+  handleMouseenter = debounce(
+    (e: MouseEvent) => {
+      this.#handleMouseenter(e)
+    },
+    this.mouseenterDelay,
+    { trailing: true }
+  )
+
+  handleMouseleave(e: MouseEvent): void {
+    const { target, relatedTarget } = e
+    if (isMenuItem(target) && !target.disabled && target.submenu?.length) {
+      target.expanded = false
+    } else if (target === this && !(isMenuItem(relatedTarget) && this.contains(relatedTarget))) {
+      this.handleMouseenter.cancel()
+    }
+  }
+
+  handleFocusout(e: FocusEvent): void {
+    const { relatedTarget, currentTarget } = e
+
+    if (!(isHTMLElement(currentTarget) && currentTarget.matches('fc-menu'))) {
+      return
+    }
+
+    const parentItem = currentTarget.closest<FCMenuItem>('fc-menu-item')
+    if (parentItem && !(isHTMLElement(relatedTarget) && currentTarget.contains(relatedTarget))) {
+      parentItem.expanded = false
     }
   }
 

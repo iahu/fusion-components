@@ -1,16 +1,13 @@
 import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
+import checkboxStyle from '../checkbox/style.css'
 import { observer, queryAll } from '../decorators'
 import { FC } from '../fusion-component'
-import { isHTMLElement } from '../helper'
 import type { FCMenu } from '../menu'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
-import { debounce } from 'lodash-es'
-
-import style from './style.css'
 import radioStyle from '../radio/style.css'
-import checkboxStyle from '../checkbox/style.css'
+import style from './style.css'
 
 const InputRoles = ['menuitemradio', 'menuitemcheckbox']
 
@@ -23,28 +20,24 @@ export class FCMenuItem extends FC {
 
   connectedCallback(): void {
     super.connectedCallback()
-
     this.addEventListener('click', this.handleClick)
-    this.addEventListener('keydown', this.handleKeydown)
-    this.addEventListener('mouseenter', this.handleMouseenter)
-    this.addEventListener('mouseleave', this.handleMouseleave)
-    this.addEventListener('focusout', this.handleFocusout)
   }
 
   disconnectedCallback(): void {
     super.disconnectedCallback()
     this.removeEventListener('click', this.handleClick)
-    this.removeEventListener('keydown', this.handleKeydown)
-    this.removeEventListener('mouseenter', this.handleMouseenter)
-    this.removeEventListener('mouseleave', this.handleMouseleave)
-    this.removeEventListener('focusout', this.handleFocusout)
   }
 
   get isInputRole(): boolean {
     return InputRoles.includes(this.role)
   }
 
-  @observer({ type: 'boolean' })
+  @observer<FCMenuItem>({
+    type: 'boolean',
+    hasChanged(oldValue, nextValue, host) {
+      return !host.disabled
+    },
+  })
   checked = false
   checkedChanged(oldValue: boolean | undefined, nextValue: boolean): void {
     if (this.isInputRole) {
@@ -68,10 +61,7 @@ export class FCMenuItem extends FC {
   @observer<FCMenuItem>({
     reflect: true,
     hasChanged(value, next, host) {
-      if (value !== undefined && !host.disabled && host.submenu?.length) {
-        return true
-      }
-      return false
+      return value !== undefined && !host.disabled
     },
   })
   expanded = this.hasAttribute('expanded')
@@ -111,46 +101,6 @@ export class FCMenuItem extends FC {
 
   handleClick(e: MouseEvent): void {
     this.checked = !this.disabled && this.isInputRole && (this.role === 'menuitemradio' || !this.checked)
-  }
-
-  handleKeydown(e: KeyboardEvent): void {
-    if (e.key === 'Enter') {
-      this.dispatchEvent(new MouseEvent('click', { bubbles: false }))
-    } else if (e.key === 'Escape') {
-      this.blur()
-    }
-  }
-
-  @observer()
-  mouseenterDelay = 340
-
-  handleMouseenter = debounce(
-    (e: MouseEvent): void => {
-      if (this.disabled || !this.submenu?.length) {
-        return
-      }
-
-      this.expanded = !this.disabled
-      this.expanded = !this.disabled
-    },
-    this.mouseenterDelay,
-    { leading: true }
-  )
-
-  handleMouseleave(e: MouseEvent): void {
-    if (this.disabled || !this.submenu?.length) {
-      return
-    }
-    this.expanded = false
-  }
-
-  handleFocusout(e: FocusEvent): void {
-    const { relatedTarget } = e
-    const outerTarget = !relatedTarget || (isHTMLElement(relatedTarget) && relatedTarget.contains(this))
-    if (this.submenu?.length && outerTarget) {
-      this.expanded = false
-      this.tabIndex = 0
-    }
   }
 
   render(): TemplateResult {
