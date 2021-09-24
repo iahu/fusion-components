@@ -1,24 +1,14 @@
-import multiInput from 'rollup-plugin-multi-input'
+import typescript from '@rollup/plugin-typescript'
 import importCss from 'rollup-plugin-lit-css'
-import typescript from 'rollup-plugin-typescript2'
-
-const input = ['./src/**/*.ts', '!./src/**/*.stories.ts', '!./src/**/*.test.ts']
-const exclude = input.filter(s => s.startsWith('!')).map(s => s.slice(1))
+import multiInput from 'rollup-plugin-multi-input'
 
 /**
  * @type {import('rollup').RollupOptions}
  */
 export default {
-  input,
+  input: ['./src/**/*.ts', '!./src/**/*.stories.ts', '!./src/**/*.test.ts'],
   output: { dir: './dist/esm', format: 'esm', sourcemap: true },
-  plugins: [
-    multiInput(),
-    typescript({
-      tsconfig: './tsconfig.json',
-      tsconfigOverride: { exclude },
-    }),
-    importCss(),
-  ],
+  plugins: [typescript({ tsconfig: './tsconfig.build.json' }), importCss(), multiInput()],
   external: [
     'lit',
     'lit/decorators.js',
@@ -27,5 +17,6 @@ export default {
     'exp-calc',
     '@open-wc/testing',
     'sinon',
+    'lodash-es',
   ],
 }
