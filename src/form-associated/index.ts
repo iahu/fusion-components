@@ -282,7 +282,7 @@ export default class FormAssociated extends FC {
     this.dirtyValue = true
     const { proxy } = this
 
-    if (!supportsElementInternals) {
+    if (this.proxy instanceof HTMLInputElement) {
       if (typeof next === 'string') {
         proxy.value = next
       } else if (next === null) {

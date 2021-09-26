@@ -45,11 +45,13 @@ export class FCSelect extends FCListBox {
       return
     }
 
+    super.valueChanged?.(old, next)
     this.visibleOptions.find(op => op.select)?.select(false)
     const nextOption = this.visibleOptions.find(op => op.value === next)
     if (nextOption) {
       nextOption.select(true)
     }
+    this.emit('change', { old, next })
   }
 
   @observer({ reflect: true })

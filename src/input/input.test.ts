@@ -15,6 +15,27 @@ describe('fc-input', function () {
     expect(input.value).to.equal('foo')
   })
 
+  it('should set value to "bar"', async () => {
+    const input: FCInput = await fixture(html`<fc-input value="foo"></fc-input>`)
+    await nextFrame()
+
+    input.value = 'bar'
+    await elementUpdated(input)
+    expect(input.value).to.equal('bar')
+  })
+
+  it('dispatch a change event when value updated', async () => {
+    const input: FCInput = await fixture(html`<fc-input value="foo"></fc-input>`)
+    await nextFrame()
+
+    const fn = Sinon.spy()
+    input.addEventListener('change', fn)
+    input.value = 'bar'
+    await elementUpdated(input)
+    expect(input.value).to.equal('bar')
+    expect(fn.called).to.be.true
+  })
+
   it('should focus on the shadow input', async () => {
     const input: FCInput = await fixture(html`<fc-input></fc-input>`)
 

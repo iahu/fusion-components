@@ -106,7 +106,7 @@ export class FCInput extends FormAssociated {
   }
 
   @observer()
-  name = 'text'
+  name = ''
 
   @observer()
   placeholder?: string
@@ -190,6 +190,11 @@ export class FCInput extends FormAssociated {
 
   @observer({ reflect: true })
   tabIndex = 0
+
+  valueChanged(old: any, next: any): void {
+    super.valueChanged(old, next)
+    this.emit('change', { old, next })
+  }
 
   @observer()
   width?: string

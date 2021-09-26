@@ -1,7 +1,7 @@
-import resolve, { nodeResolve } from '@rollup/plugin-node-resolve'
+import { nodeResolve } from '@rollup/plugin-node-resolve'
+import typescript from '@rollup/plugin-typescript'
 import importCss from 'rollup-plugin-lit-css'
 import { terser } from 'rollup-plugin-terser'
-import typescript from '@rollup/plugin-typescript'
 
 /**
  * @type {import('rollup').RollupOptions}
@@ -21,7 +21,6 @@ export default {
   ],
   plugins: [
     nodeResolve({ exportConditions: ['development'] }),
-    resolve(),
     typescript({
       tsconfig: './tsconfig.build.json',
       declaration: false,

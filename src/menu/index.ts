@@ -153,8 +153,9 @@ export class FCMenu extends FC {
       target.expanded = true
       const submenu = target.submenu?.[0]
       if (submenu) {
-        // target.tabIndex = -1
-        return submenu.setTopIndex()
+        this.updateComplete.then(() => {
+          submenu.setTopIndex()?.focus()
+        })
       }
       return target
     }
@@ -210,6 +211,8 @@ export class FCMenu extends FC {
     if (!(isHTMLElement(target) && target.closest('fc-menu') === this)) {
       return
     }
+
+    target.focus()
 
     this.items.find(item => {
       if (isMenuItem(item) && item.expanded) {

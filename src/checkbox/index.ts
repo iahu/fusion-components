@@ -36,7 +36,8 @@ export class FCCheckbox extends FormAssociated {
 
   @observer()
   value = 'on'
-  protected valueChanged(old: string, next: string): void {
+  valueChanged(old: string, next: string): void {
+    super.valueChanged(old, next)
     this.dirtyValue = true
     if (this.proxy) {
       this.proxy.value = next

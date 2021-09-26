@@ -65,7 +65,7 @@ export class FCRadioGroup extends FC {
 
   @observer()
   value = ''
-  protected valueChanged(): void {
+  valueChanged(old: string, next: string): void {
     this.reorderTabindex()
   }
 

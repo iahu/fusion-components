@@ -68,25 +68,25 @@ export class FCMenuItem extends FC {
   expandedChanged(old: boolean, next: boolean): void {
     this.setAttribute('aria-expanded', next.toString())
 
-    if (next && !this.contains(document.activeElement)) {
-      this.updateComplete.then(() => {
-        if (this.submenu) {
-          this.submenu[0]?.setTopIndex()?.focus()
-        } else {
-          this.focus()
-        }
-      })
-    }
+    // if (next && !this.contains(document.activeElement)) {
+    //   this.updateComplete.then(() => {
+    //     if (this.submenu) {
+    //       this.submenu[0]?.setTopIndex()?.focus()
+    //     } else {
+    //       this.focus()
+    //     }
+    //   })
+    // }
 
-    if (typeof old === 'boolean') {
-      this.emit('expanded', { old, next })
+    // if (typeof old === 'boolean') {
+    //   this.emit('expanded', { old, next })
 
-      if (next && this === document.activeElement && this.submenu?.length) {
-        const submenu = this.submenu[0]
-        const topindex = submenu?.setTopIndex?.()
-        submenu.updateComplete.then(() => topindex?.focus())
-      }
-    }
+    //   if (next && this === document.activeElement && this.submenu?.length) {
+    //     const submenu = this.submenu[0]
+    //     const topindex = submenu?.setTopIndex?.()
+    //     submenu.updateComplete.then(() => topindex?.focus())
+    //   }
+    // }
   }
 
   @observer({ reflect: true })

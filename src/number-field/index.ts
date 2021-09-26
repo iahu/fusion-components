@@ -81,8 +81,8 @@ export class FCNumberFiled extends FCInput {
     },
   })
   value = ''
-  protected valueChanged(old: string, next: string): void {
-    super.valueChanged?.(old, next)
+  valueChanged(old: string, next: string): void {
+    super.valueChanged(old, next)
     if (this.shadowInput instanceof HTMLInputElement) {
       this.shadowInput.value = next
     }
