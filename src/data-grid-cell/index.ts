@@ -51,12 +51,10 @@ export class FCDataGridCell extends FC {
   @observer({ reflect: true })
   collpase = false
 
-  @observer({ reflect: true })
+  @observer({ reflect: true, hasChanged: ignoreInitChanged })
   open = false
   openChanged(old: boolean, next: boolean): void {
-    if (typeof old === 'boolean') {
-      this.emit('open')
-    }
+    this.emit('open', { old, next })
   }
 
   @observer<FCDataGridCell>({

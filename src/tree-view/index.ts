@@ -68,7 +68,7 @@ export class FCTreeView extends FC {
     if (next) {
       next.selected = true
       next.tabIndex = 0
-      next.focus()
+      // next.focus()
     }
   }
 

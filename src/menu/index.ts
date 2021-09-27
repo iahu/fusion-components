@@ -212,8 +212,6 @@ export class FCMenu extends FC {
       return
     }
 
-    target.focus()
-
     this.items.find(item => {
       if (isMenuItem(item) && item.expanded) {
         item.expanded = false

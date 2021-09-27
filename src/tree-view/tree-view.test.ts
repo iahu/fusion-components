@@ -59,6 +59,52 @@ describe('fc-tree-view', function () {
     expect(secondItem).eq(document.activeElement)
   })
 
+  it('should focus the second visible item', async () => {
+    const tree: FCTreeView = await fixture(html`
+      <fc-tree-view>
+        <fc-tree-item id="first-item">
+          <span>水果</span>
+          <fc-tree-item><span slot="before">🍎</span>苹果</fc-tree-item>
+          <fc-tree-item><span slot="before">🍊</span>橘子</fc-tree-item>
+          <fc-tree-item><span slot="before">🍌</span>香蕉</fc-tree-item>
+        </fc-tree-item>
+        <fc-tree-item expanded id="second-item">
+          <span>蔬菜</span>
+          <fc-tree-item id="second-item-sub-item">
+            <span>茄果类</span>
+            <fc-tree-item><span slot="before">🍆</span>茄子</fc-tree-item>
+            <fc-tree-item><span slot="before">🍅</span>西红柿</fc-tree-item>
+            <fc-tree-item disabled><span slot="before">🥒</span>黄瓜</fc-tree-item>
+            <fc-tree-item><span slot="before">🎃</span>南瓜</fc-tree-item>
+          </fc-tree-item>
+          <fc-tree-item>
+            <span>根茎类</span>
+            <fc-tree-item><span slot="before">🥕</span>胡萝卜</fc-tree-item>
+            <fc-tree-item><span slot="before">🌽</span>玉米</fc-tree-item>
+            <fc-tree-item><span slot="before">🍠</span>地瓜</fc-tree-item>
+            <fc-tree-item><span slot="before">🥔</span>土豆</fc-tree-item>
+          </fc-tree-item>
+        </fc-tree-item>
+        <fc-tree-item>粮油</fc-tree-item>
+      </fc-tree-view>
+    `)
+
+    const firstItem = tree.querySelector<FCTreeItem>('#first-item')!
+    const secondItem = tree.querySelector<FCTreeItem>('#second-item')!
+    firstItem.focus()
+    firstItem.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }))
+
+    await nextFrame()
+    expect(secondItem.tabIndex).eq(0)
+    expect(secondItem).eq(document.activeElement)
+
+    secondItem.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }))
+    const secondItemSubItem = secondItem.querySelector<FCTreeItem>('#second-item-sub-item')!
+    await nextFrame()
+    expect(secondItemSubItem.tabIndex).eq(0)
+    expect(secondItemSubItem).eq(document.activeElement)
+  })
+
   it('should focus the first item', async () => {
     const tree: FCTreeView = await fixture(html`<fc-tree-view>
       <fc-tree-item>foo</fc-tree-item>

@@ -109,8 +109,33 @@ describe('fc-menu', function () {
     水果.dispatchEvent(arrowRight)
     await elementUpdated(menu)
     expect(水果.expanded).to.be.true
+  })
 
+  it('should focus submenu first item while pressed ArrowRight', async () => {
+    const menu: FCMenu = await fixture(html`
+      <fc-menu>
+        <fc-menu-item id="水果">
+          <span>水果</span>
+          <fc-menu slot="submenu">
+            <fc-menu-item id="苹果">苹果</fc-menu-item>
+            <fc-menu-item id="香蕉">香蕉</fc-menu-item>
+            <fc-menu-item id="橘子">橘子</fc-menu-item>
+            <fc-menu-item id="梨">梨</fc-menu-item>
+          </fc-menu>
+        </fc-menu-item>
+      </fc-menu>
+    `)
+
+    await nextFrame()
+
+    const 水果 = menu.querySelector<FCMenuItem>('#水果')!
+    水果.focus()
+
+    const arrowRight = new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true })
+    // 从`水果`冒泡到 menu 不是直接 menu.dispatchEvent(arrowRight)
+    水果.dispatchEvent(arrowRight)
     await elementUpdated(menu)
+
     const 苹果 = menu.querySelector('#苹果')
     expect(document.activeElement).to.eq(苹果)
   })

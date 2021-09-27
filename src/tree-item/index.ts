@@ -1,6 +1,6 @@
 import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
-import { observer, queryAll } from '../decorators'
+import { ignoreInitChanged, observer, queryAll } from '../decorators'
 import { FC } from '../fusion-component'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
@@ -16,6 +16,7 @@ export class FCTreeItem extends FC {
   connectedCallback(): void {
     super.connectedCallback()
 
+    this.setAttribute('aria-expanded', String(this.hasAttribute('expanded')))
     this.addEventListener('keydown', this.handleKeydown)
   }
 
@@ -81,9 +82,7 @@ export class FCTreeItem extends FC {
 
   @observer<FCTreeItem, boolean>({
     reflect: true,
-    hasChanged(old, next, host) {
-      return old !== undefined && !host.disabled
-    },
+    hasChanged: ignoreInitChanged,
   })
   expanded = false
   protected expandedChanged(old: boolean, next: boolean): void {

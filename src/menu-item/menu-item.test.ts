@@ -1,5 +1,4 @@
-import { aTimeout, elementUpdated, expect, fixture, html, nextFrame } from '@open-wc/testing'
-
+import { elementUpdated, expect, fixture, html, nextFrame } from '@open-wc/testing'
 import '../menu'
 import './index'
 import type { FCMenuItem } from './index'
@@ -87,23 +86,5 @@ describe('fc-menu-item', function () {
     menuitem.expanded = false
     await elementUpdated(menuitem)
     expect(menuitem.expanded).be.false
-  })
-
-  it('should focus first menu item of submenu', async () => {
-    const menuitem: FCMenuItem = await fixture(html`<fc-menu-item>
-      <span>foo</span>
-      <fc-menu slot="submenu">
-        <fc-menu-item id="foo">foo</fc-menu-item>
-        <fc-menu-item id="bar">bar</fc-menu-item>
-        <fc-menu-item id="baz">baz</fc-menu-item>
-      </fc-menu>
-    </fc-menu-item>`)
-
-    await nextFrame()
-    menuitem.focus()
-    menuitem.expanded = true
-    const foo = menuitem.querySelector<FCMenuItem>('#foo')!
-    await elementUpdated(menuitem)
-    expect(document.activeElement).to.eq(foo)
   })
 })

@@ -86,3 +86,9 @@ export const getCallback = (o: any, key: PropertyKey) => {
 }
 
 export const clamp = (min: number, max: number, num: number): number => Math.min(max, Math.max(min, num))
+
+export const delay = (wait = 100): Promise<boolean> => {
+  return new Promise(resolve => {
+    setTimeout(() => resolve(true), wait)
+  })
+}
