@@ -1,6 +1,6 @@
 import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
-import { observer } from '../decorators'
+import { ignoreInitChanged, observer } from '../decorators'
 import { FC } from '../fusion-component'
 import mergeStyles from '../merge-styles'
 
@@ -58,12 +58,14 @@ export class FCDialog extends FC {
         this.focus()
       })
     }
-    this.emit('change', { old, next })
-    this.emit('visibleChange', { old, next })
+    if (typeof old === 'boolean') {
+      this.emit('change', { old, next })
+      this.emit('visibleChange', { old, next })
+    }
   }
 
   @observer({ reflect: true })
-  protected role = 'dialog'
+  role = 'dialog'
 
   show(): void {
     this.hidden = false
