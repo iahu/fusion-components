@@ -1,4 +1,4 @@
-import { expect, fixture, html, nextFrame } from '@open-wc/testing'
+import { elementUpdated, expect, fixture, html, nextFrame } from '@open-wc/testing'
 import { FCTreeItem } from '../tree-item'
 import './index'
 import { FCTreeView } from './index'
@@ -130,10 +130,10 @@ describe('fc-tree-view', function () {
     </fc-tree-view>`)
 
     const firstItem = tree.items![0]
-    firstItem.focus()
+    // firstItem.focus()
     firstItem.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }))
 
-    await nextFrame()
+    await elementUpdated(tree)
     expect(firstItem.expanded).be.true
     expect(firstItem.items![0]).eq(document.activeElement)
   })
@@ -147,7 +147,7 @@ describe('fc-tree-view', function () {
     </fc-tree-view>`)
 
     const bar = tree.querySelector<FCTreeItem>('#bar')!
-    bar.focus()
+    // bar.focus()
     bar.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true }))
 
     await nextFrame()

@@ -16,7 +16,6 @@
     "build": "cross-env NODE_ENV=production yarn build:esm && yarn build:bundle",
     "build:esm": "rollup --config rollup.config.esm.js",
     "build:bundle": "rollup --config rollup.config.bundle.js",
-    "build:test": "cross-env NODE_ENV=test yarn build:esm",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook -o ./docs",
     "prettier": "prettier --fix --write ./src/**/*.ts",

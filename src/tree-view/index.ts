@@ -110,6 +110,7 @@ export class FCTreeView extends FC {
 
   focusNext(delta: number): void {
     if (this.focusableItems) {
+      this.focus()
       focusFirstOrNext(this.focusableItems, delta)
     }
   }
@@ -121,7 +122,11 @@ export class FCTreeView extends FC {
     }
 
     e.preventDefault()
+    this.focus()
     target.expanded = true
+    target.updateComplete.then(() => {
+      target.items?.[0].focus()
+    })
   }
 
   #collapseOrFocusParent(e: KeyboardEvent): void {
@@ -131,6 +136,7 @@ export class FCTreeView extends FC {
     }
 
     e.preventDefault()
+    this.focus()
     if (target.expanded) {
       target.expanded = false
       target.focusItem(true)

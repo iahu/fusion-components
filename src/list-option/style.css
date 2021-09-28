@@ -39,6 +39,7 @@
   background: var(--accent-color-disabled);
 }
 .control {
+  display: flex;
   color: inherit;
   align-items: center;
   background-color: inherit;
