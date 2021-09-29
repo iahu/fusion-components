@@ -64,9 +64,15 @@ export class FCComboBox extends FCSelect {
     return this.shadowRoot?.querySelector('.selected-value')
   }
 
+  displayValueChanged(old: string | undefined, next: string): void {
+    if (typeof old === 'string') {
+      this.open = false
+    }
+    this.inputValue = next
+  }
+
   selectedOptionChanged(old: FCListOption, next: FCListOption): void {
     super.selectedOptionChanged(old, next)
-
     if (next) {
       this.inputValue = next.text
     }
@@ -84,8 +90,14 @@ export class FCComboBox extends FCSelect {
       if (nextOption) {
         nextOption.select(true)
         this.selectedOption = nextOption
+      } else {
+        this.inputValue = next
       }
     })
+
+    this.emit('change', { old, next })
+    this.setFormValue(next)
+    this.validate()
   }
 
   @observer({ attribute: false })
@@ -96,6 +108,7 @@ export class FCComboBox extends FCSelect {
     } else {
       this.updateComplete.then(() => this.filterOptions(next))
     }
+    this.displayValue = next
   }
 
   handleLabelClick(e: MouseEvent): void {

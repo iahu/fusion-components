@@ -64,7 +64,7 @@ describe('fc-tree-item', function () {
     expect(treeItem.expanded).be.true
   })
 
-  it('should be selected when clicking on expand button', async () => {
+  it('should be selected when click on expand button', async () => {
     const treeItem = await fixture<FCTreeItem>(html`
       <fc-tree-item>
         <button slot="expand-collapse-button">cool</button>

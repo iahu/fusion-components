@@ -1,9 +1,8 @@
 import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
-import { ignoreInitChanged, observer } from '../decorators'
+import { observer } from '../decorators'
 import { FC } from '../fusion-component'
 import mergeStyles from '../merge-styles'
-
 import style from './style.css'
 
 @customElement('fc-dialog')
@@ -22,7 +21,7 @@ export class FCDialog extends FC {
     this.removeEventListener('close', this.handleClose)
   }
 
-  @observer()
+  @observer({ initCallback: true })
   anchor: string | null = this.getAttribute('anchor')
   anchorChanged(): void {
     const { anchor } = this

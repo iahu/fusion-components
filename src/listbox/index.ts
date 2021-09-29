@@ -47,9 +47,9 @@ export class FCListBox extends FormAssociated {
   @observer({ reflect: true })
   role = 'listbox'
 
-  @observer()
+  @observer({ initCallback: true })
   value = this.getAttribute('value') ?? ''
-  protected valueChanged(old: string, next: string): void {
+  valueChanged(old: string, next: string): void {
     if (!this.selectable || (!this.hasAttribute('value') && !next)) {
       return
     }
@@ -94,9 +94,9 @@ export class FCListBox extends FormAssociated {
   }
 
   // 可以避免 value 相同时，设置 value 导致选择错乱的问题
-  @observer({ attribute: false })
+  @observer({ attribute: false, initCallback: true })
   selectedOption?: FCListOption
-  protected selectedOptionChanged(old?: FCListOption, next?: FCListOption): void {
+  selectedOptionChanged(old?: FCListOption, next?: FCListOption): void {
     if (old) {
       old.focusItem(false)
       old.select(false)

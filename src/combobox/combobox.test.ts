@@ -31,7 +31,7 @@ describe('fc-combobox', function () {
     expect(el2.value, 'el2').to.eq('foo')
   })
 
-  it('should set value matched list-option to selected', async () => {
+  it('should select matched list-option', async () => {
     const el: FCComboBox = await fixture(html`<fc-combobox value="foo">
       <fc-list-option value="foo"></fc-list-option>
       <fc-list-option value="bar"></fc-list-option>

@@ -267,6 +267,7 @@ export default class FormAssociated extends FC {
 
   @observer<FormAssociated, FormValue>({
     type: 'any',
+    initCallback: true,
     converter(v, host) {
       const { proxy } = host
       if (proxy instanceof HTMLInputElement && proxy.type === 'file') {

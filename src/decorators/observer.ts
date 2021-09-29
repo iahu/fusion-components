@@ -1,5 +1,4 @@
 import { LitElement } from 'lit'
-import FusionComponent from '../fusion-component'
 import { getCallback, PromiseLike, propKey2Str } from '../helper'
 
 export type TypeCotr = { new (...args: any[]): any }
@@ -142,7 +141,7 @@ export type ObservedProperties<T extends HTMLElement, V = any> = Map<PropertyKey
 export const observedPropsKey = 'observedProperties'
 
 export const observer = function <T extends LitElement, V = any>(options?: RawObserverOptions<T, V>) {
-  const { reflect = false, attribute = true, init = true, initCallback = true, hasChanged = beChanged } = options || {}
+  const { reflect = false, attribute = true, init = true, initCallback = false, hasChanged = beChanged } = options || {}
   return function (proto: T, key: string): void {
     const ctor = proto.constructor
 
@@ -232,17 +231,18 @@ export function observeProp(this: any, observedProps: Map<string, ObserverOption
           if (!callback && typeof cb === 'function') {
             callback = cb
           }
-          const shouldCallback = initCallback || inited
+          const shouldCallback = inited || initCallback || !attribute || oldValue !== undefined
           if (shouldCallback && typeof callback === 'function') {
             callback.call(this, oldValue, currentValue)
+          }
+
+          if (!inited) {
+            inited = true
           }
         })
 
         // update
         this.requestUpdate(propKey, oldValue, { attribute: mergedAttrName, noAccessor: true })
-        if (!inited && oldValue !== undefined) {
-          inited = true
-        }
       }
     },
   })

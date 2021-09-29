@@ -28,7 +28,7 @@ export class FCSelect extends FCListBox {
     this.removeEventListener('focusout', this.handleFocusout)
   }
 
-  private displayValueChanged(old: string | undefined, next: string): void {
+  displayValueChanged(old: string | undefined, next: string): void {
     if (typeof old === 'string') {
       this.open = false
     }
@@ -54,7 +54,7 @@ export class FCSelect extends FCListBox {
     this.emit('change', { old, next })
   }
 
-  @observer({ reflect: true })
+  @observer({ reflect: true, initCallback: true })
   open = this.hasAttribute('open')
   openChanged(old: boolean, next: boolean): void {
     this.setAttribute('aria-expanded', String(next))

@@ -32,7 +32,7 @@ export class FCPanel extends FC {
 
   #defaultHeader?: FCPanelHeader
 
-  @observer()
+  @observer({ initCallback: true })
   header?: string
   headerChanged(old: string, next: string): void {
     if (next) {

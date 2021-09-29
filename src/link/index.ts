@@ -26,7 +26,7 @@ export class FCLink extends FC {
   @observer({ reflect: true })
   appearance = 'button'
 
-  @observer({ reflect: true })
+  @observer({ reflect: true, initCallback: true })
   download = ''
   downloadChanged(old: string, next: string): void {
     if (this.control) {
@@ -34,7 +34,7 @@ export class FCLink extends FC {
     }
   }
 
-  @observer({ reflect: true })
+  @observer({ reflect: true, initCallback: true })
   href = ''
   hrefChanged(old: string, next: string): void {
     if (this.control) {

@@ -1,6 +1,6 @@
 import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
-import { ignoreInitChanged, observer } from '../decorators'
+import { observer } from '../decorators'
 import FormAssociated from '../form-associated'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
@@ -46,20 +46,15 @@ export class FCListOption extends FormAssociated {
 
   @observer<FCListOption>({
     reflect: true,
-    hasChanged: ignoreInitChanged,
+    // initCallback: true,
     converter(v: boolean, host) {
       return host.selectable && v
     },
   })
   selected = false
   protected selectedChanged(old: boolean, next: boolean): void {
-    if (old === undefined) {
-      return
-    }
+    this.emit('select')
     this.setAttribute('tabindex', String(Number(next) - 1))
-    if (typeof old === 'boolean') {
-      this.emit('select')
-    }
     if (this.proxy instanceof HTMLInputElement) {
       this.proxy.checked = next
     }
@@ -74,27 +69,28 @@ export class FCListOption extends FormAssociated {
   @observer({ attribute: false })
   defaultSelected = this.hasAttribute('selected')
 
-  @observer({ type: 'boolean', reflect: true })
-  disabled = false
+  // @observer({ type: 'boolean', reflect: true })
+  // disabled = false
 
-  @observer()
-  name = ''
-  nameChanged(old: string, next: string): void {
-    if (this.proxy) {
-      this.proxy.name = next
-    }
-  }
+  // @observer()
+  // name = ''
+  // nameChanged(old: string, next: string): void {
+  //   if (this.proxy) {
+  //     this.proxy.name = next
+  //   }
+  // }
 
-  @observer()
-  value = ''
+  // @observer({ initCallback: true })
+  value = this.getAttribute('value') ?? ''
   valueChanged(old: string, next: string): void {
+    super.valueChanged(old, next)
     if (this.proxy) {
       this.proxy.value = next
     }
   }
 
-  @observer()
-  required = false
+  // @observer()
+  // required = false
 
   // 不能真的获取焦点，因为在 comobox 下，焦点应该在输入框上
   focusItem(focused = true): void {

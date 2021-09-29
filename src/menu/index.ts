@@ -181,6 +181,7 @@ export class FCMenu extends FC {
       this.resetTabIndex()
       // target.tabIndex = 0
 
+      target.expanded = true
       target.focus()
     }
   }
@@ -221,6 +222,7 @@ export class FCMenu extends FC {
     const menuItem = target.closest<FCMenuItem>('fc-menu-item')
     if (isMenuItem(menuItem) && !menuItem.disabled && menuItem.submenu?.length) {
       menuItem.expanded = true
+      menuItem.focus()
     }
   }
 

@@ -35,7 +35,7 @@ export class FCTreeItem extends FC {
     }
   }
 
-  @observer()
+  @observer({ initCallback: true })
   @queryAll('fc-tree-item')
   items?: FCTreeItem[]
   itemsChanged(old: FCTreeItem[], next: FCTreeItem[]): void {
@@ -74,15 +74,15 @@ export class FCTreeItem extends FC {
     this.emit('selectionChange', { old, next })
   }
 
-  @observer({ attribute: false, reflect: true })
-  private hasChild = this.hasAttribute('hasChild')
+  @observer({ attribute: false, reflect: true, initCallback: true })
+  private hasChild = false
 
   @observer({ reflect: true })
   indent = false
 
   @observer<FCTreeItem, boolean>({
     reflect: true,
-    hasChanged: ignoreInitChanged,
+    initCallback: true,
   })
   expanded = false
   protected expandedChanged(old: boolean, next: boolean): void {
