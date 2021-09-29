@@ -132,6 +132,7 @@ abstract class FusionComponent extends LitElement {
   private classname?: string
   classnameChanged(old: string, next: string): void {
     if (next) {
+      console.warn('should use class instead of className')
       this.setAttribute('class', next)
       // react className property
       this.removeAttribute('className')

@@ -30,7 +30,7 @@ import type {
   FCTreeView,
 } from '../dist/esm'
 
-type FCMap<T> = Partial<T> | React.DetailedHTMLProps<React.HTMLAttributes<T>, T>
+type FCMap<T> = ({ class: string } & Partial<T>) | React.DetailedHTMLProps<React.HTMLAttributes<T>, T>
 
 declare global {
   namespace JSX {
