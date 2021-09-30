@@ -37,6 +37,7 @@ export class FCMenu extends FC {
     this.removeEventListener('keydown', this.handleKeydown)
     this.removeEventListener('mouseenter', this.handleMouseenter, true)
     this.removeEventListener('mouseleave', this.handleMouseleave)
+    this.removeEventListener('focusout', this.handleFocusout)
   }
 
   setTopIndex(): HTMLElement | undefined {
@@ -178,10 +179,13 @@ export class FCMenu extends FC {
   handleClick(e: MouseEvent): void {
     const { target } = e
     if (isMenuItem(target) && target.closest<FCMenu>('fc-menu') === this) {
-      this.resetTabIndex()
-      // target.tabIndex = 0
-
       target.expanded = true
+      const { activeElement } = document
+      if (activeElement instanceof HTMLElement && this.contains(activeElement)) {
+        activeElement.dispatchEvent(
+          new FocusEvent('focusout', { bubbles: true, composed: true, relatedTarget: target })
+        )
+      }
       target.focus()
     }
   }
@@ -245,8 +249,7 @@ export class FCMenu extends FC {
 
   handleFocusout(e: FocusEvent): void {
     const { relatedTarget, currentTarget } = e
-
-    if (!(isHTMLElement(currentTarget) && currentTarget.matches('fc-menu'))) {
+    if (!(isHTMLElement(currentTarget) && currentTarget.closest('fc-menu'))) {
       return
     }
 

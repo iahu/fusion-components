@@ -19,7 +19,7 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook -o ./docs",
     "prettier": "prettier --fix --write ./src/**/*.ts",
-    "pretest": "rimraf test && yarn tsc --project tsconfig.test.json --outdir test",
+    "pretest": "git status && rimraf test && yarn tsc --project tsconfig.test.json --outdir test",
     "test": "web-test-runner test/*.test.js test/**/*.test.js --node-resolve",
     "prepare": "husky install",
     "prepublish": "npm run build"
