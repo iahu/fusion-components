@@ -1,6 +1,9 @@
 import { elementUpdated, expect, fixture, html, nextFrame } from '@open-wc/testing'
 import './index'
 import { FCDropdown } from './index'
+import '../menu'
+import { FCMenu } from '../menu'
+import { FCMenuItem } from '../menu-item'
 
 describe('fc-dropdown', function () {
   it('should not throw error when createElement', async () => {
@@ -88,5 +91,38 @@ describe('fc-dropdown', function () {
     dropdown.open = true
     await elementUpdated(dropdown)
     expect(dropdown.querySelector('#foo')).eq(document.activeElement)
+  })
+
+  it('should keep open when menu close its submenu', async () => {
+    const dropdown: FCDropdown = await fixture(html`<fc-dropdown open>
+      <fc-menu>
+        <fc-menu-item id="foo">
+          <span>foo</span>
+          <fc-menu slot="submenu">
+            <fc-menu-item id="bar">bar</fc-menu-item>
+          </fc-menu>
+        </fc-menu-item>
+        <fc-menu-item id="baz">baz</fc-menu-item>
+      </fc-menu>
+    </fc-dropdown>`)
+
+    const menu = dropdown.querySelector<FCMenu>('fc-menu')!
+
+    await elementUpdated(dropdown)
+    expect(dropdown.open, 'before menu').to.be.true
+
+    const foo = menu.querySelector<FCMenuItem>('#foo')!
+    const baz = menu.querySelector<FCMenuItem>('#baz')!
+
+    foo.click()
+    await elementUpdated(foo)
+    expect(foo.expanded, 'menuitem foo will expand').be.true
+    expect(foo, 'will keep focus when expand submenu').eq(document.activeElement)
+
+    baz.click()
+    await elementUpdated(foo)
+    expect(foo.expanded, 'menuitem foo will collapse').be.false
+
+    expect(baz, 'will keep focus when collapse submenu').eq(document.activeElement)
   })
 })

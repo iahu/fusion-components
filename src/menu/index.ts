@@ -170,11 +170,14 @@ export class FCMenu extends FC {
     if (isMenuItem(target) && target.closest<FCMenu>('fc-menu') === this) {
       target.expanded = true
       const { activeElement } = document
-      if (activeElement instanceof HTMLElement && this.contains(activeElement)) {
-        activeElement.dispatchEvent(
-          new FocusEvent('focusout', { bubbles: true, composed: true, relatedTarget: target })
-        )
+      if (activeElement instanceof HTMLElement && activeElement !== target && this.contains(activeElement)) {
+        const expandedItems = Array.from(this.querySelectorAll<FCMenuItem>('fc-menu-item[expanded]'))
+        expandedItems.forEach(item => {
+          item.focus()
+          item.expanded = false
+        })
       }
+
       target.focus()
     }
   }

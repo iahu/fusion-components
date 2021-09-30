@@ -14,10 +14,10 @@
 }
 
 .listbox {
-  position: absolute;
   display: none;
+  position: absolute;
   z-index: 9;
-  overflow-y: auto;
+  /*overflow-y: auto;*/
   background: var(--box-background);
   box-shadow: var(--box-shadow);
 }

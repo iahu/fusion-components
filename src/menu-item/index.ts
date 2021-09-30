@@ -76,6 +76,9 @@ export class FCMenuItem extends FC {
   tabindex = this.getAttribute('tabindex') ?? '-1'
 
   handleClick(e: MouseEvent): void {
+    if (e.target !== this) {
+      return
+    }
     this.checked = !this.disabled && this.isInputRole && (this.role === 'menuitemradio' || !this.checked)
   }
 
