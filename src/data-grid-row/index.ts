@@ -3,7 +3,7 @@ import { customElement } from 'lit/decorators.js'
 import { FCDataGridCell } from '../data-grid-cell'
 import { assignedElements, ignoreInitChanged, observer } from '../decorators'
 import { FC } from '../fusion-component'
-import { setCSSText } from '../helper'
+import { onEvent, setCSSText } from '../helper'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
 import style from './style.css'
@@ -14,12 +14,7 @@ export class FCDataGridRow extends FC {
 
   connectedCallback(): void {
     super.connectedCallback()
-    this.addEventListener('open', this.handleOpen)
-  }
-
-  disconnectedCallback(): void {
-    super.disconnectedCallback()
-    this.removeEventListener('open', this.handleOpen)
+    onEvent(this, 'open', this.handleOpen)
   }
 
   @observer<FCDataGridRow, FCDataGridCell[]>({ attribute: false })

@@ -3,6 +3,7 @@ import { customElement } from 'lit/decorators.js'
 import checkboxStyle from '../checkbox/style.css'
 import { observer, queryAll } from '../decorators'
 import { FC } from '../fusion-component'
+import { onEvent } from '../helper'
 import type { FCMenu } from '../menu'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
@@ -20,12 +21,7 @@ export class FCMenuItem extends FC {
 
   connectedCallback(): void {
     super.connectedCallback()
-    this.addEventListener('click', this.handleClick)
-  }
-
-  disconnectedCallback(): void {
-    super.disconnectedCallback()
-    this.removeEventListener('click', this.handleClick)
+    onEvent(this, 'click', this.handleClick)
   }
 
   get isInputRole(): boolean {
@@ -67,26 +63,6 @@ export class FCMenuItem extends FC {
   expanded = this.hasAttribute('expanded')
   expandedChanged(old: boolean, next: boolean): void {
     this.setAttribute('aria-expanded', next.toString())
-
-    // if (next && !this.contains(document.activeElement)) {
-    //   this.updateComplete.then(() => {
-    //     if (this.submenu) {
-    //       this.submenu[0]?.setTopIndex()?.focus()
-    //     } else {
-    //       this.focus()
-    //     }
-    //   })
-    // }
-
-    // if (typeof old === 'boolean') {
-    //   this.emit('expanded', { old, next })
-
-    //   if (next && this === document.activeElement && this.submenu?.length) {
-    //     const submenu = this.submenu[0]
-    //     const topindex = submenu?.setTopIndex?.()
-    //     submenu.updateComplete.then(() => topindex?.focus())
-    //   }
-    // }
   }
 
   @observer({ reflect: true })

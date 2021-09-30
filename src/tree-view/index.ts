@@ -2,7 +2,7 @@ import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { observer, queryAll } from '../decorators'
 import { FC } from '../fusion-component'
-import { focusFirstOrNext, toggleTabIndex } from '../helper'
+import { focusFirstOrNext, onEvent, toggleTabIndex } from '../helper'
 import mergeStyles from '../merge-styles'
 import { FCTreeItem, isTreeItem } from '../tree-item'
 import style from './style.css'
@@ -15,19 +15,13 @@ export class FCTreeView extends FC {
 
   connectedCallback(): void {
     super.connectedCallback()
-    this.addEventListener('selectionChange', this.handleSelectionChange)
-    this.addEventListener('keydown', this.handleKeydown)
+    onEvent(this, 'selectionChange', this.handleSelectionChange)
+    onEvent(this, 'keydown', this.handleKeydown)
     this.updateComplete.then(() => {
       if (this.items?.length) {
         toggleTabIndex(this.items, 1, false)
       }
     })
-  }
-
-  disconnectedCallback(): void {
-    super.disconnectedCallback()
-    this.removeEventListener('selectionchange', this.handleSelectionChange)
-    this.removeEventListener('keydown', this.handleKeydown)
   }
 
   @queryAll('fc-tree-item')

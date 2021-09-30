@@ -2,6 +2,7 @@ import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { observer } from '../decorators'
 import FormAssociated from '../form-associated'
+import { onEvent } from '../helper'
 import mergeStyles from '../merge-styles'
 import style from './style.css'
 
@@ -24,14 +25,8 @@ export class FCCheckbox extends FormAssociated {
     this.checked = this.hasAttribute('checked')
     this.defaultChecked = this.checked
 
-    this.addEventListener('click', this.handleClick)
-    this.addEventListener('keydown', this.handleKeydown)
-  }
-
-  disconnectedCallback(): void {
-    this.removeEventListener('click', this.handleClick)
-    this.removeEventListener('keydown', this.handleKeydown)
-    this.updateForm()
+    onEvent(this, 'click', this.handleClick)
+    onEvent(this, 'keydown', this.handleKeydown)
   }
 
   @observer()

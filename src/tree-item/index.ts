@@ -1,7 +1,8 @@
 import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
-import { ignoreInitChanged, observer, queryAll } from '../decorators'
+import { observer, queryAll } from '../decorators'
 import { FC } from '../fusion-component'
+import { onEvent } from '../helper'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
 import style from './style.css'
@@ -17,13 +18,7 @@ export class FCTreeItem extends FC {
     super.connectedCallback()
 
     this.setAttribute('aria-expanded', String(this.hasAttribute('expanded')))
-    this.addEventListener('keydown', this.handleKeydown)
-  }
-
-  disconnectedCallback(): void {
-    super.disconnectedCallback()
-
-    this.removeEventListener('keydown', this.handleKeydown)
+    onEvent(this, 'keydown', this.handleKeydown)
   }
 
   focusItem(focused = true): void {

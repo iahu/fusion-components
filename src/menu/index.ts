@@ -4,7 +4,7 @@ import { debounce, DebouncedFunc, noop } from 'lodash-es'
 import { assignedElements, ignoreInitChanged, observer } from '../decorators'
 import '../divider'
 import { FC } from '../fusion-component'
-import { getNextFocusableElement, isHTMLElement, setTopIndex, tabbableElement } from '../helper'
+import { getNextFocusableElement, isHTMLElement, onEvent, setTopIndex, tabbableElement } from '../helper'
 import '../menu-item'
 import { FCMenuItem, isMenuItem } from '../menu-item'
 import mergeStyles from '../merge-styles'
@@ -21,23 +21,12 @@ export class FCMenu extends FC {
     this.setAttribute('aria-orientation', 'vertical')
     this.setAttribute('aria-expanded', 'true')
 
-    this.addEventListener('change', this.handleChange)
-    this.addEventListener('click', this.handleClick)
-    this.addEventListener('keydown', this.handleKeydown)
-    this.addEventListener('mouseenter', this.handleMouseenter, true)
-    this.addEventListener('mouseleave', this.handleMouseleave, true)
-    this.addEventListener('focusout', this.handleFocusout)
-  }
-
-  disconnectedCallback(): void {
-    super.disconnectedCallback()
-
-    this.removeEventListener('change', this.handleChange)
-    this.removeEventListener('click', this.handleClick)
-    this.removeEventListener('keydown', this.handleKeydown)
-    this.removeEventListener('mouseenter', this.handleMouseenter, true)
-    this.removeEventListener('mouseleave', this.handleMouseleave)
-    this.removeEventListener('focusout', this.handleFocusout)
+    onEvent(this, 'change', this.handleChange)
+    onEvent(this, 'click', this.handleClick)
+    onEvent(this, 'keydown', this.handleKeydown)
+    onEvent(this, 'mouseenter', this.handleMouseenter, true)
+    onEvent(this, 'mouseleave', this.handleMouseleave, true)
+    onEvent(this, 'focusout', this.handleFocusout)
   }
 
   setTopIndex(): HTMLElement | undefined {
@@ -208,7 +197,7 @@ export class FCMenu extends FC {
       fn.flush = noop
       this.handleMouseenter = fn
     }
-    this.addEventListener('mouseenter', this.handleMouseenter, true)
+    onEvent(this, 'mouseenter', this.handleMouseenter, true)
   }
 
   #handleMouseenter(e: MouseEvent): void {

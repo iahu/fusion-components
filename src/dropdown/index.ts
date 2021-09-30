@@ -2,7 +2,7 @@ import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { observer, query } from '../decorators'
 import { FC } from '../fusion-component'
-import { focusable, isHTMLElement, tabbableElement } from '../helper'
+import { focusable, isHTMLElement, onEvent, tabbableElement } from '../helper'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
 import style from './style.css'
@@ -14,9 +14,9 @@ export class FCDropdown extends FC {
   connectedCallback(): void {
     super.connectedCallback()
 
-    this.addEventListener('click', this.handleClick)
-    this.addEventListener('keydown', this.handleKeydown)
-    this.addEventListener('focusout', this.handleFocusout)
+    onEvent(this, 'click', this.handleClick)
+    onEvent(this, 'keydown', this.handleKeydown)
+    onEvent(this, 'focusout', this.handleFocusout)
 
     this.updateComplete.then(() => {
       const firstAssigned = this.firstAssigned

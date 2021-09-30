@@ -2,7 +2,7 @@ import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { assignedElements, observer } from '../decorators'
 import FormAssociated from '../form-associated'
-import { toggleTabIndex } from '../helper'
+import { onEvent, toggleTabIndex } from '../helper'
 import { FCListOption, isOption } from '../list-option'
 import mergeStyles from '../merge-styles'
 import style from './style.css'
@@ -20,15 +20,9 @@ export class FCListBox extends FormAssociated {
 
   connectedCallback(): void {
     super.connectedCallback()
-    this.addEventListener('keydown', this.handleKeydown)
-    this.addEventListener('select', this.handleSelect)
+    onEvent(this, 'keydown', this.handleKeydown)
+    onEvent(this, 'select', this.handleSelect)
     this.setAttribute('aria-orientation', 'vertical')
-  }
-
-  disconnectedCallback(): void {
-    super.disconnectedCallback()
-    this.removeEventListener('keydown', this.handleKeydown)
-    this.removeEventListener('select', this.handleSelect)
   }
 
   @observer({ attribute: false, init: false, type: 'string' })

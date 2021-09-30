@@ -2,6 +2,7 @@ import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { ignoreInitChanged, observer } from '../decorators'
 import FormAssociated from '../form-associated'
+import { onEvent } from '../helper'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
 import style from './style.css'
@@ -18,8 +19,8 @@ export class FCButton extends FormAssociated {
 
   connectedCallback(): void {
     super.connectedCallback()
-    this.addEventListener('click', this.handleClick)
-    this.addEventListener('keydown', this.handleKeydown)
+    onEvent(this, 'click', this.handleClick)
+    onEvent(this, 'keydown', this.handleKeydown)
 
     if (this.hasAttribute('autofocus') && !document.activeElement) {
       if (!this.hasAttribute('tabindex')) {
@@ -31,7 +32,6 @@ export class FCButton extends FormAssociated {
 
   disconnectedCallback(): void {
     super.disconnectedCallback()
-    this.removeEventListener('keydown', this.handleKeydown)
     this.proxy.removeEventListener('click', this.handleSubmission)
     this.proxy.removeEventListener('click', this.handleClick)
     this.proxy.removeEventListener('click', this.handleReset)
@@ -67,13 +67,13 @@ export class FCButton extends FormAssociated {
 
     switch (next) {
       case 'submit':
-        this.addEventListener('click', this.handleSubmission)
+        onEvent(this, 'click', this.handleSubmission)
         break
       case 'reset':
-        this.addEventListener('click', this.handleReset)
+        onEvent(this, 'click', this.handleReset)
         break
       default:
-        this.addEventListener('click', this.handleClick)
+        onEvent(this, 'click', this.handleClick)
         break
     }
   }

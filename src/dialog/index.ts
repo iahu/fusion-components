@@ -2,6 +2,7 @@ import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { observer } from '../decorators'
 import { FC } from '../fusion-component'
+import { onEvent } from '../helper'
 import mergeStyles from '../merge-styles'
 import style from './style.css'
 
@@ -12,13 +13,8 @@ export class FCDialog extends FC {
   connectedCallback(): void {
     super.connectedCallback()
 
-    this.addEventListener('keydown', this.handleKeydown)
-    this.addEventListener('close', this.handleClose)
-  }
-  disconnectedCallback(): void {
-    super.disconnectedCallback()
-    this.removeEventListener('keydown', this.handleKeydown)
-    this.removeEventListener('close', this.handleClose)
+    onEvent(this, 'keydown', this.handleKeydown)
+    onEvent(this, 'close', this.handleClose)
   }
 
   @observer({ initCallback: true })

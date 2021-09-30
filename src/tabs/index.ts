@@ -2,7 +2,7 @@ import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { observer } from '../decorators'
 import { FC } from '../fusion-component'
-import { focusable, focusFirstOrNext, toggleTabIndex } from '../helper'
+import { focusable, focusFirstOrNext, onEvent, toggleTabIndex } from '../helper'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
 import { isTabPanel } from '../tab-panel/index'
@@ -38,13 +38,7 @@ export class FCTabs extends FC {
       }
     }
 
-    this.addEventListener('select', this.handleSelect)
-  }
-
-  disconnectedCallback(): void {
-    super.disconnectedCallback()
-
-    this.removeEventListener('select', this.handleSelect)
+    onEvent(this, 'select', this.handleSelect)
   }
 
   @observer({ attribute: false, init: false })

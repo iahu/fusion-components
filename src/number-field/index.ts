@@ -2,6 +2,7 @@ import expCalc, { Formula, isDigit, isNumber, normalize, toNumber } from 'exp-ca
 import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { observer } from '../decorators'
+import { onEvent } from '../helper'
 import { FCInput } from '../input'
 import inputStyle from '../input/style.css'
 import mergeStyles from '../merge-styles'
@@ -23,13 +24,12 @@ export class FCNumberFiled extends FCInput {
 
   connectedCallback(): void {
     super.connectedCallback()
-    this.addEventListener('keydown', this.handleKeydown)
+    onEvent(this, 'keydown', this.handleKeydown)
     this.shadowInput?.addEventListener('change', this.handleChange)
   }
 
   disconnectedCallback(): void {
     super.disconnectedCallback()
-    this.removeEventListener('keydown', this.handleKeydown)
     this.shadowInput?.removeEventListener('change', this.handleChange)
   }
 

@@ -2,6 +2,7 @@ import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { observer } from '../decorators'
 import { FC } from '../fusion-component'
+import { onEvent } from '../helper'
 import mergeStyles from '../merge-styles'
 
 import style from './style.css'
@@ -14,12 +15,7 @@ export class FCTab extends FC {
 
   connectedCallback(): void {
     super.connectedCallback()
-    this.addEventListener('click', this.handleClick)
-  }
-
-  disconnectedCallback(): void {
-    super.disconnectedCallback()
-    this.removeEventListener('click', this.handleClick)
+    onEvent(this, 'click', this.handleClick)
   }
 
   @observer()

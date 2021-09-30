@@ -2,6 +2,7 @@ import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { observer } from '../decorators'
 import FormAssociated from '../form-associated'
+import { onEvent } from '../helper'
 import mergeStyles from '../merge-styles'
 import style from './style.css'
 
@@ -25,11 +26,7 @@ export class FCRadio extends FormAssociated {
     this.disabled = this.hasAttribute('disabled')
     this.defaultChecked = this.checked
 
-    this.addEventListener('click', this.handleClick)
-  }
-
-  disconnectedCallback(): void {
-    this.removeEventListener('click', this.handleClick)
+    onEvent(this, 'click', this.handleClick)
   }
 
   @observer()

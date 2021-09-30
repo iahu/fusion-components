@@ -3,6 +3,7 @@ import { customElement } from 'lit/decorators.js'
 import { ifDefined } from 'lit/directives/if-defined.js'
 import { observer, query, reflectAttribute } from '../decorators'
 import { FC } from '../fusion-component'
+import { onEvent } from '../helper'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
 import style from './style.css'
@@ -13,14 +14,8 @@ export class FCLink extends FC {
 
   connectedCallback(): void {
     super.connectedCallback()
-    this.addEventListener('click', this.handleClick)
-    this.addEventListener('keydown', this.handleKeydown)
-  }
-
-  disconnectedCallback(): void {
-    super.disconnectedCallback()
-    this.removeEventListener('click', this.handleClick)
-    this.removeEventListener('keydown', this.handleKeydown)
+    onEvent(this, 'click', this.handleClick)
+    onEvent(this, 'keydown', this.handleKeydown)
   }
 
   @observer({ reflect: true })

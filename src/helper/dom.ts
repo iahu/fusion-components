@@ -1,3 +1,5 @@
+import FusionComponent from '../fusion-component'
+
 export const isHTMLElement = (e: unknown): e is HTMLElement => e instanceof HTMLElement
 
 const emptyNodeNames = [
@@ -114,3 +116,34 @@ export const getNextFocusableElement = <T extends HTMLElement = HTMLElement>(
     idx = loop ? mod(nextIdx, length) : nextIdx
   }
 }
+
+function onEvent<K extends keyof HTMLElementEventMap>(
+  target: FusionComponent,
+  type: K,
+  listener: (ev: HTMLElementEventMap[K]) => any,
+  options?: boolean | AddEventListenerOptions
+): void
+function onEvent(
+  target: FusionComponent,
+  type: string,
+  listener: EventListenerOrEventListenerObject,
+  options?: boolean | AddEventListenerOptions
+): void
+function onEvent<K extends keyof HTMLElementEventMap>(
+  target: FusionComponent,
+  type: string | K,
+  listener: EventListenerOrEventListenerObject | ((ev: HTMLElementEventMap[K] | Event) => any),
+  options?: boolean | AddEventListenerOptions
+): void {
+  target.addEventListener(type, listener, options)
+
+  target.addEventListener(
+    'disconnected',
+    () => {
+      target.removeEventListener(type, listener, options)
+    },
+    { once: true }
+  )
+}
+
+export { onEvent }

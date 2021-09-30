@@ -2,6 +2,7 @@ import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { createRef, Ref, ref } from 'lit/directives/ref.js'
 import { observer } from '../decorators'
+import { onEvent } from '../helper'
 import { FCListOption, isOption } from '../list-option'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
@@ -29,12 +30,7 @@ export class FCComboBox extends FCSelect {
 
   connectedCallback(): void {
     super.connectedCallback()
-    this.addEventListener('select', this.handleSelect)
-  }
-
-  disconnectedCallback(): void {
-    super.disconnectedCallback()
-    this.removeEventListener('select', this.handleSelect)
+    onEvent(this, 'select', this.handleSelect)
   }
 
   caseCompaire(a: string, b: string): boolean {

@@ -6,7 +6,7 @@ import '../data-grid-row'
 import { FCDataGridRow } from '../data-grid-row'
 import { observer, queryAll } from '../decorators'
 import { FC } from '../fusion-component'
-import { clamp, focusFirstOrNext, setCSSText } from '../helper'
+import { clamp, focusFirstOrNext, onEvent, setCSSText } from '../helper'
 import mergeStyles from '../merge-styles'
 import style from './style.css'
 
@@ -22,15 +22,8 @@ export class FCDataGrid extends FC {
   connectedCallback(): void {
     super.connectedCallback()
 
-    this.addEventListener('keydown', this.handleKeydown)
-    this.addEventListener('click', this.handleClick)
-  }
-
-  disconnectedCallback(): void {
-    super.disconnectedCallback()
-
-    this.removeEventListener('keydown', this.handleKeydown)
-    this.removeEventListener('click', this.handleClick)
+    onEvent(this, 'keydown', this.handleKeydown)
+    onEvent(this, 'click', this.handleClick)
   }
 
   @observer({ attribute: false })

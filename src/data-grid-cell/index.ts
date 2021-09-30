@@ -6,6 +6,7 @@ import mergeStyles from '../merge-styles'
 
 import style from './style.css'
 import { after, before } from '../pattern/before-after'
+import { onEvent } from '../helper'
 
 @customElement('fc-data-grid-cell')
 export class FCDataGridCell extends FC {
@@ -13,16 +14,9 @@ export class FCDataGridCell extends FC {
 
   connectedCallback(): void {
     super.connectedCallback()
-    this.addEventListener('focusin', this.handleFocus)
-    this.addEventListener('blur', this.handleBlur)
-    this.addEventListener('click', this.handleClick)
-  }
-
-  disconnectedCallback(): void {
-    super.disconnectedCallback()
-    this.removeEventListener('focusin', this.handleFocus)
-    this.removeEventListener('blur', this.handleBlur)
-    this.removeEventListener('click', this.handleClick)
+    onEvent(this, 'focusin', this.handleFocus)
+    onEvent(this, 'blur', this.handleBlur)
+    onEvent(this, 'click', this.handleClick)
   }
 
   @observer({ reflect: true })

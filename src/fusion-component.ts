@@ -82,6 +82,7 @@ abstract class FusionComponent extends LitElement {
 
   connectedCallback(): void {
     super.connectedCallback()
+    this.dispatchEvent(new CustomEvent('connected', { composed: true, bubbles: false, cancelable: false }))
 
     const observedProps = Reflect.get(this.constructor, observedPropsKey) as ObservedProperties<this, any> | undefined
     if (!observedProps) {
@@ -110,6 +111,11 @@ abstract class FusionComponent extends LitElement {
         Reflect.set(this, propKey, mergedNextValue)
       }
     })
+  }
+
+  disconnectedCallback(): void {
+    super.disconnectedCallback()
+    this.dispatchEvent(new CustomEvent('disconnected', { composed: true, bubbles: false, cancelable: false }))
   }
 
   get slotElements(): Record<string, HTMLSlotElement> {

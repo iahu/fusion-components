@@ -1,7 +1,7 @@
 import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { observer } from '../decorators'
-import { removeCSSText, setCSSText } from '../helper'
+import { onEvent, removeCSSText, setCSSText } from '../helper'
 import { FCListBox } from '../listbox'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
@@ -20,12 +20,7 @@ export class FCSelect extends FCListBox {
 
   connectedCallback(): void {
     super.connectedCallback()
-    this.addEventListener('focusout', this.handleFocusout)
-  }
-
-  disconnectedCallback(): void {
-    super.disconnectedCallback()
-    this.removeEventListener('focusout', this.handleFocusout)
+    onEvent(this, 'focusout', this.handleFocusout)
   }
 
   displayValueChanged(old: string | undefined, next: string): void {

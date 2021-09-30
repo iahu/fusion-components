@@ -2,7 +2,7 @@ import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { observer } from '../decorators'
 import { FC } from '../fusion-component'
-import { focusFirstOrNext } from '../helper'
+import { focusFirstOrNext, onEvent } from '../helper'
 import mergeStyles from '../merge-styles'
 import { FCRadio } from '../radio'
 import style from './style.css'
@@ -13,8 +13,8 @@ export class FCRadioGroup extends FC {
 
   connectedCallback(): void {
     super.connectedCallback()
-    this.addEventListener('keydown', this.handleKeydown)
-    this.addEventListener('change', this.handleChange)
+    onEvent(this, 'keydown', this.handleKeydown)
+    onEvent(this, 'change', this.handleChange)
     this.updateComplete.then(() => {
       this.disabled = this.hasAttribute('disabled')
       this.value = this.getAttribute('value') || this.value
@@ -26,11 +26,6 @@ export class FCRadioGroup extends FC {
       })
       this.reorderTabindex()
     })
-  }
-
-  disconnectedCallback(): void {
-    super.disconnectedCallback()
-    this.removeEventListener('keydown', this.handleKeydown)
   }
 
   public get items(): FCRadio[] | [] {

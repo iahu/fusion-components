@@ -2,6 +2,7 @@ import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { observer } from '../decorators'
 import FormAssociated from '../form-associated'
+import { onEvent } from '../helper'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
 import style from './style.css'
@@ -55,24 +56,16 @@ export class FCInput extends FormAssociated {
   connectedCallback(): void {
     super.connectedCallback()
 
-    this.addEventListener('focusin', this.handleFocusin)
-    this.addEventListener('focusout', this.handleFocusout)
-    this.addEventListener('click', this.handleClick)
-    this.addEventListener('keydown', this.handleKeyDown)
+    onEvent(this, 'focusin', this.handleFocusin)
+    onEvent(this, 'focusout', this.handleFocusout)
+    onEvent(this, 'click', this.handleClick)
+    onEvent(this, 'keydown', this.handleKeyDown)
     this.attachProxy()
     this.proxy.style.cssText = ''
 
     if (this.autofocus && !document.activeElement) {
       this.focus()
     }
-  }
-
-  disconnectedCallback(): void {
-    this.removeEventListener('focusin', this.handleFocusin)
-    this.removeEventListener('focusout', this.handleFocusout)
-    this.removeEventListener('click', this.handleClick)
-    this.removeEventListener('keydown', this.handleKeyDown)
-    this.detachProxy()
   }
 
   @observer({ reflect: true })

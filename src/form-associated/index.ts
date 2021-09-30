@@ -133,7 +133,7 @@ export default class FormAssociated extends FC {
     super.disconnectedCallback()
     this.removeEventListener('keydown', this._handleKeydown)
     this.form?.removeEventListener('reset', this.handleFormReset)
-    if (!supportsElementInternals) {
+    if (!this.proxy) {
       this.detachProxy()
     }
     this.proxy.removeEventListener('invalid', this.handleProxyInvalid)

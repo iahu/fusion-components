@@ -2,6 +2,7 @@ import { html, TemplateResult } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { observer } from '../decorators'
 import FormAssociated from '../form-associated'
+import { onEvent } from '../helper'
 import mergeStyles from '../merge-styles'
 import { after, before } from '../pattern/before-after'
 import style from './style.css'
@@ -28,14 +29,8 @@ export class FCListOption extends FormAssociated {
 
   connectedCallback(): void {
     super.connectedCallback()
-    this.addEventListener('click', this.handleClick)
-    this.addEventListener('blur', this.handleBlur)
-  }
-
-  disconnectedCallback(): void {
-    super.disconnectedCallback()
-    this.removeEventListener('click', this.handleClick)
-    this.removeEventListener('blur', this.handleBlur)
+    onEvent(this, 'click', this.handleClick)
+    onEvent(this, 'blur', this.handleBlur)
   }
 
   @observer({ reflect: true })
