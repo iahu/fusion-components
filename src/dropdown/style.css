@@ -7,10 +7,6 @@
   display: none;
 }
 
-slot {
-  display: block;
-}
-
 .button {
   font: inherit;
   display: block;
@@ -23,12 +19,18 @@ slot {
 
 .listbox {
   position: absolute;
+  display: none;
   z-index: 9;
   overflow-y: auto;
   background: var(--box-background);
   box-shadow: var(--box-shadow);
 }
 
+:host([open]) .listbox {
+  display: block;
+}
+
 .listbox slot {
+  display: block;
   max-height: var(--list-max-height);
 }

@@ -50,10 +50,10 @@ export class FCDropdown extends FC {
         if (!firstAssigned) return
 
         if (focusable(firstAssigned)) {
-          firstAssigned.focus()
+          firstAssigned.focus({ preventScroll: true })
         } else if (isHTMLElement(firstAssigned)) {
           firstAssigned.setAttribute('tabindex', '-1')
-          firstAssigned.focus()
+          firstAssigned.focus({ preventScroll: true })
         }
 
         if (!this.listboxNode) return
