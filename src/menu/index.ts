@@ -230,6 +230,7 @@ export class FCMenu extends FC {
   handleMouseleave(e: MouseEvent): void {
     const { target, relatedTarget } = e
     if (isMenuItem(target) && !target.disabled && target.submenu?.length) {
+      target.focus()
       target.expanded = false
     } else if (target === this && !(isMenuItem(relatedTarget) && this.contains(relatedTarget))) {
       this.handleMouseenter.cancel()
@@ -244,6 +245,7 @@ export class FCMenu extends FC {
 
     const parentItem = currentTarget.closest<FCMenuItem>('fc-menu-item')
     if (parentItem && !(isHTMLElement(relatedTarget) && currentTarget.contains(relatedTarget))) {
+      parentItem.focus()
       parentItem.expanded = false
     }
   }

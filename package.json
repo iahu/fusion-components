@@ -22,7 +22,7 @@
     "pretest": "git status && rimraf test && yarn tsc --project tsconfig.test.json --outdir test",
     "test": "web-test-runner test/*.test.js test/**/*.test.js --node-resolve",
     "prepare": "husky install",
-    "prepublish": "npm run build"
+    "prepublish": "git status"
   },
   "lint-staged": {
     "src/**/*.ts": [

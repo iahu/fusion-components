@@ -3,10 +3,6 @@
   display: inline-block;
 }
 
-:host(:not([open])) .listbox {
-  display: none;
-}
-
 .button {
   font: inherit;
   display: block;
