@@ -356,7 +356,7 @@ describe('fc-menu', function () {
     expect(menuitem.expanded, 'after delay').be.true
   })
 
-  it('should change expanded to `false` when mouseleave', async () => {
+  it('should keep expanded and focus status when mouse leave out from menu', async () => {
     const menu: FCMenu = await fixture(html`
       <fc-menu>
         <fc-menu-item expanded>
@@ -371,10 +371,11 @@ describe('fc-menu', function () {
     const menuitem = menu.querySelector<FCMenuItem>('[expanded]')!
 
     expect(menuitem.expanded, 'before mouseleave').be.true
+    menuitem.focus()
     const mouseleave = new MouseEvent('mouseleave')
     menuitem.dispatchEvent(mouseleave)
     await elementUpdated(menuitem)
-    expect(menuitem.expanded, 'after mouseleave').be.false
+    expect(menuitem.expanded, 'after mouseleave').be.true
     expect(menuitem, 'keep focus').eq(document.activeElement)
   })
 
