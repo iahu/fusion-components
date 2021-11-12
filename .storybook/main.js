@@ -4,6 +4,8 @@ module.exports = {
   stories: ['../src/**/*.stories.ts'],
   addons: ['@storybook/addon-links' /*, '@storybook/addon-essentials'*/],
   features: { postcss: false },
+  // use vite
+  core: { builder: 'storybook-builder-vite' },
 
   /**
    * webpackFinal
