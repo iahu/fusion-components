@@ -12,6 +12,7 @@ module.exports = {
    * @param {import('vite').UserConfig} config vite config
    */
   viteFinal(config) {
+    config.base = './'
     config.optimizeDeps = {
       ...config.optimizeDeps,
       exclude: [/^lit/, 'exp-calc', '@open-wc/testing', 'sinon', 'lodash-es'],
