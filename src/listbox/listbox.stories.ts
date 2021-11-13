@@ -1,4 +1,4 @@
-import book from './book.html'
+import book from './book.html?raw'
 import './index'
 
 export default { title: 'Listbox', order: 5 }
