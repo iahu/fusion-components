@@ -96,11 +96,16 @@ export class FCDropdown extends FC {
   listButton?: HTMLSlotElement
 
   handleClick(event: MouseEvent): void {
-    event.preventDefault()
+    if (event.defaultPrevented) {
+      return
+    }
     this.open = !this.disabled
   }
 
   handleKeydown(e: KeyboardEvent): void {
+    if (e.defaultPrevented) {
+      return
+    }
     switch (e.key) {
       case 'Enter':
         this.click()
@@ -126,7 +131,23 @@ export class FCDropdown extends FC {
 
   handleFocusout(event: FocusEvent): void {
     const { relatedTarget } = event
-    if (!(isHTMLElement(relatedTarget) && this.contains(relatedTarget))) {
+    if (!event.defaultPrevented && !(isHTMLElement(relatedTarget) && this.contains(relatedTarget))) {
+      this.open = false
+    }
+  }
+
+  @observer({ reflect: true })
+  autoClose = true
+  @observer({ reflect: true })
+  autoCloseDelay = 50
+
+  handleClose(): void {
+    if (!this.autoClose) return
+    if (this.autoCloseDelay) {
+      setTimeout(() => {
+        this.open = false
+      }, this.autoCloseDelay)
+    } else {
       this.open = false
     }
   }
@@ -145,6 +166,7 @@ export class FCDropdown extends FC {
         role="listbox"
         aria-label="${this.placeholder}"
         aria-hidden="${!this.open}"
+        @click="${this.handleClose}"
       >
         <slot></slot>
       </div>

@@ -67,5 +67,31 @@
 <form action="#" id="form-1">
   <input type="text" name="text" value="foo" />
   <fc-button type="submit" id="submit">submit</fc-button>
+  <label><input type="checkbox" checked id="checkbox" /> preventDefault()</label>
 </form>
 <fc-button type="reset" id="reset-btn" form="form-1">reset</fc-button>
+<script>
+  let preventDefault = true
+  document.querySelector('#checkbox').addEventListener('change', e => {
+    preventDefault = e.checked
+  })
+
+  setTimeout(function () {
+    document.querySelector('#form-1').addEventListener('submit', e => {
+      e.preventDefault()
+      console.log('submit event')
+    })
+    document.querySelector('#submit').addEventListener('click', e => {
+      if (preventDefault) {
+        e.preventDefault()
+        console.log('prevented submit')
+      }
+    })
+    document.querySelector('#reset-btn').addEventListener('click', e => {
+      if (preventDefault) {
+        e.preventDefault()
+        console.log('prevented reset')
+      }
+    })
+  }, 1000)
+</script>

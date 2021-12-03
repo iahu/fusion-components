@@ -1,4 +1,4 @@
-import { elementUpdated, expect, fixture, html, nextFrame } from '@open-wc/testing'
+import { aTimeout, elementUpdated, expect, fixture, html, nextFrame } from '@open-wc/testing'
 import './index'
 import { FCDropdown } from './index'
 import '../menu'
@@ -124,5 +124,33 @@ describe('fc-dropdown', function () {
     expect(foo.expanded, 'menuitem foo will collapse').be.false
 
     expect(baz, 'will keep focus when collapse submenu').eq(document.activeElement)
+  })
+
+  it('should auto close', async () => {
+    const dropdown: FCDropdown = await fixture(
+      html`<fc-dropdown autoCloseDelay="50"><div id="foo">foo</div></fc-dropdown>`
+    )
+
+    await nextFrame()
+    dropdown.open = true
+    await elementUpdated(dropdown)
+    dropdown.querySelector<FCMenuItem>('#foo')!.click()
+    await aTimeout(100)
+
+    expect(dropdown.open).to.be.false
+  })
+
+  it('should not auto close', async () => {
+    const dropdown: FCDropdown = await fixture(
+      html`<fc-dropdown autoCloseDelay="50" autoClose="false"><div id="foo">foo</div></fc-dropdown>`
+    )
+
+    await nextFrame()
+    dropdown.open = true
+    await elementUpdated(dropdown)
+    dropdown.querySelector<FCMenuItem>('#foo')!.click()
+    await aTimeout(100)
+
+    expect(dropdown.open).to.be.true
   })
 })

@@ -27,7 +27,8 @@
     "no-control-regex": "off",
     "no-implicit-globals": ["error", { "lexicalBindings": true }],
     "no-restricted-globals": ["error", "name", "parent"],
-    "no-global-assign": "error"
+    "no-global-assign": "error",
+    "@typescript-eslint/no-unused-vars": ["warn", { "args": "none" }]
   },
   "overrides": [
     {

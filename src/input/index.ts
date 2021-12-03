@@ -201,7 +201,12 @@ export class FCInput extends FormAssociated {
   }
 
   handleFocusout(e: FocusEvent): void {
-    this.shadowInput?.blur()
+    if (e.relatedTarget === this.shadowInput) {
+      e.stopPropagation()
+    }
+    if (this.#focused) {
+      this.shadowInput?.blur()
+    }
     this.#focused = false
     this.requestUpdate()
   }

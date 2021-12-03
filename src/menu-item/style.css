@@ -7,7 +7,8 @@
   --outline-offset: 0px;
 }
 
-:host([disabled]) {
+:host([disabled]),
+:host([disabled]) .content {
   --foreground: var(--foreground-disabled);
   color: var(--foreground-disabled);
   /*background: var(--background);*/

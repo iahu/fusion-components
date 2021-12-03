@@ -27,8 +27,11 @@
   min-height: calc(var(--font-size) * var(--line-height));
 }
 
-.arrow-right {
+.expand-collapse-button .arrow-right,
+.expand-collapse-button .arrow-bottom {
   font-size: var(--font-size);
+  width: var(--font-size);
+  height: var(--font-size);
 }
 
 .content {

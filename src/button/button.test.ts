@@ -106,7 +106,10 @@ describe('FCButton', function () {
       html`<form action="#"><input type="text" name="test" value="foo" /><fc-button type="submit">x</fc-button></form>`
     )
 
-    const spy = Sinon.spy(e => e.preventDefault())
+    const spy = Sinon.spy(e => {
+      e.preventDefault()
+      console.log('submit event')
+    })
     el!.addEventListener('submit', spy)
     const btn = el.querySelector<FCButton>('fc-button')
     btn!.addEventListener('click', e => {

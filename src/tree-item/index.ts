@@ -1,5 +1,5 @@
 import { html, TemplateResult } from 'lit'
-import { customElement } from 'lit/decorators.js'
+import { customElement, eventOptions } from 'lit/decorators.js'
 import { observer, queryAll } from '../decorators'
 import { FC } from '../fusion-component'
 import { onEvent } from '../helper'
@@ -92,9 +92,8 @@ export class FCTreeItem extends FC {
   @observer({ reflect: true })
   forceIcon = false
 
-  handleTitleClick(e: MouseEvent): void {
-    e.preventDefault()
-    if (!this.disabled) {
+  handleClickTitle(e: MouseEvent): void {
+    if (!this.disabled && !e.defaultPrevented) {
       if (this.expandable) {
         this.expanded = !this.expanded
       }
@@ -106,13 +105,13 @@ export class FCTreeItem extends FC {
 
   handleButtonClick(e: MouseEvent): void {
     e.stopPropagation()
-    if (!this.disabled) {
+    if (!this.disabled && !e.defaultPrevented) {
       this.expanded = !this.expanded
     }
   }
 
   handleKeydown(e: KeyboardEvent): void {
-    if (this.disabled || e.target !== this) return
+    if (e.defaultPrevented || this.disabled || e.target !== this) return
     if (e.key === 'Enter') {
       e.preventDefault()
       this.selected = !this.selected
@@ -125,15 +124,15 @@ export class FCTreeItem extends FC {
 
   render(): TemplateResult<1> {
     const collapseBtn = html`
-      <svg class="arrow-right" viewBox="0 0 12 12" width="12" height="12" xmlns="http://www.w3.org/2000/svg">
+      <svg part="collapse-button" class="arrow-right" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
         <path d="m9 6-6 5.5V.5z" fill-rule="evenodd" />
       </svg>
     `
     const expandBtn = html`<svg
       viewBox="0 0 12 12"
       xmlns="http://www.w3.org/2000/svg"
-      width="12"
-      height="12"
+      part="expand-button"
+      class="arrow-bottom"
       xmlns:v="https://vecta.io/nano"
     >
       <path d="M6 9L.5 3h11z" fill-rule="evenodd" />
@@ -143,7 +142,7 @@ export class FCTreeItem extends FC {
       ${before()}
       ${this.hasChild
         ? html`
-            <div role="button" class="expand-collapse-button" @click="${this.handleButtonClick}">
+            <div role="button" part="button" class="expand-collapse-button" @click="${this.handleButtonClick}">
               <slot name="expand-collapse-button">
                 ${this.expanded
                   ? html`<slot name="expand-button">${expandBtn}</slot>`
@@ -153,7 +152,7 @@ export class FCTreeItem extends FC {
           `
         : null}
       <div class="content" part="content">
-        <div class="control fc-inner-outline" part="control" @click="${this.handleTitleClick}">
+        <div class="control fc-inner-outline" part="control" @click="${this.handleClickTitle}">
           <slot></slot>
         </div>
         ${this.expanded

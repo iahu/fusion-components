@@ -15,6 +15,25 @@
   </ul>
 </fc-dropdown>
 
+<h4>自动关闭</h4>
+<fc-dropdown>
+  <fc-button slot="button">默认会自动关闭</fc-button>
+  <fc-listbox>
+    <fc-list-option>option-1</fc-list-option>
+    <fc-list-option>option-2</fc-list-option>
+    <fc-list-option>option-3</fc-list-option>
+  </fc-listbox>
+</fc-dropdown>
+
+<fc-dropdown autoClose="false">
+  <fc-button slot="button">阻止自动关闭</fc-button>
+  <fc-listbox>
+    <fc-list-option>option-1</fc-list-option>
+    <fc-list-option>option-2</fc-list-option>
+    <fc-list-option>option-3</fc-list-option>
+  </fc-listbox>
+</fc-dropdown>
+
 <h4>和 fc-menu 一起使用</h4>
 <fc-dropdown>
   <fc-menu>
