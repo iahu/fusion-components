@@ -42,6 +42,7 @@
 :host([orientation='horizontal']) ::slotted([slot='label']),
 :host([orientation='horizontal']) .label {
   margin-right: calc(var(--font-size) / 2);
+  flex-shrink: 0;
 }
 
 :host([orientation='vertical']) {

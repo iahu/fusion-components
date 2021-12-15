@@ -55,7 +55,6 @@ export class FCInput extends FormAssociated {
 
   connectedCallback(): void {
     super.connectedCallback()
-
     onEvent(this, 'focusin', this.handleFocusin)
     onEvent(this, 'focusout', this.handleFocusout)
     onEvent(this, 'click', this.handleClick)
@@ -66,6 +65,14 @@ export class FCInput extends FormAssociated {
     if (this.autofocus && !document.activeElement) {
       this.focus()
     }
+
+    this.proxy.addEventListener('input', this.proxyInputHandler)
+  }
+
+  disconnectedCallback(): void {
+    super.disconnectedCallback()
+
+    this.proxy.removeEventListener('input', this.proxyInputHandler)
   }
 
   @observer({ reflect: true })
@@ -175,6 +182,10 @@ export class FCInput extends FormAssociated {
     this.classList.toggle('read-only', this.readonly)
   }
 
+  select(): void {
+    this.shadowInput?.select()
+  }
+
   @observer()
   src = ''
 
@@ -221,6 +232,12 @@ export class FCInput extends FormAssociated {
     if (['Enter', ' '].includes(e.key)) {
       this.click()
     }
+  }
+
+  proxyInputHandler = (e: Event): void => {
+    e.stopPropagation()
+    e.stopImmediatePropagation()
+    // this.$emit('input', { composed: true, detail: { originalEvent: e } })
   }
 
   render(): TemplateResult {

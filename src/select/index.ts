@@ -21,6 +21,7 @@ export class FCSelect extends FCListBox {
   connectedCallback(): void {
     super.connectedCallback()
     onEvent(this, 'focusout', this.handleFocusout)
+    onEvent(this, 'click', this.handleClickControl)
   }
 
   displayValueChanged(old: string | undefined, next: string): void {

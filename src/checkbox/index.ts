@@ -58,6 +58,9 @@ export class FCCheckbox extends FormAssociated {
   @observer({ type: 'boolean', attribute: 'checked' })
   defaultChecked = false
 
+  @observer()
+  label = ''
+
   @observer({ type: 'boolean', reflect: true })
   indeterminate = false
 
@@ -120,7 +123,7 @@ export class FCCheckbox extends FormAssociated {
           <div class="indeterminate-indicator"></div>
         </slot>
       </div>
-      <label class="label" part="label"><slot></slot></label>
+      <label class="label" part="label"><slot>${this.label}</slot></label>
     `
   }
 }
