@@ -237,7 +237,7 @@ export class FCInput extends FormAssociated {
   proxyInputHandler = (e: Event): void => {
     e.stopPropagation()
     e.stopImmediatePropagation()
-    // this.$emit('input', { composed: true, detail: { originalEvent: e } })
+    this.$emit('input', { composed: true, detail: { originalEvent: e } })
   }
 
   render(): TemplateResult {
