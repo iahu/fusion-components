@@ -101,7 +101,6 @@ export class FCSelect extends FCListBox {
 
   handleClickControl(e: MouseEvent): void {
     e.preventDefault()
-    e.stopPropagation()
     if (!this.disabled) {
       this.open = !this.open
     }
