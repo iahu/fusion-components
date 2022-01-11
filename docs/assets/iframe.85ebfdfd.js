@@ -935,14 +935,13 @@ slot[name='placeholder'] {
   opacity: 0.5;
   display: block;
 }
-`,Eo=Object.defineProperty,Ao=Object.getOwnPropertyDescriptor,pe=(e,t,n,i)=>{for(var o=i>1?void 0:i?Ao(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&Eo(t,n,o),o},lt;(function(e){e.top="top",e.bottom="bottom"})(lt||(lt={}));let U=class extends L{constructor(){super(...arguments);this.role="listbox",this.tabindex="0",this.open=this.hasAttribute("open"),this.placeholder="\u8BF7\u9009\u62E9",this.outline=!0,this.position="bottom"}connectedCallback(){super.connectedCallback(),p(this,"focusout",this.handleFocusout),p(this,"click",this.handleClick)}displayValueChanged(e,t){typeof e=="string"&&(this.open=!1)}valueChanged(e,t){var i,o;if(!this.selectable)return;(i=super.valueChanged)==null||i.call(this,e,t),(o=this.visibleOptions.find(r=>r.select))==null||o.select(!1);const n=this.visibleOptions.find(r=>r.value===t);n&&n.select(!0),this.emit("change",{old:e,next:t})}openChanged(e,t){this.setAttribute("aria-expanded",String(t)),t?(this.focus(),et(this,{"--client-height":`${this.clientHeight}px`}),this.updateComplete.then(()=>{var n;(n=this.selectedOption)==null||n.scrollIntoView({block:"nearest"})})):Rn(this,"--client-height")}handleKeydown(e){!this.open&&["ArrowDown","ArrowUp","Enter"].includes(e.key)?(e.preventDefault(),this.open=!0):super.handleKeydown(e)}handleClick(e){this.disabled||(this.open=!this.open)}handleClickControl(e){e.preventDefault(),this.disabled||(this.open=!this.open)}handleFocusout(e){const{relatedTarget:t}=e;t instanceof Node&&this.contains(t)||(this.open=!1)}render(){var e;return d`
+`,Eo=Object.defineProperty,Ao=Object.getOwnPropertyDescriptor,pe=(e,t,n,i)=>{for(var o=i>1?void 0:i?Ao(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&Eo(t,n,o),o},lt;(function(e){e.top="top",e.bottom="bottom"})(lt||(lt={}));const Io=e=>{e.preventDefault(),e.stopPropagation()};let U=class extends L{constructor(){super(...arguments);this.role="listbox",this.tabindex="0",this.open=this.hasAttribute("open"),this.placeholder="\u8BF7\u9009\u62E9",this.outline=!0,this.position="bottom"}connectedCallback(){super.connectedCallback(),p(this,"focusout",this.handleFocusout),p(this,"click",this.handleClick)}displayValueChanged(e,t){typeof e=="string"&&(this.open=!1)}valueChanged(e,t){var i,o;if(!this.selectable)return;(i=super.valueChanged)==null||i.call(this,e,t),(o=this.visibleOptions.find(r=>r.select))==null||o.select(!1);const n=this.visibleOptions.find(r=>r.value===t);n&&n.select(!0),this.emit("change",{old:e,next:t})}openChanged(e,t){this.setAttribute("aria-expanded",String(t)),t?(this.focus(),et(this,{"--client-height":`${this.clientHeight}px`}),this.updateComplete.then(()=>{var n;(n=this.selectedOption)==null||n.scrollIntoView({block:"nearest"})})):Rn(this,"--client-height")}handleKeydown(e){!this.open&&["ArrowDown","ArrowUp","Enter"].includes(e.key)?(e.preventDefault(),this.open=!0):super.handleKeydown(e)}handleClick(e){this.disabled||(this.open=!this.open)}handleFocusout(e){const{relatedTarget:t}=e;t instanceof Node&&this.contains(t)||(this.open=!1)}render(){var e;return d`
       <div
         class="control"
         id="control"
         part="control"
         role="comobox"
         aria-haspopup="listbox"
-        @click="${this.handleClickControl}"
         disabled="${this.disabled}"
       >
         ${O()}
@@ -971,11 +970,12 @@ slot[name='placeholder'] {
         ?disabled="${this.disabled}"
         position="${this.position}"
         tabindex="${this.open?"0":""}"
+        @click="${Io}"
       >
         <slot></slot>
         ${this.length===0?d`<slot name="empty">--空--</slot>`:null}
       </div>
-    `}};U.styles=m(Kt);pe([a({reflect:!0})],U.prototype,"role",2);pe([a({reflect:!0})],U.prototype,"tabindex",2);pe([a({reflect:!0,initCallback:!0})],U.prototype,"open",2);pe([a()],U.prototype,"placeholder",2);pe([a({reflect:!0})],U.prototype,"outline",2);pe([a({converter(e,t){const n=t.getAttribute("position")||"";if(Object.keys(lt).includes(n))return n;const{top:i,height:o}=t.getBoundingClientRect();return i+o/2>window.innerHeight/2?"top":"bottom"}})],U.prototype,"position",2);U=pe([g("fc-select")],U);var Io=`.selected-value {
+    `}};U.styles=m(Kt);pe([a({reflect:!0})],U.prototype,"role",2);pe([a({reflect:!0})],U.prototype,"tabindex",2);pe([a({reflect:!0,initCallback:!0})],U.prototype,"open",2);pe([a()],U.prototype,"placeholder",2);pe([a({reflect:!0})],U.prototype,"outline",2);pe([a({converter(e,t){const n=t.getAttribute("position")||"";if(Object.keys(lt).includes(n))return n;const{top:i,height:o}=t.getBoundingClientRect();return i+o/2>window.innerHeight/2?"top":"bottom"}})],U.prototype,"position",2);U=pe([g("fc-select")],U);var So=`.selected-value {
   width: 100%;
   background: transparent;
   padding: 0;
@@ -988,7 +988,7 @@ slot[name='placeholder'] {
   caret-color: var(--caret);
   font: inherit;
 }
-`,So=Object.defineProperty,Po=Object.getOwnPropertyDescriptor,ke=(e,t,n,i)=>{for(var o=i>1?void 0:i?Po(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&So(t,n,o),o};let re=class extends U{constructor(){super(...arguments);var e;this.inputRef=un(),this.role="combobox",this.autocomplete="",this.casesensitive=!1,this.placeholder="",this.inputValue=(e=this.getAttribute("value"))!=null?e:""}connectedCallback(){super.connectedCallback(),p(this,"select",this.handleSelect)}caseCompaire(e,t){return this.translateCase(e)==this.translateCase(t)}translateCase(e){return this.casesensitive?e:e.toLowerCase()}filterOptions(e){let t=!1;this.options.forEach(n=>{const i=e===""||this.translateCase(n.text).startsWith(this.translateCase(e));n.hidden=!i,i&&e===n.text&&(this.selectedOption=n,t=!0)}),t||(this.selectedOption=void 0)}get input(){var e;return(e=this.shadowRoot)==null?void 0:e.querySelector(".selected-value")}displayValueChanged(e,t){typeof e=="string"&&(this.open=!1),this.inputValue=t}selectedOptionChanged(e,t){super.selectedOptionChanged(e,t),t&&(this.inputValue=t.text)}valueChanged(e,t){!this.selectable||(this.updateComplete.then(()=>{var i;(i=this.visibleOptions.find(o=>o.select))==null||i.select(!1);const n=this.options.find(o=>o.value===t);n?(n.select(!0),this.selectedOption=n):this.inputValue=t}),this.emit("change",{old:e,next:t}),this.setFormValue(t),this.validate())}inputValueChanged(e,t){e?this.filterOptions(t):this.updateComplete.then(()=>this.filterOptions(t)),this.displayValue=t}handleLabelClick(e){var n;e.stopPropagation();const t=(n=this.shadowRoot)==null?void 0:n.querySelector(".selected-value");t instanceof HTMLElement&&t.focus()}handleFocus(){this.open=!0}handleSelect(e){if(!this.selectable||this.disabled)return;const{target:t}=e;t instanceof HTMLElement&&Nt(t)&&t.selected&&(this.open=!1,this.inputValue=t.text,this.value=t.value)}handleInputChange(){this.open=!1;const e=this.input.value;this.filterOptions(e),this.selectedOption=this.visibleOptions.find(t=>this.caseCompaire(t.text,e.trim()))}handleInput(e){e.stopPropagation(),this.open=!0;const{value:t}=e.target;this.selectedOption=void 0,this.inputValue=t.trim(),this.filterOptions(t.trim())}render(){return d`
+`,Po=Object.defineProperty,zo=Object.getOwnPropertyDescriptor,ke=(e,t,n,i)=>{for(var o=i>1?void 0:i?zo(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&Po(t,n,o),o};let re=class extends U{constructor(){super(...arguments);var e;this.inputRef=un(),this.role="combobox",this.autocomplete="",this.casesensitive=!1,this.placeholder="",this.inputValue=(e=this.getAttribute("value"))!=null?e:""}connectedCallback(){super.connectedCallback(),p(this,"select",this.handleSelect)}caseCompaire(e,t){return this.translateCase(e)==this.translateCase(t)}translateCase(e){return this.casesensitive?e:e.toLowerCase()}filterOptions(e){let t=!1;this.options.forEach(n=>{const i=e===""||this.translateCase(n.text).startsWith(this.translateCase(e));n.hidden=!i,i&&e===n.text&&(this.selectedOption=n,t=!0)}),t||(this.selectedOption=void 0)}get input(){var e;return(e=this.shadowRoot)==null?void 0:e.querySelector(".selected-value")}displayValueChanged(e,t){typeof e=="string"&&(this.open=!1),this.inputValue=t}selectedOptionChanged(e,t){super.selectedOptionChanged(e,t),t&&(this.inputValue=t.text)}valueChanged(e,t){!this.selectable||(this.updateComplete.then(()=>{var i;(i=this.visibleOptions.find(o=>o.select))==null||i.select(!1);const n=this.options.find(o=>o.value===t);n?(n.select(!0),this.selectedOption=n):this.inputValue=t}),this.emit("change",{old:e,next:t}),this.setFormValue(t),this.validate())}inputValueChanged(e,t){e?this.filterOptions(t):this.updateComplete.then(()=>this.filterOptions(t)),this.displayValue=t}handleLabelClick(e){var n;e.stopPropagation();const t=(n=this.shadowRoot)==null?void 0:n.querySelector(".selected-value");t instanceof HTMLElement&&t.focus()}handleFocus(){this.open=!0}handleSelect(e){if(!this.selectable||this.disabled)return;const{target:t}=e;t instanceof HTMLElement&&Nt(t)&&t.selected&&(this.open=!1,this.inputValue=t.text,this.value=t.value)}handleInputChange(){this.open=!1;const e=this.input.value;this.filterOptions(e),this.selectedOption=this.visibleOptions.find(t=>this.caseCompaire(t.text,e.trim()))}handleInput(e){e.stopPropagation(),this.open=!0;const{value:t}=e.target;this.selectedOption=void 0,this.inputValue=t.trim(),this.filterOptions(t.trim())}render(){return d`
       <label
         for="input"
         class="control"
@@ -1039,14 +1039,14 @@ slot[name='placeholder'] {
         <slot></slot>
         <slot name="empty">--空--</slot>
       </div>
-    `}};re.styles=m(Kt,Io);ke([a({reflect:!0})],re.prototype,"role",2);ke([a()],re.prototype,"autocomplete",2);ke([a({type:"boolean"})],re.prototype,"casesensitive",2);ke([a()],re.prototype,"placeholder",2);ke([a({attribute:!1})],re.prototype,"inputValue",2);re=ke([g("fc-combobox")],re);var zo={parameters:{storySource:{source:`import book from './book.html?raw'
+    `}};re.styles=m(Kt,So);ke([a({reflect:!0})],re.prototype,"role",2);ke([a()],re.prototype,"autocomplete",2);ke([a({type:"boolean"})],re.prototype,"casesensitive",2);ke([a()],re.prototype,"placeholder",2);ke([a({attribute:!1})],re.prototype,"inputValue",2);re=ke([g("fc-combobox")],re);var Lo={parameters:{storySource:{source:`import book from './book.html?raw'
 
 import './index'
 
 export default { title: 'Combobox', order: 6 }
 
 export const Combobox = () => book
-`,locationsMap:{combobox:{startLoc:{col:24,line:7},endLoc:{col:34,line:7},startBody:{col:24,line:7},endBody:{col:34,line:7}}}}},title:"Combobox",order:6};const Lo=()=>vo,To=["Combobox"];var Do=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",default:zo,Combobox:Lo,__namedExportsOrder:To}),Mo=`<style>
+`,locationsMap:{combobox:{startLoc:{col:24,line:7},endLoc:{col:34,line:7},startBody:{col:24,line:7},endBody:{col:34,line:7}}}}},title:"Combobox",order:6};const To=()=>vo,Do=["Combobox"];var Mo=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",default:Lo,Combobox:To,__namedExportsOrder:Do}),jo=`<style>
   .inline-grid {
     display: inline-grid;
     width: auto;
@@ -1626,7 +1626,7 @@ export const Combobox = () => book
     </fc-data-grid-cell>
   </fc-data-grid-row>
 </fc-data-grid>
-`,jo=`:host {
+`,Bo=`:host {
   position: relative;
   display: flex;
   justify-content: var(--data-grid-align);
@@ -1657,7 +1657,7 @@ export const Combobox = () => book
   padding: var(--padding);
   cursor: pointer;
 }
-`,Bo=Object.defineProperty,Ro=Object.getOwnPropertyDescriptor,Q=(e,t,n,i)=>{for(var o=i>1?void 0:i?Ro(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&Bo(t,n,o),o};let P=class extends w{constructor(){super(...arguments);this.tabIndex=-1,this.colIndex=-1,this.colSpan=1,this.collpase=!1,this.open=!1,this.role="cell",this.sortable=this.hasAttribute("sortable"),this.rowSpan=1,this.handleFocus=e=>{e.target===this&&this.focusItem(!0)},this.handleBlur=e=>{e.target===this&&this.focusItem(!1)},this.handleClick=e=>{e.target===this&&(this.tabIndex=0)}}connectedCallback(){super.connectedCallback(),p(this,"focusin",this.handleFocus),p(this,"blur",this.handleBlur),p(this,"click",this.handleClick)}colIndexChanged(e,t){t>=0?this.setAttribute("aria-colindex",t.toString()):this.removeAttribute("aria-colindex")}colSpanChanged(e,t){t>1?this.style.gridColumnEnd=`span ${t}`:this.style.gridColumnEnd=""}openChanged(e,t){this.emit("open",{old:e,next:t})}rowSpanChanged(e,t){t>1?this.style.gridRowEnd=`span ${t}`:this.style.gridRowEnd=""}focusItem(e=!0){this.toggleAttribute("focused",Boolean(e))}handleCollpase(e){e.preventDefault(),e.stopPropagation(),this.open=!this.open}render(){const e=d`
+`,Ro=Object.defineProperty,Fo=Object.getOwnPropertyDescriptor,Q=(e,t,n,i)=>{for(var o=i>1?void 0:i?Fo(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&Ro(t,n,o),o};let P=class extends w{constructor(){super(...arguments);this.tabIndex=-1,this.colIndex=-1,this.colSpan=1,this.collpase=!1,this.open=!1,this.role="cell",this.sortable=this.hasAttribute("sortable"),this.rowSpan=1,this.handleFocus=e=>{e.target===this&&this.focusItem(!0)},this.handleBlur=e=>{e.target===this&&this.focusItem(!1)},this.handleClick=e=>{e.target===this&&(this.tabIndex=0)}}connectedCallback(){super.connectedCallback(),p(this,"focusin",this.handleFocus),p(this,"blur",this.handleBlur),p(this,"click",this.handleClick)}colIndexChanged(e,t){t>=0?this.setAttribute("aria-colindex",t.toString()):this.removeAttribute("aria-colindex")}colSpanChanged(e,t){t>1?this.style.gridColumnEnd=`span ${t}`:this.style.gridColumnEnd=""}openChanged(e,t){this.emit("open",{old:e,next:t})}rowSpanChanged(e,t){t>1?this.style.gridRowEnd=`span ${t}`:this.style.gridRowEnd=""}focusItem(e=!0){this.toggleAttribute("focused",Boolean(e))}handleCollpase(e){e.preventDefault(),e.stopPropagation(),this.open=!this.open}render(){const e=d`
       <svg class="arrow-right" viewBox="0 0 12 12" width="12" height="12" xmlns="http://www.w3.org/2000/svg">
         <path d="m9 6-6 5.5V.5z" fill-rule="evenodd" />
       </svg>
@@ -1679,7 +1679,7 @@ export const Combobox = () => book
       <slot></slot>
       ${E()}
       <span class="fc-focus-overlay"></span>
-    `}};P.styles=m(jo);Q([a({reflect:!0})],P.prototype,"tabIndex",2);Q([a({hasChanged:q})],P.prototype,"colIndex",2);Q([a()],P.prototype,"colSpan",2);Q([a({reflect:!0})],P.prototype,"collpase",2);Q([a({reflect:!0,hasChanged:q})],P.prototype,"open",2);Q([a({reflect:!0,init(e){const{parentElement:t}=e;return t&&t.getAttribute("role")=="rowheader"?"columnheader":"cell"}})],P.prototype,"role",2);Q([a()],P.prototype,"sortable",2);Q([a()],P.prototype,"rowSpan",2);P=Q([g("fc-data-grid-cell")],P);var Fo=`:host {
+    `}};P.styles=m(Bo);Q([a({reflect:!0})],P.prototype,"tabIndex",2);Q([a({hasChanged:q})],P.prototype,"colIndex",2);Q([a()],P.prototype,"colSpan",2);Q([a({reflect:!0})],P.prototype,"collpase",2);Q([a({reflect:!0,hasChanged:q})],P.prototype,"open",2);Q([a({reflect:!0,init(e){const{parentElement:t}=e;return t&&t.getAttribute("role")=="rowheader"?"columnheader":"cell"}})],P.prototype,"role",2);Q([a()],P.prototype,"sortable",2);Q([a()],P.prototype,"rowSpan",2);P=Q([g("fc-data-grid-cell")],P);var Vo=`:host {
   /*\u4E5F\u8BB8\u4F1A\u7528 shadow DOM \u6765\u5B9E\u73B0*/
   display: contents;
   border-radius: 0;
@@ -1697,12 +1697,12 @@ export const Combobox = () => book
 :host(:last-child) ::slotted(:not([slot]):last-child) {
   --grid-border-right-width: 0;
 }
-`,Vo=Object.defineProperty,No=Object.getOwnPropertyDescriptor,ae=(e,t,n,i)=>{for(var o=i>1?void 0:i?No(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&Vo(t,n,o),o};let G=class extends w{constructor(){super(...arguments);this.cells=[],this.collapseCells=[],this.open=!1,this.role="row",this.rowIndex=-1,this.rowIndexElements=[],this.sortable=this.hasAttribute("sortable")}connectedCallback(){super.connectedCallback(),p(this,"open",this.handleOpen)}cellsChanged(e,t){t.forEach((n,i)=>{n.colIndex=i+1}),this.emit("cellsChanged")}collapseCellsChanged(e,t){t.length&&this.cells.length&&(this.cells[0].collpase=!0,et(this.cells[this.cells.length-1],{"--grid-border-right-width":"0"}))}roleChanged(e,t){t==="rowheader"&&this.cells.forEach(n=>{n.role="columnheader"})}rowIndexChanged(e,t){t>=0&&this.setAttribute("aria-rowindex",this.rowIndex.toString())}rowIndexElementsChanged(){this.cells=Array.from(this.querySelectorAll("fc-data-grid-cell:not([slot])"))}sortableChanged(e,t){this.cells.forEach(n=>{n.sortable=t})}handleOpen(e){e.target instanceof P&&(this.open=e.target.open)}render(){return d`
+`,No=Object.defineProperty,Ko=Object.getOwnPropertyDescriptor,ae=(e,t,n,i)=>{for(var o=i>1?void 0:i?Ko(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&No(t,n,o),o};let G=class extends w{constructor(){super(...arguments);this.cells=[],this.collapseCells=[],this.open=!1,this.role="row",this.rowIndex=-1,this.rowIndexElements=[],this.sortable=this.hasAttribute("sortable")}connectedCallback(){super.connectedCallback(),p(this,"open",this.handleOpen)}cellsChanged(e,t){t.forEach((n,i)=>{n.colIndex=i+1}),this.emit("cellsChanged")}collapseCellsChanged(e,t){t.length&&this.cells.length&&(this.cells[0].collpase=!0,et(this.cells[this.cells.length-1],{"--grid-border-right-width":"0"}))}roleChanged(e,t){t==="rowheader"&&this.cells.forEach(n=>{n.role="columnheader"})}rowIndexChanged(e,t){t>=0&&this.setAttribute("aria-rowindex",this.rowIndex.toString())}rowIndexElementsChanged(){this.cells=Array.from(this.querySelectorAll("fc-data-grid-cell:not([slot])"))}sortableChanged(e,t){this.cells.forEach(n=>{n.sortable=t})}handleOpen(e){e.target instanceof P&&(this.open=e.target.open)}render(){return d`
       ${O()}
       <slot></slot>
       <slot name="collapse"></slot>
       ${E()}
-    `}};G.styles=m(Fo);ae([a({attribute:!1}),Fe()],G.prototype,"cells",2);ae([a({attribute:!1}),Fe('slot[name="collapse"]')],G.prototype,"collapseCells",2);ae([a({reflect:!0})],G.prototype,"open",2);ae([a({reflect:!0,hasChanged:q,init:e=>e.slot==="row-header"?"rowheader":"row"})],G.prototype,"role",2);ae([a()],G.prototype,"rowIndex",2);ae([a({init(e){return Array.from(e.querySelectorAll('fc-data-grid-cell[slot="row-index"]'))}})],G.prototype,"rowIndexElements",2);ae([a({reflect:!0})],G.prototype,"sortable",2);G=ae([g("fc-data-grid-row")],G);var Ko=`:host {
+    `}};G.styles=m(Vo);ae([a({attribute:!1}),Fe()],G.prototype,"cells",2);ae([a({attribute:!1}),Fe('slot[name="collapse"]')],G.prototype,"collapseCells",2);ae([a({reflect:!0})],G.prototype,"open",2);ae([a({reflect:!0,hasChanged:q,init:e=>e.slot==="row-header"?"rowheader":"row"})],G.prototype,"role",2);ae([a()],G.prototype,"rowIndex",2);ae([a({init(e){return Array.from(e.querySelectorAll('fc-data-grid-cell[slot="row-index"]'))}})],G.prototype,"rowIndexElements",2);ae([a({reflect:!0})],G.prototype,"sortable",2);G=ae([g("fc-data-grid-row")],G);var qo=`:host {
   display: grid;
   position: relative;
   width: 100%;
@@ -1735,10 +1735,10 @@ export const Combobox = () => book
 ::slotted([role^='row']:last-child) {
   --grid-border-bottom-width: 0;
 }
-`,qo=Object.defineProperty,Ho=Object.getOwnPropertyDescriptor,T=(e,t,n,i)=>{for(var o=i>1?void 0:i?Ho(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&qo(t,n,o),o};let A=class extends w{constructor(){super(...arguments);this.grid=!1,this.outline=!1,this.role="grid",this.sticky=!1,this.maxRows=-1,this.colCount=-1,this.sortIndex=-1,this.handleSort=()=>{var o;const{sortIndex:e,colCount:t,dataRows:n,ownerDocument:i}=this;if(e>0&&e<=t&&n){const r=this.onSort.bind(this),l=n.sort(r),s=i.activeElement;this.innerHTML="";const{rowHeader:c=[]}=this,f=Number(!c.length),h=c.concat(l);h.forEach((y,v)=>{this.appendChild(y),y.rowIndex=v+1,y.setAttribute("data-index",(v+f).toString())}),((o=this.activeElement)==null?void 0:o.parentElement)||(this.activeElement=h[0].cells[0]),s===this.activeElement&&this.activeElement.focus(),this.emit("sorted")}},this.order="asc"}connectedCallback(){super.connectedCallback(),p(this,"keydown",this.handleKeydown),p(this,"click",this.handleClick)}activeElementChanged(e,t){var l,s;if(e&&(e.tabIndex=-1),!t)return;t.tabIndex=0;const{rows:n}=this;if(!n)return;const i=n.findIndex(c=>c.contains(t)),o=n[i];this.activeRow=o==null?void 0:o.cells;const r=(s=(l=o==null?void 0:o.cells)==null?void 0:l.findIndex(c=>c===t))!=null?s:-1;this.activeCol=n.map(c=>{var f;return(f=c.cells)==null?void 0:f[r]}).filter(c=>!!c)}maxRowsChanged(e,t){t>0?this.setAttribute("max-rows",t.toString()):this.removeAttribute("max-rows")}rowsChanged(e,t=[]){const{maxRows:n,rowHeader:i=[]}=this;!this.activeElement&&t.length&&this.updateComplete.then(()=>{this.activeElement=t[0].querySelector("fc-data-grid-cell")});const o=[],r=Number(!i.length);t.forEach((h,y)=>{h.rowIndex=y+1,h.dataset.index=(y+r).toString(),o.push(h.updateComplete)}),Promise.all(o).then(()=>this.handleSort());const l=t.map(h=>h.cells.reduce((y,v)=>(y+=v.colSpan,y),0)),s=Math.max(...l,0),c=t==null?void 0:t[n];let f="";c&&(f=c.offsetTop+c.offsetHeight+"px"),et(this,{"max-height":f,"--grid-template-columns":`repeat(${s}, 1fr)`}),this.setAttribute("aria-rowcount",t.length.toString()),this.setAttribute("aria-colcount",s.toString()),this.colCount=s}sortIndexChanged(e,t){this.handleSort()}orderChanged(e,t){this.handleSort()}onSort(e,t){var s,c,f,h,y,v;const{sortIndex:n,order:i}=this,o=i==="desc"?-1:1,r=((f=(c=(s=e.cells)==null?void 0:s.find(x=>x.colIndex===n))==null?void 0:c.textContent)==null?void 0:f.trim())||"",l=((v=(y=(h=t.cells)==null?void 0:h.find(x=>x.colIndex===n))==null?void 0:y.textContent)==null?void 0:v.trim())||"";return r==l?0:o*(r==null?void 0:r.localeCompare(l,"co",{numeric:!0}))}handleKeydown(e){const{activeElement:t,activeRow:n,activeCol:i}=this;if(!!(t&&n&&i)&&e.target instanceof P)switch(e.key){case"Escape":t.blur();break;case"ArrowUp":case"ArrowDown":case"ArrowLeft":case"ArrowRight":this.focusNext(e);break;case"Enter":this.handleClick(e)}}focusNext(e){const{activeElement:t,activeRow:n,activeCol:i}=this,r={ArrowLeft:[n,-1],ArrowRight:[n,1],ArrowUp:[i,-1],ArrowDown:[i,1]}[e.key];if(r){const[l,s]=r,c=l.findIndex(x=>x===t),{length:f}=l,h=Nn(0,f-1,s*f),y=e.ctrlKey?h-c:s,v=Ie(l,y,!e.altKey);if(v){e.preventDefault(),v.scrollIntoView({block:"nearest"}),this.activeElement=v;const{offsetParent:x,offsetTop:F,offsetHeight:ne}=v;x&&x.scrollTop>=F&&(x.scrollTop-=ne)}}}handleClick(e){const{target:t}=e;if(!(t instanceof HTMLElement))return;const n=t.closest("fc-data-grid-cell");if(n&&(this.activeElement=n,n.sortable)){const i=n.colIndex;i!==this.sortIndex?this.sortIndex=i:this.order=this.order==="desc"?"asc":"desc"}}render(){return d`
+`,Ho=Object.defineProperty,Uo=Object.getOwnPropertyDescriptor,T=(e,t,n,i)=>{for(var o=i>1?void 0:i?Uo(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&Ho(t,n,o),o};let A=class extends w{constructor(){super(...arguments);this.grid=!1,this.outline=!1,this.role="grid",this.sticky=!1,this.maxRows=-1,this.colCount=-1,this.sortIndex=-1,this.handleSort=()=>{var o;const{sortIndex:e,colCount:t,dataRows:n,ownerDocument:i}=this;if(e>0&&e<=t&&n){const r=this.onSort.bind(this),l=n.sort(r),s=i.activeElement;this.innerHTML="";const{rowHeader:c=[]}=this,f=Number(!c.length),h=c.concat(l);h.forEach((y,v)=>{this.appendChild(y),y.rowIndex=v+1,y.setAttribute("data-index",(v+f).toString())}),((o=this.activeElement)==null?void 0:o.parentElement)||(this.activeElement=h[0].cells[0]),s===this.activeElement&&this.activeElement.focus(),this.emit("sorted")}},this.order="asc"}connectedCallback(){super.connectedCallback(),p(this,"keydown",this.handleKeydown),p(this,"click",this.handleClick)}activeElementChanged(e,t){var l,s;if(e&&(e.tabIndex=-1),!t)return;t.tabIndex=0;const{rows:n}=this;if(!n)return;const i=n.findIndex(c=>c.contains(t)),o=n[i];this.activeRow=o==null?void 0:o.cells;const r=(s=(l=o==null?void 0:o.cells)==null?void 0:l.findIndex(c=>c===t))!=null?s:-1;this.activeCol=n.map(c=>{var f;return(f=c.cells)==null?void 0:f[r]}).filter(c=>!!c)}maxRowsChanged(e,t){t>0?this.setAttribute("max-rows",t.toString()):this.removeAttribute("max-rows")}rowsChanged(e,t=[]){const{maxRows:n,rowHeader:i=[]}=this;!this.activeElement&&t.length&&this.updateComplete.then(()=>{this.activeElement=t[0].querySelector("fc-data-grid-cell")});const o=[],r=Number(!i.length);t.forEach((h,y)=>{h.rowIndex=y+1,h.dataset.index=(y+r).toString(),o.push(h.updateComplete)}),Promise.all(o).then(()=>this.handleSort());const l=t.map(h=>h.cells.reduce((y,v)=>(y+=v.colSpan,y),0)),s=Math.max(...l,0),c=t==null?void 0:t[n];let f="";c&&(f=c.offsetTop+c.offsetHeight+"px"),et(this,{"max-height":f,"--grid-template-columns":`repeat(${s}, 1fr)`}),this.setAttribute("aria-rowcount",t.length.toString()),this.setAttribute("aria-colcount",s.toString()),this.colCount=s}sortIndexChanged(e,t){this.handleSort()}orderChanged(e,t){this.handleSort()}onSort(e,t){var s,c,f,h,y,v;const{sortIndex:n,order:i}=this,o=i==="desc"?-1:1,r=((f=(c=(s=e.cells)==null?void 0:s.find(x=>x.colIndex===n))==null?void 0:c.textContent)==null?void 0:f.trim())||"",l=((v=(y=(h=t.cells)==null?void 0:h.find(x=>x.colIndex===n))==null?void 0:y.textContent)==null?void 0:v.trim())||"";return r==l?0:o*(r==null?void 0:r.localeCompare(l,"co",{numeric:!0}))}handleKeydown(e){const{activeElement:t,activeRow:n,activeCol:i}=this;if(!!(t&&n&&i)&&e.target instanceof P)switch(e.key){case"Escape":t.blur();break;case"ArrowUp":case"ArrowDown":case"ArrowLeft":case"ArrowRight":this.focusNext(e);break;case"Enter":this.handleClick(e)}}focusNext(e){const{activeElement:t,activeRow:n,activeCol:i}=this,r={ArrowLeft:[n,-1],ArrowRight:[n,1],ArrowUp:[i,-1],ArrowDown:[i,1]}[e.key];if(r){const[l,s]=r,c=l.findIndex(x=>x===t),{length:f}=l,h=Nn(0,f-1,s*f),y=e.ctrlKey?h-c:s,v=Ie(l,y,!e.altKey);if(v){e.preventDefault(),v.scrollIntoView({block:"nearest"}),this.activeElement=v;const{offsetParent:x,offsetTop:F,offsetHeight:ne}=v;x&&x.scrollTop>=F&&(x.scrollTop-=ne)}}}handleClick(e){const{target:t}=e;if(!(t instanceof HTMLElement))return;const n=t.closest("fc-data-grid-cell");if(n&&(this.activeElement=n,n.sortable)){const i=n.colIndex;i!==this.sortIndex?this.sortIndex=i:this.order=this.order==="desc"?"asc":"desc"}}render(){return d`
       <slot name="row-header" sticky="${this.sticky}"></slot>
       <slot></slot>
-    `}};A.styles=m(Ko);T([a({attribute:!1})],A.prototype,"activeElement",2);T([a({reflect:!0})],A.prototype,"grid",2);T([a({reflect:!0})],A.prototype,"outline",2);T([a({reflect:!0})],A.prototype,"role",2);T([a({reflect:!0})],A.prototype,"sticky",2);T([a({attribute:"max-rows"})],A.prototype,"maxRows",2);T([a({attribute:!1}),ye("[slot=row-header]")],A.prototype,"rowHeader",2);T([a({attribute:!1}),ye("fc-data-grid-row")],A.prototype,"rows",2);T([ye("fc-data-grid-row:not([slot])")],A.prototype,"dataRows",2);T([a({reflect:!0})],A.prototype,"sortIndex",2);T([a({reflect:!0})],A.prototype,"order",2);A=T([g("fc-data-grid")],A);var Uo={parameters:{storySource:{source:`import book from './book.html?raw'
+    `}};A.styles=m(qo);T([a({attribute:!1})],A.prototype,"activeElement",2);T([a({reflect:!0})],A.prototype,"grid",2);T([a({reflect:!0})],A.prototype,"outline",2);T([a({reflect:!0})],A.prototype,"role",2);T([a({reflect:!0})],A.prototype,"sticky",2);T([a({attribute:"max-rows"})],A.prototype,"maxRows",2);T([a({attribute:!1}),ye("[slot=row-header]")],A.prototype,"rowHeader",2);T([a({attribute:!1}),ye("fc-data-grid-row")],A.prototype,"rows",2);T([ye("fc-data-grid-row:not([slot])")],A.prototype,"dataRows",2);T([a({reflect:!0})],A.prototype,"sortIndex",2);T([a({reflect:!0})],A.prototype,"order",2);A=T([g("fc-data-grid")],A);var Go={parameters:{storySource:{source:`import book from './book.html?raw'
 
 import './index'
 
@@ -1746,7 +1746,7 @@ import './index'
 export default { title: 'Data Grid ' }
 
 export const DataGrid = () => book
-`,locationsMap:{"data-grid":{startLoc:{col:24,line:8},endLoc:{col:34,line:8},startBody:{col:24,line:8},endBody:{col:34,line:8}}}}},title:"Data Grid "};const Go=()=>Mo,Wo=["DataGrid"];var Yo=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",default:Uo,DataGrid:Go,__namedExportsOrder:Wo}),Xo=`<h4>\u7B80\u5355\u4F7F\u7528</h4>
+`,locationsMap:{"data-grid":{startLoc:{col:24,line:8},endLoc:{col:34,line:8},startBody:{col:24,line:8},endBody:{col:34,line:8}}}}},title:"Data Grid "};const Wo=()=>jo,Yo=["DataGrid"];var Xo=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",default:Go,DataGrid:Wo,__namedExportsOrder:Yo}),Jo=`<h4>\u7B80\u5355\u4F7F\u7528</h4>
 <fc-button id="btn-1">button</fc-button>
 <fc-dialog anchor="#btn-1">
   <h3>\u5956\u5B66\u91D1\u7533\u8BF7 \u4E00</h3>
@@ -1842,7 +1842,7 @@ export const DataGrid = () => book
     </div>
   </fc-panel>
 </fc-dialog>
-`,Jo=`:host {
+`,Qo=`:host {
   position: fixed;
   left: 0;
   top: 0;
@@ -1883,7 +1883,7 @@ export const DataGrid = () => book
   width: fit-content;
   height: fit-content;
 }
-`,Qo=Object.defineProperty,Zo=Object.getOwnPropertyDescriptor,le=(e,t,n,i)=>{for(var o=i>1?void 0:i?Zo(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&Qo(t,n,o),o};let W=class extends w{constructor(){super(...arguments);this.anchor=this.getAttribute("anchor"),this.modal=!0,this.overlayClosable=!0,this.tabindex="-1",this.escClosable=!0,this.hidden=!0,this.role="dialog",this.handleClick=e=>{const{target:t}=e,{anchor:n}=this;t instanceof HTMLElement&&n&&t.closest(n)&&(e.preventDefault(),this.hidden=!1)},this.handleKeydown=e=>{this.escClosable&&e.key==="Escape"&&e.target===this&&(e.preventDefault(),this.hidden=!0)},this.handleClickOverlay=e=>{e.preventDefault(),this.overlayClosable&&(this.hidden=!0,this.emit("dismiss"))}}connectedCallback(){super.connectedCallback(),p(this,"keydown",this.handleKeydown),p(this,"close",this.handleClose)}anchorChanged(){var t;const{anchor:e}=this;e&&((t=this.anchorElements)==null||t.forEach(n=>n.removeEventListener("click",this.handleClick)),this.anchorElements=Array.from(this.renderRoot.ownerDocument.querySelectorAll(e)),this.anchorElements.forEach(n=>n.addEventListener("click",this.handleClick)))}hiddenChanged(e,t){t||this.updateComplete.then(()=>{this.focus()}),typeof e=="boolean"&&(this.emit("change",{old:e,next:t}),this.emit("visibleChange",{old:e,next:t}))}show(){this.hidden=!1}hide(){this.hidden=!0}handleClose(e){e instanceof CustomEvent&&e.detail&&this.matches(e.detail)&&(this.hidden=!0)}render(){return d`
+`,Zo=Object.defineProperty,ei=Object.getOwnPropertyDescriptor,le=(e,t,n,i)=>{for(var o=i>1?void 0:i?ei(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&Zo(t,n,o),o};let W=class extends w{constructor(){super(...arguments);this.anchor=this.getAttribute("anchor"),this.modal=!0,this.overlayClosable=!0,this.tabindex="-1",this.escClosable=!0,this.hidden=!0,this.role="dialog",this.handleClick=e=>{const{target:t}=e,{anchor:n}=this;t instanceof HTMLElement&&n&&t.closest(n)&&(e.preventDefault(),this.hidden=!1)},this.handleKeydown=e=>{this.escClosable&&e.key==="Escape"&&e.target===this&&(e.preventDefault(),this.hidden=!0)},this.handleClickOverlay=e=>{e.preventDefault(),this.overlayClosable&&(this.hidden=!0,this.emit("dismiss"))}}connectedCallback(){super.connectedCallback(),p(this,"keydown",this.handleKeydown),p(this,"close",this.handleClose)}anchorChanged(){var t;const{anchor:e}=this;e&&((t=this.anchorElements)==null||t.forEach(n=>n.removeEventListener("click",this.handleClick)),this.anchorElements=Array.from(this.renderRoot.ownerDocument.querySelectorAll(e)),this.anchorElements.forEach(n=>n.addEventListener("click",this.handleClick)))}hiddenChanged(e,t){t||this.updateComplete.then(()=>{this.focus()}),typeof e=="boolean"&&(this.emit("change",{old:e,next:t}),this.emit("visibleChange",{old:e,next:t}))}show(){this.hidden=!1}hide(){this.hidden=!0}handleClose(e){e instanceof CustomEvent&&e.detail&&this.matches(e.detail)&&(this.hidden=!0)}render(){return d`
       ${this.modal?d`<div
             class="overlay"
             part="overlay"
@@ -1895,14 +1895,14 @@ export const DataGrid = () => book
         <slot name="dialog-header"></slot>
         <slot></slot>
       </div>
-    `}};W.styles=m(Jo);le([a({initCallback:!0})],W.prototype,"anchor",2);le([a({reflect:!0})],W.prototype,"modal",2);le([a({attribute:"overlay-closable"})],W.prototype,"overlayClosable",2);le([a({reflect:!0})],W.prototype,"tabindex",2);le([a({attribute:"esc-closable"})],W.prototype,"escClosable",2);le([a({reflect:!0})],W.prototype,"hidden",2);le([a({reflect:!0})],W.prototype,"role",2);W=le([g("fc-dialog")],W);var ei={parameters:{storySource:{source:`import book from './book.html?raw'
+    `}};W.styles=m(Qo);le([a({initCallback:!0})],W.prototype,"anchor",2);le([a({reflect:!0})],W.prototype,"modal",2);le([a({attribute:"overlay-closable"})],W.prototype,"overlayClosable",2);le([a({reflect:!0})],W.prototype,"tabindex",2);le([a({attribute:"esc-closable"})],W.prototype,"escClosable",2);le([a({reflect:!0})],W.prototype,"hidden",2);le([a({reflect:!0})],W.prototype,"role",2);W=le([g("fc-dialog")],W);var ti={parameters:{storySource:{source:`import book from './book.html?raw'
 
 import './index'
 
 export default { title: 'Dialog', order: 1 }
 
 export const Dialog = () => book
-`,locationsMap:{dialog:{startLoc:{col:22,line:7},endLoc:{col:32,line:7},startBody:{col:22,line:7},endBody:{col:32,line:7}}}}},title:"Dialog",order:1};const ti=()=>Xo,ni=["Dialog"];var oi=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",default:ei,Dialog:ti,__namedExportsOrder:ni}),ii=`<h4>\u7B80\u5355\u4F7F\u7528</h4>
+`,locationsMap:{dialog:{startLoc:{col:22,line:7},endLoc:{col:32,line:7},startBody:{col:22,line:7},endBody:{col:32,line:7}}}}},title:"Dialog",order:1};const ni=()=>Jo,oi=["Dialog"];var ii=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",default:ti,Dialog:ni,__namedExportsOrder:oi}),ri=`<h4>\u7B80\u5355\u4F7F\u7528</h4>
 <fc-dropdown>
   <div>foo</div>
   <div>bar</div>
@@ -2012,7 +2012,7 @@ export const Dialog = () => book
     <fc-list-option>option-3</fc-list-option>
   </fc-listbox>
 </fc-dropdown>
-`,ri=`:host {
+`,ai=`:host {
   position: relative;
   display: inline-block;
 }
@@ -2044,7 +2044,7 @@ export const Dialog = () => book
   display: block;
   max-height: var(--list-max-height);
 }
-`,ai=Object.defineProperty,li=Object.getOwnPropertyDescriptor,Y=(e,t,n,i)=>{for(var o=i>1?void 0:i?li(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&ai(t,n,o),o};let D=class extends w{constructor(){super(...arguments);this.disabled=!1,this.open=!1,this.placement="auto",this.placeholder="\u8BF7\u9009\u62E9",this.tabindex="0",this.autoClose=!0,this.autoCloseDelay=50}connectedCallback(){super.connectedCallback(),p(this,"click",this.handleClick),p(this,"keydown",this.handleKeydown),p(this,"focusout",this.handleFocusout),this.updateComplete.then(()=>{const e=this.firstAssigned;e&&!fe(e)&&Ve(e)&&(e.tabIndex=-1)})}get firstAssigned(){var t;const e=(t=this.slotElements.default)==null?void 0:t.assignedElements();return e==null?void 0:e[0]}openChanged(e,t){if(t){const{height:n,bottom:i}=this.getBoundingClientRect();this.updateComplete.then(()=>{const{firstAssigned:o}=this;if(!o||(fe(o)?o.focus({preventScroll:!0}):$(o)&&(o.setAttribute("tabindex","-1"),o.focus({preventScroll:!0})),!this.listboxNode))return;let{placement:r}=this;const{height:l}=this.slotElements.default.getBoundingClientRect();r==="auto"&&(r=i+l>window.innerHeight?"top":"bottom"),r=="top"?this.listboxNode.style.marginTop=`${-1*(n+l)}px`:this.listboxNode.style.marginTop=""})}this.emit("change",{old:e,next:t})}handleClick(e){e.defaultPrevented||(this.open=!this.disabled)}handleKeydown(e){if(!e.defaultPrevented)switch(e.key){case"Enter":this.click();break;case"Escape":{const{firstAssigned:t}=this;$(t)?t.blur():this.blur();break}case" ":case"ArrowDown":!this.open&&!this.disabled&&(e.preventDefault(),this.open=!0);break}}handleFocusout(e){const{relatedTarget:t}=e;!e.defaultPrevented&&!($(t)&&this.contains(t))&&(this.open=!1)}handleClose(){!this.autoClose||(this.autoCloseDelay?setTimeout(()=>{this.open=!1},this.autoCloseDelay):this.open=!1)}render(){return d`
+`,li=Object.defineProperty,ci=Object.getOwnPropertyDescriptor,Y=(e,t,n,i)=>{for(var o=i>1?void 0:i?ci(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&li(t,n,o),o};let D=class extends w{constructor(){super(...arguments);this.disabled=!1,this.open=!1,this.placement="auto",this.placeholder="\u8BF7\u9009\u62E9",this.tabindex="0",this.autoClose=!0,this.autoCloseDelay=50}connectedCallback(){super.connectedCallback(),p(this,"click",this.handleClick),p(this,"keydown",this.handleKeydown),p(this,"focusout",this.handleFocusout),this.updateComplete.then(()=>{const e=this.firstAssigned;e&&!fe(e)&&Ve(e)&&(e.tabIndex=-1)})}get firstAssigned(){var t;const e=(t=this.slotElements.default)==null?void 0:t.assignedElements();return e==null?void 0:e[0]}openChanged(e,t){if(t){const{height:n,bottom:i}=this.getBoundingClientRect();this.updateComplete.then(()=>{const{firstAssigned:o}=this;if(!o||(fe(o)?o.focus({preventScroll:!0}):$(o)&&(o.setAttribute("tabindex","-1"),o.focus({preventScroll:!0})),!this.listboxNode))return;let{placement:r}=this;const{height:l}=this.slotElements.default.getBoundingClientRect();r==="auto"&&(r=i+l>window.innerHeight?"top":"bottom"),r=="top"?this.listboxNode.style.marginTop=`${-1*(n+l)}px`:this.listboxNode.style.marginTop=""})}this.emit("change",{old:e,next:t})}handleClick(e){e.defaultPrevented||(this.open=!this.disabled)}handleKeydown(e){if(!e.defaultPrevented)switch(e.key){case"Enter":this.click();break;case"Escape":{const{firstAssigned:t}=this;$(t)?t.blur():this.blur();break}case" ":case"ArrowDown":!this.open&&!this.disabled&&(e.preventDefault(),this.open=!0);break}}handleFocusout(e){const{relatedTarget:t}=e;!e.defaultPrevented&&!($(t)&&this.contains(t))&&(this.open=!1)}handleClose(){!this.autoClose||(this.autoCloseDelay?setTimeout(()=>{this.open=!1},this.autoCloseDelay):this.open=!1)}render(){return d`
       ${O()}
       <slot name="button" aria-haspopup="listbox" aria-expanded="${this.open}">
         <button class="button" part="button" role="button">${this.placeholder}</button>
@@ -2062,7 +2062,7 @@ export const Dialog = () => book
         <slot></slot>
       </div>
       ${E()}
-    `}};D.styles=m(ri);Y([a({reflect:!0})],D.prototype,"disabled",2);Y([it(".listbox",!0)],D.prototype,"listboxNode",2);Y([a({reflect:!0})],D.prototype,"open",2);Y([a({reflect:!0})],D.prototype,"placement",2);Y([a()],D.prototype,"placeholder",2);Y([a({reflect:!0,converter(e,t){return t.listButton?null:e}})],D.prototype,"tabindex",2);Y([it('[slot="button"]')],D.prototype,"listButton",2);Y([a({reflect:!0})],D.prototype,"autoClose",2);Y([a({reflect:!0})],D.prototype,"autoCloseDelay",2);D=Y([g("fc-dropdown")],D);var ci={parameters:{storySource:{source:`import book from './book.html?raw'
+    `}};D.styles=m(ai);Y([a({reflect:!0})],D.prototype,"disabled",2);Y([it(".listbox",!0)],D.prototype,"listboxNode",2);Y([a({reflect:!0})],D.prototype,"open",2);Y([a({reflect:!0})],D.prototype,"placement",2);Y([a()],D.prototype,"placeholder",2);Y([a({reflect:!0,converter(e,t){return t.listButton?null:e}})],D.prototype,"tabindex",2);Y([it('[slot="button"]')],D.prototype,"listButton",2);Y([a({reflect:!0})],D.prototype,"autoClose",2);Y([a({reflect:!0})],D.prototype,"autoCloseDelay",2);D=Y([g("fc-dropdown")],D);var si={parameters:{storySource:{source:`import book from './book.html?raw'
 
 import './index'
 
@@ -2070,8 +2070,8 @@ import './index'
 export default { title: 'Dropdown' }
 
 export const Dropdown = () => book
-`,locationsMap:{dropdown:{startLoc:{col:24,line:8},endLoc:{col:34,line:8},startBody:{col:24,line:8},endBody:{col:34,line:8}}}}},title:"Dropdown"};const si=()=>ii,di=["Dropdown"];var fi=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",default:ci,Dropdown:si,__namedExportsOrder:di}),pi=`<fc-icon>\u{1F697}</fc-icon>
-`,hi=`:host {
+`,locationsMap:{dropdown:{startLoc:{col:24,line:8},endLoc:{col:34,line:8},startBody:{col:24,line:8},endBody:{col:34,line:8}}}}},title:"Dropdown"};const di=()=>ri,fi=["Dropdown"];var pi=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",default:si,Dropdown:di,__namedExportsOrder:fi}),hi=`<fc-icon>\u{1F697}</fc-icon>
+`,ui=`:host {
   display: inline-block;
   width: var(--font-size);
   height: var(--font-size);
@@ -2084,14 +2084,14 @@ export const Dropdown = () => book
   height: 100%;
   fill: inherit;
 }
-`,ui=Object.defineProperty,bi=Object.getOwnPropertyDescriptor,gi=(e,t,n,i)=>{for(var o=i>1?void 0:i?bi(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&ui(t,n,o),o};let ct=class extends w{render(){return d`<slot part="control"></slot>`}};ct.styles=m(hi);ct=gi([g("fc-icon")],ct);var mi={parameters:{storySource:{source:`import book from './book.html?raw'
+`,bi=Object.defineProperty,gi=Object.getOwnPropertyDescriptor,mi=(e,t,n,i)=>{for(var o=i>1?void 0:i?gi(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&bi(t,n,o),o};let ct=class extends w{render(){return d`<slot part="control"></slot>`}};ct.styles=m(ui);ct=mi([g("fc-icon")],ct);var vi={parameters:{storySource:{source:`import book from './book.html?raw'
 
 import './index'
 
 export default { title: 'Icon', order: 4 }
 
 export const Icon = () => book
-`,locationsMap:{icon:{startLoc:{col:20,line:7},endLoc:{col:30,line:7},startBody:{col:20,line:7},endBody:{col:30,line:7}}}}},title:"Icon",order:4};const vi=()=>pi,yi=["Icon"];var xi=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",default:mi,Icon:vi,__namedExportsOrder:yi}),wi=`<h4>\u7B80\u5355\u4F7F\u7528</h4>
+`,locationsMap:{icon:{startLoc:{col:20,line:7},endLoc:{col:30,line:7},startBody:{col:20,line:7},endBody:{col:30,line:7}}}}},title:"Icon",order:4};const yi=()=>hi,xi=["Icon"];var wi=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",default:vi,Icon:yi,__namedExportsOrder:xi}),ki=`<h4>\u7B80\u5355\u4F7F\u7528</h4>
 <fc-input></fc-input>
 
 <h4>\u76F4\u89D2</h4>
@@ -2244,21 +2244,21 @@ slot[has-value='false'] {
 .control:focus-within::after {
   content: '';
 }
-`,ki=Object.defineProperty,Ci=Object.getOwnPropertyDescriptor,b=(e,t,n,i)=>{for(var o=i>1?void 0:i?Ci(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&ki(t,n,o),o},Ht=(e,t,n)=>{if(!t.has(e))throw TypeError("Cannot "+n)},Ut=(e,t,n)=>(Ht(e,t,"read from private field"),n?n.call(e):t.get(e)),_i=(e,t,n)=>{if(t.has(e))throw TypeError("Cannot add the same private member more than once");t instanceof WeakSet?t.add(e):t.set(e,n)},Gt=(e,t,n,i)=>(Ht(e,t,"write to private field"),i?i.call(e,n):t.set(e,n),n),Ce;let u=class extends H{constructor(){super(...arguments);this.accept="",this.outline=!1,this.type="text",this.name="",this.autofocus=!1,this.checked=!1,this.disabled=!1,this.orientation="horizontal",this.multiple=!1,this.readonly=!1,this.src="",this.tabIndex=0,_i(this,Ce,!1),this.proxyInputHandler=e=>{e.stopPropagation(),e.stopImmediatePropagation(),this.$emit("input",{composed:!0,detail:{originalEvent:e}})}}get shadowInput(){return this.proxy instanceof HTMLInputElement?this.proxy:null}attributeChangedCallback(e,t,n){super.attributeChangedCallback(e,t,n),["type","name","value","placeholder","autofocus","checked","disabled","form","formaction","formtarget","formnovalidate","height","list","max","maxlength","min","minlength","pattern","readonly","required","src","step","width","inputMode"].includes(e)&&(n?this.proxy.setAttribute(e,n):this.proxy.removeAttribute(e))}connectedCallback(){super.connectedCallback(),p(this,"focusin",this.handleFocusin),p(this,"focusout",this.handleFocusout),p(this,"click",this.handleClick),p(this,"keydown",this.handleKeyDown),this.attachProxy(),this.proxy.style.cssText="",this.autofocus&&!document.activeElement&&this.focus(),this.proxy.addEventListener("input",this.proxyInputHandler)}disconnectedCallback(){super.disconnectedCallback(),this.proxy.removeEventListener("input",this.proxyInputHandler)}acceptChanged(e,t){this.proxy instanceof HTMLInputElement&&(this.proxy.accept=t)}blur(){var e;(e=this.shadowInput)==null||e.blur(),this.$emit("blur",{bubbles:!1,composed:!0})}typeChanged(e,t){this.proxy instanceof HTMLInputElement&&(this.proxy.type=t),t==="file"?this.placeholder="\u8BF7\u9009\u62E9\u6587\u4EF6":["number","text"].includes(t)&&(this.placeholder="\u8BF7\u8F93\u5165")}get files(){if(this.proxy instanceof HTMLInputElement)return this.proxy.files}multipleChanged(e,t){this.proxy instanceof HTMLInputElement&&(this.proxy.multiple=t)}readonlyChanged(){this.classList.toggle("read-only",this.readonly)}select(){var e;(e=this.shadowInput)==null||e.select()}valueChanged(e,t){super.valueChanged(e,t),this.emit("change",{old:e,next:t})}handleFocusin(e){var t;(t=this.shadowInput)==null||t.focus(),Gt(this,Ce,!0),this.requestUpdate()}handleFocusout(e){var t;e.relatedTarget===this.shadowInput&&e.stopPropagation(),Ut(this,Ce)&&((t=this.shadowInput)==null||t.blur()),Gt(this,Ce,!1),this.requestUpdate()}handleClick(e){this.proxy&&this.proxy.click()}handleKeyDown(e){["Enter"," "].includes(e.key)&&this.click()}render(){return d`
+`,Ci=Object.defineProperty,_i=Object.getOwnPropertyDescriptor,b=(e,t,n,i)=>{for(var o=i>1?void 0:i?_i(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&Ci(t,n,o),o},Ht=(e,t,n)=>{if(!t.has(e))throw TypeError("Cannot "+n)},Ut=(e,t,n)=>(Ht(e,t,"read from private field"),n?n.call(e):t.get(e)),$i=(e,t,n)=>{if(t.has(e))throw TypeError("Cannot add the same private member more than once");t instanceof WeakSet?t.add(e):t.set(e,n)},Gt=(e,t,n,i)=>(Ht(e,t,"write to private field"),i?i.call(e,n):t.set(e,n),n),Ce;let u=class extends H{constructor(){super(...arguments);this.accept="",this.outline=!1,this.type="text",this.name="",this.autofocus=!1,this.checked=!1,this.disabled=!1,this.orientation="horizontal",this.multiple=!1,this.readonly=!1,this.src="",this.tabIndex=0,$i(this,Ce,!1),this.proxyInputHandler=e=>{e.stopPropagation(),e.stopImmediatePropagation(),this.$emit("input",{composed:!0,detail:{originalEvent:e}})}}get shadowInput(){return this.proxy instanceof HTMLInputElement?this.proxy:null}attributeChangedCallback(e,t,n){super.attributeChangedCallback(e,t,n),["type","name","value","placeholder","autofocus","checked","disabled","form","formaction","formtarget","formnovalidate","height","list","max","maxlength","min","minlength","pattern","readonly","required","src","step","width","inputMode"].includes(e)&&(n?this.proxy.setAttribute(e,n):this.proxy.removeAttribute(e))}connectedCallback(){super.connectedCallback(),p(this,"focusin",this.handleFocusin),p(this,"focusout",this.handleFocusout),p(this,"click",this.handleClick),p(this,"keydown",this.handleKeyDown),this.attachProxy(),this.proxy.style.cssText="",this.autofocus&&!document.activeElement&&this.focus(),this.proxy.addEventListener("input",this.proxyInputHandler)}disconnectedCallback(){super.disconnectedCallback(),this.proxy.removeEventListener("input",this.proxyInputHandler)}acceptChanged(e,t){this.proxy instanceof HTMLInputElement&&(this.proxy.accept=t)}blur(){var e;(e=this.shadowInput)==null||e.blur(),this.$emit("blur",{bubbles:!1,composed:!0})}typeChanged(e,t){this.proxy instanceof HTMLInputElement&&(this.proxy.type=t),t==="file"?this.placeholder="\u8BF7\u9009\u62E9\u6587\u4EF6":["number","text"].includes(t)&&(this.placeholder="\u8BF7\u8F93\u5165")}get files(){if(this.proxy instanceof HTMLInputElement)return this.proxy.files}multipleChanged(e,t){this.proxy instanceof HTMLInputElement&&(this.proxy.multiple=t)}readonlyChanged(){this.classList.toggle("read-only",this.readonly)}select(){var e;(e=this.shadowInput)==null||e.select()}valueChanged(e,t){super.valueChanged(e,t),this.emit("change",{old:e,next:t})}handleFocusin(e){var t;(t=this.shadowInput)==null||t.focus(),Gt(this,Ce,!0),this.requestUpdate()}handleFocusout(e){var t;e.relatedTarget===this.shadowInput&&e.stopPropagation(),Ut(this,Ce)&&((t=this.shadowInput)==null||t.blur()),Gt(this,Ce,!1),this.requestUpdate()}handleClick(e){this.proxy&&this.proxy.click()}handleKeyDown(e){["Enter"," "].includes(e.key)&&this.click()}render(){return d`
       <slot name="label">${this.label?d`<span class="label">${this.label}</span`:null}</slot>
       <div class="control fc-focusin-outline" part="control" focused="${Ut(this,Ce)}">
         ${O()}
         ${this.type==="file"?d`<slot has-value="${!!this.value}">${this.value||this.placeholder}</slot>`:d`<slot name="form-associated-proxy"></slot>`}
         ${E()}
       </div>
-    `}};Ce=new WeakMap;u.styles=m(qt);b([a({reflect:!0})],u.prototype,"accept",2);b([a()],u.prototype,"outline",2);b([a()],u.prototype,"type",2);b([a()],u.prototype,"name",2);b([a()],u.prototype,"placeholder",2);b([a()],u.prototype,"autofocus",2);b([a()],u.prototype,"checked",2);b([a()],u.prototype,"disabled",2);b([a()],u.prototype,"formaction",2);b([a()],u.prototype,"formenctype",2);b([a()],u.prototype,"formmethod",2);b([a()],u.prototype,"formnovalidate",2);b([a()],u.prototype,"formtarget",2);b([a()],u.prototype,"height",2);b([a({type:"string"})],u.prototype,"label",2);b([a({reflect:!0})],u.prototype,"orientation",2);b([a()],u.prototype,"list",2);b([a()],u.prototype,"max",2);b([a()],u.prototype,"maxlength",2);b([a()],u.prototype,"min",2);b([a()],u.prototype,"minlength",2);b([a()],u.prototype,"multiple",2);b([a()],u.prototype,"pattern",2);b([a()],u.prototype,"readonly",2);b([a()],u.prototype,"src",2);b([a()],u.prototype,"step",2);b([a({reflect:!0})],u.prototype,"tabIndex",2);b([a()],u.prototype,"width",2);u=b([g("fc-input")],u);var $i={parameters:{storySource:{source:`import book from './book.html?raw'
+    `}};Ce=new WeakMap;u.styles=m(qt);b([a({reflect:!0})],u.prototype,"accept",2);b([a()],u.prototype,"outline",2);b([a()],u.prototype,"type",2);b([a()],u.prototype,"name",2);b([a()],u.prototype,"placeholder",2);b([a()],u.prototype,"autofocus",2);b([a()],u.prototype,"checked",2);b([a()],u.prototype,"disabled",2);b([a()],u.prototype,"formaction",2);b([a()],u.prototype,"formenctype",2);b([a()],u.prototype,"formmethod",2);b([a()],u.prototype,"formnovalidate",2);b([a()],u.prototype,"formtarget",2);b([a()],u.prototype,"height",2);b([a({type:"string"})],u.prototype,"label",2);b([a({reflect:!0})],u.prototype,"orientation",2);b([a()],u.prototype,"list",2);b([a()],u.prototype,"max",2);b([a()],u.prototype,"maxlength",2);b([a()],u.prototype,"min",2);b([a()],u.prototype,"minlength",2);b([a()],u.prototype,"multiple",2);b([a()],u.prototype,"pattern",2);b([a()],u.prototype,"readonly",2);b([a()],u.prototype,"src",2);b([a()],u.prototype,"step",2);b([a({reflect:!0})],u.prototype,"tabIndex",2);b([a()],u.prototype,"width",2);u=b([g("fc-input")],u);var Oi={parameters:{storySource:{source:`import book from './book.html?raw'
 
 import './index'
 
 export default { title: 'Input', order: 2 }
 
 export const Input = () => book
-`,locationsMap:{input:{startLoc:{col:21,line:7},endLoc:{col:31,line:7},startBody:{col:21,line:7},endBody:{col:31,line:7}}}}},title:"Input",order:2};const Oi=()=>wi,Ei=["Input"];var Ai=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",default:$i,Input:Oi,__namedExportsOrder:Ei}),Ii=`<h4>\u7B80\u5355\u4F7F\u7528</h4>
+`,locationsMap:{input:{startLoc:{col:21,line:7},endLoc:{col:31,line:7},startBody:{col:21,line:7},endBody:{col:31,line:7}}}}},title:"Input",order:2};const Ei=()=>ki,Ai=["Input"];var Ii=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",default:Oi,Input:Ei,__namedExportsOrder:Ai}),Si=`<h4>\u7B80\u5355\u4F7F\u7528</h4>
 <fc-link href="#">fc-component</fc-link>
 
 <h4>\u7981\u7528</h4>
@@ -2276,7 +2276,7 @@ export const Input = () => book
 </p>
 
 <p>\u8FD9\u662F\u4E2A\u6CA1\u6709[href]\u5C5E\u6027\u7684 <fc-link appearance="text">fc-link</fc-link></p>
-`,Si=`:host {
+`,Pi=`:host {
   display: inline-flex;
   vertical-align: bottom;
   cursor: pointer;
@@ -2346,7 +2346,7 @@ export const Input = () => book
 .control:focus {
   text-decoration: underline !important;
 }
-`,Pi=Object.defineProperty,zi=Object.getOwnPropertyDescriptor,M=(e,t,n,i)=>{for(var o=i>1?void 0:i?zi(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&Pi(t,n,o),o};let I=class extends w{constructor(){super(...arguments);this.appearance="button",this.download="",this.href="",this.hreflang="",this.ping="",this.ref="",this.role="link",this.target="",this.tabindex="0",this.type=""}connectedCallback(){super.connectedCallback(),p(this,"click",this.handleClick),p(this,"keydown",this.handleKeydown)}downloadChanged(e,t){this.control&&ot(this.control,"download",t,!1)}hrefChanged(e,t){this.control&&ot(this.control,"href",t,!1)}handleClick(e){this.shadowAnchor&&this.shadowAnchor.click()}handleKeydown(e){e.key==="Enter"&&this.click()}render(){return d`<a
+`,zi=Object.defineProperty,Li=Object.getOwnPropertyDescriptor,M=(e,t,n,i)=>{for(var o=i>1?void 0:i?Li(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&zi(t,n,o),o};let I=class extends w{constructor(){super(...arguments);this.appearance="button",this.download="",this.href="",this.hreflang="",this.ping="",this.ref="",this.role="link",this.target="",this.tabindex="0",this.type=""}connectedCallback(){super.connectedCallback(),p(this,"click",this.handleClick),p(this,"keydown",this.handleKeydown)}downloadChanged(e,t){this.control&&ot(this.control,"download",t,!1)}hrefChanged(e,t){this.control&&ot(this.control,"href",t,!1)}handleClick(e){this.shadowAnchor&&this.shadowAnchor.click()}handleKeydown(e){e.key==="Enter"&&this.click()}render(){return d`<a
       class="control"
       part="control"
       tabindex="-1"
@@ -2364,14 +2364,14 @@ export const Input = () => book
       ${O()}
       <span part="content"><slot></slot></span>
       ${E()}
-    </a>`}};I.styles=m(Si);M([a({reflect:!0})],I.prototype,"appearance",2);M([a({reflect:!0,initCallback:!0})],I.prototype,"download",2);M([a({reflect:!0,initCallback:!0})],I.prototype,"href",2);M([a()],I.prototype,"hreflang",2);M([a()],I.prototype,"ping",2);M([a()],I.prototype,"ref",2);M([a({reflect:!0})],I.prototype,"role",2);M([a()],I.prototype,"target",2);M([a({reflect:!0})],I.prototype,"tabindex",2);M([a()],I.prototype,"type",2);M([it("a",!0)],I.prototype,"shadowAnchor",2);I=M([g("fc-link")],I);var Li={parameters:{storySource:{source:`import book from './book.html?raw'
+    </a>`}};I.styles=m(Pi);M([a({reflect:!0})],I.prototype,"appearance",2);M([a({reflect:!0,initCallback:!0})],I.prototype,"download",2);M([a({reflect:!0,initCallback:!0})],I.prototype,"href",2);M([a()],I.prototype,"hreflang",2);M([a()],I.prototype,"ping",2);M([a()],I.prototype,"ref",2);M([a({reflect:!0})],I.prototype,"role",2);M([a()],I.prototype,"target",2);M([a({reflect:!0})],I.prototype,"tabindex",2);M([a()],I.prototype,"type",2);M([it("a",!0)],I.prototype,"shadowAnchor",2);I=M([g("fc-link")],I);var Ti={parameters:{storySource:{source:`import book from './book.html?raw'
 
 import './index'
 
 export default { title: 'Link', order: 7 }
 
 export const Link = () => book
-`,locationsMap:{link:{startLoc:{col:20,line:7},endLoc:{col:30,line:7},startBody:{col:20,line:7},endBody:{col:30,line:7}}}}},title:"Link",order:7};const Ti=()=>Ii,Di=["Link"];var Mi=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",default:Li,Link:Ti,__namedExportsOrder:Di}),ji=`<h4>\u7B80\u5355\u4F7F\u7528</h4>
+`,locationsMap:{link:{startLoc:{col:20,line:7},endLoc:{col:30,line:7},startBody:{col:20,line:7},endBody:{col:30,line:7}}}}},title:"Link",order:7};const Di=()=>Si,Mi=["Link"];var ji=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",default:Ti,Link:Di,__namedExportsOrder:Mi}),Bi=`<h4>\u7B80\u5355\u4F7F\u7528</h4>
 <fc-list-option>\u82F9\u679C</fc-list-option>
 
 <h4>\u8BBE\u7F6E value</h4>
@@ -2390,14 +2390,14 @@ export const Link = () => book
 <fc-list-option hidden>\u6A58\u5B50</fc-list-option>
 
 <p>\u6A58\u5B50\u88AB\u9690\u85CF\u4E86</p>
-`,Bi={parameters:{storySource:{source:`import book from './book.html?raw'
+`,Ri={parameters:{storySource:{source:`import book from './book.html?raw'
 
 import './index'
 
 export default { title: 'List Option', order: 1 }
 
 export const ListOption = () => book
-`,locationsMap:{"list-option":{startLoc:{col:26,line:7},endLoc:{col:36,line:7},startBody:{col:26,line:7},endBody:{col:36,line:7}}}}},title:"List Option",order:1};const Ri=()=>ji,Fi=["ListOption"];var Vi=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",default:Bi,ListOption:Ri,__namedExportsOrder:Fi}),Ni=`<h4>\u6B63\u5E38\u4F7F\u7528</h4>
+`,locationsMap:{"list-option":{startLoc:{col:26,line:7},endLoc:{col:36,line:7},startBody:{col:26,line:7},endBody:{col:36,line:7}}}}},title:"List Option",order:1};const Fi=()=>Bi,Vi=["ListOption"];var Ni=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",default:Ri,ListOption:Fi,__namedExportsOrder:Vi}),Ki=`<h4>\u6B63\u5E38\u4F7F\u7528</h4>
 <fc-listbox>
   <fc-list-option value="apple">\u82F9\u679C</fc-list-option>
   <fc-list-option value="banana">\u9999\u8549</fc-list-option>
@@ -2460,13 +2460,13 @@ export const ListOption = () => book
   <fc-list-option>Bar</fc-list-option>
   <fc-list-option>Baz</fc-list-option>
 </fc-listbox>
-`,Ki={parameters:{storySource:{source:`import book from './book.html?raw'
+`,qi={parameters:{storySource:{source:`import book from './book.html?raw'
 import './index'
 
 export default { title: 'Listbox', order: 5 }
 
 export const Listbox = () => book
-`,locationsMap:{listbox:{startLoc:{col:23,line:6},endLoc:{col:33,line:6},startBody:{col:23,line:6},endBody:{col:33,line:6}}}}},title:"Listbox",order:5};const qi=()=>Ni,Hi=["Listbox"];var Ui=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",default:Ki,Listbox:qi,__namedExportsOrder:Hi}),Gi=`<h4>\u7B80\u5355\u4F7F\u7528</h4>
+`,locationsMap:{listbox:{startLoc:{col:23,line:6},endLoc:{col:33,line:6},startBody:{col:23,line:6},endBody:{col:33,line:6}}}}},title:"Listbox",order:5};const Hi=()=>Ki,Ui=["Listbox"];var Gi=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",default:qi,Listbox:Hi,__namedExportsOrder:Ui}),Wi=`<h4>\u7B80\u5355\u4F7F\u7528</h4>
 <fc-menu-item>\u70E7\u997C</fc-menu-item>
 
 <h4>\u4E0D\u53EF\u7528\uFF08disabled\uFF09</h4>
@@ -2597,7 +2597,7 @@ export const Listbox = () => book
 :host(.readonly) .label {
   cursor: auto;
 }
-`,Wi=`:host {
+`,Yi=`:host {
   position: relative;
   display: flex;
   padding: var(--padding);
@@ -2678,7 +2678,7 @@ export const Listbox = () => book
   height: 100%;
   pointer-events: none;
 }
-`,Yi=Object.defineProperty,Xi=Object.getOwnPropertyDescriptor,ce=(e,t,n,i)=>{for(var o=i>1?void 0:i?Xi(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&Yi(t,n,o),o};const Ji=["menuitemradio","menuitemcheckbox"],se=e=>e instanceof _||e instanceof Element&&e.nodeName.toLowerCase()==="fc-menu-item";let _=class extends w{constructor(){super(...arguments);var e,t;this.checked=!1,this.disabled=!1,this.expanded=this.hasAttribute("expanded"),this.role=(e=this.getAttribute("role"))!=null?e:"menuitem",this.tabindex=(t=this.getAttribute("tabindex"))!=null?t:"-1"}connectedCallback(){super.connectedCallback(),p(this,"click",this.handleClick)}get isInputRole(){return Ji.includes(this.role)}checkedChanged(e,t){if(this.isInputRole){if(this.disabled)return;this.toggleAttribute("aria-checked",t),this.toggleAttribute("checked",t),typeof e=="boolean"&&this.emit("change")}else this.removeAttribute("aria-checked")}expandedChanged(e,t){this.setAttribute("aria-expanded",t.toString())}handleClick(e){e.target===this&&(this.checked=!this.disabled&&this.isInputRole&&(this.role==="menuitemradio"||!this.checked))}render(){var e;return d`
+`,Xi=Object.defineProperty,Ji=Object.getOwnPropertyDescriptor,ce=(e,t,n,i)=>{for(var o=i>1?void 0:i?Ji(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&Xi(t,n,o),o};const Qi=["menuitemradio","menuitemcheckbox"],se=e=>e instanceof _||e instanceof Element&&e.nodeName.toLowerCase()==="fc-menu-item";let _=class extends w{constructor(){super(...arguments);var e,t;this.checked=!1,this.disabled=!1,this.expanded=this.hasAttribute("expanded"),this.role=(e=this.getAttribute("role"))!=null?e:"menuitem",this.tabindex=(t=this.getAttribute("tabindex"))!=null?t:"-1"}connectedCallback(){super.connectedCallback(),p(this,"click",this.handleClick)}get isInputRole(){return Qi.includes(this.role)}checkedChanged(e,t){if(this.isInputRole){if(this.disabled)return;this.toggleAttribute("aria-checked",t),this.toggleAttribute("checked",t),typeof e=="boolean"&&this.emit("change")}else this.removeAttribute("aria-checked")}expandedChanged(e,t){this.setAttribute("aria-expanded",t.toString())}handleClick(e){e.target===this&&(this.checked=!this.disabled&&this.isInputRole&&(this.role==="menuitemradio"||!this.checked))}render(){var e;return d`
       ${O()}
       ${this.isInputRole?d`<span class="input-container" ?checkable="${this.isInputRole}">
             ${this.role==="menuitemradio"?d`<slot name="radio-indicator">
@@ -2717,7 +2717,7 @@ export const Listbox = () => book
           ></slot>`:null}
       ${E()} ${this.expanded?d`<div class="submenu" part="submenu"><slot name="submenu"></slot></div>`:null}
       <span class="fc-inner-outline"></span>
-    `}};_.styles=m(Wt,Vt,Wi);ce([a({type:"boolean",hasChanged(e,t,n){return!n.disabled}})],_.prototype,"checked",2);ce([a()],_.prototype,"disabled",2);ce([a({type:"string",reflect:!0})],_.prototype,"href",2);ce([a({reflect:!0,hasChanged(e,t,n){return e!==void 0&&!n.disabled}})],_.prototype,"expanded",2);ce([a({reflect:!0})],_.prototype,"role",2);ce([a({attribute:!1}),ye('[slot="submenu"]')],_.prototype,"submenu",2);ce([a({reflect:!0})],_.prototype,"tabindex",2);_=ce([g("fc-menu-item")],_);var Qi={parameters:{storySource:{source:`import book from './book.html?raw'
+    `}};_.styles=m(Wt,Vt,Yi);ce([a({type:"boolean",hasChanged(e,t,n){return!n.disabled}})],_.prototype,"checked",2);ce([a()],_.prototype,"disabled",2);ce([a({type:"string",reflect:!0})],_.prototype,"href",2);ce([a({reflect:!0,hasChanged(e,t,n){return e!==void 0&&!n.disabled}})],_.prototype,"expanded",2);ce([a({reflect:!0})],_.prototype,"role",2);ce([a({attribute:!1}),ye('[slot="submenu"]')],_.prototype,"submenu",2);ce([a({reflect:!0})],_.prototype,"tabindex",2);_=ce([g("fc-menu-item")],_);var Zi={parameters:{storySource:{source:`import book from './book.html?raw'
 
 import './index'
 
@@ -2725,7 +2725,7 @@ import './index'
 export default { title: 'Menu Item' }
 
 export const MenuItem = () => book
-`,locationsMap:{"menu-item":{startLoc:{col:24,line:8},endLoc:{col:34,line:8},startBody:{col:24,line:8},endBody:{col:34,line:8}}}}},title:"Menu Item"};const Zi=()=>Gi,er=["MenuItem"];var tr=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",default:Qi,MenuItem:Zi,__namedExportsOrder:er}),nr=`<h4>\u7B80\u5355\u4F7F\u7528</h4>
+`,locationsMap:{"menu-item":{startLoc:{col:24,line:8},endLoc:{col:34,line:8},startBody:{col:24,line:8},endBody:{col:34,line:8}}}}},title:"Menu Item"};const er=()=>Wi,tr=["MenuItem"];var nr=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",default:Zi,MenuItem:er,__namedExportsOrder:tr}),or=`<h4>\u7B80\u5355\u4F7F\u7528</h4>
 <fc-menu>
   <fc-menu-item>\u82F9\u679C</fc-menu-item>
   <fc-menu-item>\u9999\u8549</fc-menu-item>
@@ -2869,13 +2869,13 @@ export const MenuItem = () => book
 </fc-menu>
 <br />
 <br />
-`,or=`:host {
+`,ir=`:host {
   display: block;
   height: 0;
   margin: calc(var(--fc-unit-size) * 4) 0;
   border-top: var(--stroke-width) solid var(--stroke-color);
 }
-`,ir=Object.defineProperty,rr=Object.getOwnPropertyDescriptor,Yt=(e,t,n,i)=>{for(var o=i>1?void 0:i?rr(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&ir(t,n,o),o};let Ue=class extends $t{constructor(){super(...arguments);this.role="separator"}};Ue.styles=m(or);Yt([a({reflect:!0})],Ue.prototype,"role",2);Ue=Yt([g("fc-divider")],Ue);var ar=`:host {
+`,rr=Object.defineProperty,ar=Object.getOwnPropertyDescriptor,Yt=(e,t,n,i)=>{for(var o=i>1?void 0:i?ar(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&rr(t,n,o),o};let Ue=class extends $t{constructor(){super(...arguments);this.role="separator"}};Ue.styles=m(ir);Yt([a({reflect:!0})],Ue.prototype,"role",2);Ue=Yt([g("fc-divider")],Ue);var lr=`:host {
   position: relative;
   display: inline-grid;
   --padding-t: var(--padding-l);
@@ -2891,11 +2891,11 @@ export const MenuItem = () => book
   margin-top: var(--menu-margin-top, calc(-1 * var(--padding-t)));
   margin-left: var(--menu-margin-left, var(--padding-l));
 }
-`,lr=Object.defineProperty,cr=Object.getOwnPropertyDescriptor,Se=(e,t,n,i)=>{for(var o=i>1?void 0:i?cr(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&lr(t,n,o),o},sr=(e,t,n)=>{if(!t.has(e))throw TypeError("Cannot "+n)},dr=(e,t,n)=>{if(t.has(e))throw TypeError("Cannot add the same private member more than once");t instanceof WeakSet?t.add(e):t.set(e,n)},st=(e,t,n)=>(sr(e,t,"access private method"),n),Pe,Ge;let he=class extends w{constructor(){super(...arguments);dr(this,Pe),this.role="menu",this.tabindex="0",this.items=[],this.mouseenterDelay=240,this.handleMouseenter=Ot(e=>{st(this,Pe,Ge).call(this,e)},this.mouseenterDelay,{trailing:!0})}connectedCallback(){super.connectedCallback(),this.setAttribute("aria-orientation","vertical"),this.setAttribute("aria-expanded","true"),p(this,"change",this.handleChange),p(this,"click",this.handleClick),p(this,"keydown",this.handleKeydown),p(this,"mouseenter",this.handleMouseenter,!0),p(this,"mouseleave",this.handleMouseleave,!0),p(this,"focusout",this.handleFocusout)}setTopIndex(){return Fn(this.items.filter(Ve))}itemsChanged(e,t){!t||e&&this.slot!=="submenu"&&this.setTopIndex()}resetTabIndex(){const e=this.items;e.length&&e.forEach(t=>{t.hasAttribute("tabindex")&&t.setAttribute("tabindex","-1")})}handleChange(e){const{target:t}=e;t instanceof _&&t.role==="menuitemradio"&&t.checked&&t!==this.checkedRadio&&(this.checkedRadio&&(this.checkedRadio.checked=!1),this.checkedRadio=t)}handleKeydown(e){const{target:t}=e;if(!!($(t)&&t.closest("fc-menu")===this))switch(e.key){case"ArrowUp":this.focusCurrentOrNext(e,-1);break;case"ArrowDown":this.focusCurrentOrNext(e,1);break;case"ArrowLeft":this.unexpand(e);break;case" ":this.toggleExpand(e);break;case"ArrowRight":this.expand(e);break;case"Enter":{se(e.target)&&e.target.dispatchEvent(new MouseEvent("click",{bubbles:!1,composed:!0}));break}case"Escape":{se(e.target)&&e.target.blur();break}}}focusCurrentOrNext(e,t){const{activeElement:n}=this.ownerDocument,i=this.items.filter(Ve);if($(n)&&!i.includes(n))return;const o=jn(i,t);return o&&(e.preventDefault(),o.focus()),o}toggleExpand(e){e.target instanceof _&&(e.target.expanded?e.target.expanded=!1:this.expand(e))}expand(e){var n,i;e.preventDefault();const{target:t}=e;if(t instanceof _){if(!((n=t.submenu)==null?void 0:n.length))return;t.expanded=!0;const o=(i=t.submenu)==null?void 0:i[0];return o&&this.updateComplete.then(()=>{var r;(r=o.setTopIndex())==null||r.focus()}),t}}unexpand(e){var n;e.preventDefault();const{target:t}=e;if(t instanceof _){const i=(n=t.parentElement)==null?void 0:n.closest("fc-menu-item");if(i instanceof _)return i.expanded=!1,i.focus(),i}}handleClick(e){const{target:t}=e;if(se(t)&&t.closest("fc-menu")===this){t.expanded=!0;const{activeElement:n}=document;n instanceof HTMLElement&&n!==t&&this.contains(n)&&Array.from(this.querySelectorAll("fc-menu-item[expanded]")).forEach(o=>{o.focus(),o.expanded=!1}),t.focus()}}mouseenterDelayChanged(e,t){if(this.removeEventListener("mouseenter",this.handleMouseenter,!0),t>0)this.handleMouseenter=Ot(st(this,Pe,Ge),t,{trailing:!0});else{const n=st(this,Pe,Ge);n.cancel=Et,n.flush=Et,this.handleMouseenter=n}p(this,"mouseenter",this.handleMouseenter,!0)}handleMouseleave(e){var i;const{target:t,relatedTarget:n}=e;t===this&&!(se(n)&&this.contains(n))&&this.handleMouseenter.cancel(),se(n)&&se(t)&&!t.disabled&&((i=t.submenu)==null?void 0:i.length)&&(t.focus(),t.expanded=!1)}handleFocusout(e){const{relatedTarget:t,currentTarget:n}=e;if(!($(n)&&n.closest("fc-menu")))return;const i=n.closest("fc-menu-item");i&&!($(t)&&n.contains(t))&&(i.focus(),i.expanded=!1)}render(){return d`
+`,cr=Object.defineProperty,sr=Object.getOwnPropertyDescriptor,Se=(e,t,n,i)=>{for(var o=i>1?void 0:i?sr(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&cr(t,n,o),o},dr=(e,t,n)=>{if(!t.has(e))throw TypeError("Cannot "+n)},fr=(e,t,n)=>{if(t.has(e))throw TypeError("Cannot add the same private member more than once");t instanceof WeakSet?t.add(e):t.set(e,n)},st=(e,t,n)=>(dr(e,t,"access private method"),n),Pe,Ge;let he=class extends w{constructor(){super(...arguments);fr(this,Pe),this.role="menu",this.tabindex="0",this.items=[],this.mouseenterDelay=240,this.handleMouseenter=Ot(e=>{st(this,Pe,Ge).call(this,e)},this.mouseenterDelay,{trailing:!0})}connectedCallback(){super.connectedCallback(),this.setAttribute("aria-orientation","vertical"),this.setAttribute("aria-expanded","true"),p(this,"change",this.handleChange),p(this,"click",this.handleClick),p(this,"keydown",this.handleKeydown),p(this,"mouseenter",this.handleMouseenter,!0),p(this,"mouseleave",this.handleMouseleave,!0),p(this,"focusout",this.handleFocusout)}setTopIndex(){return Fn(this.items.filter(Ve))}itemsChanged(e,t){!t||e&&this.slot!=="submenu"&&this.setTopIndex()}resetTabIndex(){const e=this.items;e.length&&e.forEach(t=>{t.hasAttribute("tabindex")&&t.setAttribute("tabindex","-1")})}handleChange(e){const{target:t}=e;t instanceof _&&t.role==="menuitemradio"&&t.checked&&t!==this.checkedRadio&&(this.checkedRadio&&(this.checkedRadio.checked=!1),this.checkedRadio=t)}handleKeydown(e){const{target:t}=e;if(!!($(t)&&t.closest("fc-menu")===this))switch(e.key){case"ArrowUp":this.focusCurrentOrNext(e,-1);break;case"ArrowDown":this.focusCurrentOrNext(e,1);break;case"ArrowLeft":this.unexpand(e);break;case" ":this.toggleExpand(e);break;case"ArrowRight":this.expand(e);break;case"Enter":{se(e.target)&&e.target.dispatchEvent(new MouseEvent("click",{bubbles:!1,composed:!0}));break}case"Escape":{se(e.target)&&e.target.blur();break}}}focusCurrentOrNext(e,t){const{activeElement:n}=this.ownerDocument,i=this.items.filter(Ve);if($(n)&&!i.includes(n))return;const o=jn(i,t);return o&&(e.preventDefault(),o.focus()),o}toggleExpand(e){e.target instanceof _&&(e.target.expanded?e.target.expanded=!1:this.expand(e))}expand(e){var n,i;e.preventDefault();const{target:t}=e;if(t instanceof _){if(!((n=t.submenu)==null?void 0:n.length))return;t.expanded=!0;const o=(i=t.submenu)==null?void 0:i[0];return o&&this.updateComplete.then(()=>{var r;(r=o.setTopIndex())==null||r.focus()}),t}}unexpand(e){var n;e.preventDefault();const{target:t}=e;if(t instanceof _){const i=(n=t.parentElement)==null?void 0:n.closest("fc-menu-item");if(i instanceof _)return i.expanded=!1,i.focus(),i}}handleClick(e){const{target:t}=e;if(se(t)&&t.closest("fc-menu")===this){t.expanded=!0;const{activeElement:n}=document;n instanceof HTMLElement&&n!==t&&this.contains(n)&&Array.from(this.querySelectorAll("fc-menu-item[expanded]")).forEach(o=>{o.focus(),o.expanded=!1}),t.focus()}}mouseenterDelayChanged(e,t){if(this.removeEventListener("mouseenter",this.handleMouseenter,!0),t>0)this.handleMouseenter=Ot(st(this,Pe,Ge),t,{trailing:!0});else{const n=st(this,Pe,Ge);n.cancel=Et,n.flush=Et,this.handleMouseenter=n}p(this,"mouseenter",this.handleMouseenter,!0)}handleMouseleave(e){var i;const{target:t,relatedTarget:n}=e;t===this&&!(se(n)&&this.contains(n))&&this.handleMouseenter.cancel(),se(n)&&se(t)&&!t.disabled&&((i=t.submenu)==null?void 0:i.length)&&(t.focus(),t.expanded=!1)}handleFocusout(e){const{relatedTarget:t,currentTarget:n}=e;if(!($(n)&&n.closest("fc-menu")))return;const i=n.closest("fc-menu-item");i&&!($(t)&&n.contains(t))&&(i.focus(),i.expanded=!1)}render(){return d`
       ${O()}
       <slot></slot>
       ${E()}
-    `}};Pe=new WeakSet;Ge=function(e){var i;const{target:t}=e;if(!($(t)&&t.closest("fc-menu")===this))return;this.items.find(o=>{se(o)&&o.expanded&&(o.expanded=!1)});const n=t.closest("fc-menu-item");se(n)&&!n.disabled&&((i=n.submenu)==null?void 0:i.length)&&(n.expanded=!0,n.focus())};he.styles=m(ar);Se([a({reflect:!0})],he.prototype,"role",2);Se([a({reflect:!0})],he.prototype,"tabindex",2);Se([a({attribute:!1}),Fe()],he.prototype,"items",2);Se([a({attribute:!1,hasChanged:q,converter(e){return Number(e)>=0?e:240}})],he.prototype,"mouseenterDelay",2);he=Se([g("fc-menu")],he);var fr={parameters:{storySource:{source:`import book from './book.html?raw'
+    `}};Pe=new WeakSet;Ge=function(e){var i;const{target:t}=e;if(!($(t)&&t.closest("fc-menu")===this))return;this.items.find(o=>{se(o)&&o.expanded&&(o.expanded=!1)});const n=t.closest("fc-menu-item");se(n)&&!n.disabled&&((i=n.submenu)==null?void 0:i.length)&&(n.expanded=!0,n.focus())};he.styles=m(lr);Se([a({reflect:!0})],he.prototype,"role",2);Se([a({reflect:!0})],he.prototype,"tabindex",2);Se([a({attribute:!1}),Fe()],he.prototype,"items",2);Se([a({attribute:!1,hasChanged:q,converter(e){return Number(e)>=0?e:240}})],he.prototype,"mouseenterDelay",2);he=Se([g("fc-menu")],he);var pr={parameters:{storySource:{source:`import book from './book.html?raw'
 
 import './index'
 
@@ -2903,7 +2903,7 @@ import './index'
 export default { title: 'Menu' }
 
 export const Menu = () => book
-`,locationsMap:{menu:{startLoc:{col:20,line:8},endLoc:{col:30,line:8},startBody:{col:20,line:8},endBody:{col:30,line:8}}}}},title:"Menu"};const pr=()=>nr,hr=["Menu"];var ur=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",default:fr,Menu:pr,__namedExportsOrder:hr}),br=`<h4>\u9ED8\u8BA4\u503C</h4>
+`,locationsMap:{menu:{startLoc:{col:20,line:8},endLoc:{col:30,line:8},startBody:{col:20,line:8},endBody:{col:30,line:8}}}}},title:"Menu"};const hr=()=>or,ur=["Menu"];var br=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",default:pr,Menu:hr,__namedExportsOrder:ur}),gr=`<h4>\u9ED8\u8BA4\u503C</h4>
 <fc-number-field value="1"></fc-number-field>
 <fc-number-field value="a" placeholder="\u7C7B\u578B\u9519\u8BEF\u7684\u9ED8\u8BA4\u503C"></fc-number-field>
 
@@ -2964,7 +2964,7 @@ export const Menu = () => book
   <fc-number-field required name="foo"></fc-number-field>
   <input type="submit" />
 </form>
-`,gr=`.controls {
+`,mr=`.controls {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -3019,7 +3019,7 @@ export const Menu = () => book
 :host([vibrate].is-min) {
   animation: vibrate 0.06s ease-in-out 3;
 }
-`,mr=Object.defineProperty,vr=Object.getOwnPropertyDescriptor,ue=(e,t,n,i)=>{for(var o=i>1?void 0:i?vr(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&mr(t,n,o),o};const ze=e=>Je(e)?Qe(e):NaN;let Z=class extends u{constructor(){super(...arguments);var e,t;this.max=(e=this.getAttribute("max"))!=null?e:"",this.min=(t=this.getAttribute("min"))!=null?t:"",this.step="1",this.unit="",this.vibrate=!1,this.value="",this.handleChange=n=>{if(!(n.target instanceof HTMLInputElement))return;const{unit:i}=this,o=n.target.value.trim(),r=i?o.replace(new RegExp("\\s*"+i,"g"),""):o;this.classList.remove("expression-error");try{const l=mn(r);if(!isNaN(l)){const s=l.toString();this.value=s,this.emit("change")}}catch(l){console.warn("\u8BA1\u7B97\u51FA\u9519",l),this.classList.add("expression-error"),this.emit("expression-error",l)}this.updateInputValue(this.valueWithUnit)}}updateInputValue(e){this.shadowInput&&(this.shadowInput.value=e),this.checkValidity()}connectedCallback(){var e;super.connectedCallback(),p(this,"keydown",this.handleKeydown),(e=this.shadowInput)==null||e.addEventListener("change",this.handleChange)}disconnectedCallback(){var e;super.disconnectedCallback(),(e=this.shadowInput)==null||e.removeEventListener("change",this.handleChange)}normalize(){this.value=vn(this.value)}valueChanged(e,t){super.valueChanged(e,t),this.shadowInput instanceof HTMLInputElement&&(this.shadowInput.value=t),this.updateInputValue(this.valueWithUnit)}get valueWithUnit(){return[this.value,this.unit].filter(e=>e).join(" ")}get number(){return Je(this.value)?Number(this.value):NaN}handleKeydown(e){const t=e.ctrlKey?10:e.shiftKey?.1:1,{step:n="1"}=this,i=ze(n);switch(e.key){case"ArrowUp":e.preventDefault(),this.nextStep(i*t);break;case"ArrowDown":e.preventDefault(),this.nextStep(i*-1*t);break}}handleClickStep(e){this.disabled||this.nextStep(e*Qe(this.step))}nextStep(e){const n=[this.value?this.number:0,"+",e].reduce((l,s)=>l.op(s),new yn(100)),i=ze(this.max),o=ze(this.min),r=n.value;i&&r>=i?(this.classList.remove("is-max"),this.updateComplete.then(()=>this.classList.add("is-max")),this.emit("is-max")):this.classList.remove("is-max"),o&&r<=o?(this.classList.remove("is-min"),this.updateComplete.then(()=>this.classList.add("is-min")),this.emit("is-min")):this.classList.remove("is-min"),this.number!==n.value&&this.emit("change"),this.value=n.toString()}render(){return d`
+`,vr=Object.defineProperty,yr=Object.getOwnPropertyDescriptor,ue=(e,t,n,i)=>{for(var o=i>1?void 0:i?yr(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&vr(t,n,o),o};const ze=e=>Je(e)?Qe(e):NaN;let Z=class extends u{constructor(){super(...arguments);var e,t;this.max=(e=this.getAttribute("max"))!=null?e:"",this.min=(t=this.getAttribute("min"))!=null?t:"",this.step="1",this.unit="",this.vibrate=!1,this.value="",this.handleChange=n=>{if(!(n.target instanceof HTMLInputElement))return;const{unit:i}=this,o=n.target.value.trim(),r=i?o.replace(new RegExp("\\s*"+i,"g"),""):o;this.classList.remove("expression-error");try{const l=mn(r);if(!isNaN(l)){const s=l.toString();this.value=s,this.emit("change")}}catch(l){console.warn("\u8BA1\u7B97\u51FA\u9519",l),this.classList.add("expression-error"),this.emit("expression-error",l)}this.updateInputValue(this.valueWithUnit)}}updateInputValue(e){this.shadowInput&&(this.shadowInput.value=e),this.checkValidity()}connectedCallback(){var e;super.connectedCallback(),p(this,"keydown",this.handleKeydown),(e=this.shadowInput)==null||e.addEventListener("change",this.handleChange)}disconnectedCallback(){var e;super.disconnectedCallback(),(e=this.shadowInput)==null||e.removeEventListener("change",this.handleChange)}normalize(){this.value=vn(this.value)}valueChanged(e,t){super.valueChanged(e,t),this.shadowInput instanceof HTMLInputElement&&(this.shadowInput.value=t),this.updateInputValue(this.valueWithUnit)}get valueWithUnit(){return[this.value,this.unit].filter(e=>e).join(" ")}get number(){return Je(this.value)?Number(this.value):NaN}handleKeydown(e){const t=e.ctrlKey?10:e.shiftKey?.1:1,{step:n="1"}=this,i=ze(n);switch(e.key){case"ArrowUp":e.preventDefault(),this.nextStep(i*t);break;case"ArrowDown":e.preventDefault(),this.nextStep(i*-1*t);break}}handleClickStep(e){this.disabled||this.nextStep(e*Qe(this.step))}nextStep(e){const n=[this.value?this.number:0,"+",e].reduce((l,s)=>l.op(s),new yn(100)),i=ze(this.max),o=ze(this.min),r=n.value;i&&r>=i?(this.classList.remove("is-max"),this.updateComplete.then(()=>this.classList.add("is-max")),this.emit("is-max")):this.classList.remove("is-max"),o&&r<=o?(this.classList.remove("is-min"),this.updateComplete.then(()=>this.classList.add("is-min")),this.emit("is-min")):this.classList.remove("is-min"),this.number!==n.value&&this.emit("change"),this.value=n.toString()}render(){return d`
       <slot name="label">${this.label?d`<span class="label">${this.label}</span`:null}</slot>
       <div class="control fc-focusin-outline" part="controls">
         ${O()}
@@ -3030,14 +3030,14 @@ export const Menu = () => book
         </div>
         ${E()}
       </div>
-    `}};Z.styles=m(qt,gr);ue([a()],Z.prototype,"max",2);ue([a()],Z.prototype,"min",2);ue([a({converter(e){return(Number(e)||1).toString()}})],Z.prototype,"step",2);ue([a()],Z.prototype,"unit",2);ue([a({reflect:!0})],Z.prototype,"vibrate",2);ue([a({init:!1,converter(e,t){if(!e)return e;if(!Je(e))return"";let n=Qe(e);const i=ze(t.max),o=ze(t.min);return At(i)&&(n=Math.min(i,n)),At(o)&&(n=Math.max(o,n)),n.toString()}})],Z.prototype,"value",2);Z=ue([g("fc-number-field")],Z);var yr={parameters:{storySource:{source:`import book from './book.html?raw'
+    `}};Z.styles=m(qt,mr);ue([a()],Z.prototype,"max",2);ue([a()],Z.prototype,"min",2);ue([a({converter(e){return(Number(e)||1).toString()}})],Z.prototype,"step",2);ue([a()],Z.prototype,"unit",2);ue([a({reflect:!0})],Z.prototype,"vibrate",2);ue([a({init:!1,converter(e,t){if(!e)return e;if(!Je(e))return"";let n=Qe(e);const i=ze(t.max),o=ze(t.min);return At(i)&&(n=Math.min(i,n)),At(o)&&(n=Math.max(o,n)),n.toString()}})],Z.prototype,"value",2);Z=ue([g("fc-number-field")],Z);var xr={parameters:{storySource:{source:`import book from './book.html?raw'
 
 import './index'
 
 export default { title: 'Number Filed', order: 1 }
 
 export const NumberFiled = () => book
-`,locationsMap:{"number-filed":{startLoc:{col:27,line:7},endLoc:{col:37,line:7},startBody:{col:27,line:7},endBody:{col:37,line:7}}}}},title:"Number Filed",order:1};const xr=()=>br,wr=["NumberFiled"];var kr=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",default:yr,NumberFiled:xr,__namedExportsOrder:wr}),Cr=`<h4>\u7B80\u5355\u4F7F\u7528</h4>
+`,locationsMap:{"number-filed":{startLoc:{col:27,line:7},endLoc:{col:37,line:7},startBody:{col:27,line:7},endBody:{col:37,line:7}}}}},title:"Number Filed",order:1};const wr=()=>gr,kr=["NumberFiled"];var Cr=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",default:xr,NumberFiled:wr,__namedExportsOrder:kr}),_r=`<h4>\u7B80\u5355\u4F7F\u7528</h4>
 <p>\u70B9\u51FB\u5173\u95ED\u6309\u94AE\u4F1A\u89E6\u53D1 <code>close</code> \u4E8B\u4EF6</p>
 <fc-panel>
   <fc-panel-header slot="panel-header">\u6D77\u9614\u5929\u7A7A</fc-panel-header>
@@ -3112,7 +3112,7 @@ export const NumberFiled = () => book
     <p>\u5929\u5730\u4E0E\u6211\u5E76\u751F\uFF0C\u800C\u4E07\u7269\u4E0E\u6211\u4E3A\u4E00</p>
   </fc-panel>
 </fc-dialog>
-`,_r=`:host {
+`,$r=`:host {
   display: inline-flex;
   justify-content: space-between;
   align-items: center;
@@ -3139,7 +3139,7 @@ export const NumberFiled = () => book
 .close-button:hover {
   color: var(--foreground-hover);
 }
-`,$r=Object.defineProperty,Or=Object.getOwnPropertyDescriptor,dt=(e,t,n,i)=>{for(var o=i>1?void 0:i?Or(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&$r(t,n,o),o};let Le=class extends w{constructor(){super(...arguments);this.closable=!0,this.closeTarget=""}handleClick(e){e.preventDefault(),this.emit("close",this.closeTarget)}render(){return d`
+`,Or=Object.defineProperty,Er=Object.getOwnPropertyDescriptor,dt=(e,t,n,i)=>{for(var o=i>1?void 0:i?Er(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&Or(t,n,o),o};let Le=class extends w{constructor(){super(...arguments);this.closable=!0,this.closeTarget=""}handleClick(e){e.preventDefault(),this.emit("close",this.closeTarget)}render(){return d`
       <slot class="control" part="control"></slot>
       ${this.closable?d` <button
             class="close-button fc-outline"
@@ -3160,7 +3160,7 @@ export const NumberFiled = () => book
               />
             </svg>
           </button>`:""}
-    `}};Le.styles=m(_r);dt([a({reflect:!0})],Le.prototype,"closable",2);dt([a()],Le.prototype,"closeTarget",2);Le=dt([g("fc-panel-header")],Le);var Er=`:host {
+    `}};Le.styles=m($r);dt([a({reflect:!0})],Le.prototype,"closable",2);dt([a()],Le.prototype,"closeTarget",2);Le=dt([g("fc-panel-header")],Le);var Ar=`:host {
   display: inline-flex;
   flex-direction: column;
   min-width: calc(var(--fc-unit-size) * 100);
@@ -3187,19 +3187,19 @@ fc-panel-header:defined {
   background: inherit;
   padding: inherit;
 }
-`,Ar=Object.defineProperty,Ir=Object.getOwnPropertyDescriptor,_e=(e,t,n,i)=>{for(var o=i>1?void 0:i?Ir(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&Ar(t,n,o),o},Xt=(e,t,n)=>{if(!t.has(e))throw TypeError("Cannot "+n)},Jt=(e,t,n)=>(Xt(e,t,"read from private field"),n?n.call(e):t.get(e)),Sr=(e,t,n)=>{if(t.has(e))throw TypeError("Cannot add the same private member more than once");t instanceof WeakSet?t.add(e):t.set(e,n)},Pr=(e,t,n,i)=>(Xt(e,t,"write to private field"),i?i.call(e,n):t.set(e,n),n),Te;let de=class extends w{constructor(){super(...arguments);this.closable=!0,this.closeTarget="",this.role="widget",this.hidden=!1,Sr(this,Te,void 0)}hiddenChanged(e,t){this.setAttribute("aria-hidden",String(t)),this.emit("visibleChange")}headerChanged(e,t){if(t){const n=document.createElement("fc-panel-header");n.slot="panel-header",n.closable=this.closable,n.closeTarget=this.closeTarget,n.innerText=t,Pr(this,Te,n),this.appendChild(n)}else Jt(this,Te)&&Jt(this,Te).remove()}render(){return this.hidden?d``:d`
+`,Ir=Object.defineProperty,Sr=Object.getOwnPropertyDescriptor,_e=(e,t,n,i)=>{for(var o=i>1?void 0:i?Sr(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&Ir(t,n,o),o},Xt=(e,t,n)=>{if(!t.has(e))throw TypeError("Cannot "+n)},Jt=(e,t,n)=>(Xt(e,t,"read from private field"),n?n.call(e):t.get(e)),Pr=(e,t,n)=>{if(t.has(e))throw TypeError("Cannot add the same private member more than once");t instanceof WeakSet?t.add(e):t.set(e,n)},zr=(e,t,n,i)=>(Xt(e,t,"write to private field"),i?i.call(e,n):t.set(e,n),n),Te;let de=class extends w{constructor(){super(...arguments);this.closable=!0,this.closeTarget="",this.role="widget",this.hidden=!1,Pr(this,Te,void 0)}hiddenChanged(e,t){this.setAttribute("aria-hidden",String(t)),this.emit("visibleChange")}headerChanged(e,t){if(t){const n=document.createElement("fc-panel-header");n.slot="panel-header",n.closable=this.closable,n.closeTarget=this.closeTarget,n.innerText=t,zr(this,Te,n),this.appendChild(n)}else Jt(this,Te)&&Jt(this,Te).remove()}render(){return this.hidden?d``:d`
       <slot name="panel-header" part="panel-header"></slot>
       <div class="panel-body" part="panel-body">
         <slot></slot>
       </div>
-    `}};Te=new WeakMap;de.styles=m(Er);_e([a({reflect:!0})],de.prototype,"closable",2);_e([a()],de.prototype,"closeTarget",2);_e([a({reflect:!0})],de.prototype,"role",2);_e([a({reflect:!0})],de.prototype,"hidden",2);_e([a({initCallback:!0})],de.prototype,"header",2);de=_e([g("fc-panel")],de);var zr={parameters:{storySource:{source:`import book from './book.html?raw'
+    `}};Te=new WeakMap;de.styles=m(Ar);_e([a({reflect:!0})],de.prototype,"closable",2);_e([a()],de.prototype,"closeTarget",2);_e([a({reflect:!0})],de.prototype,"role",2);_e([a({reflect:!0})],de.prototype,"hidden",2);_e([a({initCallback:!0})],de.prototype,"header",2);de=_e([g("fc-panel")],de);var Lr={parameters:{storySource:{source:`import book from './book.html?raw'
 
 import './index'
 
 export default { title: 'Panel', order: 1 }
 
 export const Panel = () => book
-`,locationsMap:{panel:{startLoc:{col:21,line:7},endLoc:{col:31,line:7},startBody:{col:21,line:7},endBody:{col:31,line:7}}}}},title:"Panel",order:1};const Lr=()=>Cr,Tr=["Panel"];var Dr=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",default:zr,Panel:Lr,__namedExportsOrder:Tr}),Mr=`<h4>\u7B80\u5355\u4F7F\u7528</h4>
+`,locationsMap:{panel:{startLoc:{col:21,line:7},endLoc:{col:31,line:7},startBody:{col:21,line:7},endBody:{col:31,line:7}}}}},title:"Panel",order:1};const Tr=()=>_r,Dr=["Panel"];var Mr=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",default:Lr,Panel:Tr,__namedExportsOrder:Dr}),jr=`<h4>\u7B80\u5355\u4F7F\u7528</h4>
 <fc-radio-group name="fruit">
   <label slot="label">\u6C34\u679C</label>
   <fc-radio value="apple">\u82F9\u679C</fc-radio>
@@ -3220,33 +3220,33 @@ export const Panel = () => book
   <fc-radio value="orange">\u6A58\u5B50</fc-radio>
   <fc-radio value="pear">\u68A8</fc-radio>
 </fc-radio-group>
-`,jr=Object.defineProperty,Br=Object.getOwnPropertyDescriptor,ee=(e,t,n,i)=>{for(var o=i>1?void 0:i?Br(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&jr(t,n,o),o};const Rr=()=>{const e=document.createElement("input");return e.type="radio",e};let z=class extends H{constructor(){super(Rr());this.value="on",this.role="radio",this.tabIndex=0,this.name="",this.checked=!1,this.defaultChecked=!1,this.indeterminate=!1,this.readOnly=!1,this.type="radio"}connectedCallback(){super.connectedCallback(),this.checked=this.hasAttribute("checked"),this.disabled=this.hasAttribute("disabled"),this.defaultChecked=this.checked,p(this,"click",this.handleClick)}checkedChanged(e,t){this.proxy instanceof HTMLInputElement&&(this.proxy.checked=t),this.checked&&(this.uniqueChecked(),this.updateForm(),this.emit("change"))}readOnlyChanged(){this.classList.toggle("readonly",this.readOnly)}uniqueChecked(){const e=this.form||this.closest("fc-radio-group")||this.ownerDocument.body,{name:t}=this;if(!e||!t)return;Array.from(e.querySelectorAll(`fc-radio[name='${t}']`)).forEach(i=>{i!==this&&(i.checked=!1)})}updateForm(){const e=this.checked?this.value:null;this.setFormValue(e)}handleClick(e){!this.disabled&&!this.readOnly&&!this.checked&&(this.checked=!0,this.updateForm())}render(){return d`
+`,Br=Object.defineProperty,Rr=Object.getOwnPropertyDescriptor,ee=(e,t,n,i)=>{for(var o=i>1?void 0:i?Rr(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&Br(t,n,o),o};const Fr=()=>{const e=document.createElement("input");return e.type="radio",e};let z=class extends H{constructor(){super(Fr());this.value="on",this.role="radio",this.tabIndex=0,this.name="",this.checked=!1,this.defaultChecked=!1,this.indeterminate=!1,this.readOnly=!1,this.type="radio"}connectedCallback(){super.connectedCallback(),this.checked=this.hasAttribute("checked"),this.disabled=this.hasAttribute("disabled"),this.defaultChecked=this.checked,p(this,"click",this.handleClick)}checkedChanged(e,t){this.proxy instanceof HTMLInputElement&&(this.proxy.checked=t),this.checked&&(this.uniqueChecked(),this.updateForm(),this.emit("change"))}readOnlyChanged(){this.classList.toggle("readonly",this.readOnly)}uniqueChecked(){const e=this.form||this.closest("fc-radio-group")||this.ownerDocument.body,{name:t}=this;if(!e||!t)return;Array.from(e.querySelectorAll(`fc-radio[name='${t}']`)).forEach(i=>{i!==this&&(i.checked=!1)})}updateForm(){const e=this.checked?this.value:null;this.setFormValue(e)}handleClick(e){!this.disabled&&!this.readOnly&&!this.checked&&(this.checked=!0,this.updateForm())}render(){return d`
       <slot name="checked-indicator">
         <div class="radio control fc-inner-outline" part="control">
           <div class="checked-indicator"></div>
         </div>
       </slot>
       <label class="label" part="label"><slot></slot></label>
-    `}};z.styles=m(Wt);ee([a()],z.prototype,"value",2);ee([a({reflect:!0})],z.prototype,"role",2);ee([a({reflect:!0})],z.prototype,"tabIndex",2);ee([a({reflect:!0})],z.prototype,"name",2);ee([a({reflect:!0})],z.prototype,"checked",2);ee([a({type:"boolean"})],z.prototype,"defaultChecked",2);ee([a({type:"boolean",reflect:!0})],z.prototype,"indeterminate",2);ee([a({type:"boolean",reflect:!0})],z.prototype,"readOnly",2);z=ee([g("fc-radio")],z);var Fr=`:host {
+    `}};z.styles=m(Wt);ee([a()],z.prototype,"value",2);ee([a({reflect:!0})],z.prototype,"role",2);ee([a({reflect:!0})],z.prototype,"tabIndex",2);ee([a({reflect:!0})],z.prototype,"name",2);ee([a({reflect:!0})],z.prototype,"checked",2);ee([a({type:"boolean"})],z.prototype,"defaultChecked",2);ee([a({type:"boolean",reflect:!0})],z.prototype,"indeterminate",2);ee([a({type:"boolean",reflect:!0})],z.prototype,"readOnly",2);z=ee([g("fc-radio")],z);var Vr=`:host {
   display: block;
 }
 
 slot[name='label'] {
   display: contents;
 }
-`,Vr=Object.defineProperty,Nr=Object.getOwnPropertyDescriptor,De=(e,t,n,i)=>{for(var o=i>1?void 0:i?Nr(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&Vr(t,n,o),o};let be=class extends w{constructor(){super(...arguments);this.disabled=!1,this.name="",this.role="radiogroup",this.value=""}connectedCallback(){super.connectedCallback(),p(this,"keydown",this.handleKeydown),p(this,"change",this.handleChange),this.updateComplete.then(()=>{this.disabled=this.hasAttribute("disabled"),this.value=this.getAttribute("value")||this.value,this.name=this.getAttribute("name")||this.name,this.items.forEach(e=>{e.checked=e.value===this.value,e.toggleAttribute("disabled",this.disabled)}),this.reorderTabindex()})}get items(){return this.slottedElements.filter(e=>e instanceof z)}get length(){return this.items.length}disabledChanged(e,t){this.updateComplete.then(()=>{this.items.forEach(n=>{n.disabled=t})})}nameChanged(){const{name:e}=this;this.items.forEach(t=>{t.name=e})}valueChanged(e,t){this.reorderTabindex()}handleKeydown(e){let t;const{key:n}=e;["ArrowLeft","ArrowUp"].includes(n)?t=Ie(this.items,-1):["ArrowRight","ArrowDown"].includes(n)&&(t=Ie(this.items,1)),t&&e.preventDefault()}reorderTabindex(){let e=!1;this.items.forEach(t=>{const{checked:n}=t;t.tabIndex=n?0:-1,n&&(e=!0)}),!e&&this.items[0]&&(this.items[0].tabIndex=0)}handleChange(e){if(e instanceof CustomEvent){const{target:t}=e;t instanceof z&&t.checked&&this.value!==t.value&&(this.value=t.value)}}render(){return d`
+`,Nr=Object.defineProperty,Kr=Object.getOwnPropertyDescriptor,De=(e,t,n,i)=>{for(var o=i>1?void 0:i?Kr(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&Nr(t,n,o),o};let be=class extends w{constructor(){super(...arguments);this.disabled=!1,this.name="",this.role="radiogroup",this.value=""}connectedCallback(){super.connectedCallback(),p(this,"keydown",this.handleKeydown),p(this,"change",this.handleChange),this.updateComplete.then(()=>{this.disabled=this.hasAttribute("disabled"),this.value=this.getAttribute("value")||this.value,this.name=this.getAttribute("name")||this.name,this.items.forEach(e=>{e.checked=e.value===this.value,e.toggleAttribute("disabled",this.disabled)}),this.reorderTabindex()})}get items(){return this.slottedElements.filter(e=>e instanceof z)}get length(){return this.items.length}disabledChanged(e,t){this.updateComplete.then(()=>{this.items.forEach(n=>{n.disabled=t})})}nameChanged(){const{name:e}=this;this.items.forEach(t=>{t.name=e})}valueChanged(e,t){this.reorderTabindex()}handleKeydown(e){let t;const{key:n}=e;["ArrowLeft","ArrowUp"].includes(n)?t=Ie(this.items,-1):["ArrowRight","ArrowDown"].includes(n)&&(t=Ie(this.items,1)),t&&e.preventDefault()}reorderTabindex(){let e=!1;this.items.forEach(t=>{const{checked:n}=t;t.tabIndex=n?0:-1,n&&(e=!0)}),!e&&this.items[0]&&(this.items[0].tabIndex=0)}handleChange(e){if(e instanceof CustomEvent){const{target:t}=e;t instanceof z&&t.checked&&this.value!==t.value&&(this.value=t.value)}}render(){return d`
       <slot name="label" part="label"></slot>
       <div class="control" part="control">
         <slot></slot>
       </div>
-    `}};be.styles=m(Fr);De([a({type:"boolean",reflect:!0})],be.prototype,"disabled",2);De([a()],be.prototype,"name",2);De([a()],be.prototype,"role",2);De([a()],be.prototype,"value",2);be=De([g("fc-radio-group")],be);var Kr={parameters:{storySource:{source:`import book from './book.html?raw'
+    `}};be.styles=m(Vr);De([a({type:"boolean",reflect:!0})],be.prototype,"disabled",2);De([a()],be.prototype,"name",2);De([a()],be.prototype,"role",2);De([a()],be.prototype,"value",2);be=De([g("fc-radio-group")],be);var qr={parameters:{storySource:{source:`import book from './book.html?raw'
 
 import './index'
 
 export default { title: 'Radio Group', order: 1 }
 
 export const RadioGroup = () => book
-`,locationsMap:{"radio-group":{startLoc:{col:26,line:7},endLoc:{col:36,line:7},startBody:{col:26,line:7},endBody:{col:36,line:7}}}}},title:"Radio Group",order:1};const qr=()=>Mr,Hr=["RadioGroup"];var Ur=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",default:Kr,RadioGroup:qr,__namedExportsOrder:Hr}),Gr=`<h4>\u7B80\u5355\u4F7F\u7528</h4>
+`,locationsMap:{"radio-group":{startLoc:{col:26,line:7},endLoc:{col:36,line:7},startBody:{col:26,line:7},endBody:{col:36,line:7}}}}},title:"Radio Group",order:1};const Hr=()=>jr,Ur=["RadioGroup"];var Gr=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",default:qr,RadioGroup:Hr,__namedExportsOrder:Ur}),Wr=`<h4>\u7B80\u5355\u4F7F\u7528</h4>
 <fc-radio value="apple">\u82F9\u679C</fc-radio>
 <fc-radio value="orange">\u6A58\u5B50</fc-radio>
 <fc-radio value="banana">\u9999\u8549</fc-radio>
@@ -3274,14 +3274,14 @@ export const RadioGroup = () => book
   <fc-radio name="ok" checked>ok</fc-radio>
   <button type="submit">submit</button>
 </form>
-`,Wr={parameters:{storySource:{source:`import book from './book.html?raw'
+`,Yr={parameters:{storySource:{source:`import book from './book.html?raw'
 
 import './index'
 
 export default { title: 'Radio', order: 1 }
 
 export const Radio = () => book
-`,locationsMap:{radio:{startLoc:{col:21,line:7},endLoc:{col:31,line:7},startBody:{col:21,line:7},endBody:{col:31,line:7}}}}},title:"Radio",order:1};const Yr=()=>Gr,Xr=["Radio"];var Jr=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",default:Wr,Radio:Yr,__namedExportsOrder:Xr}),Qr=`<h4>\u7B80\u5355\u4F7F\u7528</h4>
+`,locationsMap:{radio:{startLoc:{col:21,line:7},endLoc:{col:31,line:7},startBody:{col:21,line:7},endBody:{col:31,line:7}}}}},title:"Radio",order:1};const Xr=()=>Wr,Jr=["Radio"];var Qr=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",default:Yr,Radio:Xr,__namedExportsOrder:Jr}),Zr=`<h4>\u7B80\u5355\u4F7F\u7528</h4>
 <fc-select>
   <fc-list-option value="0">\u8BF7\u9009\u62E9</fc-list-option>
   <fc-list-option value="1">\u82F9\u679C</fc-list-option>
@@ -3361,7 +3361,7 @@ export const Radio = () => book
   <fc-list-option value="3">\u6854\u5B50</fc-list-option>
   <fc-list-option value="4">\u68A8</fc-list-option>
 </fc-select>
-`,Zr={parameters:{storySource:{source:`import book from './book.html?raw'
+`,ea={parameters:{storySource:{source:`import book from './book.html?raw'
 
 import '../list-option/index'
 import './index'
@@ -3369,7 +3369,7 @@ import './index'
 export default { title: 'Select', order: 3 }
 
 export const Select = () => book
-`,locationsMap:{select:{startLoc:{col:22,line:8},endLoc:{col:32,line:8},startBody:{col:22,line:8},endBody:{col:32,line:8}}}}},title:"Select",order:3};const ea=()=>Qr,ta=["Select"];var na=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",default:Zr,Select:ea,__namedExportsOrder:ta}),oa=`<h4>\u7B80\u5355\u4F7F\u7528</h4>
+`,locationsMap:{select:{startLoc:{col:22,line:8},endLoc:{col:32,line:8},startBody:{col:22,line:8},endBody:{col:32,line:8}}}}},title:"Select",order:3};const ta=()=>Zr,na=["Select"];var oa=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",default:ea,Select:ta,__namedExportsOrder:na}),ia=`<h4>\u7B80\u5355\u4F7F\u7528</h4>
 <p style="font-size: smaller">\u8BD5\u8BD5 <kbd>Tab</kbd> <kbd>\u2192</kbd> <kbd>Enter</kbd></p>
 
 <fc-tabs>
@@ -3419,7 +3419,7 @@ export const Select = () => book
   <fc-tab-panel id="panel-fruit" slot="tabpanel">\u82F9\u679C \u6A58\u5B50 \u9999\u8549</fc-tab-panel>
   <fc-tab-panel id="panel-vegetable" slot="tabpanel">\u767D\u83DC \u841D\u535C \u8304\u5B50</fc-tab-panel>
 </fc-tabs>
-`,ia=`:host {
+`,ra=`:host {
   position: relative;
   display: inline-block;
   box-sizing: border-box;
@@ -3432,7 +3432,7 @@ export const Select = () => book
 :host([disabled]) {
   color: var(--foreground-disabled);
 }
-`,ra=Object.defineProperty,aa=Object.getOwnPropertyDescriptor,ft=(e,t,n,i)=>{for(var o=i>1?void 0:i?aa(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&ra(t,n,o),o};const la=e=>e instanceof $e||e.tagName.toLowerCase()==="fc-tab-panel";let $e=class extends w{constructor(){super(...arguments);this.role="tabpanel",this.disabled=!1}render(){return d`<slot></slot>`}};$e.styles=m(ia);ft([a({reflect:!0})],$e.prototype,"role",2);ft([a()],$e.prototype,"disabled",2);$e=ft([g("fc-tab-panel")],$e);var ca=`:host {
+`,aa=Object.defineProperty,la=Object.getOwnPropertyDescriptor,ft=(e,t,n,i)=>{for(var o=i>1?void 0:i?la(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&aa(t,n,o),o};const ca=e=>e instanceof $e||e.tagName.toLowerCase()==="fc-tab-panel";let $e=class extends w{constructor(){super(...arguments);this.role="tabpanel",this.disabled=!1}render(){return d`<slot></slot>`}};$e.styles=m(ra);ft([a({reflect:!0})],$e.prototype,"role",2);ft([a()],$e.prototype,"disabled",2);$e=ft([g("fc-tab-panel")],$e);var sa=`:host {
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -3471,7 +3471,7 @@ export const Select = () => book
 :host([direction='row']) {
   border-radius: var(--border-radius) 0 0 var(--border-radius);
 }
-`,sa=Object.defineProperty,da=Object.getOwnPropertyDescriptor,Oe=(e,t,n,i)=>{for(var o=i>1?void 0:i?da(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&sa(t,n,o),o};const fa=e=>e instanceof j||e.tagName.toLowerCase()==="fc-tab";let j=class extends w{constructor(){super(...arguments);this.disabled=!1,this.readonly=this.hasAttribute("readonly"),this.role="tab",this.selected=!1,this.tabindex="-1"}connectedCallback(){super.connectedCallback(),p(this,"click",this.handleClick)}selectedChanged(e,t){this.selected&&this.emit("select")}handleClick(e){e.preventDefault(),this.selected=!this.disabled}render(){return d`<slot></slot>`}};j.styles=m(ca);Oe([a()],j.prototype,"disabled",2);Oe([a({reflect:!0})],j.prototype,"readonly",2);Oe([a({reflect:!0})],j.prototype,"role",2);Oe([a({reflect:!0})],j.prototype,"selected",2);Oe([a({reflect:!0})],j.prototype,"tabindex",2);j=Oe([g("fc-tab")],j);var pa=`:host {
+`,da=Object.defineProperty,fa=Object.getOwnPropertyDescriptor,Oe=(e,t,n,i)=>{for(var o=i>1?void 0:i?fa(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&da(t,n,o),o};const pa=e=>e instanceof j||e.tagName.toLowerCase()==="fc-tab";let j=class extends w{constructor(){super(...arguments);this.disabled=!1,this.readonly=this.hasAttribute("readonly"),this.role="tab",this.selected=!1,this.tabindex="-1"}connectedCallback(){super.connectedCallback(),p(this,"click",this.handleClick)}selectedChanged(e,t){this.selected&&this.emit("select")}handleClick(e){e.preventDefault(),this.selected=!this.disabled}render(){return d`<slot></slot>`}};j.styles=m(sa);Oe([a()],j.prototype,"disabled",2);Oe([a({reflect:!0})],j.prototype,"readonly",2);Oe([a({reflect:!0})],j.prototype,"role",2);Oe([a({reflect:!0})],j.prototype,"selected",2);Oe([a({reflect:!0})],j.prototype,"tabindex",2);j=Oe([g("fc-tab")],j);var ha=`:host {
   display: flex;
   flex-direction: column;
 }
@@ -3500,7 +3500,7 @@ export const Select = () => book
 .tablist .tab {
   margin: 0 2px;
 }
-`,ha=Object.defineProperty,ua=Object.getOwnPropertyDescriptor,ge=(e,t,n,i)=>{for(var o=i>1?void 0:i?ua(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&ha(t,n,o),o};let B=class extends w{constructor(){super();this.tabs=[],this.panels=[],this.activeid="",this.disabled=this.hasAttribute("disabled"),this.direction="row",B.index+=1}connectedCallback(){if(super.connectedCallback(),this.tabs=Array.from(this.children).filter(fa),this.panels=Array.from(this.children).filter(la),this.activeid=this.getAttribute("activeid"),!this.activeid&&this.tabs){const e=Ie(this.tabs,1,!1,!0);e&&(this.activeid=e.id)}p(this,"select",this.handleSelect)}tabsChanged(){var e;(e=this.tabs)==null||e.forEach((t,n)=>{t.getAttribute("id")||t.setAttribute("id",`tab-${n}`)})}panelsChanged(){var n;const{index:e}=B,{activeTab:t}=this;(n=this.panels)==null||n.forEach((i,o)=>{i.getAttribute("id")||i.setAttribute("id",`panel-${e}-${o}`);const r=i.getAttribute("id"),l=this.tabs[o];l&&(l.hasAttribute("aria-controls")||l.setAttribute("aria-controls",r),i.hasAttribute("aria-labelledby")||i.setAttribute("aria-labelledby",l.getAttribute("id")),l===t&&i.toggleAttribute("hidden",!0))})}activeTabChanged(){var i;this.activeid=((i=this.activeTab)==null?void 0:i.id)||null,this.tabs.forEach(o=>{fe(o)&&o.setAttribute("tabindex","-1"),o.toggleAttribute("selected",!1)}),this.panels.forEach(o=>{o.setAttribute("hidden","true"),o.removeAttribute("tabindex")});const{activeTab:e}=this;if(!e)return;e.toggleAttribute("selected",!0),fe(e)&&e.setAttribute("tabindex","0");const t=e.getAttribute("aria-controls"),n=this.panels.find(o=>o.getAttribute("id")===t);n&&(n.removeAttribute("hidden"),fe(e)&&n.setAttribute("tabindex","0"))}activeidChanged(){const{activeid:e}=this;this.activeTab=this.tabs.find(t=>t.getAttribute("id")===e)}disabledChanged(){this.disabled&&this.tabs.forEach(e=>e.toggleAttribute("disabled",!0))}directionChanged(){const{direction:e}=this;this.tabs.forEach(t=>t.setAttribute("direction",e))}handleSelect(e){const{target:t}=e;t instanceof j&&!this.disabled&&(e.preventDefault(),this.activeTab=t)}handleKeydown(e){var n,i;if(!(e.target instanceof j)||this.disabled)return;const t={previous:"ArrowLeft",next:"ArrowRight"};switch(this.direction==="column"&&(t.previous="ArrowUp",t.next="ArrowDown"),e.key){case t.previous:e.preventDefault(),(n=Ae(this.tabs,-1,!0))==null||n.focus();break;case t.next:e.preventDefault(),(i=Ae(this.tabs,1,!0))==null||i.focus();break;case"Enter":{e.preventDefault(),e.target instanceof j&&(this.activeTab=e.target);break}}}render(){return d`
+`,ua=Object.defineProperty,ba=Object.getOwnPropertyDescriptor,ge=(e,t,n,i)=>{for(var o=i>1?void 0:i?ba(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&ua(t,n,o),o};let B=class extends w{constructor(){super();this.tabs=[],this.panels=[],this.activeid="",this.disabled=this.hasAttribute("disabled"),this.direction="row",B.index+=1}connectedCallback(){if(super.connectedCallback(),this.tabs=Array.from(this.children).filter(pa),this.panels=Array.from(this.children).filter(ca),this.activeid=this.getAttribute("activeid"),!this.activeid&&this.tabs){const e=Ie(this.tabs,1,!1,!0);e&&(this.activeid=e.id)}p(this,"select",this.handleSelect)}tabsChanged(){var e;(e=this.tabs)==null||e.forEach((t,n)=>{t.getAttribute("id")||t.setAttribute("id",`tab-${n}`)})}panelsChanged(){var n;const{index:e}=B,{activeTab:t}=this;(n=this.panels)==null||n.forEach((i,o)=>{i.getAttribute("id")||i.setAttribute("id",`panel-${e}-${o}`);const r=i.getAttribute("id"),l=this.tabs[o];l&&(l.hasAttribute("aria-controls")||l.setAttribute("aria-controls",r),i.hasAttribute("aria-labelledby")||i.setAttribute("aria-labelledby",l.getAttribute("id")),l===t&&i.toggleAttribute("hidden",!0))})}activeTabChanged(){var i;this.activeid=((i=this.activeTab)==null?void 0:i.id)||null,this.tabs.forEach(o=>{fe(o)&&o.setAttribute("tabindex","-1"),o.toggleAttribute("selected",!1)}),this.panels.forEach(o=>{o.setAttribute("hidden","true"),o.removeAttribute("tabindex")});const{activeTab:e}=this;if(!e)return;e.toggleAttribute("selected",!0),fe(e)&&e.setAttribute("tabindex","0");const t=e.getAttribute("aria-controls"),n=this.panels.find(o=>o.getAttribute("id")===t);n&&(n.removeAttribute("hidden"),fe(e)&&n.setAttribute("tabindex","0"))}activeidChanged(){const{activeid:e}=this;this.activeTab=this.tabs.find(t=>t.getAttribute("id")===e)}disabledChanged(){this.disabled&&this.tabs.forEach(e=>e.toggleAttribute("disabled",!0))}directionChanged(){const{direction:e}=this;this.tabs.forEach(t=>t.setAttribute("direction",e))}handleSelect(e){const{target:t}=e;t instanceof j&&!this.disabled&&(e.preventDefault(),this.activeTab=t)}handleKeydown(e){var n,i;if(!(e.target instanceof j)||this.disabled)return;const t={previous:"ArrowLeft",next:"ArrowRight"};switch(this.direction==="column"&&(t.previous="ArrowUp",t.next="ArrowDown"),e.key){case t.previous:e.preventDefault(),(n=Ae(this.tabs,-1,!0))==null||n.focus();break;case t.next:e.preventDefault(),(i=Ae(this.tabs,1,!0))==null||i.focus();break;case"Enter":{e.preventDefault(),e.target instanceof j&&(this.activeTab=e.target);break}}}render(){return d`
       <div class="tablist" part="tablist" role="tablist" @keydown="${this.handleKeydown}">
         ${O()}
         <slot name="tab" class="tab" part="tab"></slot>
@@ -3509,14 +3509,14 @@ export const Select = () => book
       <div class="tabpanel" part="tabpanel">
         <slot name="tabpanel" class="tabpanel" part="tabpanel"></slot>
       </div>
-    `}};B.styles=m(pa);B.index=0;ge([a({attribute:!1,init:!1})],B.prototype,"tabs",2);ge([a({attribute:!1,init:!1})],B.prototype,"panels",2);ge([a({attribute:!1,init:!1})],B.prototype,"activeTab",2);ge([a({init:!1})],B.prototype,"activeid",2);ge([a({init:!1})],B.prototype,"disabled",2);ge([a({reflect:!0})],B.prototype,"direction",2);B=ge([g("fc-tabs")],B);var ba={parameters:{storySource:{source:`import book from './book.html?raw'
+    `}};B.styles=m(ha);B.index=0;ge([a({attribute:!1,init:!1})],B.prototype,"tabs",2);ge([a({attribute:!1,init:!1})],B.prototype,"panels",2);ge([a({attribute:!1,init:!1})],B.prototype,"activeTab",2);ge([a({init:!1})],B.prototype,"activeid",2);ge([a({init:!1})],B.prototype,"disabled",2);ge([a({reflect:!0})],B.prototype,"direction",2);B=ge([g("fc-tabs")],B);var ga={parameters:{storySource:{source:`import book from './book.html?raw'
 
 import './index'
 
 export default { title: 'Tabs', order: 1 }
 
 export const Tabs = () => book
-`,locationsMap:{tabs:{startLoc:{col:20,line:7},endLoc:{col:30,line:7},startBody:{col:20,line:7},endBody:{col:30,line:7}}}}},title:"Tabs",order:1};const ga=()=>oa,ma=["Tabs"];var va=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",default:ba,Tabs:ga,__namedExportsOrder:ma}),ya=`<h4>\u7B80\u5355\u4F7F\u7528</h4>
+`,locationsMap:{tabs:{startLoc:{col:20,line:7},endLoc:{col:30,line:7},startBody:{col:20,line:7},endBody:{col:30,line:7}}}}},title:"Tabs",order:1};const ma=()=>ia,va=["Tabs"];var ya=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",default:ga,Tabs:ma,__namedExportsOrder:va}),xa=`<h4>\u7B80\u5355\u4F7F\u7528</h4>
 <fc-button id="jys-1">\u9759\u591C\u601D</fc-button>
 <fc-tooltip anchor="#jys-1">\u674E\u767D</fc-tooltip>
 
@@ -3564,7 +3564,7 @@ export const Tabs = () => book
   <fc-button class="anchor-2" position="bottom"> \u4F4E\u5934\u601D\u6545\u4E61</fc-button>
   <fc-tooltip anchor=".anchor-2">\u{1F331}\u{1F319}<br />\u9759\u591C\u601D</fc-tooltip>
 </div>
-`,xa=`:host {
+`,wa=`:host {
   display: inline-block;
   z-index: 999;
 }
@@ -3578,18 +3578,18 @@ export const Tabs = () => book
   background: var(--background);
   visibility: hidden;
 }
-`,wa=Object.defineProperty,ka=Object.getOwnPropertyDescriptor,te=(e,t,n,i)=>{for(var o=i>1?void 0:i?ka(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&wa(t,n,o),o},Qt=(e,t,n)=>{if(!t.has(e))throw TypeError("Cannot "+n)},Zt=(e,t,n)=>(Qt(e,t,"read from private field"),n?n.call(e):t.get(e)),Ca=(e,t,n)=>{if(t.has(e))throw TypeError("Cannot add the same private member more than once");t instanceof WeakSet?t.add(e):t.set(e,n)},_a=(e,t,n,i)=>(Qt(e,t,"write to private field"),i?i.call(e,n):t.set(e,n),n),Me;let K=class extends w{constructor(){super(...arguments);this.delay=300,this.offsetX=6,this.offsetY=6,this.role="tooltip",Ca(this,Me,void 0),this.visible=!1,this.position="bottom",this.handleMouseenter=e=>{this.currentAnchorElement=e.target,this.visible=!0},this.handleMouseleave=e=>{this.currentAnchorElement=null,this.visible=!1}}connectedCallback(){var e;super.connectedCallback(),this.anchor=this.getAttribute("anchor"),this.anchorElements=this.anchor?Array.from(this.renderRoot.ownerDocument.querySelectorAll(this.anchor)):null,(e=this.anchorElements)==null||e.forEach(t=>{t.addEventListener("mouseenter",this.handleMouseenter),t.addEventListener("mouseleave",this.handleMouseleave)})}disconnectedCallback(){var e;super.disconnectedCallback(),(e=this.anchorElements)==null||e.forEach(t=>{t.removeEventListener("mouseenter",this.handleMouseenter),t.removeEventListener("mouseleave",this.handleMouseleave)})}visibleChanged(e,t){var n;if(t){!this.currentAnchorElement&&((n=this.anchorElements)==null?void 0:n.length)&&(this.currentAnchorElement=this.anchorElements[0]);const i=()=>{const{anchorPosition:o,tooltip:r}=this;r&&(r.style.cssText=Object.entries(o).map(([l,s])=>`${l}:${s}px`).join(";"),r.style.visibility="visible"),this.emit("visibleChange",{old:e,next:t})};this.delay>0?_a(this,Me,setTimeout(i,this.delay)):i()}else Zt(this,Me)&&clearTimeout(Zt(this,Me))}get anchorPosition(){const{currentAnchorElement:e}=this,t=this.renderRoot.querySelector(".tooltip");if(!e||!t)return{};const{top:n,left:i,right:o,bottom:r,width:l,height:s}=e.getBoundingClientRect(),{width:c,height:f}=t.getBoundingClientRect(),h=i-(c-l)/2,y=n-(f-s)/2,{offsetX:v,offsetY:x}=this;switch(this.position){case"bottom":return{left:h,top:r+x};case"top":return{left:h,top:n-f-x};case"left":return{left:i-c-v,top:y};case"right":return{left:o+v,top:y};default:return{}}}render(){return this.visible?d`
+`,ka=Object.defineProperty,Ca=Object.getOwnPropertyDescriptor,te=(e,t,n,i)=>{for(var o=i>1?void 0:i?Ca(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&ka(t,n,o),o},Qt=(e,t,n)=>{if(!t.has(e))throw TypeError("Cannot "+n)},Zt=(e,t,n)=>(Qt(e,t,"read from private field"),n?n.call(e):t.get(e)),_a=(e,t,n)=>{if(t.has(e))throw TypeError("Cannot add the same private member more than once");t instanceof WeakSet?t.add(e):t.set(e,n)},$a=(e,t,n,i)=>(Qt(e,t,"write to private field"),i?i.call(e,n):t.set(e,n),n),Me;let K=class extends w{constructor(){super(...arguments);this.delay=300,this.offsetX=6,this.offsetY=6,this.role="tooltip",_a(this,Me,void 0),this.visible=!1,this.position="bottom",this.handleMouseenter=e=>{this.currentAnchorElement=e.target,this.visible=!0},this.handleMouseleave=e=>{this.currentAnchorElement=null,this.visible=!1}}connectedCallback(){var e;super.connectedCallback(),this.anchor=this.getAttribute("anchor"),this.anchorElements=this.anchor?Array.from(this.renderRoot.ownerDocument.querySelectorAll(this.anchor)):null,(e=this.anchorElements)==null||e.forEach(t=>{t.addEventListener("mouseenter",this.handleMouseenter),t.addEventListener("mouseleave",this.handleMouseleave)})}disconnectedCallback(){var e;super.disconnectedCallback(),(e=this.anchorElements)==null||e.forEach(t=>{t.removeEventListener("mouseenter",this.handleMouseenter),t.removeEventListener("mouseleave",this.handleMouseleave)})}visibleChanged(e,t){var n;if(t){!this.currentAnchorElement&&((n=this.anchorElements)==null?void 0:n.length)&&(this.currentAnchorElement=this.anchorElements[0]);const i=()=>{const{anchorPosition:o,tooltip:r}=this;r&&(r.style.cssText=Object.entries(o).map(([l,s])=>`${l}:${s}px`).join(";"),r.style.visibility="visible"),this.emit("visibleChange",{old:e,next:t})};this.delay>0?$a(this,Me,setTimeout(i,this.delay)):i()}else Zt(this,Me)&&clearTimeout(Zt(this,Me))}get anchorPosition(){const{currentAnchorElement:e}=this,t=this.renderRoot.querySelector(".tooltip");if(!e||!t)return{};const{top:n,left:i,right:o,bottom:r,width:l,height:s}=e.getBoundingClientRect(),{width:c,height:f}=t.getBoundingClientRect(),h=i-(c-l)/2,y=n-(f-s)/2,{offsetX:v,offsetY:x}=this;switch(this.position){case"bottom":return{left:h,top:r+x};case"top":return{left:h,top:n-f-x};case"left":return{left:i-c-v,top:y};case"right":return{left:o+v,top:y};default:return{}}}render(){return this.visible?d`
         <div class="tooltip" part="tooltip" role="tooltip">
           <slot></slot>
         </div>
-      `:d``}};Me=new WeakMap;K.styles=m(xa);te([a({init:!1})],K.prototype,"anchor",2);te([a({converter(e){return Math.max(0,e)}})],K.prototype,"delay",2);te([a()],K.prototype,"offsetX",2);te([a()],K.prototype,"offsetY",2);te([a({reflect:!0})],K.prototype,"role",2);te([a()],K.prototype,"visible",2);te([a()],K.prototype,"position",2);te([xn(".tooltip")],K.prototype,"tooltip",2);K=te([g("fc-tooltip")],K);var $a={parameters:{storySource:{source:`import book from './book.html?raw'
+      `:d``}};Me=new WeakMap;K.styles=m(wa);te([a({init:!1})],K.prototype,"anchor",2);te([a({converter(e){return Math.max(0,e)}})],K.prototype,"delay",2);te([a()],K.prototype,"offsetX",2);te([a()],K.prototype,"offsetY",2);te([a({reflect:!0})],K.prototype,"role",2);te([a()],K.prototype,"visible",2);te([a()],K.prototype,"position",2);te([xn(".tooltip")],K.prototype,"tooltip",2);K=te([g("fc-tooltip")],K);var Oa={parameters:{storySource:{source:`import book from './book.html?raw'
 
 import './index'
 
 export default { title: 'Tooltip', order: 1 }
 
 export const Tooltip = () => book
-`,locationsMap:{tooltip:{startLoc:{col:23,line:7},endLoc:{col:33,line:7},startBody:{col:23,line:7},endBody:{col:33,line:7}}}}},title:"Tooltip",order:1};const Oa=()=>ya,Ea=["Tooltip"];var Aa=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",default:$a,Tooltip:Oa,__namedExportsOrder:Ea}),Ia=`<h4>\u7B80\u5355\u4F7F\u7528</h4>
+`,locationsMap:{tooltip:{startLoc:{col:23,line:7},endLoc:{col:33,line:7},startBody:{col:23,line:7},endBody:{col:33,line:7}}}}},title:"Tooltip",order:1};const Ea=()=>xa,Aa=["Tooltip"];var Ia=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",default:Oa,Tooltip:Ea,__namedExportsOrder:Aa}),Sa=`<h4>\u7B80\u5355\u4F7F\u7528</h4>
 <fc-tree-item tabindex="1">\u82F9\u679C</fc-tree-item>
 
 <h4>\u9009\u4E2D</h4>
@@ -3635,7 +3635,7 @@ export const Tooltip = () => book
   \u6C34\u679C(\u70B9\u6211)
   <fc-tree-item slot="item">\u897F\u7EA2\u67FF</fc-tree-item>
 </fc-tree-item>
-`,Sa=`:host {
+`,Pa=`:host {
   display: flex;
   /*padding: var(--padding);*/
 }
@@ -3725,7 +3725,7 @@ export const Tooltip = () => book
 :host([indent]) {
   padding-left: calc(var(--font-size) * var(--line-height));
 }
-`,Pa=Object.defineProperty,za=Object.getOwnPropertyDescriptor,R=(e,t,n,i)=>{for(var o=i>1?void 0:i?za(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&Pa(t,n,o),o};const We=e=>e instanceof HTMLElement&&e.nodeName.toLowerCase()==="fc-tree-item";let S=class extends w{constructor(){super(...arguments);this.role="treeitem",this.value="",this.disabled=!1,this.selectable=!0,this.selected=!1,this.hasChild=!1,this.indent=!1,this.expanded=!1,this.expandable=!1,this.forceIcon=!1}connectedCallback(){super.connectedCallback(),this.setAttribute("aria-expanded",String(this.hasAttribute("expanded"))),p(this,"keydown",this.handleKeydown)}focusItem(e=!0){this.toggleAttribute("focused",e),e?this.focus():this.blur()}itemsChanged(e,t){t.forEach(n=>{n.slot="item"}),this.hasChild=t.length>0}selectedChanged(e,t){this.emit("selectionChange",{old:e,next:t})}expandedChanged(e,t){this.emit("expand"),this.setAttribute("aria-expanded",String(t))}handleClickTitle(e){!this.disabled&&!e.defaultPrevented&&(this.expandable&&(this.expanded=!this.expanded),this.selectable&&(this.selected=!this.selected))}handleButtonClick(e){e.stopPropagation(),!this.disabled&&!e.defaultPrevented&&(this.expanded=!this.expanded)}handleKeydown(e){e.defaultPrevented||this.disabled||e.target!==this||(e.key==="Enter"&&(e.preventDefault(),this.selected=!this.selected),e.key===" "&&(e.preventDefault(),this.expanded=!this.expanded))}render(){const e=d`
+`,za=Object.defineProperty,La=Object.getOwnPropertyDescriptor,R=(e,t,n,i)=>{for(var o=i>1?void 0:i?La(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&za(t,n,o),o};const We=e=>e instanceof HTMLElement&&e.nodeName.toLowerCase()==="fc-tree-item";let S=class extends w{constructor(){super(...arguments);this.role="treeitem",this.value="",this.disabled=!1,this.selectable=!0,this.selected=!1,this.hasChild=!1,this.indent=!1,this.expanded=!1,this.expandable=!1,this.forceIcon=!1}connectedCallback(){super.connectedCallback(),this.setAttribute("aria-expanded",String(this.hasAttribute("expanded"))),p(this,"keydown",this.handleKeydown)}focusItem(e=!0){this.toggleAttribute("focused",e),e?this.focus():this.blur()}itemsChanged(e,t){t.forEach(n=>{n.slot="item"}),this.hasChild=t.length>0}selectedChanged(e,t){this.emit("selectionChange",{old:e,next:t})}expandedChanged(e,t){this.emit("expand"),this.setAttribute("aria-expanded",String(t))}handleClickTitle(e){!this.disabled&&!e.defaultPrevented&&(this.expandable&&(this.expanded=!this.expanded),this.selectable&&(this.selected=!this.selected))}handleButtonClick(e){e.stopPropagation(),!this.disabled&&!e.defaultPrevented&&(this.expanded=!this.expanded)}handleKeydown(e){e.defaultPrevented||this.disabled||e.target!==this||(e.key==="Enter"&&(e.preventDefault(),this.selected=!this.selected),e.key===" "&&(e.preventDefault(),this.expanded=!this.expanded))}render(){const e=d`
       <svg part="collapse-button" class="arrow-right" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
         <path d="m9 6-6 5.5V.5z" fill-rule="evenodd" />
       </svg>
@@ -3755,14 +3755,14 @@ export const Tooltip = () => book
             </div>`:null}
       </div>
       ${E()}
-    `}};S.styles=m(Sa);R([a({initCallback:!0}),ye("fc-tree-item")],S.prototype,"items",2);R([a({reflect:!0})],S.prototype,"role",2);R([a()],S.prototype,"value",2);R([a({reflect:!0})],S.prototype,"disabled",2);R([a({reflect:!0})],S.prototype,"selectable",2);R([a({reflect:!0,converter(e,t){return!t.disabled&&e}})],S.prototype,"selected",2);R([a({attribute:!1,reflect:!0,initCallback:!0})],S.prototype,"hasChild",2);R([a({reflect:!0})],S.prototype,"indent",2);R([a({reflect:!0,initCallback:!0})],S.prototype,"expanded",2);R([a({reflect:!0})],S.prototype,"expandable",2);R([a({reflect:!0})],S.prototype,"forceIcon",2);S=R([g("fc-tree-item")],S);var La={parameters:{storySource:{source:`import book from './book.html?raw'
+    `}};S.styles=m(Pa);R([a({initCallback:!0}),ye("fc-tree-item")],S.prototype,"items",2);R([a({reflect:!0})],S.prototype,"role",2);R([a()],S.prototype,"value",2);R([a({reflect:!0})],S.prototype,"disabled",2);R([a({reflect:!0})],S.prototype,"selectable",2);R([a({reflect:!0,converter(e,t){return!t.disabled&&e}})],S.prototype,"selected",2);R([a({attribute:!1,reflect:!0,initCallback:!0})],S.prototype,"hasChild",2);R([a({reflect:!0})],S.prototype,"indent",2);R([a({reflect:!0,initCallback:!0})],S.prototype,"expanded",2);R([a({reflect:!0})],S.prototype,"expandable",2);R([a({reflect:!0})],S.prototype,"forceIcon",2);S=R([g("fc-tree-item")],S);var Ta={parameters:{storySource:{source:`import book from './book.html?raw'
 
 import './index'
 
 export default { title: 'Tree Item', order: 1 }
 
 export const TreeItem = () => book
-`,locationsMap:{"tree-item":{startLoc:{col:24,line:7},endLoc:{col:34,line:7},startBody:{col:24,line:7},endBody:{col:34,line:7}}}}},title:"Tree Item",order:1};const Ta=()=>Ia,Da=["TreeItem"];var Ma=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",default:La,TreeItem:Ta,__namedExportsOrder:Da}),ja=`<h4>\u9ED8\u8BA4</h4>
+`,locationsMap:{"tree-item":{startLoc:{col:24,line:7},endLoc:{col:34,line:7},startBody:{col:24,line:7},endBody:{col:34,line:7}}}}},title:"Tree Item",order:1};const Da=()=>Sa,Ma=["TreeItem"];var ja=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",default:Ta,TreeItem:Da,__namedExportsOrder:Ma}),Ba=`<h4>\u9ED8\u8BA4</h4>
 <fc-tree-view>
   <fc-tree-item>
     <span>\u6C34\u679C</span>
@@ -3864,18 +3864,18 @@ export const TreeItem = () => book
     <fc-tree-item value="banana" readonly><span slot="before">\u{1F34C}</span>\u9999\u8549(\u4E0D\u53EF\u9009)</fc-tree-item>
   </fc-tree-item>
 </fc-tree-view>
-`,Ba=`:host {
+`,Ra=`:host {
   display: block;
 }
 :host::after {
   content: none;
 }
-`,Ra=Object.defineProperty,Fa=Object.getOwnPropertyDescriptor,je=(e,t,n,i)=>{for(var o=i>1?void 0:i?Fa(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&Ra(t,n,o),o},Va=(e,t,n)=>{if(!t.has(e))throw TypeError("Cannot "+n)},en=(e,t,n)=>{if(t.has(e))throw TypeError("Cannot add the same private member more than once");t instanceof WeakSet?t.add(e):t.set(e,n)},tn=(e,t,n)=>(Va(e,t,"access private method"),n),pt,nn,ht,on;let me=class extends w{constructor(){super(...arguments);en(this,pt),en(this,ht),this.role="tree",this.value=""}connectedCallback(){super.connectedCallback(),p(this,"selectionChange",this.handleSelectionChange),p(this,"keydown",this.handleKeydown),this.updateComplete.then(()=>{var e;((e=this.items)==null?void 0:e.length)&&Ae(this.items,1,!1)})}valueChanged(e,t){var n,i;if(!!t&&((n=this.selectedItem)==null?void 0:n.value)!==t){const o=(i=this.items)==null?void 0:i.find(r=>r.value===t);if(!o)return;typeof e=="string"?o.toggleAttribute("selected",!0):this.updateComplete.then(()=>{o.toggleAttribute("selected",!0)})}}selectedItemChanged(e,t){e&&(e.selected=!1,e.tabIndex=-1),t&&(t.selected=!0,t.tabIndex=0)}get focusableItems(){return Array.from(this.querySelectorAll(':not([aria-expanded="false"]) > fc-tree-item')).filter(t=>{var n;return!((n=t.parentElement)==null?void 0:n.closest('[aria-expanded="false"]'))})}handleSelectionChange(e){const{target:t}=e;We(t)&&t.selected&&(this.selectedItem=t)}handleKeydown(e){switch(e.key){case"ArrowDown":{e.preventDefault(),this.focusNext(1);break}case"ArrowUp":{e.preventDefault(),this.focusNext(-1);break}case"ArrowRight":{tn(this,pt,nn).call(this,e);break}case"ArrowLeft":{tn(this,ht,on).call(this,e);break}}}focusNext(e){this.focusableItems&&(this.focus(),Ie(this.focusableItems,e))}render(){return d`<slot></slot>`}};pt=new WeakSet;nn=function(e){var n;const{target:t}=e;!(We(t)&&((n=t.items)==null?void 0:n.length))||(e.preventDefault(),this.focus(),t.expanded=!0,t.updateComplete.then(()=>{var i;(i=t.items)==null||i[0].focus()}))};ht=new WeakSet;on=function(e){const{target:t}=e;if(!!We(t))if(e.preventDefault(),this.focus(),t.expanded)t.expanded=!1,t.focusItem(!0);else{const{parentElement:n}=t;n&&We(n)&&n.focusItem(!0)}};me.styles=m(Ba);je([ye("fc-tree-item")],me.prototype,"items",2);je([a({reflect:!0})],me.prototype,"role",2);je([a()],me.prototype,"value",2);je([a()],me.prototype,"selectedItem",2);me=je([g("fc-tree-view")],me);var Na={parameters:{storySource:{source:`import book from './book.html?raw'
+`,Fa=Object.defineProperty,Va=Object.getOwnPropertyDescriptor,je=(e,t,n,i)=>{for(var o=i>1?void 0:i?Va(t,n):t,r=e.length-1,l;r>=0;r--)(l=e[r])&&(o=(i?l(t,n,o):l(o))||o);return i&&o&&Fa(t,n,o),o},Na=(e,t,n)=>{if(!t.has(e))throw TypeError("Cannot "+n)},en=(e,t,n)=>{if(t.has(e))throw TypeError("Cannot add the same private member more than once");t instanceof WeakSet?t.add(e):t.set(e,n)},tn=(e,t,n)=>(Na(e,t,"access private method"),n),pt,nn,ht,on;let me=class extends w{constructor(){super(...arguments);en(this,pt),en(this,ht),this.role="tree",this.value=""}connectedCallback(){super.connectedCallback(),p(this,"selectionChange",this.handleSelectionChange),p(this,"keydown",this.handleKeydown),this.updateComplete.then(()=>{var e;((e=this.items)==null?void 0:e.length)&&Ae(this.items,1,!1)})}valueChanged(e,t){var n,i;if(!!t&&((n=this.selectedItem)==null?void 0:n.value)!==t){const o=(i=this.items)==null?void 0:i.find(r=>r.value===t);if(!o)return;typeof e=="string"?o.toggleAttribute("selected",!0):this.updateComplete.then(()=>{o.toggleAttribute("selected",!0)})}}selectedItemChanged(e,t){e&&(e.selected=!1,e.tabIndex=-1),t&&(t.selected=!0,t.tabIndex=0)}get focusableItems(){return Array.from(this.querySelectorAll(':not([aria-expanded="false"]) > fc-tree-item')).filter(t=>{var n;return!((n=t.parentElement)==null?void 0:n.closest('[aria-expanded="false"]'))})}handleSelectionChange(e){const{target:t}=e;We(t)&&t.selected&&(this.selectedItem=t)}handleKeydown(e){switch(e.key){case"ArrowDown":{e.preventDefault(),this.focusNext(1);break}case"ArrowUp":{e.preventDefault(),this.focusNext(-1);break}case"ArrowRight":{tn(this,pt,nn).call(this,e);break}case"ArrowLeft":{tn(this,ht,on).call(this,e);break}}}focusNext(e){this.focusableItems&&(this.focus(),Ie(this.focusableItems,e))}render(){return d`<slot></slot>`}};pt=new WeakSet;nn=function(e){var n;const{target:t}=e;!(We(t)&&((n=t.items)==null?void 0:n.length))||(e.preventDefault(),this.focus(),t.expanded=!0,t.updateComplete.then(()=>{var i;(i=t.items)==null||i[0].focus()}))};ht=new WeakSet;on=function(e){const{target:t}=e;if(!!We(t))if(e.preventDefault(),this.focus(),t.expanded)t.expanded=!1,t.focusItem(!0);else{const{parentElement:n}=t;n&&We(n)&&n.focusItem(!0)}};me.styles=m(Ra);je([ye("fc-tree-item")],me.prototype,"items",2);je([a({reflect:!0})],me.prototype,"role",2);je([a()],me.prototype,"value",2);je([a()],me.prototype,"selectedItem",2);me=je([g("fc-tree-view")],me);var Ka={parameters:{storySource:{source:`import book from './book.html?raw'
 
 import './index'
 
 export default { title: 'Tree View', order: 1 }
 
 export const treeView = () => book
-`,locationsMap:{"tree-view":{startLoc:{col:24,line:7},endLoc:{col:34,line:7},startBody:{col:24,line:7},endBody:{col:34,line:7}}}}},title:"Tree View",order:1};const Ka=()=>ja,qa=["treeView"];var Ha=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",default:Na,treeView:Ka,__namedExportsOrder:qa});const Ua=[En,An];Ua.forEach(e=>{Object.keys(e).forEach(t=>{const n=e[t];switch(t){case"args":case"argTypes":return $n.warn("Invalid args/argTypes in config, ignoring.",JSON.stringify(n));case"decorators":return n.forEach(i=>_n(i,!1));case"loaders":return n.forEach(i=>Cn(i,!1));case"parameters":return It(ve({},n),!1);case"argTypesEnhancers":return n.forEach(i=>kn(i));case"argsEnhancers":return n.forEach(i=>wn(i));case"globals":case"globalTypes":{const i={};return i[t]=n,It(i,!1)}case"decorateStory":case"renderToDOM":return null;default:return console.log(t+" was not supported :( !")}})});On(()=>[co,mo,Do,Yo,oi,fi,xi,Ai,Mi,Vi,Ui,tr,ur,kr,Dr,Ur,Jr,na,va,Aa,Ma,Ha].filter(e=>e.default),{hot:!1},!1);
-//# sourceMappingURL=iframe.98c4c1ac.js.map
+`,locationsMap:{"tree-view":{startLoc:{col:24,line:7},endLoc:{col:34,line:7},startBody:{col:24,line:7},endBody:{col:34,line:7}}}}},title:"Tree View",order:1};const qa=()=>Ba,Ha=["treeView"];var Ua=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",default:Ka,treeView:qa,__namedExportsOrder:Ha});const Ga=[En,An];Ga.forEach(e=>{Object.keys(e).forEach(t=>{const n=e[t];switch(t){case"args":case"argTypes":return $n.warn("Invalid args/argTypes in config, ignoring.",JSON.stringify(n));case"decorators":return n.forEach(i=>_n(i,!1));case"loaders":return n.forEach(i=>Cn(i,!1));case"parameters":return It(ve({},n),!1);case"argTypesEnhancers":return n.forEach(i=>kn(i));case"argsEnhancers":return n.forEach(i=>wn(i));case"globals":case"globalTypes":{const i={};return i[t]=n,It(i,!1)}case"decorateStory":case"renderToDOM":return null;default:return console.log(t+" was not supported :( !")}})});On(()=>[co,mo,Mo,Xo,ii,pi,wi,Ii,ji,Ni,Gi,nr,br,Cr,Mr,Gr,Qr,oa,ya,Ia,ja,Ua].filter(e=>e.default),{hot:!1},!1);
+//# sourceMappingURL=iframe.85ebfdfd.js.map

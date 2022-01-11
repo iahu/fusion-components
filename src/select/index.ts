@@ -14,6 +14,11 @@ export enum POSTION {
 
 type Position = keyof typeof POSTION
 
+const stopBubble = (e: MouseEvent): void => {
+  e.preventDefault()
+  e.stopPropagation()
+}
+
 @customElement('fc-select')
 export class FCSelect extends FCListBox {
   static styles = mergeStyles(style)
@@ -99,13 +104,6 @@ export class FCSelect extends FCListBox {
     }
   }
 
-  handleClickControl(e: MouseEvent): void {
-    e.preventDefault()
-    if (!this.disabled) {
-      this.open = !this.open
-    }
-  }
-
   handleFocusout(e: FocusEvent): void {
     const { relatedTarget } = e
     if (!(relatedTarget instanceof Node && this.contains(relatedTarget))) {
@@ -121,7 +119,6 @@ export class FCSelect extends FCListBox {
         part="control"
         role="comobox"
         aria-haspopup="listbox"
-        @click="${this.handleClickControl}"
         disabled="${this.disabled}"
       >
         ${before()}
@@ -150,6 +147,7 @@ export class FCSelect extends FCListBox {
         ?disabled="${this.disabled}"
         position="${this.position}"
         tabindex="${this.open ? '0' : ''}"
+        @click="${stopBubble}"
       >
         <slot></slot>
         ${this.length === 0 ? html`<slot name="empty">--空--</slot>` : null}

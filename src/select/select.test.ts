@@ -105,6 +105,22 @@ describe('fc-select', function () {
     expect(select.open).be.true
   })
 
+  it('should open the dropdown overlay when shadow button-container element is clicked', async () => {
+    const select: FCSelect = await fixture(html`<fc-select value="foo">
+      <fc-list-option value="foo"></fc-list-option>
+      <fc-list-option value="bar"></fc-list-option>
+    </fc-select>`)
+
+    await nextFrame()
+    const shadowRoot = select.shadowRoot as ShadowRoot
+    const button = shadowRoot.querySelector<HTMLDivElement>('.selected-value')!
+
+    button.click()
+    await elementUpdated(select)
+
+    expect(select.open).be.true
+  })
+
   it('should select the first element when pressed ArrowDown key', async () => {
     const select: FCSelect = await fixture(html`<fc-select open>
       <fc-list-option value="foo"></fc-list-option>
@@ -118,5 +134,21 @@ describe('fc-select', function () {
     const firstOption = select.visibleOptions[0]
     expect(firstOption.tabIndex).eq(0)
     expect(firstOption.focused).be.true
+  })
+
+  it('should close the dropdown overlay when option element is clicked', async () => {
+    const select: FCSelect = await fixture(html`<fc-select value="foo" open>
+      <fc-list-option value="foo">foo</fc-list-option>
+      <fc-list-option value="bar">bar</fc-list-option>
+    </fc-select>`)
+
+    await nextFrame()
+    expect(select.open, 'before').be.true
+
+    const option = select.querySelector<HTMLElement>('[value="bar"]')!
+    option.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    await elementUpdated(option)
+
+    expect(select.open, 'after').be.false
   })
 })
