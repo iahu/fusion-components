@@ -21,7 +21,7 @@ export class FCSelect extends FCListBox {
   connectedCallback(): void {
     super.connectedCallback()
     onEvent(this, 'focusout', this.handleFocusout)
-    onEvent(this, 'click', this.handleClickControl)
+    onEvent(this, 'click', this.handleClick)
   }
 
   displayValueChanged(old: string | undefined, next: string): void {
@@ -93,8 +93,15 @@ export class FCSelect extends FCListBox {
   })
   position = 'bottom'
 
+  handleClick(e: MouseEvent): void {
+    if (!this.disabled) {
+      this.open = !this.open
+    }
+  }
+
   handleClickControl(e: MouseEvent): void {
     e.preventDefault()
+    e.stopPropagation()
     if (!this.disabled) {
       this.open = !this.open
     }
