@@ -1,9 +1,9 @@
-# Fusion Components <sup>Beta</sup>
+# Fusion Components
 
 [![Build Status](https://app.travis-ci.com/iahu/fusion-components.svg?branch=master)](https://app.travis-ci.com/iahu/fusion-components)
 [![codecov](https://codecov.io/gh/iahu/fusion-components/branch/master/graph/badge.svg?token=HS4SFMZVJR)](https://codecov.io/gh/iahu/fusion-components)
 
-一套面向类桌面应用的沉浸式风格 Web Components UI 库
+a suit of UI components, which are build with Web Component.
 
 **几个特点：**
 
@@ -22,11 +22,13 @@
 
 ## How to use
 
-**暂未发布到 npm**
+### Install
 
-因为 web components 组件不需要额外的库就可以运行，所以在项目中可以直接使用
+`npm install @egret/fusion-components`
 
-### 在 HTML 中使用
+`yarn add @egret/fusion-components`
+
+### use in HTML
 
 ```html
 <html>
@@ -40,19 +42,18 @@
       <fc-list-option value="2">2</fc-list-option>
       <fc-list-option value="3">3</fc-list-option>
     </fc-select>
+
+    <script>
+      // listen to events
+      document.querySelector('#fc-select').addEventListener('change', console.log)
+    </script>
   </body>
 </html>
 ```
 
-监听事件
+### use in React Application
 
-```js
-document.querySelector('#fc-select').addEventListener('change', console.log)
-```
-
-### 在 React 中使用
-
-首先在入口文件一次性引入依赖，比如 index.tsx
+Firstly, we should import this lib on entry file.
 
 ```ts
 import '@egret/fusion-components'
@@ -60,10 +61,14 @@ import '@egret/fusion-components'
 import '@egret/fusion-components/types/fc-react.d.ts'
 ```
 
+then we can use all components likewise normal HTML
+
+**Notice**: we should use `class` instead of `className` on web component tags
+
 ```ts
 export const MyComponent = props => {
   return (
-    <fc-select onChange={() => console.log('react onChange', e)}
+    <fc-select class="my-fc-select" onChange={() => console.log('react onChange', e)}
       <fc-list-option value="1">1</fc-list-option>
       <fc-list-option value="2">2</fc-list-option>
       <fc-list-option value="3">3</fc-list-option>
@@ -136,3 +141,7 @@ fusion-components 充分利用了 CSS 自定义变量，所有组件都尽量使
 ```
 
 </details>
+
+## License
+
+MIT

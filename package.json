@@ -39,7 +39,7 @@
     "application"
   ],
   "author": "i18u",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@mdx-js/react": "^1.6.22",
     "@open-wc/testing": "^2.5.33",
