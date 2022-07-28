@@ -12,7 +12,7 @@ a suit of UI components, which are build with Web Component.
   - 丰富的 slot 模块，方便插入自定义元素
   - 全局的 CSS 变量，方便修改组件内部样式
 - 原生支持在 React 中使用，无需转换
-  - React 能原生捕获组件内部 `change`
+  - React 能原生捕获组件内部 `onChange` 事件
 - 可用性高
   - 很好地支持了键盘操作
   - 较好地实现了 a11y 规范
